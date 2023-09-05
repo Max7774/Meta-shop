@@ -1,13 +1,14 @@
 import Button from "@UI/Button/Button";
 import Heading from "@UI/Heading/Heading";
 import TextField from "@UI/TextField/TextField";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   return (
-    <section className="flex justify-center m-20 max-[420px]:mt-2 mr-2 ml-2">
+    <section className="flex justify-center m-20 max-[420px]:mt-5 mr-5 ml-5">
       <div
         className="rounded shadow-2xl mins-w-2/5 p-10 bg-secondary"
-        style={{ width: "600px" }}
+        style={{ width: "900px" }}
       >
         <form>
           <Heading className="capitalize text-center mb-4 text-white">
@@ -37,13 +38,13 @@ const Register = () => {
           </div>
           <div className="text-center text-white">
             Already have an account?
-            <a
+            <Link
               className="text-gray hover:text-primary transition-colors duration-200"
-              href="/"
+              to="/login"
             >
               {" "}
               Login
-            </a>
+            </Link>
           </div>
         </form>
       </div>

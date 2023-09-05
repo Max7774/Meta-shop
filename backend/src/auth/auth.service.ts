@@ -198,6 +198,8 @@ export class AuthService {
       subject: 'Reset password', // Тема письма
       text: `Token to reset your password: ${resetToken}`, // Текст письма
     });
+
+    return 'OK';
   }
 
   async updatePassword(body: ResetPasswordType, res: Response) {
@@ -224,6 +226,6 @@ export class AuthService {
       },
     });
 
-    return res.redirect('/login');
+    return 'OK';
   }
 }

@@ -2,7 +2,11 @@ import { axiosClassic, instance } from "@api/api.interceptor";
 import { IAuthResponse } from "@interfaces/data-interfaces/user.interface";
 import { REFRESH_TOKEN, saveToStorage } from "@utils/tokens";
 import Cookies from "js-cookie";
-import { LoginUserField, RegisterType } from "types/user.type";
+import {
+  LoginUserField,
+  RegisterType,
+  ResetUserPasswordType,
+} from "types/user.type";
 
 export const AuthService = {
   async auth(data: LoginUserField | RegisterType, type: "login" | "register") {
@@ -12,7 +16,32 @@ export const AuthService = {
       data,
     });
 
+    console.log(response.data);
+
     if (response.data) saveToStorage(response.data);
+
+    return response.data;
+  },
+
+  async reset(email: string) {
+    const data = {
+      email,
+    };
+    const response = await instance<string>({
+      url: `/auth/reset-password`,
+      method: "POST",
+      data,
+    });
+
+    return response.data;
+  },
+
+  async resetWithToken(data: ResetUserPasswordType) {
+    const response = await instance({
+      url: `/auth/reset`,
+      method: "PATCH",
+      data,
+    });
 
     return response.data;
   },

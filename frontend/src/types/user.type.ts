@@ -9,6 +9,12 @@ export type IInitialState = {
   isLoading: boolean;
 };
 
+export type ResetUserPasswordType = {
+  old_pass: string;
+  new_pass: string;
+  resetToken: string;
+};
+
 export type RegisterType = {
   email: string;
   first_name: string;

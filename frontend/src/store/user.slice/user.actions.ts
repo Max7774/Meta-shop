@@ -3,7 +3,11 @@ import { IAuthResponse } from "@interfaces/data-interfaces/user.interface";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthService } from "@services/auth/auth.service";
 import { removeFromStorage } from "@utils/tokens";
-import { LoginUserField, RegisterType } from "types/user.type";
+import {
+  LoginUserField,
+  RegisterType,
+  ResetUserPasswordType,
+} from "types/user.type";
 
 /* register */
 export const register = createAsyncThunk<IAuthResponse, RegisterType>(
@@ -36,6 +40,38 @@ export const login = createAsyncThunk<IAuthResponse, LoginUserField>(
     }
   }
 );
+
+/* reset password email */
+export const resetPasswordEmail = createAsyncThunk<string, string>(
+  "auth/reset-password",
+  async (data, thunkApi) => {
+    try {
+      const response = await AuthService.reset(data);
+
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(
+        error.response.data.message || "Unknown error"
+      );
+    }
+  }
+);
+
+/* reset password */
+export const resetPasswordToken = createAsyncThunk<
+  unknown,
+  ResetUserPasswordType
+>("auth/reset-password", async (data, thunkApi) => {
+  try {
+    const response = await AuthService.resetWithToken(data);
+
+    return response;
+  } catch (error: any) {
+    return thunkApi.rejectWithValue(
+      error.response.data.message || "Unknown error"
+    );
+  }
+});
 
 /* logout */
 export const logout = createAsyncThunk("/logout", async () => {
