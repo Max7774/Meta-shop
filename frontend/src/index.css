@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  @apply overflow-x-hidden bg-secondary text-black;
+  @apply overflow-x-hidden bg-bg-color-secondary text-black;
   font-family: var(--font-golos), sans-serif;
-  font-size: larger;
+  font-size: medium;
 }
 
 .disabled {

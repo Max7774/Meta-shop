@@ -1,7 +1,11 @@
-import React from "react";
+import Auth from "@Pages/Auth/Auth";
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <>
+      <Auth />
+    </>
+  );
 }
 
 export default App;
