@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uuid         String         @unique
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  email        String         @unique
+  phone_number String         @unique
+  birth_day    String
+  town         String
+  first_name   String      
+  second_name  String      
+  password     String         @unique
+  avatarPath   String         @default("default-avatar.png") @map("avatar_path")
+  verified     Boolean?
+  verifyToken  String?        @unique
+  role         EnumRoleOfUser @default(DEFAULT_USER)
+  orders       Order[]
+  favorites    Product[]
+  reviews      Review[]
+  clicks       UserClick[]
+}
+
+model Product {
+  uuid          String        @unique
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  name          String        @unique
+  slug          String        @unique
+  description   String
+  peculiarities String?
+  quantity      Int
+  price         Int
+  images        String[]      @default(["default-product-photo.png"])
+  categoryUuid  String?       @map("category_uuid")
+  userUuid      String?       @map("user_uuid")
+  subcategoryUuid String?     @map("subcategory_uuid")
+  orderItems    OrderItem[]
+  category      Category?     @relation(fields: [categoryUuid], references: [uuid])
+  user          User?         @relation(fields: [userUuid], references: [uuid])
+  reviews       Review[]
+  photoFiles    PhotoFile[]
+  clicks        UserClick[]
+  subcategory   Subcategory?  @relation(fields: [subcategoryUuid], references: [uuid])
+}
+
+model UserClick {
+  uuid          String       @unique
+  clickedAt     DateTime     @default(now())
+  userUuid      String
+  productUuid   String
+  
+  product       Product      @relation(fields: [productUuid], references: [uuid])
+  user          User         @relation(fields: [userUuid], references: [uuid])
+}
+
+
+model PhotoFile {
+  uuid         String        @unique
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  url          String        @unique
+  filename     String
+  originalname String
+  mimetype     String
+  size         Int
+  path         String
+  productUuid  String?       @map("product_uuid")
+  product      Product?      @relation(fields: [productUuid], references: [uuid])
+}
+
+model Category {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  name        String         @unique
+  slug        String         @unique
+  subcategory Subcategory[]
+  products    Product[]
+}
+
+model Subcategory {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  name        String
+  slug        String         @unique
+
+  categoryUuid String?       @map("category_uuid")
+  category     Category?     @relation(fields: [categoryUuid], references: [uuid])
+  products     Product[]
+}
+
+model Review {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  rating      Int
+  text        String
+  userUuid    String         @map("user_uuid")
+  productUuid String?        @map("product_uuid")
+  product     Product?       @relation(fields: [productUuid], references: [uuid])
+  user        User           @relation(fields: [userUuid], references: [uuid])
+}
+
+model Order {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  status      EnumOrderItemStatus @default(Pending)
+
+  items       OrderItem[]
+  total       Int
+
+  user        User           @relation(fields: [userUuid], references: [uuid])
+  userUuid    String         @map("user_uuid")
+}
+
+model OrderItem {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  quantity    Int
+  price       Int
+
+  order       Order?         @relation(fields: [orderUuid], references: [uuid])
+  orderUuid   String?        @map("order_uuid")
+
+  product     Product        @relation(fields: [productUuid], references: [uuid])
+  productUuid String         @map("product_uuid")
+
+  @@map("Order_item")
+}
+
+enum EnumOrderItemStatus {
+  Pending
+  Payed
+  Shipped
+  Delivered
+}
+
+enum EnumRoleOfUser {
+  ADMIN
+  DEFAULT_USER
+  MANAGER
+}
