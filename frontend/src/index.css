@@ -1,13 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply overflow-x-hidden bg-secondary text-black;
+  font-family: var(--font-golos), sans-serif;
+  font-size: larger;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  opacity: 0.2 !important;
+}
+
+.btn {
+  @apply rounded-xl px-10 py-2 font-medium shadow transition duration-300 ease-in-out;
+
+  &:not(&:disabled) {
+    @apply hover:shadow-lg;
+  }
+
+  &.btn-white {
+    @apply bg-white text-primary;
+  }
+
+  &.btn-orange {
+    @apply bg-primary text-white;
+  }
+
+  &.btn-large {
+    @apply px-12 py-4 text-xl;
+  }
+}
+
+.btnlink {
+  @apply rounded-3xl px-10 py-2 font-medium shadow transition duration-300 ease-in-out;
+
+  &:not(&:disabled) {
+    @apply hover:shadow-lg;
+  }
+
+  &.btn-white {
+    @apply bg-white text-primary;
+  }
+
+  &.btn-orange {
+    @apply bg-primary text-white;
+  }
+
+  &.btn-large {
+    @apply px-12 py-4 text-xl;
+  }
 }
