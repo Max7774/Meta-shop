@@ -58,7 +58,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Patch('reset')
-  async updatePassword(@Body() body: ResetPasswordType) {
-    return this.authService.updatePassword(body);
+  async updatePassword(@Body() body: ResetPasswordType, @Res() res: Response) {
+    return this.authService.updatePassword(body, res);
   }
 }

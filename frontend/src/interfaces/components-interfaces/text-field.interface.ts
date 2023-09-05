@@ -9,4 +9,5 @@ export interface ITextField extends InputHTMLAttributes<HTMLInputElement> {
   uniqueLink?: boolean;
   center?: boolean;
   name?: string;
+  token?: boolean;
 }

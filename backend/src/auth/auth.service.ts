@@ -200,7 +200,7 @@ export class AuthService {
     });
   }
 
-  async updatePassword(body: ResetPasswordType) {
+  async updatePassword(body: ResetPasswordType, res: Response) {
     const user = await this.prisma.user.findUnique({
       where: {
         verifyToken: body.resetToken,
@@ -213,8 +213,6 @@ export class AuthService {
 
     if (!isValid) throw new UnauthorizedException('Invalid password');
 
-    const tokens = await this.issueTokens(user.uuid);
-
     await this.prisma.user.update({
       where: {
         uuid: user.uuid,
@@ -226,9 +224,6 @@ export class AuthService {
       },
     });
 
-    return {
-      user: this.returnUserFields(user),
-      ...tokens,
-    };
+    return res.redirect('/login');
   }
 }

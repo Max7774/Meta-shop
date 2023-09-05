@@ -8,6 +8,7 @@ const TextField = forwardRef<HTMLInputElement, ITextField>(
     {
       placeholder,
       error,
+      token,
       pattern,
       className,
       type,
@@ -51,14 +52,18 @@ const TextField = forwardRef<HTMLInputElement, ITextField>(
               )}
               {...rest}
             />
-            {type === "password" && (
-              <button
-                type="button"
-                className="absolute top-1/2 bg-white right-3 transform -translate-y-1/2"
-                onClick={toggleShowPassword}
-              >
-                {showPassword ? <IoMdEyeOff /> : <IoMdEye />}
-              </button>
+            {!token && (
+              <>
+                {type === "password" ? (
+                  <button
+                    type="button"
+                    className="absolute top-1/2 bg-white right-3 transform -translate-y-1/2"
+                    onClick={toggleShowPassword}
+                  >
+                    {showPassword ? <IoMdEyeOff /> : <IoMdEye />}
+                  </button>
+                ) : null}
+              </>
             )}
           </div>
         </label>
