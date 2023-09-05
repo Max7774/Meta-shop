@@ -1,3 +1,4 @@
+import { IAuthResponse } from "@interfaces/data-interfaces/user.interface";
 import Cookies from "js-cookie";
 
 export const ACCESS_TOKEN = "accessToken";
@@ -12,7 +13,7 @@ export const getUserFromStorage = () => {
   return JSON.parse(localStorage.getItem("user") || "{}");
 };
 
-export const saveTokensStorage = (data: any) => {
+export const saveTokensStorage = (data: IAuthResponse) => {
   Cookies.set(REFRESH_TOKEN, data.refreshToken);
   Cookies.set(ACCESS_TOKEN, data.accessToken);
 };
@@ -23,11 +24,11 @@ export const removeFromStorage = () => {
   localStorage.removeItem("user");
 };
 
-export const saveToStorage = (data: any) => {
-  if (!data.refreshToken) {
+export const saveToStorage = (data: IAuthResponse) => {
+  if (!data.user) {
     return;
   } else {
     saveTokensStorage(data);
-    localStorage.setItem("user", JSON.stringify({ access: data.accessToken }));
+    localStorage.setItem("user", JSON.stringify(data.user));
   }
 };

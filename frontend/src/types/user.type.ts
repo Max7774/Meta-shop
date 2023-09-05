@@ -5,6 +5,7 @@ export type LoginUserField = {
 
 export type IInitialState = {
   user: UserType | null;
+  verified?: boolean;
   isLoading: boolean;
 };
 

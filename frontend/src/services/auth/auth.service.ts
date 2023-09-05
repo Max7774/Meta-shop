@@ -12,7 +12,7 @@ export const AuthService = {
       data,
     });
 
-    if (response.data.accessToken) saveToStorage(response.data);
+    if (response.data) saveToStorage(response.data);
 
     return response.data;
   },
@@ -25,7 +25,7 @@ export const AuthService = {
       { refreshToken }
     );
 
-    if (response.data.accessToken) saveToStorage(response.data);
+    if (response.data) saveToStorage(response.data);
 
     return response;
   },

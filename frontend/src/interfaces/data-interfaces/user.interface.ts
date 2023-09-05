@@ -5,7 +5,7 @@ export interface ITokens {
   refreshToken: string;
 }
 
-export interface IAuthResponse extends ITokens {
+export interface ITokens {
   accessToken: string;
   refreshToken: string;
 }

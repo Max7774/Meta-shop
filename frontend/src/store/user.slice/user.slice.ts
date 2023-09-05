@@ -5,6 +5,7 @@ import { IInitialState } from "types/user.type";
 
 const initialState: IInitialState = {
   user: getStoreLocal("user"),
+  verified: false,
   isLoading: false,
 };
 
@@ -19,6 +20,7 @@ export const userSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.verified = payload.user.user.verified;
         state.user = payload.user;
       })
       .addCase(register.rejected, (state) => {
@@ -41,7 +43,7 @@ export const userSlice = createSlice({
         state.user = null;
       })
       .addCase(checkAuth.fulfilled, (state, { payload }) => {
-        state.user = payload;
+        state.user = payload.user;
       });
   },
 });
