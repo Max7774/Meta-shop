@@ -6,19 +6,15 @@ import { LoginUserField, RegisterType } from "types/user.type";
 
 export const AuthService = {
   async auth(data: LoginUserField | RegisterType, type: "login" | "register") {
-    try {
-      const response = await instance<IAuthResponse>({
-        url: `/auth/${type}`,
-        method: "POST",
-        data,
-      });
+    const response = await instance<IAuthResponse>({
+      url: `/auth/${type}`,
+      method: "POST",
+      data,
+    });
 
-      if (response.data.accessToken) saveToStorage(response.data);
+    if (response.data.accessToken) saveToStorage(response.data);
 
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
+    return response.data;
   },
 
   async getNewTokens() {

@@ -3,6 +3,11 @@ export type LoginUserField = {
   password: string;
 };
 
+export type IInitialState = {
+  user: UserType | null;
+  isLoading: boolean;
+};
+
 export type RegisterType = {
   email: string;
   first_name: string;

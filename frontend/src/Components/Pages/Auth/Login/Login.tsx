@@ -22,7 +22,7 @@ const Login = () => {
   };
 
   return (
-    <section className="flex justify-center m-40">
+    <section className="flex justify-center m-40 max-[420px]:mt-30 mr-2 ml-2">
       <div
         className="rounded shadow-2xl mins-w-2/5 p-10 bg-secondary"
         style={{ width: "600px" }}

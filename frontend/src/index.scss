@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+$small: 420px;
+$medium: 900px;
+
 body {
   margin: 0;
   @apply overflow-x-hidden bg-bg-color-secondary text-black;
   font-family: var(--font-golos), sans-serif;
-  font-size: medium;
+  font-size: larger;
+  @media screen and (max-width: $small) {
+    font-size: smaller;
+  }
 }
 
 .disabled {

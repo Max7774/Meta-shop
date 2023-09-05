@@ -4,7 +4,7 @@ import TextField from "@UI/TextField/TextField";
 
 const Register = () => {
   return (
-    <section className="flex justify-center m-20">
+    <section className="flex justify-center m-20 max-[420px]:mt-2 mr-2 ml-2">
       <div
         className="rounded shadow-2xl mins-w-2/5 p-10 bg-secondary"
         style={{ width: "600px" }}

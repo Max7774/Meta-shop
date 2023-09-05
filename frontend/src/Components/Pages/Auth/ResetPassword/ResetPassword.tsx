@@ -1,7 +1,6 @@
 import Button from "@UI/Button/Button";
 import Heading from "@UI/Heading/Heading";
 import TextField from "@UI/TextField/TextField";
-import React from "react";
 
 const ResetPassword = () => {
   return (

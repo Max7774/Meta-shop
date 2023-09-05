@@ -8,8 +8,8 @@ function App() {
   return (
     <>
       {/* <Login /> */}
-      <ResetPassword />
-      {/* <Register /> */}
+      {/* <ResetPassword /> */}
+      <Register />
       {/* <Modal isOpen={true}>
         <EmailForm />
       </Modal> */}
