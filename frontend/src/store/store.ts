@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./user.slice/user.slice";
+import { profileSlice } from "./profile.slice/profile.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
+  profile: profileSlice.reducer,
 });
 
 let mainReducer = combinedReducers;
