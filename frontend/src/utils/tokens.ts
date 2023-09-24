@@ -22,6 +22,7 @@ export const removeFromStorage = () => {
   Cookies.remove(ACCESS_TOKEN);
   Cookies.remove(REFRESH_TOKEN);
   localStorage.removeItem("user");
+  window.location.href = "/auth";
 };
 
 export const saveToStorage = (data: IAuthResponse) => {

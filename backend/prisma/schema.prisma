@@ -161,4 +161,5 @@ enum EnumRoleOfUser {
   ADMIN
   DEFAULT_USER
   MANAGER
+  COURIER
 }

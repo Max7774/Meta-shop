@@ -1,9 +1,11 @@
-import React from 'react'
+import CarouselBox from "@UI/CarouselBox/CarouselBox";
 
 const Main = () => {
   return (
-    <div>Main</div>
-  )
-}
+    <div>
+      <CarouselBox />
+    </div>
+  );
+};
 
-export default Main
+export default Main;

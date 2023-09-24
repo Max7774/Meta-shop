@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { EnumRoleOfUser } from '@prisma/client';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class AuthDto {
   @IsEmail()
@@ -25,6 +32,10 @@ export class AuthDto {
   @IsOptional()
   @IsString()
   town: string;
+
+  @IsOptional()
+  @IsEnum(EnumRoleOfUser)
+  role: EnumRoleOfUser;
 
   @IsOptional()
   @IsString()

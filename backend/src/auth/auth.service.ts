@@ -110,6 +110,34 @@ export class AuthService {
     };
   }
 
+  async createUser(dto: AuthDto) {
+    const oldUser = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (oldUser) throw new BadGatewayException('Такой пользователь уже есть');
+
+    const user = await this.prisma.user.create({
+      data: {
+        uuid: uuidGen(),
+        role: dto.role,
+        email: dto.email,
+        first_name: dto.first_name,
+        second_name: dto.second_name,
+        birth_day: dto.birth_day,
+        town: dto.town,
+        avatarPath: '/uploads/default-avatar.png',
+        phone_number: dto.phone_number,
+        password: await hash(dto.password),
+        verified: true,
+      },
+    });
+
+    return user;
+  }
+
   async verifyToken(verifyToken: string, res: Response) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -202,7 +230,7 @@ export class AuthService {
     return 'OK';
   }
 
-  async updatePassword(body: ResetPasswordType, res: Response) {
+  async updatePassword(body: ResetPasswordType) {
     const user = await this.prisma.user.findUnique({
       where: {
         verifyToken: body.resetToken,

@@ -75,7 +75,6 @@ export const resetPasswordToken = createAsyncThunk<
 
 /* logout */
 export const logout = createAsyncThunk("/logout", async () => {
-  window.location.href = "/auth";
   removeFromStorage();
 });
 
