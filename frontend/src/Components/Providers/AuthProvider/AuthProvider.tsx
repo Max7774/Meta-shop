@@ -19,7 +19,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const accessToken = getAccessToken();
-    if (accessToken) checkAuth({ accessToken });
+    if (accessToken) checkAuth();
 
     if (!accessToken) {
       navigate("/login");

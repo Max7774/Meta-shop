@@ -1,8 +1,12 @@
 import { errorCatch } from "@api/api.helper";
-import { IAuthResponse } from "@interfaces/data-interfaces/user.interface";
+import {
+  IAuthResponse,
+  IRegisterResponse,
+} from "@interfaces/data-interfaces/user.interface";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthService } from "@services/auth/auth.service";
 import { removeFromStorage } from "@utils/tokens";
+import { toast } from "react-toastify";
 import {
   LoginUserField,
   RegisterType,
@@ -10,11 +14,31 @@ import {
 } from "types/user.type";
 
 /* register */
-export const register = createAsyncThunk<IAuthResponse, RegisterType>(
+export const register = createAsyncThunk<IRegisterResponse, RegisterType>(
   "auth/register",
   async (data, thunkApi) => {
     try {
-      const response = await AuthService.auth(data, "register");
+      const response = await AuthService.register(data);
+
+      return response;
+    } catch (error: any) {
+      toast.error(errorCatch(error), {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return thunkApi.rejectWithValue(
+        error.response.data.message || "Unknown error"
+      );
+    }
+  }
+);
+
+/* verify account */
+
+export const verifyAccount = createAsyncThunk<IRegisterResponse, string>(
+  "auth/verify-account",
+  async (data, thunkApi) => {
+    try {
+      const response = await AuthService.verifyAccount(data);
 
       return response;
     } catch (error: any) {
@@ -34,6 +58,9 @@ export const login = createAsyncThunk<IAuthResponse, LoginUserField>(
 
       return response;
     } catch (error: any) {
+      toast.error(errorCatch(error), {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return thunkApi.rejectWithValue(
         error.response.data.message || "Unknown error"
       );
@@ -63,7 +90,10 @@ export const resetPasswordToken = createAsyncThunk<
   ResetUserPasswordType
 >("auth/reset-password", async (data, thunkApi) => {
   try {
-    const response = await AuthService.resetWithToken(data);
+    const response = await AuthService.resetWithToken({
+      new_pass: data.new_pass,
+      resetToken: data.resetToken,
+    });
 
     return response;
   } catch (error: any) {
@@ -79,21 +109,18 @@ export const logout = createAsyncThunk("/logout", async () => {
 });
 
 /* checkAuth */
-export const checkAuth = createAsyncThunk<
-  IAuthResponse,
-  {
-    accessToken: string;
-  }
->("auth/check-auth", async (_, thunkApi) => {
-  try {
-    const response = await AuthService.getNewTokens();
+export const checkAuth = createAsyncThunk<boolean>(
+  "auth/check-auth",
+  async (_, thunkApi) => {
+    try {
+      const response = await AuthService.checkTokens();
+      return response.data;
+    } catch (error: any) {
+      if (errorCatch(error) === "Invalid refresh token") {
+        removeFromStorage();
+      }
 
-    return response.data;
-  } catch (error) {
-    if (errorCatch(error) === "jwt expired") {
-      thunkApi.dispatch(logout());
+      return thunkApi.rejectWithValue(error);
     }
-
-    return thunkApi.rejectWithValue(error);
   }
-});
+);

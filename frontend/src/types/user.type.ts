@@ -10,8 +10,8 @@ export type IInitialState = {
 };
 
 export type ResetUserPasswordType = {
-  old_pass: string;
   new_pass: string;
+  reset_pass: string;
   resetToken: string;
 };
 

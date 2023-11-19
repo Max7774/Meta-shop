@@ -8,7 +8,7 @@ export const useProfile = () => {
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   return { profile };
 };

@@ -39,3 +39,7 @@ export interface ITokens {
 export interface IAuthResponse extends ITokens {
   user: UserType;
 }
+
+export interface IRegisterResponse extends ITokens {
+  user: UserType["user"];
+}

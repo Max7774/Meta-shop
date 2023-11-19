@@ -1,19 +1,16 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   Param,
   Patch,
   Post,
-  Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { Response } from 'express';
+import { AccessTokenDto, RefreshTokenDto } from './dto/refresh-token.dto';
 import { ResetPasswordType } from './auth.interface';
 
 @Controller('auth')
@@ -36,9 +33,16 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Get('verify/:token')
-  async registerMail(@Param('token') token: string, @Res() res: Response) {
-    return this.authService.verifyToken(token, res);
+  @Post('verify/:token')
+  async registerMail(@Param('token') token: string) {
+    return this.authService.verifyToken(token);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Post('verify-token')
+  async checkToken(@Body() dto: AccessTokenDto) {
+    return await this.authService.verifyAccessToken(dto.accessToken);
   }
 
   @UsePipes(new ValidationPipe())

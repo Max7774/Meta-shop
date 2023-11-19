@@ -1,6 +1,6 @@
-import Button from "@UI/Button/Button";
-import Heading from "@UI/Heading/Heading";
-import TextField from "@UI/TextField/TextField";
+import Button from "@UI/AuthUI/Button/Button";
+import Heading from "@UI/AuthUI/Heading/Heading";
+import TextField from "@UI/AuthUI/TextField/TextField";
 import { useActions } from "@hooks/useActions";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -33,19 +33,6 @@ const ResetPassword = () => {
             Reset password
           </Heading>
           <TextField
-            {...formRegister("old_pass", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Min length should more 6 symbols",
-              },
-            })}
-            placeholder="Old password"
-            type="password"
-            color="white"
-            error={errors.old_pass?.message}
-          />
-          <TextField
             {...formRegister("new_pass", {
               required: "Password is required",
               minLength: {
@@ -59,11 +46,25 @@ const ResetPassword = () => {
             error={errors.new_pass?.message}
           />
           <TextField
+            {...formRegister("reset_pass", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Min length should more 6 symbols",
+              },
+            })}
+            placeholder="Repeat password"
+            type="password"
+            color="white"
+            error={errors.reset_pass?.message}
+          />
+          <TextField
             {...formRegister("resetToken", {
               required: "Token is required",
             })}
             placeholder="Token"
             type="password"
+            helperText="Enter token from email"
             token
             color="white"
             error={errors.resetToken?.message}

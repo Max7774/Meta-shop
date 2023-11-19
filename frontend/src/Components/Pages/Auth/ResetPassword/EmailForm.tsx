@@ -1,6 +1,4 @@
-import Button from "@UI/Button/Button";
-import Heading from "@UI/Heading/Heading";
-import TextField from "@UI/TextField/TextField";
+import { AuthUI } from "@UI/AuthUI";
 import { useActions } from "@hooks/useActions";
 import { validEmail } from "@utils/validations/valid-email";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -25,11 +23,11 @@ const EmailForm = () => {
 
   return (
     <div>
-      <Heading className="text-sm capitalize text-center m-4">
+      <AuthUI.Heading className="text-lg text-center m-4 text-white">
         Write your email to reset password
-      </Heading>
+      </AuthUI.Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
+        <AuthUI.TextField
           {...formRegister("email", {
             required: "Email is required",
             pattern: {
@@ -37,14 +35,16 @@ const EmailForm = () => {
               message: "Please enter a valid email addres",
             },
           })}
+          className="bg"
           placeholder="Email"
+          color="white"
           center
           error={errors.email?.message}
         />
         <div className="flex justify-center">
-          <Button size="md" variant="secondary">
+          <AuthUI.Button size="md" variant="primary">
             Send
-          </Button>
+          </AuthUI.Button>
         </div>
       </form>
     </div>

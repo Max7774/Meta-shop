@@ -12,7 +12,6 @@ import { AuthDto } from './dto/auth.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { createTransport } from 'nodemailer';
 import { generateToken } from 'src/utils/generateToken';
-import { Response } from 'express';
 import { ResetPasswordType } from './auth.interface';
 
 @Injectable()
@@ -65,6 +64,20 @@ export class AuthService {
     };
   }
 
+  async verifyAccessToken(accessToken: string) {
+    try {
+      const result = this.jwt.verify(accessToken);
+      await this.prisma.user.findUnique({
+        where: {
+          uuid: result.uuid,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid access token');
+    }
+  }
+
   async register(dto: AuthDto) {
     const oldUser = await this.prisma.user.findUnique({
       where: {
@@ -76,7 +89,7 @@ export class AuthService {
 
     const verificationToken = generateToken(16);
 
-    const user = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         uuid: uuidGen(),
         role: 'DEFAULT_USER',
@@ -85,7 +98,7 @@ export class AuthService {
         second_name: dto.second_name,
         birth_day: dto.birth_day,
         town: dto.town,
-        avatarPath: '/uploads/default-avatar.png',
+        avatarPath: 'default-avatar.png',
         phone_number: dto.phone_number,
         password: await hash(dto.password),
         verified: false,
@@ -93,52 +106,17 @@ export class AuthService {
       },
     });
 
-    const verificationLink = `${process.env.SERVER_URL}/auth/verify/${verificationToken}`;
-
     await this.transporter.sendMail({
-      from: 'mega_ymbetov@mail.ru', // Адрес отправителя
-      to: dto.email, // Адрес получателя
-      subject: 'Verify your account', // Тема письма
-      text: `Please verify your account by clicking the following link: ${verificationLink}`, // Текст письма
+      from: 'mega_ymbetov@mail.ru',
+      to: dto.email,
+      subject: 'Verify your account',
+      text: `Please verify your account by this token: ${verificationToken}`,
     });
 
-    const tokens = await this.issueTokens(user.uuid);
-
-    return {
-      user: this.returnUserFields(user),
-      ...tokens,
-    };
+    return 'Success';
   }
 
-  async createUser(dto: AuthDto) {
-    const oldUser = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-    });
-
-    if (oldUser) throw new BadGatewayException('Такой пользователь уже есть');
-
-    const user = await this.prisma.user.create({
-      data: {
-        uuid: uuidGen(),
-        role: dto.role,
-        email: dto.email,
-        first_name: dto.first_name,
-        second_name: dto.second_name,
-        birth_day: dto.birth_day,
-        town: dto.town,
-        avatarPath: '/uploads/default-avatar.png',
-        phone_number: dto.phone_number,
-        password: await hash(dto.password),
-        verified: true,
-      },
-    });
-
-    return user;
-  }
-
-  async verifyToken(verifyToken: string, res: Response) {
+  async verifyToken(verifyToken: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         verifyToken,
@@ -147,7 +125,7 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('User not found!');
 
-    await this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: {
         verifyToken,
       },
@@ -157,7 +135,12 @@ export class AuthService {
       },
     });
 
-    return res.redirect('/');
+    const tokens = await this.issueTokens(updatedUser.uuid);
+
+    return {
+      user: this.returnUserFields(updatedUser),
+      ...tokens,
+    };
   }
 
   private async issueTokens(userUuid: string) {
@@ -238,10 +221,6 @@ export class AuthService {
     });
 
     if (!user) throw new NotFoundException('User not found');
-
-    const isValid = verify(user.password, body.old_pass);
-
-    if (!isValid) throw new UnauthorizedException('Invalid password');
 
     await this.prisma.user.update({
       where: {

@@ -1,5 +1,5 @@
 import { getStoreLocal } from "@utils/local-storage";
-import { checkAuth, login, logout, register } from "./user.actions";
+import { checkAuth, login, logout, verifyAccount } from "./user.actions";
 import { createSlice } from "@reduxjs/toolkit";
 import { IInitialState } from "types/user.type";
 
@@ -15,15 +15,15 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state) => {
+      .addCase(verifyAccount.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(register.fulfilled, (state, { payload }) => {
+      .addCase(verifyAccount.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.verified = payload.user.user.verified;
-        state.user = payload.user;
+        state.verified = payload.user.verified;
+        state.user = { user: payload.user };
       })
-      .addCase(register.rejected, (state) => {
+      .addCase(verifyAccount.rejected, (state) => {
         state.isLoading = false;
         state.user = null;
       })
@@ -42,8 +42,8 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.user = null;
       })
-      .addCase(checkAuth.fulfilled, (state, { payload }) => {
-        state.user = payload.user;
+      .addCase(checkAuth.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

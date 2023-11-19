@@ -1,6 +1,9 @@
 import { axiosClassic, instance } from "@api/api.interceptor";
-import { IAuthResponse } from "@interfaces/data-interfaces/user.interface";
-import { REFRESH_TOKEN, saveToStorage } from "@utils/tokens";
+import {
+  IAuthResponse,
+  IRegisterResponse,
+} from "@interfaces/data-interfaces/user.interface";
+import { ACCESS_TOKEN, REFRESH_TOKEN, saveToStorage } from "@utils/tokens";
 import Cookies from "js-cookie";
 import {
   LoginUserField,
@@ -16,9 +19,40 @@ export const AuthService = {
       data,
     });
 
-    console.log(response.data);
-
     if (response.data) saveToStorage(response.data);
+
+    return response.data;
+  },
+
+  async register(data: RegisterType) {
+    const response = await instance<IRegisterResponse>({
+      url: `/auth/register`,
+      method: "POST",
+      data,
+    });
+
+    if (response.data)
+      saveToStorage({
+        refreshToken: response.data.refreshToken,
+        accessToken: response.data.accessToken,
+        user: { user: response.data.user },
+      });
+
+    return response.data;
+  },
+
+  async verifyAccount(token: string) {
+    const response = await axiosClassic<IRegisterResponse>({
+      url: `/auth/verify/${token}`,
+      method: "POST",
+    });
+
+    if (response.data)
+      saveToStorage({
+        refreshToken: response.data.refreshToken,
+        accessToken: response.data.accessToken,
+        user: { user: response.data.user },
+      });
 
     return response.data;
   },
@@ -36,7 +70,9 @@ export const AuthService = {
     return response.data;
   },
 
-  async resetWithToken(data: ResetUserPasswordType) {
+  async resetWithToken(
+    data: Pick<ResetUserPasswordType, "new_pass" | "resetToken">
+  ) {
     const response = await instance({
       url: `/auth/reset`,
       method: "PATCH",
@@ -55,6 +91,16 @@ export const AuthService = {
     );
 
     if (response.data) saveToStorage(response.data);
+
+    return response;
+  },
+
+  async checkTokens() {
+    const accessToken = Cookies.get(ACCESS_TOKEN);
+
+    const response = await axiosClassic.post<boolean>("/auth/verify-token", {
+      accessToken,
+    });
 
     return response;
   },

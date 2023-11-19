@@ -1,7 +1,7 @@
 import { IButton } from "@interfaces/components-interfaces/button.interface";
 import { FC, PropsWithChildren } from "react";
 import cn from "clsx";
-import Loader from "@UI/Loader/Loader";
+import Loader from "@UI/AuthUI/Loader/Loader";
 
 const Button: FC<PropsWithChildren<IButton>> = ({
   isLoading = false,
@@ -34,7 +34,11 @@ const Button: FC<PropsWithChildren<IButton>> = ({
       )}
       {...rest}
     >
-      {isLoading ? <Loader /> : <>{children}</>}
+      {isLoading ? (
+        <Loader color="white" size="md" isLoading />
+      ) : (
+        <>{children}</>
+      )}
     </button>
   );
 };
