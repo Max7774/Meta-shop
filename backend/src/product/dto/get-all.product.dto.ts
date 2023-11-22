@@ -32,4 +32,8 @@ export class GetAllProductDto extends PaginationDto {
   @IsOptional()
   @IsString()
   categoryUuid?: string;
+
+  @IsOptional()
+  @IsString()
+  subcategoryUuid?: string;
 }

@@ -116,8 +116,14 @@ export const checkAuth = createAsyncThunk<boolean>(
       const response = await AuthService.checkTokens();
       return response.data;
     } catch (error: any) {
-      if (errorCatch(error) === "Invalid refresh token") {
-        removeFromStorage();
+      if (errorCatch(error) === "Invalid access token") {
+        try {
+          await AuthService.getNewTokens();
+        } catch (error: any) {
+          if (errorCatch(error) === "Invalid refresh token") {
+            removeFromStorage();
+          }
+        }
       }
 
       return thunkApi.rejectWithValue(error);

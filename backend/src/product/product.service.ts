@@ -94,6 +94,14 @@ export class ProductService {
           },
         },
         {
+          subcategory: {
+            name: {
+              contains: searchTerm,
+              mode: 'insensitive',
+            },
+          },
+        },
+        {
           name: {
             contains: searchTerm,
             mode: 'insensitive',

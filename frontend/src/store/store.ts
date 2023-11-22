@@ -1,10 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./user.slice/user.slice";
 import { profileSlice } from "./profile.slice/profile.slice";
+import { carouselSlice } from "./carousel.slice/carousel.slice";
+import { categorySlice } from "./category.slice/category.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
   profile: profileSlice.reducer,
+  carousel: carouselSlice.reducer,
+  category: categorySlice.reducer,
 });
 
 let mainReducer = combinedReducers;

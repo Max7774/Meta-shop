@@ -1,9 +1,12 @@
-import CarouselBox from "@UI/CarouselBox/CarouselBox";
+import Carousel from "@UI/Carousel/Carousel";
+import { carouselItems } from "./items";
+import Categories from "./Categories/Categories";
 
 const Main = () => {
   return (
     <div>
-      <CarouselBox />
+      <Carousel items={carouselItems} />
+      <Categories />
     </div>
   );
 };

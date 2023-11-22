@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CategoryDto } from './dto/category.dto';
-import { returnCategoryObject } from './return-category.object';
+import {
+  returnCategoryObject,
+  returnAllCategoryObject,
+} from './return-category.object';
 import { convertToSlug } from 'src/utils/convertToSlug';
 import { uuidGen } from 'src/utils/uuidGenerator';
 
@@ -40,9 +43,11 @@ export class CategoryService {
   }
 
   async getAll() {
-    return await this.prisma.category.findMany({
-      select: returnCategoryObject,
+    const categories = await this.prisma.category.findMany({
+      select: returnAllCategoryObject,
     });
+
+    return { categories };
   }
 
   async createCategory(dto: CategoryDto) {

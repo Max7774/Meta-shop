@@ -17,6 +17,12 @@ export const productReturnObject: Prisma.ProductSelect = {
       createdAt: 'desc',
     },
   },
+  subcategory: {
+    select: {
+      name: true,
+      slug: true,
+    },
+  },
 };
 
 export const productReturnObjectFull: Prisma.ProductSelect = {
