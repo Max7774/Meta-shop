@@ -42,4 +42,32 @@ export class FileUploadService {
 
     return urls;
   }
+
+  async uploadFile(file: Express.Multer.File, categoryUuid: { uuid: string }) {
+    const { filename, mimetype, originalname, size, path } = file;
+    const url = `${process.env.SERVER_URL}/file-upload/${filename}`;
+
+    const result = await this.prismaFileService.photoFile.create({
+      data: {
+        uuid: uuidGen(),
+        url,
+        filename,
+        mimetype,
+        originalname,
+        size,
+        path,
+        categoryUuid: categoryUuid.uuid,
+      },
+    });
+
+    await this.prismaFileService.category.update({
+      where: {
+        uuid: categoryUuid.uuid,
+      },
+      data: {
+        icon: result.url,
+      },
+    });
+    return result.url;
+  }
 }

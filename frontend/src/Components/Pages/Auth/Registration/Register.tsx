@@ -5,8 +5,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { RegisterType } from "types/user.type";
 import VerifyAccount from "./VerifyAccount/VerifyAccount";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [isModalOpen, setOpen] = useState(false);
@@ -113,12 +111,6 @@ const Register = () => {
       >
         <VerifyAccount />
       </AuthUI.Modal>
-      <ToastContainer
-        autoClose={2000}
-        position="top-center"
-        className="toast-container"
-        toastClassName="dark-toast"
-      />
     </section>
   );
 };

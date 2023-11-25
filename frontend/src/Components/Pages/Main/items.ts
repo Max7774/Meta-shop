@@ -17,4 +17,10 @@ export const carouselItems: ICarouselItem[] = [
     image: "/img/3.jpg1",
     link: "Hello",
   },
+  {
+    title: "Реклама",
+    description: "Каждый год новые контесты!",
+    image: "/img/3.jpg1",
+    link: "Hello",
+  },
 ];

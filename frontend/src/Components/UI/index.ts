@@ -6,6 +6,7 @@ import Loader from "./AuthUI/Loader/Loader";
 import CarouselBox from "./Carousel/Carousel";
 import Heading from "./AuthUI/Heading/Heading";
 import Modal from "./AuthUI/Modal/Modal";
+import Footer from "./Footer/Footer";
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   CarouselBox,
   Heading,
   Modal,
+  Footer,
 };

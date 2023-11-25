@@ -1,0 +1,4 @@
+.search-results {
+  @apply flex flex-col w-[199.5px] tablet:w-96 absolute z-3 p-2 rounded-b-md bg-white border-2 border-t-0 border-primary text-black;
+  top: 5%;
+}

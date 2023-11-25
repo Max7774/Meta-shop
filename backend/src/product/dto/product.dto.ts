@@ -23,4 +23,8 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
   @IsNumber()
   quantity: number;
+
+  @IsOptional()
+  @IsNumber()
+  discount: number;
 }

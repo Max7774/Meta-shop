@@ -1,5 +1,9 @@
 /* eslint-disable no-console */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma, Product } from '@prisma/client';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { PrismaService } from 'src/prisma.service';
@@ -243,6 +247,7 @@ export class ProductService {
       peculiarities,
       subcategoryUuid,
       quantity,
+      discount,
     } = dto;
 
     const isProduct = await this.prisma.product.findUnique({
@@ -263,6 +268,7 @@ export class ProductService {
         price,
         categoryUuid,
         subcategoryUuid,
+        discount: discount || 0,
         quantity,
       },
     });
@@ -271,29 +277,43 @@ export class ProductService {
   }
 
   async updateProduct(uuid: string, dto: ProductDto) {
-    const { description, price, name, categoryUuid, quantity, peculiarities } =
-      dto;
-
-    await this.categoryService.byId(categoryUuid);
-
-    return this.prisma.product.update({
-      where: {
-        uuid,
-      },
-      data: {
+    try {
+      const {
         description,
         price,
         name,
-        peculiarities,
+        categoryUuid,
         quantity,
-        slug: convertToSlug(name),
-        category: {
-          connect: {
-            uuid: categoryUuid,
+        peculiarities,
+        discount,
+      } = dto;
+
+      const { uuid: catUuid } = await this.categoryService.byId(categoryUuid);
+
+      const product = await this.prisma.product.update({
+        where: {
+          uuid,
+        },
+        data: {
+          description,
+          discount,
+          price,
+          name,
+          peculiarities,
+          quantity,
+          slug: convertToSlug(name),
+          category: {
+            connect: {
+              uuid: catUuid,
+            },
           },
         },
-      },
-    });
+      });
+
+      return product;
+    } catch (error) {
+      throw new UnauthorizedException('Product is not found');
+    }
   }
 
   async deleteProduct(uuid: string) {

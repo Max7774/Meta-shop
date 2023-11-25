@@ -11,11 +11,31 @@ const Categories = () => {
     getAllCategories({});
   }, [getAllCategories]);
   return (
-    <div className="m-5 flex flex-row flex-wrap gap-10">
-      {categories.categories.map((el, i) => (
-        <Box key={i}>{el.name}</Box>
-      ))}
-    </div>
+    <>
+      <div className="bg-gray h-[1px] mx-5"></div>
+      <div className="text-3xl text-black font-semibold m-5 tablet:text-center">
+        Категории
+      </div>
+      <div className="m-5 grid grid-cols-2 tablet:grid-cols-3 desktop:grid-cols-6 gap-5 tablet:gap-20">
+        {categories.categories.map((el, i) => (
+          <div
+            key={i + "block"}
+            className="flex flex-col justify-center items-center"
+          >
+            <Box key={i}>
+              <img src={el.icon} alt="..." width={130} height={130} />
+            </Box>
+            <div
+              key={i + "name"}
+              className="text-sm text-center mt-1 hidden tablet:block text-black font-semibold"
+            >
+              {el.name}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-gray h-[1px] mx-5"></div>
+    </>
   );
 };
 

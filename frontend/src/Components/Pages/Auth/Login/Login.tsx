@@ -6,10 +6,10 @@ import { LoginUserField } from "types/user.type";
 import EmailForm from "../ResetPassword/EmailForm";
 import { AuthUI } from "@UI/AuthUI";
 import Links from "./Links/Links";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useAuthRedirect } from "@hooks/auth-hooks/useAuthRedirect";
 
 const Login = () => {
+  useAuthRedirect("login");
   const [isModalOpen, setIsOpen] = useState(false);
   const { login } = useActions();
 
@@ -26,14 +26,15 @@ const Login = () => {
   };
 
   return (
-    <section className="flex justify-center m-40 max-[420px]:mt-30 mr-2 ml-2">
+    // <section className="flex justify-center m-40 max-[420px]:mt-30 mr-2 ml-2">
+    <>
       <div
-        className="rounded-2xl shadow-2xl mins-w-2/5 p-10 bg-secondary"
-        style={{ width: "600px" }}
+      // className="mins-w-2/5 p-10"
+      // style={{ width: "600px" }}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <AuthUI.Heading className="capitalize text-center mb-4 text-white">
-            Login
+            Войти
           </AuthUI.Heading>
           <AuthUI.TextField
             {...formRegister("email", {
@@ -74,13 +75,8 @@ const Login = () => {
           <EmailForm />
         </AuthUI.Modal>
       </div>
-      <ToastContainer
-        autoClose={2000}
-        position="top-center"
-        className="toast-container"
-        toastClassName="dark-toast"
-      />
-    </section>
+    </>
+    // </section>
   );
 };
 

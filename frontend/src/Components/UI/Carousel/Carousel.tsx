@@ -8,6 +8,8 @@ import { ICarouselItem } from "./carousel.interface";
 import { useTypedSelector } from "@hooks/redux-hooks/useTypedSelector";
 import Transition from "@UI/Transition/Transition";
 import { Link } from "react-router-dom";
+import { MdOutlineHorizontalRule } from "react-icons/md";
+import { useActions } from "@hooks/useActions";
 
 interface ICarousel {
   items: ICarouselItem[];
@@ -17,11 +19,12 @@ interface ICarousel {
 const Carousel: FC<ICarousel> = ({ items, className = "" }) => {
   const { selectedItemIndex } = useTypedSelector((state) => state.carousel);
   const selectedItem = items[selectedItemIndex];
+  const { selectSlide } = useActions();
 
   return (
-    <section className={cn(className, "relative m-5")}>
-      <CarouselNavigation />
-      <TransitionGroup className="relative h-56">
+    <section className={cn(className, "relative m-5 mb-0")}>
+      <CarouselNavigation items={items} />
+      <TransitionGroup className="relative h-60">
         <Transition
           key={selectedItem.title}
           timeout={500}
@@ -58,6 +61,17 @@ const Carousel: FC<ICarousel> = ({ items, className = "" }) => {
           </div>
         </Transition>
       </TransitionGroup>
+      <div className={styles["nav-center"]}>
+        {items.map((_, i) => (
+          <div
+            key={i}
+            className={cn({ "text-gray": selectedItemIndex !== i })}
+            onClick={() => selectSlide(i)}
+          >
+            <MdOutlineHorizontalRule size={50} />
+          </div>
+        ))}
+      </div>
     </section>
   );
 };

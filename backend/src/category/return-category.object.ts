@@ -9,6 +9,7 @@ export const returnCategoryObject: Prisma.CategorySelect = {
 export const returnAllCategoryObject: Prisma.CategorySelect = {
   name: true,
   slug: true,
+  icon: true,
   subcategory: {
     select: {
       name: true,

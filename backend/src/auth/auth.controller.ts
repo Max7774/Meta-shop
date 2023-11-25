@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  UnauthorizedException,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -28,7 +29,11 @@ export class AuthController {
   @HttpCode(200)
   @Post('login/access-token')
   async getNewToken(@Body() dto: RefreshTokenDto) {
-    return this.authService.getNewToken(dto.refreshToken);
+    try {
+      return await this.authService.getNewToken(dto.refreshToken);
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
   }
 
   @UsePipes(new ValidationPipe())

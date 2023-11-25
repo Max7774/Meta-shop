@@ -3,12 +3,18 @@ import { userSlice } from "./user.slice/user.slice";
 import { profileSlice } from "./profile.slice/profile.slice";
 import { carouselSlice } from "./carousel.slice/carousel.slice";
 import { categorySlice } from "./category.slice/category.slice";
+import { productSlice } from "./products.slice/product.slice";
+import { modalSlice } from "./modal.slice/modal.slice";
+import { filtersSlice } from "./filters/filters.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
   profile: profileSlice.reducer,
   carousel: carouselSlice.reducer,
   category: categorySlice.reducer,
+  products: productSlice.reducer,
+  modals: modalSlice.reducer,
+  filters: filtersSlice.reducer,
 });
 
 let mainReducer = combinedReducers;

@@ -7,13 +7,14 @@ import {
   ParseFilePipe,
   Post,
   Res,
+  UploadedFile,
   UploadedFiles,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { FileUploadService } from './file-upload.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('file-upload')
@@ -35,6 +36,23 @@ export class FileUploadController {
     @Param() uuid: { uuid: string },
   ) {
     return this.fileUploadService.uploadFiles(file, uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth('ADMIN' || 'MANAGER')
+  @Post('create/icon/:uuid')
+  @UseInterceptors(FileInterceptor('file'))
+  async createIcon(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
+      }),
+    )
+    file: Express.Multer.File,
+    @Param() uuid: { uuid: string },
+  ) {
+    return this.fileUploadService.uploadFile(file, uuid);
   }
 
   @Get(':fileName')

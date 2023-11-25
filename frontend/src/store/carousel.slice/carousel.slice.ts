@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { ICarouselInitialState } from './carousel.types'
+import { ICarouselInitialState } from '../../interfaces/data-interfaces/carousel.interface'
 
 const initialState: ICarouselInitialState = {
 	selectedItemIndex: 0

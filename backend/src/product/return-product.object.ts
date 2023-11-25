@@ -8,6 +8,7 @@ export const productReturnObject: Prisma.ProductSelect = {
   uuid: true,
   name: true,
   price: true,
+  discount: true,
   createdAt: true,
   slug: true,
   category: { select: returnCategoryObject },

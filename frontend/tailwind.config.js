@@ -11,7 +11,7 @@ const colors = {
   disabledpri: "#855868",
   disabled: "#73879D",
   "bg-color": "#524fff",
-  "bg-color-secondary": "#D7E8BA",
+  "bg-color-secondary": "#F2F2F5",
   aqua: "#268697",
   green: twColors.green[400],
   red: twColors.red[400],
@@ -23,6 +23,7 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     screens: {
+      mobile: "450px",
       tablet: "600px",
       laptop: "1024px",
       desktop: "1280px",

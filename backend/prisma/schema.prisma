@@ -43,6 +43,7 @@ model Product {
   peculiarities String?
   quantity      Int
   price         Int
+  discount      Int
   images        String[]      @default(["default-product-photo.png"])
   categoryUuid  String?       @map("category_uuid")
   userUuid      String?       @map("user_uuid")
@@ -80,6 +81,7 @@ model PhotoFile {
   path         String
   productUuid  String?       @map("product_uuid")
   product      Product?      @relation(fields: [productUuid], references: [uuid])
+  categoryUuid String?      @map("category_uuid") @unique
 }
 
 model Category {
@@ -87,6 +89,7 @@ model Category {
   createdAt   DateTime       @default(now()) @map("created_at")
   updatedAt   DateTime       @updatedAt @map("updated_at")
 
+  icon        String?        @default("default-product-photo.png")
   name        String         @unique
   slug        String         @unique
   subcategory Subcategory[]

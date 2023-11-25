@@ -1,21 +1,30 @@
 import { FC } from "react";
-import { BsCaretLeftSquare, BsCaretRightSquare } from "react-icons/bs";
+import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 
 import styles from "./Carousel.module.scss";
 import { useActions } from "@hooks/useActions";
+import { ICarouselItem } from "./carousel.interface";
 
-const CarouselNavigation: FC = () => {
+interface ICarouselNavigationProps {
+  items: ICarouselItem[];
+}
+
+const CarouselNavigation: FC<ICarouselNavigationProps> = ({ items }) => {
   const { nextSlide, prevSlide } = useActions();
 
   return (
-    <div className={styles.nav}>
-      <button onClick={() => prevSlide()}>
-        <BsCaretLeftSquare />
-      </button>
-      <button onClick={() => nextSlide({ carouselLength: 3 })}>
-        <BsCaretRightSquare />
-      </button>
-    </div>
+    <>
+      <div className={styles["nav-right"]}>
+        <button onClick={() => nextSlide({ carouselLength: 3 })}>
+          <BsChevronCompactRight size={40} />
+        </button>
+      </div>
+      <div className={styles["nav-left"]}>
+        <button onClick={() => prevSlide()}>
+          <BsChevronCompactLeft size={40} />
+        </button>
+      </div>
+    </>
   );
 };
 

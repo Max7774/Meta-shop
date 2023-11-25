@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 const Loader: FC<{
   size: "sm" | "md" | "lg";
   isLoading?: boolean;
-  color: "white" | "#3772FF" | "#000000";
+  color: "white" | "primary" | "secondary";
   className?: string;
 }> = ({ size, isLoading, color, className }) => {
   const [sizeLoader, setSizeLoader] = useState({
@@ -45,7 +45,13 @@ const Loader: FC<{
       >
         <path
           fill="none"
-          stroke={color}
+          stroke={
+            color === "primary"
+              ? "#611C35"
+              : color === "secondary"
+              ? "#2E5077"
+              : color
+          }
           strokeWidth="8"
           strokeDasharray="42.76482137044271 42.76482137044271"
           d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z"
