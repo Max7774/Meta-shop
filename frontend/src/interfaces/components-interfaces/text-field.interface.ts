@@ -1,4 +1,5 @@
 import { InputHTMLAttributes } from "react";
+import { IconType } from "react-icons";
 
 export interface ITextField extends InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
@@ -10,4 +11,5 @@ export interface ITextField extends InputHTMLAttributes<HTMLInputElement> {
   center?: boolean;
   name?: string;
   token?: boolean;
+  Icon?: IconType;
 }

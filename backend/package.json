@@ -29,6 +29,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.1",
     "@nestjs/platform-express": "^10.2.4",
+    "@nestjs/swagger": "^7.1.16",
     "@prisma/client": "^5.2.0",
     "@types/multer": "^1.4.7",
     "argon2": "^0.31.1",
@@ -82,5 +83,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
   }
 }

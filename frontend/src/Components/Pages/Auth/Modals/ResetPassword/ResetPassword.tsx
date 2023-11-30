@@ -3,12 +3,10 @@ import Heading from "@UI/AuthUI/Heading/Heading";
 import TextField from "@UI/AuthUI/TextField/TextField";
 import { useActions } from "@hooks/useActions";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { ResetUserPasswordType } from "types/user.type";
 
 const ResetPassword = () => {
-  const { resetPasswordToken } = useActions();
-  const navigate = useNavigate();
+  const { resetPasswordToken, openModal, closeModal } = useActions();
 
   const {
     register: formRegister,
@@ -20,7 +18,8 @@ const ResetPassword = () => {
   const onSubmit: SubmitHandler<ResetUserPasswordType> = async (data) => {
     resetPasswordToken(data);
     reset();
-    navigate("/login");
+    closeModal("resetPassword");
+    openModal("login");
   };
   return (
     <section className="flex justify-center m-40">

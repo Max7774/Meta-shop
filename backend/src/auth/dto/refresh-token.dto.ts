@@ -9,3 +9,8 @@ export class AccessTokenDto {
   @IsString()
   accessToken: string;
 }
+
+export class ResetPasswordDto {
+  @IsString()
+  email: string;
+}

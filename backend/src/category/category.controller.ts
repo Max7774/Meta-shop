@@ -13,8 +13,10 @@ import {
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dto/category.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('categories')
+@ApiTags('Categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

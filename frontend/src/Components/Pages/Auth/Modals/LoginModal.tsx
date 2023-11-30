@@ -1,7 +1,7 @@
 import { Modal } from "@UI/index";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
-import Login from "../Login/Login";
+import Login from "./Login/Login";
 
 const LoginModal = () => {
   const { login } = useAppSelector((store) => store.modals);

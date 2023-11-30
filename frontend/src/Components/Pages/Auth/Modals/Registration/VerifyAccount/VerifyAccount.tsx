@@ -20,24 +20,28 @@ const VerifyAccount = () => {
   return (
     <>
       <AuthUI.Heading className="text-lg text-center m-4 text-white">
-        Verify your account
+        Подтвердите свой аккаунт
       </AuthUI.Heading>
       <form onSubmit={handleSubmit(verify)}>
         <AuthUI.TextField
           {...formRegister("token", {
-            required: "Token is required",
+            required: "Код подтверждения обязателен",
+            minLength: {
+              value: 6,
+              message: "Код подтверждения должен состоять из 6 цифр",
+            },
           })}
           type="password"
-          placeholder="Token"
+          placeholder="Код"
           color="white"
           token
-          helperText="Enter token from email"
+          helperText="Введите код подтверждения отправленный на почту"
           center
           error={errors.token?.message}
         />
         <div className="flex justify-center">
           <AuthUI.Button size="md" variant="primary">
-            Send
+            Подтвердить
           </AuthUI.Button>
         </div>
       </form>

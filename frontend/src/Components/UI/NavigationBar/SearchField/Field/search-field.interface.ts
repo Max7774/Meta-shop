@@ -4,4 +4,5 @@ export interface ISearchField extends InputHTMLAttributes<HTMLInputElement> {
   type: HTMLInputTypeAttribute;
   placeholder: string;
   isLoading?: boolean
+  isInput?: boolean
 }

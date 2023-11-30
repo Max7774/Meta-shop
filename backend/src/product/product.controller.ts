@@ -16,13 +16,34 @@ import { GetAllProductDto } from './dto/get-all.product.dto';
 import { ProductDto } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { returnProductSchema } from './return-product.object';
 
 @Controller('products')
+@ApiTags('Products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @UsePipes(new ValidationPipe())
   @Get()
+  @ApiResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        length: {
+          type: 'number',
+          example: 0,
+        },
+        products: {
+          type: 'array',
+          items: {
+            $ref: '#/components/schemas/returnProductSchema',
+          },
+          example: [returnProductSchema],
+        },
+      },
+    },
+  })
   async getAll(@Query() queryDto: GetAllProductDto) {
     return this.productService.getAll(queryDto);
   }

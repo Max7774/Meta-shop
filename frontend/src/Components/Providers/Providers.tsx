@@ -5,7 +5,7 @@ import AuthProvider from "./AuthProvider/AuthProvider";
 import store from "@store/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AuthModals from "@Pages/Auth/Modals";
+import AuthModals from "@Pages/Auth";
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (

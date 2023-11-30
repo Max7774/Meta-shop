@@ -111,8 +111,8 @@ export class AuthService {
     await this.transporter.sendMail({
       from: 'mega_ymbetov@mail.ru',
       to: dto.email,
-      subject: 'Verify your account',
-      text: `Please verify your account by this token: ${verificationToken}`,
+      subject: 'Подтверждение аккаунта',
+      text: `Пожалуйста, подтвердите свой аккаунт с помощью кода подтверждения: ${verificationToken}`,
     });
 
     return 'Success';
@@ -208,8 +208,8 @@ export class AuthService {
     await this.transporter.sendMail({
       from: 'mega_ymbetov@mail.ru', // Адрес отправителя
       to: email, // Адрес получателя
-      subject: 'Reset password', // Тема письма
-      text: `Token to reset your password: ${resetToken}`, // Текст письма
+      subject: 'Сброс пароля', // Тема письма
+      text: `Код для сброса пароля: ${resetToken}`, // Текст письма
     });
 
     return 'OK';

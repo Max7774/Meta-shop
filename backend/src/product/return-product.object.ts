@@ -29,3 +29,27 @@ export const productReturnObject: Prisma.ProductSelect = {
 export const productReturnObjectFull: Prisma.ProductSelect = {
   ...productReturnObject,
 };
+
+export const returnProductSchema = {
+  images: ['string'],
+  description: 'string',
+  uuid: 'string',
+  name: 'string',
+  price: 0,
+  discount: 0,
+  createdAt: new Date(),
+  slug: 'string',
+  category: {
+    name: 'string',
+    slug: 'string',
+  },
+  reviews: [
+    {
+      uuid: 'string',
+    },
+  ],
+  subcategory: {
+    name: 'string',
+    slug: 'string',
+  },
+};

@@ -46,7 +46,15 @@ const TextField = forwardRef<HTMLInputElement, ITextField>(
               name={name}
               placeholder={placeholder}
               ref={ref}
-              type={showPassword ? "text" : type}
+              type={
+                showPassword
+                  ? "text"
+                  : type === "password"
+                  ? "password"
+                  : type === "repeat_password"
+                  ? "password"
+                  : type
+              }
               className={cn(
                 "border-b-2 px-4 py-2 text-white w-full outline-none bg-secondary focus:border-b-primary transition-all placeholder:text-white rounded-xl",
                 { "border-b-red": !!error }
@@ -55,7 +63,7 @@ const TextField = forwardRef<HTMLInputElement, ITextField>(
             />
             {!token && (
               <>
-                {type === "password" ? (
+                {type === "password" || type === "repeat_password" ? (
                   <button
                     type="button"
                     className="absolute top-1/2 right-3 transform -translate-y-1/2 text-white"

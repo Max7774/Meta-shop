@@ -23,6 +23,7 @@ export type RegisterType = {
   phone_number: string;
   town: string;
   birth_day: string;
+  repeat_password?: string;
 };
 
 export type UserType = {

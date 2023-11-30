@@ -12,8 +12,10 @@ import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { OrderDto } from './dto/order.dto';
 import { OrderService } from './order.service';
 import { PaymentStatusDto } from './dto/payment-status.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('orders')
+@ApiTags('Orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
