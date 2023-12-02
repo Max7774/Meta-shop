@@ -24,3 +24,9 @@ export const carouselItems: ICarouselItem[] = [
     link: "Hello",
   },
 ];
+
+export const ReactItems = (): JSX.Element[] => {
+  return carouselItems.map((item) => (
+    <div className="py-10 mx-20">{item.title}</div>
+  ));
+};
