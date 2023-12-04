@@ -9,3 +9,20 @@
 .image {
   @apply duration-300 hover:shadow-md ml-5 first:ml-0 last:mr-0 border-b-4 border-solid transition-all rounded-lg overflow-hidden inline-block;
 }
+
+.nav-right,
+.nav-left {
+  @apply absolute z-10;
+  top: 40%; /* Измените это значение для регулировки вертикального положения */
+  transform: translateY(
+    -50%
+  ); /* Это значение центрирует элементы относительно их нового вертикального положения */
+}
+
+.nav-right {
+  right: 10px;
+}
+
+.nav-left {
+  left: 10px;
+}

@@ -40,7 +40,12 @@ export class FileUploadService {
         uuid: productUuid.uuid,
       },
       data: {
-        images: [...product.images, ...urls],
+        images: [...product.images, ...urls].filter(
+          (imageUrl) =>
+            !imageUrl.includes(
+              `${process.env.SERVER_URL}/file-upload/default-product-photo.png`,
+            ),
+        ),
       },
     });
 

@@ -27,12 +27,12 @@ const OneProduct = () => {
         <div className="flex flex-col tablet:flex-row justify-between">
           <Carousel images={product.images} isNew={product.isNew} />
           <div className="mt-5 hidden desktop:block w-[500px] p-2">
-            <div className="text-xl font-semibold">Описание</div>
-            <div className="pl-2">{product.description}</div>
+            <div className="text-xl font-bold">Описание</div>
+            <div>{product.description}</div>
             {product.peculiarities !== "" && (
               <>
-                <div className="text-xl font-semibold mt-5">Особенности</div>
-                <div className="pl-2">{product.peculiarities}</div>
+                <div className="text-xl font-bold my-2">Особенности</div>
+                <div className="font-thin">{product.peculiarities}</div>
               </>
             )}
           </div>
@@ -41,9 +41,9 @@ const OneProduct = () => {
               <div className="text-md font-semibold m-2">Цена</div>
               <Price price={product.price} discount={product.discount} />
               {product.discount !== 0 && (
-                <div className="flex flex-row justify-center items-center ml-2">
+                <div className="flex flex-col tablet:flex-row justify-center items-start tablet:items-center ml-2">
                   <RiErrorWarningFill size={25} className="text-red mr-2" />
-                  <div className="text-center text-red">
+                  <div className="text-start text-red">
                     До конца скидки осталось 2 дня
                   </div>
                 </div>
@@ -61,9 +61,9 @@ const OneProduct = () => {
           </div>
         </div>
         <div className="mt-5 m-5 desktop:hidden">
-          <div className="text-xl font-semibold">Описание</div>
+          <div className="text-xl font-bold">Описание</div>
           <div>{product.description}</div>
-          <div className="text-md font-semibold">- Особенности</div>
+          <div className="text-xl font-bold my-2">Особенности</div>
           <div>{product.peculiarities}</div>
         </div>
       </div>

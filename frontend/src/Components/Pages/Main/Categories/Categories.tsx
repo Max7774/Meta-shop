@@ -1,40 +1,86 @@
 import { useTypedSelector } from "@hooks/redux-hooks/useTypedSelector";
 import { useActions } from "@hooks/useActions";
-import { useEffect } from "react";
-import Box from "./Box";
+import { useEffect, useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import styles from "./Categories.module.scss";
+import cn from "clsx";
 
 const Categories = () => {
   const { getAllCategories } = useActions();
   const categories = useTypedSelector((state) => state.category);
+  const [expandedCategories, setExpandedCategories] = useState<any>({});
 
   useEffect(() => {
     getAllCategories({});
   }, [getAllCategories]);
+
+  const toggleCategory = (slug: string) => {
+    // setExpandedCategories((prev: any) => ({
+    //   ...prev,
+    //   [slug]: !prev[slug],
+    // }));
+    setExpandedCategories((prev: any) => {
+      const isExpanded = !prev[slug];
+      const newExpanded = { ...prev, [slug]: isExpanded };
+
+      if (isExpanded) {
+        // Вычислите и примените высоту
+        const content = document.getElementById(`subcategory-${slug}`);
+        if (content) {
+          content.style.height = `${content.scrollHeight}px`;
+        }
+      } else {
+        // Сбросьте высоту
+        const content = document.getElementById(`subcategory-${slug}`);
+        if (content) {
+          content.style.height = `0px`;
+        }
+      }
+
+      return newExpanded;
+    });
+  };
+
   return (
     <>
       <div className="bg-gray h-[1px] mx-5"></div>
-      <div className="text-3xl text-black font-semibold m-5 tablet:text-center">
+      <div className="text-3xl text-black font-semibold m-5 mb-0 tablet:text-center">
         Категории
       </div>
-      <div className="m-5 grid grid-cols-2 tablet:grid-cols-3 desktop:grid-cols-6 gap-5 tablet:gap-20">
-        {categories.categories.map((el, i) => (
-          <div
-            key={i + "block"}
-            className="flex flex-col justify-center items-center"
-          >
-            <Box key={i}>
-              <img src={el.icon} alt="..." width={130} height={130} />
-            </Box>
+      <div className="flex flex-col justify-center items-center mx-5">
+        {categories.categories.map((category, i) => (
+          <div key={i} className="w-full flex flex-col">
             <div
-              key={i + "name"}
-              className="text-sm text-center mt-1 hidden tablet:block text-black font-semibold"
+              className="flex flex-row justify-between items-center w-full bg-gray rounded-lg py-2 my-2 px-5"
+              onClick={() => toggleCategory(category.slug)}
             >
-              {el.name}
+              <div className="text-sm text-center mt-1 text-black font-semibold">
+                {category.name}
+              </div>
+              <div>
+                {expandedCategories[category.slug] ? (
+                  <FaChevronUp />
+                ) : (
+                  <FaChevronDown />
+                )}
+              </div>
+            </div>
+            <div
+              id={`subcategory-${category.slug}`}
+              className={cn(styles.subcategories, {
+                [styles.filterOpened]: expandedCategories[category.slug],
+              })}
+            >
+              {category.subcategory?.map((sub, idx) => (
+                <div key={idx} className="pl-5 py-2 text-black">
+                  {sub.name}
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
-      <div className="bg-gray h-[1px] mx-5"></div>
+      <div className="bg-gray h-[1px] mx-5 my-2"></div>
     </>
   );
 };

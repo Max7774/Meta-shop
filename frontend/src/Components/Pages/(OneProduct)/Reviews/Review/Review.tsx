@@ -15,14 +15,14 @@ const Review: FC<{ review: IReview }> = ({ review }) => {
             height={50}
           />
           <div className="mx-2">{review.user.first_name}</div>
-          <div className="bg-white p-2 rounded-xl">
+          <div className="p-2 rounded-xl">
             <Rating
               readonly
               initialValue={review.rating}
               SVGstyle={{
                 display: "inline-block",
               }}
-              size={20}
+              size={30}
               allowFraction
               transition
             />

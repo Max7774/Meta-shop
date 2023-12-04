@@ -8,7 +8,7 @@ $medium: 900px;
 body {
   margin: 0;
   @apply overflow-x-hidden bg-bg-color-secondary text-black;
-  font-family: var(--font-golos), sans-serif;
+  font-family: "Merriweather", serif;
   font-size: larger;
   @media screen and (max-width: $small) {
     font-size: smaller;

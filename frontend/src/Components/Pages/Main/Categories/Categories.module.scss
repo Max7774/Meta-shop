@@ -1,0 +1,13 @@
+.subcategories {
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  transition:
+    height 600ms ease-in-out,
+    opacity 600ms ease-in-out;
+}
+
+.subcategories.filterOpened {
+  height: 50px; /* Пример фиксированной высоты, настройте это значение в соответствии с вашим контентом */
+  opacity: 1;
+}

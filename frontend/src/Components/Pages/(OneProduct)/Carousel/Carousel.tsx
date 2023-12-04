@@ -2,14 +2,16 @@ import { FC, useState } from "react";
 import { FaCaretRight } from "react-icons/fa";
 import cn from "clsx";
 import styles from "./Carousel.module.scss";
+import CarouselNavigation from "./Navigation";
 
 const Carousel: FC<{ images: string[]; isNew: boolean }> = ({
   images,
   isNew,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <div className="mx-5 mt-5">
+    <div className="mx-5 mt-5 relative">
       {isNew && (
         <>
           <div className={styles["flag"]}>
@@ -20,13 +22,20 @@ const Carousel: FC<{ images: string[]; isNew: boolean }> = ({
           </div>
         </>
       )}
-      <img
-        src={images[activeIndex]}
-        alt="..."
-        width={500}
-        height={500}
-        className="rounded-lg overflow-hidden"
-      />
+      <div>
+        <img
+          src={images[activeIndex]}
+          alt="..."
+          width={500}
+          height={500}
+          className="rounded-lg overflow-hidden"
+        />
+        <CarouselNavigation
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          images={images}
+        />
+      </div>
       <div
         className="mt-6 rounded-md p-2 overflow-auto"
         style={{ maxWidth: 500, overflowX: "auto", whiteSpace: "nowrap" }}
