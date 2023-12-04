@@ -45,6 +45,7 @@ model Product {
   price         Int
   discount      Int
   images        String[]      @default(["default-product-photo.png"])
+
   categoryUuid  String?       @map("category_uuid")
   userUuid      String?       @map("user_uuid")
   subcategoryUuid String?     @map("subcategory_uuid")

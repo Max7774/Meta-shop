@@ -6,12 +6,14 @@ import * as productActions from "./products.slice/products.actions";
 import { modalSlice } from "./modal.slice/modal.slice";
 import { productSlice } from "./products.slice/product.slice";
 import { filtersSlice } from "./filters/filters.slice";
+import * as oneProductActions from "./oneProduct.slice/oneProduct.actions";
 
 export const rootActions = {
   ...carouselSlice.actions,
   ...modalSlice.actions,
   ...productSlice.actions,
   ...filtersSlice.actions,
+  ...oneProductActions,
   ...categoryActions,
   ...userActions,
   ...profileActions,

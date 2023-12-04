@@ -12,6 +12,7 @@ import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { ReviewDto } from './dto/review.dto';
 import { ReviewService } from './review.service';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('reviews')
 @ApiTags('Review')
@@ -26,6 +27,7 @@ export class ReviewController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @Auth('DEFAULT_USER')
   @Post('leave/:productUuid')
   async leaveReview(
     @CurrentUser('uuid') uuid: string,

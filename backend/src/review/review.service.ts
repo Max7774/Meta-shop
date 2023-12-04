@@ -20,7 +20,7 @@ export class ReviewService {
   }
 
   async createReview(userUuid: string, dto: ReviewDto, productUuid: string) {
-    const resonse = await this.prisma.review.create({
+    const response = await this.prisma.review.create({
       data: {
         uuid: uuidGen(),
         rating: Math.floor(dto.rating),
@@ -39,7 +39,7 @@ export class ReviewService {
       select: returnReviewObject,
     });
 
-    return resonse;
+    return response;
   }
 
   async getAverageValueByProductId(productUuid: string) {

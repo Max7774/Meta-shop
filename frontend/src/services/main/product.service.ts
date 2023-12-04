@@ -14,4 +14,13 @@ export const ProductService = {
 
     return response.data;
   },
+
+  async getBySlug(slug: string) {
+    const response = await instance({
+      url: `products/by-slug/${slug}`,
+      method: "GET",
+    });
+
+    return response.data;
+  },
 };

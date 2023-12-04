@@ -17,6 +17,7 @@ const colors = {
   red: twColors.red[400],
   purple: "#6931e0",
   blue: "#2e33bf",
+  orange: "#ff8a00",
 };
 
 module.exports = {

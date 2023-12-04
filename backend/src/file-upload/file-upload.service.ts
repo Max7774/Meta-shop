@@ -29,6 +29,10 @@ export class FileUploadService {
       return result.url;
     });
 
+    const product = await this.prismaFileService.product.findUnique({
+      where: { uuid: productUuid.uuid },
+    });
+
     const urls = await Promise.all(promises);
 
     await this.prismaFileService.product.update({
@@ -36,7 +40,7 @@ export class FileUploadService {
         uuid: productUuid.uuid,
       },
       data: {
-        images: urls,
+        images: [...product.images, ...urls],
       },
     });
 

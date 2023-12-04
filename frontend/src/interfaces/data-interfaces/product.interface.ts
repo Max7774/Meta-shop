@@ -14,6 +14,7 @@ export interface IProduct {
   category: ICategory;
   quantity: number;
   isNew: boolean;
+  peculiarities: string;
 }
 
 export type TypeProductData = {

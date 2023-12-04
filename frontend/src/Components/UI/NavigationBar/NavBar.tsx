@@ -6,6 +6,7 @@ import { useActions } from "@hooks/useActions";
 import { CiLogin } from "react-icons/ci";
 import styles from "./NavBar.module.scss";
 import { MdFavoriteBorder } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const { profile } = useProfile();
@@ -16,7 +17,9 @@ const NavBar = () => {
       <header className="bg-secondary text-white py-2 px-3 max-[400px]:py-3">
         {user === null ? (
           <div className="flex flex-row justify-between items-center">
-            <div className="text-2xl text-white font-semibold">Shop</div>
+            <div className="text-2xl text-white font-semibold">
+              <Link to={"/"}>Shop</Link>
+            </div>
             <div className="flex flex-row justify-center items-center">
               <div className="px-2">
                 <MdFavoriteBorder

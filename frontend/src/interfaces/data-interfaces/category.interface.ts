@@ -4,7 +4,7 @@ export interface ICategory {
   name: string;
   slug: string;
   icon: string;
-  subcategory: ISubcategory[];
+  subcategory?: ISubcategory[];
 }
 
 export interface IResponseCategory {

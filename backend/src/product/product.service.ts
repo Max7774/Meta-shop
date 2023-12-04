@@ -39,8 +39,16 @@ export class ProductService {
       select: productReturnObject,
     });
 
+    const currentProducts = products.map((product) => {
+      return {
+        ...product,
+        isNew:
+          product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      };
+    });
+
     return {
-      products,
+      currentProducts,
       length: await this.prisma.product.count({
         where: filters,
       }),
@@ -192,7 +200,13 @@ export class ProductService {
         throw new NotFoundException('Product not found');
       }
 
-      return product;
+      const currentProduct = {
+        ...product,
+        isNew:
+          product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      };
+
+      return currentProduct;
     } catch (error) {
       console.error('Failed to delete product:', error);
       throw error;
