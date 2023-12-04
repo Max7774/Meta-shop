@@ -1,11 +1,11 @@
 .progress-step {
-  @apply py-2 px-4 hover:cursor-pointer rounded-xl;
+  @apply py-2 px-4 hover:cursor-pointer rounded-xl text-center;
   transition:
     background-color 0.3s ease,
     transform 0.3s ease;
 }
 
 .active-step {
-  @apply underline bg-primary rounded-xl;
+  @apply underline bg-primary rounded-xl text-center;
   transform: scale(1.1); /* небольшое увеличение для активного шага */
 }

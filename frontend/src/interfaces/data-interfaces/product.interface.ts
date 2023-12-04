@@ -12,6 +12,8 @@ export interface IProduct {
   images: string[];
   createdAt: string;
   category: ICategory;
+  quantity: number;
+  isNew: boolean;
 }
 
 export type TypeProductData = {
@@ -35,7 +37,7 @@ export type TypeProductDataFilters = {
 
 export type TypePaginationProducts = {
   length: number;
-  products: IProduct[];
+  currentProducts: IProduct[];
 };
 
 export enum EnumProductSort {

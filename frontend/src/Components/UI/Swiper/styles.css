@@ -27,19 +27,19 @@
     height: 47rem;
   }
   .swiper-slide {
-    width: 28rem !important;
-    height: 36rem !important;
+    width: 18rem !important;
+    height: 18rem !important;
   }
   .swiper-slide img {
-    width: 28rem !important;
-    height: 36rem !important;
+    width: 18rem !important;
+    height: 18rem !important;
   }
 }
 
 .swiper-slide img {
   width: 37rem;
   height: 42rem;
-  border-radius: 4rem;
+  border-radius: 2rem;
   object-fit: cover;
 }
 

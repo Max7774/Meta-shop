@@ -12,8 +12,6 @@ export const ProductService = {
       params: queryData,
     });
 
-    console.log(response.request.responseURL);
-
     return response.data;
   },
 };

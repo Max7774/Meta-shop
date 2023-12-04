@@ -1,10 +1,11 @@
 import { AuthUI } from "@UI/AuthUI";
 import { useProfile } from "@hooks/useProfile";
-import Search from "./SearchField/Search";
+// import Search from "./SearchField/Search";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
 import { CiLogin } from "react-icons/ci";
 import styles from "./NavBar.module.scss";
+import { MdFavoriteBorder } from "react-icons/md";
 
 const NavBar = () => {
   const { profile } = useProfile();
@@ -16,17 +17,26 @@ const NavBar = () => {
         {user === null ? (
           <div className="flex flex-row justify-between items-center">
             <div className="text-2xl text-white font-semibold">Shop</div>
-            <Search />
-            <CiLogin
-              size={40}
-              onClick={() => openModal("login")}
-              className={styles["login"]}
-            />
+            <div className="flex flex-row justify-center items-center">
+              <div className="px-2">
+                <MdFavoriteBorder
+                  size={30}
+                  onClick={() => openModal("login")}
+                  className={styles["login"]}
+                />
+              </div>
+              <div className="px-2">
+                <CiLogin
+                  size={35}
+                  onClick={() => openModal("login")}
+                  className={styles["login"]}
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <div className="flex flex-row justify-between items-center">
             <div className="text-2xl text-white font-semibold">Shop</div>
-            <Search />
             {profile.isLoading ? (
               <AuthUI.Loader isLoading size="sm" color="white" />
             ) : (

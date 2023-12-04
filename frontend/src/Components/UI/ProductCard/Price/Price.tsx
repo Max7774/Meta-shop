@@ -8,7 +8,7 @@ const Price: FC<{ discount: number; price: number }> = ({
   return (
     <div className="pl-2 flex flex-row items-center">
       {discount === 0 ? (
-        <div className="text-xl font-semibold text-red">
+        <div className="text-xl font-semibold text-black">
           {convertPrice(price)}
         </div>
       ) : (

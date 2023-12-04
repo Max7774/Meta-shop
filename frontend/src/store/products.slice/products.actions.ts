@@ -22,16 +22,16 @@ export const getAllProducts = createAsyncThunk<
   }
 );
 
-export const searchProducts = createAsyncThunk<TypePaginationProducts, TypeProductDataFilters>(
-  "products/search",
-  async (data, thunkApi) => {
-    try {
-      const response = await ProductService.getAll(data);
-      return response;
-    } catch (error: any) {
-      return thunkApi.rejectWithValue(
-        error.response.data.message || "Unknown error"
-      );
-    }
+export const searchProducts = createAsyncThunk<
+  TypePaginationProducts,
+  TypeProductDataFilters
+>("products/search", async (data, thunkApi) => {
+  try {
+    const response = await ProductService.getAll(data);
+    return response;
+  } catch (error: any) {
+    return thunkApi.rejectWithValue(
+      error.response.data.message || "Unknown error"
+    );
   }
-);
+});

@@ -16,7 +16,6 @@ const ProgressBar: FC<{
       >
         Основная информация
       </div>
-      <div className="py-2 px-4">{"->"}</div>
       <div
         className={cn(styles["progress-step"], {
           [styles["active-step"]]: step === 2,

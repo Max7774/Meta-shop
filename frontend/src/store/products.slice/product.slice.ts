@@ -12,14 +12,14 @@ export const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllProducts.fulfilled, (state, { payload }) => {
-      state.products = payload.products;
-    });
-    builder.addCase(searchProducts.pending, (state, { payload}) => {
+    builder.addCase(searchProducts.pending, (state, { payload }) => {
       state.searchResults = [];
     });
-    builder.addCase(searchProducts.fulfilled, (state, { payload}) => {
-      state.searchResults = payload.products.map((el) => el.name);
+    builder.addCase(getAllProducts.fulfilled, (state, { payload }) => {
+      state.products = payload.currentProducts;
+    });
+    builder.addCase(searchProducts.fulfilled, (state, { payload }) => {
+      state.searchResults = payload.currentProducts.map((el) => el.name);
     });
   },
 });

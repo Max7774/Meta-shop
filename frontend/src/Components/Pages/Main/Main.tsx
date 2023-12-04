@@ -1,7 +1,6 @@
 import Categories from "./Categories/Categories";
 import Products from "./Products/Products";
-import { Button, Footer } from "@UI/index";
-import SwiperCarousel from "./Swiper/Swiper";
+import { Button, Footer, SwiperCarousel } from "@UI/index";
 
 const Main = () => {
   return (

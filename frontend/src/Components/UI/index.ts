@@ -7,6 +7,8 @@ import CarouselBox from "./Carousel/Carousel";
 import Heading from "./AuthUI/Heading/Heading";
 import Modal from "./AuthUI/Modal/Modal";
 import Footer from "./Footer/Footer";
+import SwiperCarousel from "./Swiper/Swiper";
+import ProductCard from "./ProductCard/ProductCard";
 
 export {
   Button,
@@ -18,4 +20,6 @@ export {
   Heading,
   Modal,
   Footer,
+  SwiperCarousel,
+  ProductCard,
 };

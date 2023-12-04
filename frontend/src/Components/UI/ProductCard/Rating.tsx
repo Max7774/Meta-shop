@@ -16,7 +16,7 @@ const ProductRating: FC<IProductRating> = ({ product, isText = false }) => {
   );
 
   return (
-    <div className="mb-2 pl-2">
+    <div className="pl-2">
       {!!product.reviews.length && (
         <span className="mr-1">
           <Rating
