@@ -1,21 +1,19 @@
 import { useEffect } from "react";
+import { useAuth } from "./auth-hooks/useAuth";
 import { useActions } from "./useActions";
-import { useAppSelector } from "./redux-hooks/reduxHooks";
-import Cookies from "js-cookie";
-import { REFRESH_TOKEN } from "@utils/tokens";
-import { useNavigate } from "react-router-dom";
+import { getAccessToken } from "@utils/tokens";
 
 export const useProfile = () => {
-  const { getProfile } = useActions();
-  const profile = useAppSelector((store) => store.profile);
-  const navigate = useNavigate();
+  const { profile, isProfileLoading } = useAuth();
+  const { getUserProfile } = useActions();
+  const accessToken = getAccessToken();
 
   useEffect(() => {
-    const refreshToken = Cookies.get(REFRESH_TOKEN);
-    if (refreshToken) {
-      getProfile();
-    }
-  }, [getProfile, navigate]);
+    if (accessToken) getUserProfile();
+  }, [accessToken]);
 
-  return { profile };
+  return {
+    profile,
+    isProfileLoading,
+  };
 };

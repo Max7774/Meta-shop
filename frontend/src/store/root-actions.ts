@@ -1,21 +1,15 @@
-import * as userActions from "./user.slice/user.actions";
-import * as profileActions from "./profile.slice/profile.actions";
-import { carouselSlice } from "./carousel.slice/carousel.slice";
-import * as categoryActions from "./category.slice/category.actions";
-import * as productActions from "./products.slice/products.actions";
-import { modalSlice } from "./modal.slice/modal.slice";
-import { productSlice } from "./products.slice/product.slice";
+import * as userActions from "./user/user.actions";
+import * as categoryActions from "./category/category.actions";
+import * as productActions from "./product/product.actions";
+import { cartSlice } from "./cart/cart.slice";
+import * as ordersActions from "./orders/orders.actions";
 import { filtersSlice } from "./filters/filters.slice";
-import * as oneProductActions from "./oneProduct.slice/oneProduct.actions";
 
 export const rootActions = {
-  ...carouselSlice.actions,
-  ...modalSlice.actions,
-  ...productSlice.actions,
-  ...filtersSlice.actions,
-  ...oneProductActions,
-  ...categoryActions,
   ...userActions,
-  ...profileActions,
+  ...categoryActions,
   ...productActions,
+  ...cartSlice.actions,
+  ...filtersSlice.actions,
+  ...ordersActions,
 };

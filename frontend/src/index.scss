@@ -2,62 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-$small: 420px;
-$medium: 900px;
-
-body {
-  margin: 0;
-  @apply overflow-x-hidden bg-bg-color-secondary text-black;
-  font-family: "Merriweather", serif;
-  font-size: larger;
-  @media screen and (max-width: $small) {
-    font-size: smaller;
-  }
+.open-menu {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.disabled {
-  pointer-events: none;
-  cursor: default;
-  text-decoration: none;
-  opacity: 0.2 !important;
-}
-
-.btn {
-  @apply rounded-xl px-10 py-2 font-medium shadow transition duration-300 ease-in-out;
-
-  &:not(&:disabled) {
-    @apply hover:shadow-lg;
-  }
-
-  &.btn-white {
-    @apply bg-white text-primary;
-  }
-
-  &.btn-orange {
-    @apply bg-primary text-white;
-  }
-
-  &.btn-large {
-    @apply px-12 py-4 text-xl;
-  }
-}
-
-.btnlink {
-  @apply rounded-3xl px-10 py-2 font-medium shadow transition duration-300 ease-in-out;
-
-  &:not(&:disabled) {
-    @apply hover:shadow-lg;
-  }
-
-  &.btn-white {
-    @apply bg-white text-primary;
-  }
-
-  &.btn-orange {
-    @apply bg-primary text-white;
-  }
-
-  &.btn-large {
-    @apply px-12 py-4 text-xl;
-  }
+.close-menu {
+  opacity: 0;
+  transform: scale(0.8);
 }

@@ -1,19 +1,25 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import {
-  EnumProductSort,
   IFiltersActionsPayload,
   IFiltersState,
 } from "./filters.types";
+import { ESort } from "@enums/ESort";
+import { TFiltersPages } from "@/types/TFilters";
 
 const initialState: IFiltersState = {
-  isFilterUpdated: false,
-  queryParams: {
-    sort: EnumProductSort.NEWEST,
-    searchTerm: "",
-    page: 1,
-    perPage: 20,
-    ratings: "",
+  order: {
+    isFilterUpdated: false,
+    queryParams: {
+      searchTerm: "",
+    },
+  },
+  products: {
+    isFilterUpdated: false,
+    queryParams: {
+      searchTerm: "",
+      sort: ESort.NEWEST,
+    },
   },
 };
 
@@ -26,11 +32,18 @@ export const filtersSlice = createSlice({
       action: PayloadAction<IFiltersActionsPayload>
     ) => {
       const { key, value } = action.payload;
-      state.queryParams[key] = value;
-      state.isFilterUpdated = true;
+      if (key === "sort") {
+        state[action.payload.pageKey].queryParams[key] = value as ESort;
+      } else {
+        state[action.payload.pageKey].queryParams[key] = value;
+      }
+      state[action.payload.pageKey].isFilterUpdated = true;
     },
-    resetFilterUpdate: (state) => {
-      state.isFilterUpdated = false;
+    resetFilterUpdate: (
+      state,
+      action: PayloadAction<{ pageKey: TFiltersPages }>
+    ) => {
+      state[action.payload.pageKey].isFilterUpdated = false;
     },
   },
 });

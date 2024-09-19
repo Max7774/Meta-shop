@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useAuth } from "./useAuth";
 import { useActions } from "@hooks/useActions";
-import { IModalActions } from "@interfaces/data-interfaces/modal.interface";
+import { IModalActions } from "@/types/TModalActions";
 
 export const useAuthRedirect = (modal: IModalActions) => {
-  const { user } = useAuth();
+  const { isAuth } = useAuth();
   const { closeModal } = useActions();
 
   useEffect(() => {
-    if (user) closeModal(modal);
-  }, [user, closeModal, modal]);
+    if (isAuth) closeModal(modal);
+  }, [isAuth, closeModal, modal]);
 };
