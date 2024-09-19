@@ -12,8 +12,8 @@ datasource db {
 
 model User {
   uuid         String         @unique
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
+  createdAt    DateTime       @default(now()) @map("createdAt")
+  updatedAt    DateTime       @updatedAt @map("updatedAt")
 
   email        String         @unique
   phone_number String         @unique
@@ -34,8 +34,8 @@ model User {
 
 model Product {
   uuid          String        @unique
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  createdAt     DateTime      @default(now()) @map("createdAt")
+  updatedAt     DateTime      @updatedAt @map("updatedAt")
 
   name          String        @unique
   slug          String        @unique
@@ -46,15 +46,17 @@ model Product {
   discount      Int
   images        String[]      @default(["default-product-photo.png"])
 
-  categoryUuid  String?       @map("category_uuid")
-  userUuid      String?       @map("user_uuid")
-  subcategoryUuid String?     @map("subcategory_uuid")
+  categoryUuid  String?       @map("categoryUuid")
+  userUuid      String?       @map("userUuid")
+  subcategoryUuid String?     @map("subcategoryUuid")
+
   orderItems    OrderItem[]
-  category      Category?     @relation(fields: [categoryUuid], references: [uuid])
-  user          User?         @relation(fields: [userUuid], references: [uuid])
   reviews       Review[]
   photoFiles    PhotoFile[]
   clicks        UserClick[]
+
+  category      Category?     @relation(fields: [categoryUuid], references: [uuid])
+  user          User?         @relation(fields: [userUuid], references: [uuid])
   subcategory   Subcategory?  @relation(fields: [subcategoryUuid], references: [uuid])
 }
 
@@ -71,8 +73,8 @@ model UserClick {
 
 model PhotoFile {
   uuid         String        @unique
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  createdAt    DateTime      @default(now()) @map("createdAt")
+  updatedAt    DateTime      @updatedAt @map("updatedAt")
 
   url          String        @unique
   filename     String
@@ -80,15 +82,15 @@ model PhotoFile {
   mimetype     String
   size         Int
   path         String
-  productUuid  String?       @map("product_uuid")
+  productUuid  String?       @map("productUuid")
   product      Product?      @relation(fields: [productUuid], references: [uuid])
-  categoryUuid String?      @map("category_uuid") @unique
+  categoryUuid String?      @map("categoryUuid") @unique
 }
 
 model Category {
   uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
 
   icon        String?        @default("default-product-photo.png")
   name        String         @unique
@@ -99,34 +101,40 @@ model Category {
 
 model Subcategory {
   uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
 
   name        String
   slug        String         @unique
 
-  categoryUuid String?       @map("category_uuid")
+  categoryUuid String?       @map("categoryUuid")
   category     Category?     @relation(fields: [categoryUuid], references: [uuid])
   products     Product[]
 }
 
 model Review {
   uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
 
   rating      Int
   text        String
-  userUuid    String         @map("user_uuid")
-  productUuid String?        @map("product_uuid")
+  userUuid    String         @map("userUuid")
+  productUuid String?        @map("productUuid")
   product     Product?       @relation(fields: [productUuid], references: [uuid])
   user        User           @relation(fields: [userUuid], references: [uuid])
 }
 
 model Order {
   uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
+
+  orderId      String        @unique
+  addressLine1 String
+  addressLine2 String?
+  postalCode   String?
+  comment      String?
 
   status      EnumOrderItemStatus @default(Pending)
 
@@ -134,22 +142,22 @@ model Order {
   total       Int
 
   user        User           @relation(fields: [userUuid], references: [uuid])
-  userUuid    String         @map("user_uuid")
+  userUuid    String         @map("userUuid")
 }
 
 model OrderItem {
   uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("created_at")
-  updatedAt   DateTime       @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
 
   quantity    Int
   price       Int
 
   order       Order?         @relation(fields: [orderUuid], references: [uuid])
-  orderUuid   String?        @map("order_uuid")
+  orderUuid   String?        @map("orderUuid")
 
   product     Product        @relation(fields: [productUuid], references: [uuid])
-  productUuid String         @map("product_uuid")
+  productUuid String         @map("productUuid")
 
   @@map("Order_item")
 }
@@ -157,8 +165,9 @@ model OrderItem {
 enum EnumOrderItemStatus {
   Pending
   Payed
-  Shipped
+  In_Delivery
   Delivered
+  Canceled
 }
 
 enum EnumRoleOfUser {

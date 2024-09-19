@@ -5,7 +5,9 @@ import { join } from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: false });
+  const app = await NestFactory.create(AppModule, {
+    cors: false,
+  });
 
   app.use('../uploads', express.static(join(__dirname, '..', 'uploads')));
 
@@ -32,6 +34,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
 
-  await app.listen(8200);
+  await app.listen(8200, '192.168.1.105');
 }
 bootstrap();

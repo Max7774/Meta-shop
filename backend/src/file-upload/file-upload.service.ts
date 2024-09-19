@@ -41,10 +41,7 @@ export class FileUploadService {
       },
       data: {
         images: [...product.images, ...urls].filter(
-          (imageUrl) =>
-            !imageUrl.includes(
-              `${process.env.SERVER_URL}/file-upload/default-product-photo.png`,
-            ),
+          (imageUrl) => !imageUrl.includes(`default-product-photo.png`),
         ),
       },
     });
@@ -78,5 +75,9 @@ export class FileUploadService {
       },
     });
     return result.url;
+  }
+
+  async createUserAvatar(file: Express.Multer.File, uuid: string) {
+    return 'avatar' + file + uuid;
   }
 }

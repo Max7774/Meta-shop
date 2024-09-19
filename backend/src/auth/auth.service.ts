@@ -55,11 +55,11 @@ export class AuthService {
         },
       });
 
-      const tokens = await this.issueTokens(user.uuid);
+      const { accessToken } = await this.issueTokens(user.uuid);
 
       return {
         user: this.returnUserFields(user),
-        ...tokens,
+        accessToken,
       };
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -69,12 +69,12 @@ export class AuthService {
   async verifyAccessToken(accessToken: string) {
     try {
       const result = this.jwt.verify(accessToken);
-      await this.prisma.user.findUnique({
+      const { role } = await this.prisma.user.findUnique({
         where: {
           uuid: result.uuid,
         },
       });
-      return true;
+      return role;
     } catch (error) {
       throw new UnauthorizedException('Invalid access token');
     }

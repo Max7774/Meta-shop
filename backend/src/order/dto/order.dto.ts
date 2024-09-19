@@ -18,6 +18,20 @@ export class OrderDto {
   @IsEnum(EnumOrderItemStatus)
   status: EnumOrderItemStatus;
 
+  @IsOptional()
+  @IsString()
+  comment: string;
+
+  @IsString()
+  addressLine1: string;
+
+  @IsString()
+  addressLine2: string;
+
+  @IsOptional()
+  @IsString()
+  postalCode: string;
+
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
@@ -25,9 +39,6 @@ export class OrderDto {
 }
 
 export class OrderItemDto {
-  @IsString()
-  uuid: string;
-
   @IsNumber()
   quantity: number;
 

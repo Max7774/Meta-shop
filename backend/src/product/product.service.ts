@@ -31,7 +31,7 @@ export class ProductService {
 
     const filters = this.createFilter(dto);
 
-    const products = await this.prisma.product.findMany({
+    const currentProducts = await this.prisma.product.findMany({
       where: filters,
       orderBy: this.getSortOption(dto.sort),
       skip,
@@ -39,7 +39,7 @@ export class ProductService {
       select: productReturnObject,
     });
 
-    const currentProducts = products.map((product) => {
+    const products = currentProducts.map((product) => {
       return {
         ...product,
         isNew:
@@ -48,7 +48,7 @@ export class ProductService {
     });
 
     return {
-      currentProducts,
+      products,
       length: await this.prisma.product.count({
         where: filters,
       }),
@@ -259,7 +259,6 @@ export class ProductService {
       name,
       categoryUuid,
       peculiarities,
-      subcategoryUuid,
       quantity,
       discount,
     } = dto;
@@ -269,6 +268,15 @@ export class ProductService {
         name,
       },
     });
+
+    // Проверка существования категории
+    const categoryExists = await this.prisma.category.findUnique({
+      where: {
+        uuid: categoryUuid,
+      },
+    });
+
+    if (!categoryExists) throw new NotFoundException('Category not found');
 
     if (isProduct) throw new NotFoundException('Product is exist');
 
@@ -280,10 +288,20 @@ export class ProductService {
         peculiarities,
         slug: convertToSlug(dto.name),
         price,
-        categoryUuid,
-        subcategoryUuid,
         discount: discount || 0,
-        quantity,
+        quantity: quantity || 0,
+        category: {
+          connectOrCreate: {
+            where: {
+              uuid: categoryUuid,
+            },
+            create: {
+              uuid: categoryUuid,
+              name: categoryExists.name,
+              slug: categoryExists.slug,
+            },
+          },
+        },
       },
     });
 
@@ -332,15 +350,53 @@ export class ProductService {
 
   async deleteProduct(uuid: string) {
     try {
+      // Начинаем транзакцию
       const deletedProduct = await this.prisma.$transaction(async (prisma) => {
-        const deletedProduct = await prisma.product.deleteMany({
-          where: { uuid: { equals: uuid } },
+        // 1. Удаляем связанные UserClick
+        await prisma.userClick.deleteMany({
+          where: {
+            productUuid: uuid,
+          },
         });
+
+        // 2. Удаляем связанные OrderItem
+        await prisma.orderItem.deleteMany({
+          where: {
+            productUuid: uuid,
+          },
+        });
+
+        // 3. Удаляем заказы без элементов
+        await prisma.order.deleteMany({
+          where: {
+            items: {
+              none: {},
+            },
+          },
+        });
+
+        // 4. Удаляем связанные Review
         await prisma.review.deleteMany({
           where: {
             productUuid: uuid,
           },
         });
+
+        // 5. Удаляем связанные PhotoFile
+        await prisma.photoFile.deleteMany({
+          where: {
+            productUuid: uuid,
+          },
+        });
+
+        // 6. Удаляем сам Product
+        const deletedProduct = await prisma.product.delete({
+          where: {
+            uuid,
+          },
+        });
+
+        // Возвращаем удаленный продукт
         return deletedProduct;
       });
 

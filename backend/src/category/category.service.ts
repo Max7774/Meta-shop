@@ -59,18 +59,8 @@ export class CategoryService {
       },
     });
 
-    const subcategory = await this.prisma.subcategory.create({
-      data: {
-        uuid: uuidGen(),
-        name: dto.subcategory_name,
-        slug: convertToSlug(dto.subcategory_name),
-        categoryUuid: category.uuid,
-      },
-    });
-
     return {
       category,
-      subcategory,
     };
   }
 

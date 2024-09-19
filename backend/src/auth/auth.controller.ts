@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Headers,
   HttpCode,
   Param,
   Patch,
@@ -11,13 +13,9 @@ import {
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import {
-  AccessTokenDto,
-  RefreshTokenDto,
-  ResetPasswordDto,
-} from './dto/refresh-token.dto';
+import { RefreshTokenDto, ResetPasswordDto } from './dto/refresh-token.dto';
 import { ResetPasswordType } from './auth.interface';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -140,14 +138,11 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Post('verify-token')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        accessToken: { type: 'string' },
-      },
-    },
+  @Get('verify-token')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Access token',
+    required: true,
   })
   @ApiResponse({
     schema: {
@@ -155,8 +150,9 @@ export class AuthController {
       example: false,
     },
   })
-  async checkToken(@Body() dto: AccessTokenDto) {
-    return await this.authService.verifyAccessToken(dto.accessToken);
+  async checkToken(@Headers('authorization') authorization: string) {
+    const accessToken = authorization.replace('Bearer ', '');
+    return await this.authService.verifyAccessToken(accessToken);
   }
 
   @UsePipes(new ValidationPipe())

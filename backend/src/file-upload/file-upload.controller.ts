@@ -17,6 +17,7 @@ import { FileUploadService } from './file-upload.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
 @Controller('file-upload')
 @ApiTags('File-upload')
@@ -43,7 +44,7 @@ export class FileUploadController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth('ADMIN' || 'MANAGER')
-  @Post('create/icon/:uuid')
+  @Post('create/category/icon/:uuid')
   @UseInterceptors(FileInterceptor('file'))
   async createIcon(
     @UploadedFile(
@@ -55,6 +56,23 @@ export class FileUploadController {
     @Param() uuid: { uuid: string },
   ) {
     return this.fileUploadService.uploadFile(file, uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth('ADMIN' || 'MANAGER')
+  @Post('create/category/icon')
+  @UseInterceptors(FileInterceptor('file'))
+  async createUserAvatar(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
+      }),
+    )
+    file: Express.Multer.File,
+    @CurrentUser('uuid') uuid: string,
+  ) {
+    return this.fileUploadService.createUserAvatar(file, uuid);
   }
 
   @Get(':fileName')

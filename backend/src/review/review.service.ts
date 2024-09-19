@@ -43,7 +43,7 @@ export class ReviewService {
   }
 
   async getAverageValueByProductId(productUuid: string) {
-    return this.prisma.review
+    return await this.prisma.review
       .aggregate({
         where: {
           productUuid,
@@ -51,5 +51,18 @@ export class ReviewService {
         _avg: { rating: true },
       })
       .then((data) => data._avg);
+  }
+
+  async deleteReview(uuid: string) {
+    try {
+      const result = await this.prisma.review.delete({
+        where: {
+          uuid,
+        },
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

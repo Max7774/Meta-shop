@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -40,5 +41,10 @@ export class ReviewController {
   @Get('avarage-by-product/:productUuid')
   async getAvarage(@Param('productUuid') productUuid: string) {
     return this.reviewService.getAverageValueByProductId(productUuid);
+  }
+
+  @Delete('/:uuid')
+  async deleteReview(@Param('uuid') uuid: string) {
+    return this.reviewService.deleteReview(uuid);
   }
 }
