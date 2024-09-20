@@ -4,6 +4,7 @@ import {
   getNewAccessToken,
   getUserProfile,
   login,
+  phoneRegister,
   register,
   resetPassword,
   sendEmailToResetPassword,
@@ -164,6 +165,21 @@ export const userSlice = createSlice({
       })
       .addCase(getUserProfile.rejected, (state) => {
         state.isProfileLoading = false;
+        state.isError = true;
+      })
+      .addCase(phoneRegister.pending, (state) => {
+        /* ===================== PHONE REGISTER ===================== */
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(phoneRegister.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAuth = true;
+        state.isError = false;
+      })
+      .addCase(phoneRegister.rejected, (state) => {
+        state.isLoading = false;
+        state.isAuth = false;
         state.isError = true;
       });
   },

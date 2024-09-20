@@ -7,11 +7,12 @@ import NotFound from "@/main/Screens/NotFound/NotFound";
 import { ERoutes } from "@enums/ERoutes";
 import Auth from "@/main/Screens/Auth/Auth";
 import PrivateRoute from "../Providers/PrivateRoute";
+import { GlOBAL_PREFIX } from "@/const/globalPrefix";
 
 const Routing = () => {
   return (
     <Routes>
-      <Route path={ERoutes.AUTH} element={<Auth />} />
+      <Route path={GlOBAL_PREFIX + ERoutes.AUTH} element={<Auth />} />
       {Object.entries(ADMIN_ROUTES_DATA).map(
         ([
           key,

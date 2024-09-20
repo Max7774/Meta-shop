@@ -28,7 +28,7 @@ export const OrderService = {
   },
 
   async updateStatus(status: EOrder, orderUuid: string) {
-    return await instance<boolean>({
+    return await instance<{ uuid: string; status: EOrder }>({
       url: `${ORDERS}/status`,
       method: "POST",
       data: { status, orderUuid },

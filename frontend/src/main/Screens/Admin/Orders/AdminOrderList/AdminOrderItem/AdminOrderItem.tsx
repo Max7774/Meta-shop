@@ -7,6 +7,7 @@ import {
   CardHeader,
   Chip,
   Divider,
+  Image,
 } from "@nextui-org/react";
 import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
 import { EOrder } from "@enums/EOrder";
@@ -50,13 +51,15 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
           </div>
           <Divider className="mb-4" />
           <div className="flex flex-col gap-2">
-            <h3>
-              Заказал: {order.user?.first_name} {order.user?.second_name}
-            </h3>
+            {!!order.user?.first_name ||
+              (!!order.user?.second_name && (
+                <h3>
+                  Заказал: {order.user?.first_name} {order.user?.second_name}
+                </h3>
+              ))}
             <h3>Адрес: {order.addressLine1}</h3>
-            <h3>Уточнения к адресу: {order.addressLine2}</h3>
-            <h3>Почтовый индекс: {order.postalCode}</h3>
             <h3>Телефон: {order.user?.phone_number}</h3>
+            {!!order.comment && <h3>Комментарий: {order.comment}</h3>}
           </div>
         </div>
       </CardHeader>
@@ -65,11 +68,11 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
         <div className="space-y-4">
           {order.items.map((item, i) => (
             <div key={item.uuid} className="flex space-x-4">
-              <img
+              <Image
                 key={item.uuid + i}
                 src={item.product.images[0]}
                 alt={item.product.name}
-                className="w-16 h-16 object-cover rounded"
+                className="w-16 h-16 object-cover"
               />
               <div
                 key={item.productUuid}
@@ -101,18 +104,6 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
           </div>
           {order.status !== EOrder.Canceled &&
             order.status !== EOrder.Delivered && (
-              // <Button
-              //   color="primary"
-              //   onClick={() =>
-              //     updateStatus({
-              //       orderUuid: order.uuid,
-              //       status: EOrder.In_Delivery,
-              //     })
-              //   }
-              //   isLoading={isOrderStatusChangeLoading}
-              // >
-              //   Оплачено
-              // </Button>
               <>
                 <Button
                   color="primary"

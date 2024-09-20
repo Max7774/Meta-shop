@@ -43,7 +43,7 @@ export const cancelOrder = createAsyncThunk<boolean, string>(
 );
 
 export const updateStatus = createAsyncThunk<
-  boolean,
+  { uuid: string; status: EOrder },
   { orderUuid: string; status: EOrder }
 >("/order/update-status", async (data, { rejectWithValue }) => {
   try {

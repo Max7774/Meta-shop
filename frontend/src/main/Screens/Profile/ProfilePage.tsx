@@ -16,7 +16,7 @@ const ProfilePage = () => {
         />
         <div className="flex w-full flex-col space-y-2">
           <h1 className="text-2xl font-bold">{profile.first_name}</h1>
-          <p>Email: {profile.email}</p>
+          <p>Email: {profile.email || "Почты нет"}</p>
           <p>Телефон: {profile.phone_number}</p>
           <Button color="primary">Редактировать профиль</Button>
         </div>

@@ -11,7 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto, ResetPasswordDto } from './dto/refresh-token.dto';
 import { ResetPasswordType } from './auth.interface';
@@ -58,7 +58,7 @@ export class AuthController {
       },
     },
   })
-  async login(@Body() dto: AuthDto) {
+  async login(@Body() dto: AuthLoginDto) {
     return this.authService.login(dto);
   }
 
@@ -180,6 +180,27 @@ export class AuthController {
   })
   async register(@Body() dto: AuthDto) {
     return this.authService.register(dto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Post('phone-register')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        phone_number: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({
+    schema: {
+      type: 'string',
+      example: 'Success',
+    },
+  })
+  async phoneRegister(@Body() data: { phone_number: string }) {
+    return this.authService.phoneRegister(data);
   }
 
   @UsePipes(new ValidationPipe())

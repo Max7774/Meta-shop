@@ -62,8 +62,14 @@ export const ordersSlice = createSlice({
       .addCase(updateStatus.pending, (state) => {
         state.isOrderStatusChangeLoading = true;
       })
-      .addCase(updateStatus.fulfilled, (state) => {
+      .addCase(updateStatus.fulfilled, (state, { payload }) => {
         state.isOrderStatusChangeLoading = false;
+        const orderIndex = state.orders.findIndex(
+          (order) => order.uuid === payload.uuid
+        );
+        if (orderIndex !== -1) {
+          state.orders[orderIndex].status = payload.status;
+        }
       })
       .addCase(updateStatus.rejected, (state) => {
         state.isOrderStatusChangeLoading = false;

@@ -26,6 +26,14 @@ export const AuthService = {
     });
   },
 
+  async phoneRegister(data: { phone_number: string }) {
+    return await axiosClassic<TAuthnResponse>({
+      url: `${AUTH}/phone-register`,
+      method: "POST",
+      data,
+    });
+  },
+
   async verifyTokenFromRegister(token: string) {
     return await axiosClassic<TAuthnResponse>({
       url: `${AUTH}/verify/${token}`,

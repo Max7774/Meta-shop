@@ -34,6 +34,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
 
-  await app.listen(8200, '192.168.1.105');
+  await app.listen(8200);
 }
 bootstrap();

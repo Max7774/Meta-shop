@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 
 export class AuthDto {
+  @IsOptional()
   @IsEmail()
   email: string;
 
@@ -19,13 +20,13 @@ export class AuthDto {
   @IsString()
   second_name: string;
 
+  @IsOptional()
   @MinLength(6, {
     message: 'Password must be at least 6 characters long',
   })
   @IsString()
   password: string;
 
-  @IsOptional()
   @IsString()
   phone_number: string;
 
@@ -40,4 +41,17 @@ export class AuthDto {
   @IsOptional()
   @IsString()
   birth_day: string;
+}
+
+export class AuthLoginDto {
+  @IsOptional()
+  @IsEmail()
+  email: string;
+
+  @IsOptional()
+  @MinLength(6, {
+    message: 'Password must be at least 6 characters long',
+  })
+  @IsString()
+  password: string;
 }

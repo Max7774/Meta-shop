@@ -80,7 +80,7 @@ export const NavigationBar = () => {
         />
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit hidden sm:block">Products</p>
+          <p className="font-bold text-inherit hidden sm:block ml-2">GreenGo</p>
         </NavbarBrand>
       </NavbarContent>
       <NavbarMenu>

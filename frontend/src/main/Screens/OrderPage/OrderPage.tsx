@@ -5,7 +5,16 @@ import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { useProfile } from "@hooks/useProfile";
-import { Button, Card, CardBody, Divider, Input } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Divider,
+  Image,
+  Input,
+  Progress,
+  Textarea,
+} from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -15,32 +24,25 @@ import { toast } from "react-toastify";
 const OrderPage = () => {
   const { items, total } = useCart();
   const {
-    profile: { first_name, phone_number, town },
+    profile: { town },
+    isProfileLoading,
   } = useProfile();
-  const { createOrder } = useActions();
+  const { createOrder, reset } = useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
-
-  const [deliveryAddress, setDeliveryAddress] = useState({
-    addressLine1: "",
-    addressLine2: "",
-    postalCode: "",
-  });
   const [deliveryPrice, setDeliveryPrice] = useState(800);
   const navigate = useNavigate();
-
-  const handleChange = (e: any) => {
-    setDeliveryAddress({ ...deliveryAddress, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
     if (total > 10000) {
       setDeliveryPrice(0);
+    } else {
+      setDeliveryPrice(800);
     }
   }, [total]);
 
   const grandTotal = total + deliveryPrice;
 
-  const { handleSubmit, control } = useForm<TOrderForm>();
+  const { handleSubmit, control, setValue } = useForm<TOrderForm>();
 
   const submit: SubmitHandler<TOrderForm> = async (data) => {
     const result: any = await createOrder({
@@ -54,59 +56,58 @@ const OrderPage = () => {
       }),
     });
     if (result.type === "/order/create/fulfilled") {
+      reset();
       navigate("/profile");
     } else {
       toast.error("Ошибка создания заказа");
     }
   };
 
+  useEffect(() => {
+    if (!isProfileLoading) {
+      setValue("town", town);
+    }
+  }, [isProfileLoading]);
+
   return (
-    <section className="px-4 sm:px-8 lg:px-16 py-8">
-      <Heading className="text-center">Оформление заказа</Heading>
+    <section>
+      <Heading>Оформление заказа</Heading>
       {items.length === 0 ? (
         <div className="text-center mt-8 text-lg">Корзина пуста!</div>
       ) : (
         <form onSubmit={handleSubmit(submit)}>
+          <Divider />
           <div className="flex flex-col mt-8 gap-8">
             {items.map((item) => (
-              <Card key={item.uuid} className="w-full shadow-lg">
-                <CardBody className="flex flex-col sm:flex-row gap-5 items-center justify-between">
-                  <div className="flex flex-col sm:flex-row gap-5 items-center">
-                    <img
-                      src={item.product.images[0]}
-                      className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg"
-                      alt={item.product.name}
-                    />
-                    <div className="text-center sm:text-left">
-                      <div className="text-lg font-semibold">
-                        {item.product.name}
-                      </div>
-                      {item.product.description && (
-                        <div className="text-sm text-gray-500">
-                          {item.product.description}
-                        </div>
+              <div className="flex flex-row justify-between">
+                <div className="flex flex-row gap-3">
+                  <Image
+                    src={item.product.images[0]}
+                    className="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-lg"
+                    alt={item.product.name}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <div className="text-sm">{item.product.name}</div>
+                    <div>
+                      {item.discount > 0 ? (
+                        <>
+                          <span className="text-sm font-semibold text-red-600 mr-2">
+                            {convertPrice(item.price)}
+                          </span>
+                          <span className="text-sm line-through text-gray-500">
+                            {convertPrice(item.product.price)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-sm font-semibold">
+                          {convertPrice(item.price)}
+                        </span>
                       )}
                     </div>
                   </div>
-                  <CartActions item={item} />
-                  <div className="text-center sm:text-right">
-                    {item.discount > 0 ? (
-                      <>
-                        <span className="text-lg font-semibold text-red-600 mr-2">
-                          {convertPrice(item.price)}
-                        </span>
-                        <span className="text-sm line-through text-gray-500">
-                          {convertPrice(item.product.price)}
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-lg font-semibold">
-                        {convertPrice(item.price)}
-                      </span>
-                    )}
-                  </div>
-                </CardBody>
-              </Card>
+                </div>
+                <CartActions item={item} />
+              </div>
             ))}
             <Divider />
             <Card className="shadow-lg">
@@ -114,30 +115,11 @@ const OrderPage = () => {
                 <Heading className="text-center sm:text-left">
                   Адрес доставки
                 </Heading>
-
-                <Input
-                  label="ФИО"
-                  placeholder="Введите ваше ФИО"
-                  name="fullName"
-                  value={first_name}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                />
-                <Input
-                  label="Номер телефона"
-                  placeholder="+7 (___) ___-__-__"
-                  name="phone"
-                  value={phone_number}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                />
                 <Controller
                   control={control}
                   name="addressLine1"
                   render={({ field: { onChange, value } }) => (
-                    <Input
+                    <Textarea
                       label="Адрес (улица, дом, квартира)"
                       placeholder="Введите адрес"
                       name="addressLine1"
@@ -148,38 +130,16 @@ const OrderPage = () => {
                     />
                   )}
                 />
-                <Controller
-                  control={control}
-                  name="addressLine2"
-                  render={({ field: { onChange, value } }) => (
-                    <Input
-                      label="Адрес (дополнительно)"
-                      placeholder="Дополнительная информация"
-                      name="addressLine2"
-                      value={value}
-                      onChange={onChange}
-                      fullWidth
-                    />
-                  )}
-                />
                 <div className="flex flex-col sm:flex-row gap-6">
-                  <Input
-                    label="Город"
-                    placeholder="Введите город"
-                    name="city"
-                    value={town}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                  />
                   <Controller
                     control={control}
-                    name="postalCode"
+                    name="town"
+                    defaultValue={town}
                     render={({ field: { onChange, value } }) => (
                       <Input
-                        label="Почтовый индекс"
-                        placeholder="Введите почтовый индекс"
-                        name="postalCode"
+                        label="Город"
+                        placeholder="Введите город"
+                        name="city"
                         value={value}
                         onChange={onChange}
                         required
@@ -188,6 +148,24 @@ const OrderPage = () => {
                     )}
                   />
                 </div>
+                <Controller
+                  control={control}
+                  name="comment"
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Textarea
+                      label="Комментарий"
+                      placeholder="Введите комментарий к доставке"
+                      isInvalid={!!error?.message}
+                      errorMessage={error?.message}
+                      onChange={onChange}
+                      value={value}
+                      fullWidth
+                    />
+                  )}
+                />
               </CardBody>
             </Card>
             <Divider />
@@ -206,6 +184,17 @@ const OrderPage = () => {
                   )}
                 </div>
               </div>
+              <Progress
+                aria-label="Loading..."
+                label={
+                  deliveryPrice === 0
+                    ? "Доставка бесплатная!"
+                    : `До бесплатной доставки: ${convertPrice(10000 - total)}`
+                }
+                color={deliveryPrice === 0 ? "success" : "warning"}
+                maxValue={10000}
+                value={total}
+              />
               <Divider />
               <div className="flex justify-between font-bold text-xl">
                 <div>Итого к оплате:</div>
@@ -218,7 +207,6 @@ const OrderPage = () => {
               isLoading={isLoading}
               fullWidth
               size="lg"
-              className="mt-4"
             >
               Оформить заказ
             </Button>

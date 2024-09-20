@@ -21,8 +21,8 @@ const Auth = () => {
             fullWidth
             aria-label="Tabs sizes"
           >
+            <Tab key="register" title="Телефон" />
             <Tab key="login" title="Авторизация" />
-            <Tab key="register" title="Регистрация" />
           </Tabs>
         </div>
       )}

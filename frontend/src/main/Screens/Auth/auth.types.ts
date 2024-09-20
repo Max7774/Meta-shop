@@ -1,1 +1,5 @@
-export type TTypeOfAuth = "login" | "register" | "reset-password"
+export type TTypeOfAuth =
+  | "login"
+  | "register"
+  | "reset-password"
+  | "phone-register";

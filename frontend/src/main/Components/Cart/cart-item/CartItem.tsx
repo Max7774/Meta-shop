@@ -4,6 +4,7 @@ import CartActions from "./cart-actions/CartActions";
 import { Link } from "react-router-dom";
 import { ICartItem } from "@store/cart/cart.types";
 import { convertPrice } from "@utils/convertPrice";
+import { Image } from "@nextui-org/react";
 
 interface IItem {
   item: ICartItem;
@@ -11,16 +12,16 @@ interface IItem {
 
 const CartItem: FC<IItem> = ({ item }) => {
   return (
-    <div style={{ display: "flex", marginBottom: "1rem" }}>
+    <div className="flex flex-row gap-3 py-3">
       <Link to={`/product/${item.product?.category?.slug}`}>
-        <img
+        <Image
           src={item.product.images[0]}
           alt={item.product.name}
-          width={80}
-          height={80}
+          width={50}
+          height={50}
         />
       </Link>
-      <div style={{ marginLeft: "1rem", flex: 1 }}>
+      <div style={{ flex: 1 }}>
         <div>{item.product.name}</div>
         {item.discount > 0 ? (
           <>
@@ -36,8 +37,8 @@ const CartItem: FC<IItem> = ({ item }) => {
             {convertPrice(item.price)}
           </span>
         )}
-        <CartActions item={item} />
       </div>
+      <CartActions item={item} />
     </div>
   );
 };

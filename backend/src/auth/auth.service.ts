@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
 import { PrismaService } from 'src/prisma.service';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { createTransport } from 'nodemailer';
 import { generateToken } from 'src/utils/generateToken';
@@ -34,7 +34,7 @@ export class AuthService {
     });
   }
 
-  async login(dto: AuthDto) {
+  async login(dto: AuthLoginDto) {
     const user = await this.validateUser(dto);
 
     const tokens = await this.issueTokens(user.uuid);
@@ -118,6 +118,56 @@ export class AuthService {
     return 'Success';
   }
 
+  async phoneRegister(data: { phone_number: string }) {
+    const oldUser = await this.prisma.user.findUnique({
+      where: {
+        phone_number: data.phone_number,
+      },
+    });
+
+    if (oldUser) {
+      const tokens = await this.issueTokens(oldUser.uuid);
+
+      return {
+        user: this.returnUserFields(oldUser),
+        ...tokens,
+      };
+    }
+
+    const temporaryPassword = generateToken(16);
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        uuid: uuidGen(),
+        role: 'DEFAULT_USER',
+        email: `tmp_email_${temporaryPassword}@gmail.com`,
+        first_name: '',
+        second_name: '',
+        birth_day: '',
+        town: '',
+        avatarPath: 'default-avatar.png',
+        phone_number: data.phone_number,
+        password: await hash(`${temporaryPassword}`),
+        verified: false,
+        verifyToken: null,
+      },
+    });
+
+    await this.transporter.sendMail({
+      from: 'mega_ymbetov@mail.ru',
+      to: 'agrozakupkz@gmail.com',
+      subject: 'Регистрация пользователя',
+      text: `Зарегистрировался новый пользователь под номером телефона: ${data.phone_number}`,
+    });
+
+    const tokens = await this.issueTokens(newUser.uuid);
+
+    return {
+      user: this.returnUserFields(newUser),
+      ...tokens,
+    };
+  }
+
   async verifyToken(verifyToken: string) {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -168,7 +218,7 @@ export class AuthService {
     };
   }
 
-  private async validateUser(dto: AuthDto) {
+  private async validateUser(dto: AuthLoginDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

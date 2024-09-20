@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FiMinus, FiPlus, FiTrash } from "react-icons/fi";
+import { FiMinus, FiPlus } from "react-icons/fi";
 
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@/hooks/useCart";
@@ -15,7 +15,7 @@ const CartActions: FC<{ item: ICartItem }> = ({ item }) => {
   )?.quantity;
 
   return (
-    <div className="w-[200px] flex flex-row sm:mt-2 items-center justify-between">
+    <div className="flex flex-row sm:mt-2 items-center justify-end">
       <div className="flex flex-row items-center">
         <FiMinus
           className="cursor-pointer"
@@ -37,11 +37,6 @@ const CartActions: FC<{ item: ICartItem }> = ({ item }) => {
           onClick={() => changeQuantity({ uuid: item.uuid, type: "plus" })}
         />
       </div>
-      <FiTrash
-        className="cursor-pointer"
-        size={20}
-        onClick={() => removeFromCart({ uuid: item.uuid })}
-      />
     </div>
   );
 };

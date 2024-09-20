@@ -16,8 +16,6 @@ const ProductPage = () => {
   const { product } = useProducts();
   const { items } = useCart();
 
-  console.log(product);
-
   const currentElement = items.find(
     (cartItem) => cartItem.product.uuid === product?.uuid
   );

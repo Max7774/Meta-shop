@@ -25,19 +25,12 @@ export const login = createAsyncThunk<TAuthnResponse, TLogin>(
       return response.data;
     } catch (error: any) {
       console.log(error);
-      if (error.response.status === 404) {
-        toast.error("Такого пользователя не существует");
-        return rejectWithValue({
-          message: "Такого пользователя не существует",
-          status: 404,
-        });
-      } else {
-        toast.error("Некорректная роль пользователя");
-        return rejectWithValue({
-          message: "Некорректная роль пользователя",
-          status: 401,
-        });
-      }
+
+      toast.error("Неправильный логин или пароль");
+      return rejectWithValue({
+        message: "Неправильный логин или пароль",
+        status: 401,
+      });
     }
   }
 );
@@ -67,6 +60,29 @@ export const register = createAsyncThunk<any, TRegister>(
     }
   }
 );
+
+/* phoneRegister */
+export const phoneRegister = createAsyncThunk<
+  TAuthnResponse,
+  { phone_number: string }
+>("/phoneRegister", async (data, thunkApi) => {
+  try {
+    const response = await AuthService.phoneRegister(data);
+
+    saveToStorage(response.data);
+
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    if (error.response.status) {
+      toast.error("Такой пользователь уже существует");
+    }
+
+    return thunkApi.rejectWithValue(
+      error.response.data.message || "Unknown error"
+    );
+  }
+});
 
 /* verifyTokenFromRegister */
 export const verifyTokenFromRegister = createAsyncThunk<any, string>(

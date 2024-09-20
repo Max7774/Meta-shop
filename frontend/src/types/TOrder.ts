@@ -25,6 +25,7 @@ export type TOrder = {
   updatedAt: string;
   addressLine1: string;
   addressLine2: string;
+  comment: string;
   postalCode: string;
   status: EOrder;
   total: number;
@@ -45,5 +46,9 @@ export type TOrderForm = {
   addressLine1: string;
   addressLine2: string;
   postalCode: string;
+  first_name: string;
+  second_name: string;
+  town: string;
+  comment: string;
   items: TOrderCartItem[];
 };

@@ -41,7 +41,7 @@ export class OrderService {
   }
 
   private createFilter(params: { searchTerm: string }): Prisma.OrderWhereInput {
-    const filters: Prisma.ProductWhereInput[] = [];
+    const filters: Prisma.OrderWhereInput[] = [];
 
     if (params.searchTerm)
       filters.push(this.getSearchTermFilter(params.searchTerm));
@@ -155,6 +155,7 @@ export class OrderService {
         addressLine2: dto.addressLine2,
         postalCode: dto.postalCode,
         comment: dto.comment,
+        town: dto.town,
         items: {
           create: dto.items.map((el) => {
             return {
@@ -172,6 +173,17 @@ export class OrderService {
       },
     });
 
+    await this.prisma.user.update({
+      where: {
+        uuid: userUuid,
+      },
+      data: {
+        town: dto.town,
+        first_name: dto.first_name,
+        second_name: dto.second_name,
+      },
+    });
+
     return order;
   }
 
@@ -185,7 +197,7 @@ export class OrderService {
       },
     });
 
-    return true;
+    return { uuid: dto.orderUuid, status: dto.status };
   }
 
   async cancelOrder(orderUuid: string) {

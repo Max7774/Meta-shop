@@ -4,9 +4,10 @@ import {
   ICartInitialState,
   IChangeQuantityPayload,
 } from "./cart.types";
+import { getStoreLocal, setLocalStorage } from "@utils/local-storage";
 
 const initialState: ICartInitialState = {
-  items: [],
+  items: getStoreLocal("cart") || [],
 };
 
 export const cartSlice = createSlice({
@@ -19,6 +20,7 @@ export const cartSlice = createSlice({
       );
 
       if (!isExistSize) {
+        setLocalStorage("cart", state.items);
         state.items.push({
           ...action.payload,
           length: state.items.length,
@@ -29,6 +31,7 @@ export const cartSlice = createSlice({
       state.items = state.items.filter(
         (item) => item.uuid !== action.payload.uuid
       );
+      setLocalStorage("cart", state.items);
     },
     changeQuantity: (state, action: PayloadAction<IChangeQuantityPayload>) => {
       const { uuid, type } = action.payload;
@@ -43,13 +46,16 @@ export const cartSlice = createSlice({
             item.quantity--;
             if (item.quantity <= 0) {
               state.items.splice(itemIndex, 1);
+              setLocalStorage("cart", state.items);
             }
           }
         }
       }
+      setLocalStorage("cart", state.items);
     },
     reset: (state) => {
       state.items = [];
+      setLocalStorage("cart", state.items);
     },
   },
 });

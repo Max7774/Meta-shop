@@ -15,14 +15,14 @@ model User {
   createdAt    DateTime       @default(now()) @map("createdAt")
   updatedAt    DateTime       @updatedAt @map("updatedAt")
 
-  email        String         @unique
+  email        String?        @unique
   phone_number String         @unique
-  birth_day    String
-  town         String
-  first_name   String      
-  second_name  String      
-  password     String         @unique
-  avatarPath   String         @default("default-avatar.png") @map("avatar_path")
+  birth_day    String?
+  town         String?
+  first_name   String?      
+  second_name  String?      
+  password     String?        @unique
+  avatarPath   String?        @default("default-avatar.png") @map("avatar_path")
   verified     Boolean?
   verifyToken  String?        @unique
   role         EnumRoleOfUser @default(DEFAULT_USER)
@@ -131,6 +131,7 @@ model Order {
   updatedAt   DateTime       @updatedAt @map("updatedAt")
 
   orderId      String        @unique
+  town         String
   addressLine1 String
   addressLine2 String?
   postalCode   String?

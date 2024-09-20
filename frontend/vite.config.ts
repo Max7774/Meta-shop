@@ -30,6 +30,9 @@ export default () => {
         "@Pages": path.resolve(__dirname, "src/main/Pages/"),
       },
     },
+    build: {
+      outDir: "build",
+    },
     server: {
       port: parseInt(port),
     },

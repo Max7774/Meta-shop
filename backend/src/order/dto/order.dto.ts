@@ -22,9 +22,22 @@ export class OrderDto {
   @IsString()
   comment: string;
 
+  @IsOptional()
+  @IsString()
+  town: string;
+
+  @IsOptional()
+  @IsString()
+  first_name: string;
+
+  @IsOptional()
+  @IsString()
+  second_name: string;
+
   @IsString()
   addressLine1: string;
 
+  @IsOptional()
   @IsString()
   addressLine2: string;
 
