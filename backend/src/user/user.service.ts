@@ -59,16 +59,39 @@ export class UserService {
 
     const user = await this.byId(uuid);
 
-    return this.prisma.user.update({
+    return await this.prisma.user.update({
       where: {
         uuid,
       },
       data: {
         email: dto.email,
         first_name: dto.first_name,
+        second_name: dto.second_name,
         avatarPath: dto.avatarPath,
         phone_number: dto.phone_number,
         password: dto.password ? await hash(dto.password) : user.password,
+      },
+      select: {
+        ...returnUserObject,
+        favorites: {
+          select: {
+            uuid: true,
+            name: true,
+            price: true,
+            images: true,
+            slug: true,
+            category: {
+              select: {
+                slug: true,
+              },
+            },
+            reviews: true,
+          },
+        },
+        currentAddress: true,
+        addresses: true,
+        orders: true,
+        ...returnUserObject,
       },
     });
   }

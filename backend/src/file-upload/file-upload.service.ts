@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { uuidGen } from 'src/utils/uuidGenerator';
 
@@ -77,7 +77,20 @@ export class FileUploadService {
     return result.url;
   }
 
-  async createUserAvatar(file: Express.Multer.File, uuid: string) {
-    return 'avatar' + file + uuid;
+  async updateAvatar(file: Express.Multer.File, uuid: string) {
+    try {
+      const result = await this.prismaFileService.user.update({
+        where: {
+          uuid,
+        },
+        data: {
+          avatarPath: file.filename,
+        },
+      });
+
+      return result.avatarPath;
+    } catch (error) {
+      throw new BadGatewayException(error);
+    }
   }
 }

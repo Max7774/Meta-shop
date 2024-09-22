@@ -19,6 +19,9 @@ export const OrderPage = lazy(
 export const ProfilePage = lazy(
   () => import("@/main/Screens/Profile/ProfilePage")
 );
+export const UserOrders = lazy(
+  () => import("@/main/Screens/UserOrders/UserOrders")
+);
 
 /* ADMIN */
 export const AdminMainPage = lazy(

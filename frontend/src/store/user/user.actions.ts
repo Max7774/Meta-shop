@@ -7,7 +7,7 @@ import {
   TRegister,
   TResetPassword,
 } from "@/types/TAuth";
-import { TProfile } from "@/types/TProfile";
+import { TProfile, TProfileEdit } from "@/types/TProfile";
 import { ERoles } from "@enums/ERoles";
 import { RootState } from "@hooks/redux-hooks/reduxHooks";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -215,6 +215,33 @@ export const createAddress = createAsyncThunk<TAddress, TAddressForm>(
   async (data, thunkApi) => {
     try {
       const response = await ProfileService.createAddress(data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk<TProfile, TProfileEdit>(
+  "/updateProfile",
+  async (data, thunkApi) => {
+    try {
+      const response = await ProfileService.updateProfile(data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const setNewUserAvatar = createAsyncThunk<string, File>(
+  "/setNewUserAvatar",
+  async (image, thunkApi) => {
+    try {
+      const response = await ProfileService.setNewUserAvatar(image);
+
       return response.data;
     } catch (error: any) {
       console.log(error);

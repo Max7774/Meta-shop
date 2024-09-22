@@ -1,11 +1,17 @@
 import { BASE_URL } from "@/const/baseUrl";
-import OrderList from "@/main/Components/OrderList/OrderList";
 import Address from "@Components/Address/Address";
-import { useProfile } from "@hooks/useProfile";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { Avatar, Button } from "@nextui-org/react";
+import EditProfileForm from "./EditProfileForm/EditProfileForm";
+import { useState } from "react";
 
 const ProfilePage = () => {
-  const { profile } = useProfile();
+  const { profile } = useAppSelector((state) => state.user);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const handleEditOpen = () => setIsEditOpen(true);
+  const handleEditClose = () => setIsEditOpen(false);
+
   return (
     <div className="container mx-auto">
       <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
@@ -17,16 +23,25 @@ const ProfilePage = () => {
         />
         <div className="flex w-full flex-col space-y-2">
           <h1 className="text-2xl font-bold">{profile.first_name}</h1>
-          <p>Email: {`${profile.email.slice(0, 15)}...` || "Почты нет"}</p>
+          <h1 className="text-2xl font-bold">{profile.second_name}</h1>
+          <p className="w-full overflow-hidden whitespace-nowrap text-ellipsis">
+            Email: {`${profile.email}` || "Почты нет"}
+          </p>
           <p>Телефон: {profile.phone_number}</p>
-          <Address />
-          <Button color="primary">Редактировать профиль</Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Address />
+            <Button
+              className="sm:flex"
+              size="lg"
+              color="primary"
+              onClick={handleEditOpen}
+            >
+              Редактировать профиль
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Мои заказы</h2>
-        <OrderList />
-      </div>
+      <EditProfileForm isOpen={isEditOpen} onClose={handleEditClose} />
     </div>
   );
 };

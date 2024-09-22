@@ -10,6 +10,8 @@ import {
   resetPassword,
   sendEmailToResetPassword,
   setCurrentAddress,
+  setNewUserAvatar,
+  updateProfile,
   verifyAccessToken,
   verifyTokenFromRegister,
 } from "./user.actions";
@@ -22,7 +24,6 @@ const info: TProfile = {
   role: ERoles.DEFAULT_USER,
   first_name: "",
   second_name: "",
-  town: "",
   avatarPath: "",
   phone_number: "",
   currentAddress: "",
@@ -207,6 +208,28 @@ export const userSlice = createSlice({
         state.profile.addresses = [payload, ...state.profile.addresses];
       })
       .addCase(createAddress.rejected, (state) => {
+        state.isProfileLoading = false;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        /* ===================== UPDATE PROFILE ===================== */
+        state.isProfileLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, { payload }) => {
+        state.isProfileLoading = false;
+        state.profile = payload;
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        state.isProfileLoading = false;
+      })
+      .addCase(setNewUserAvatar.pending, (state) => {
+        /* ===================== SET NEW AVATAR PROFILE ===================== */
+        state.isProfileLoading = true;
+      })
+      .addCase(setNewUserAvatar.fulfilled, (state, { payload }) => {
+        state.isProfileLoading = false;
+        state.profile.avatarPath = payload;
+      })
+      .addCase(setNewUserAvatar.rejected, (state) => {
         state.isProfileLoading = false;
       });
   },

@@ -1,5 +1,5 @@
 import { Button, Input, Spacer } from "@nextui-org/react";
-import { TTypeOfAuth } from "../auth.types";
+// import { TTypeOfAuth } from "../auth.types";
 import { useActions } from "@hooks/useActions";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { TLogin } from "@/types/TAuth";
@@ -8,11 +8,11 @@ import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
 import { validEmail } from "@utils/validations/valid-email";
 
-interface ILoginProps {
-  setTypeOfAuth: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
-}
+// interface ILoginProps {
+//   setTypeOfAuth?: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
+// }
 
-const Login = ({ setTypeOfAuth }: ILoginProps) => {
+const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { login } = useActions();
   const { isLoading } = useAuth();
@@ -106,7 +106,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
           Войти
         </Button>
       </form>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <div className="text-md">
           Забыли пароль?{" "}
           <Button
@@ -117,7 +117,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
             Восстановить
           </Button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

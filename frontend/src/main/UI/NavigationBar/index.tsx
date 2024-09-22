@@ -54,6 +54,13 @@ export const NavigationBar = () => {
     },
     {
       role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
+      key: "orders",
+      onClick: () => navigate("/orders"),
+      color: "default",
+      label: "Заказы",
+    },
+    {
+      role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
       key: "logout",
       onClick: () => logout(),
       color: "danger",

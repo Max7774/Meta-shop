@@ -60,10 +60,10 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
-  @Post('create/category/icon')
+  @Auth('DEFAULT_USER')
+  @Post('update/user/avatar')
   @UseInterceptors(FileInterceptor('file'))
-  async createUserAvatar(
+  async updateAvatar(
     @UploadedFile(
       new ParseFilePipe({
         validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
@@ -72,7 +72,7 @@ export class FileUploadController {
     file: Express.Multer.File,
     @CurrentUser('uuid') uuid: string,
   ) {
-    return this.fileUploadService.createUserAvatar(file, uuid);
+    return this.fileUploadService.updateAvatar(file, uuid);
   }
 
   @Get(':fileName')

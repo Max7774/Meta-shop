@@ -10,9 +10,16 @@ export type TProfile = {
   second_name: string;
   avatarPath: string;
   phone_number: string;
-  town: string;
   currentAddress: string;
   favorites: [];
   orders: TProfileOrderItem[];
   addresses: TAddress[];
+};
+
+export type TProfileEdit = {
+  email: string;
+  first_name: string;
+  second_name: string;
+  avatarPath: string;
+  phone_number: string;
 };

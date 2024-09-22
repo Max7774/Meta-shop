@@ -1,6 +1,7 @@
 import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UserDto {
+  @IsOptional()
   @IsEmail()
   email: string;
 
@@ -11,6 +12,10 @@ export class UserDto {
   @IsOptional()
   @IsString()
   first_name: string;
+
+  @IsOptional()
+  @IsString()
+  second_name: string;
 
   @IsOptional()
   @IsString()

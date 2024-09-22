@@ -7,6 +7,7 @@ import {
   ProfilePage,
   SubCategories,
   SubCategoriesProducts,
+  UserOrders,
 } from "../components/root";
 
 export const ROOT_DATA: TRoutes<ERoutes>[] = [
@@ -39,5 +40,10 @@ export const ROOT_DATA: TRoutes<ERoutes>[] = [
     id: "profile-page",
     path: ERoutes.PROFILE,
     component: ProfilePage,
+  },
+  {
+    id: "user-order-page",
+    path: ERoutes.ORDERS,
+    component: UserOrders,
   },
 ];
