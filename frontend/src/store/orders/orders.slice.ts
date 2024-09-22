@@ -7,6 +7,7 @@ import {
 } from "./orders.actions";
 import { TOrder } from "@/types/TOrder";
 import { toast } from "react-toastify";
+import { EOrder } from "@enums/EOrder";
 
 type TOrdersState = {
   orders: TOrder[];
@@ -52,8 +53,14 @@ export const ordersSlice = createSlice({
       .addCase(cancelOrder.pending, (state) => {
         state.isCancelOrderLoading = true;
       })
-      .addCase(cancelOrder.fulfilled, (state) => {
+      .addCase(cancelOrder.fulfilled, (state, { meta: { arg } }) => {
         state.isCancelOrderLoading = false;
+        const orderIndex = state.orders.findIndex(
+          (order) => order.uuid === arg
+        );
+        if (orderIndex !== -1) {
+          state.orders[orderIndex].status = EOrder.Canceled;
+        }
       })
       .addCase(cancelOrder.rejected, (state) => {
         state.isCancelOrderLoading = false;

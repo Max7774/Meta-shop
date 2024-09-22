@@ -45,7 +45,7 @@ const Filters = () => {
 
   return (
     <section>
-      <div className="flex flex-row gap-5 mb-4 cursor-pointer" onClick={onOpen}>
+      <div className="flex flex-row gap-5 cursor-pointer" onClick={onOpen}>
         <span className="font-bold">Фильтры</span>
         <IoFilter size={25} />
       </div>

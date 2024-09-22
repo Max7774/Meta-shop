@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/const/baseUrl";
 import OrderList from "@/main/Components/OrderList/OrderList";
+import Address from "@Components/Address/Address";
 import { useProfile } from "@hooks/useProfile";
 import { Avatar, Button } from "@nextui-org/react";
 
@@ -16,8 +17,9 @@ const ProfilePage = () => {
         />
         <div className="flex w-full flex-col space-y-2">
           <h1 className="text-2xl font-bold">{profile.first_name}</h1>
-          <p>Email: {profile.email || "Почты нет"}</p>
+          <p>Email: {`${profile.email.slice(0, 15)}...` || "Почты нет"}</p>
           <p>Телефон: {profile.phone_number}</p>
+          <Address />
           <Button color="primary">Редактировать профиль</Button>
         </div>
       </div>

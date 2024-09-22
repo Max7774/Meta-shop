@@ -13,6 +13,7 @@ import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
 import { EOrder } from "@enums/EOrder";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
+import { convertPrice } from "@utils/convertPrice";
 
 interface IAdminOrderItemProps {
   order: TOrder;
@@ -49,7 +50,8 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
               От: {new Date(order.createdAt).toLocaleDateString()}
             </span>
           </div>
-          <Divider className="mb-4" />
+          <Divider />
+          <h1 className="font-bold">Адрес:</h1>
           <div className="flex flex-col gap-2">
             {!!order.user?.first_name ||
               (!!order.user?.second_name && (
@@ -57,7 +59,14 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
                   Заказал: {order.user?.first_name} {order.user?.second_name}
                 </h3>
               ))}
-            <h3>Адрес: {order.addressLine1}</h3>
+            <h3>Город: {order.address.town}</h3>
+            <h3>Улица: {order.address.street}</h3>
+            <h3>Дом/корпус: {order.address.house}</h3>
+            <h3>Квартира: {order.address.apartment}</h3>
+            <h3>Домофон: {order.address.intercom}</h3>
+            <h3>Подъезд: {order.address.entrance}</h3>
+            <h3>Этаж: {order.address.floor}</h3>
+            <Divider className="mb-4" />
             <h3>Телефон: {order.user?.phone_number}</h3>
             {!!order.comment && <h3>Комментарий: {order.comment}</h3>}
           </div>
@@ -82,7 +91,7 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
                   {item.product.name}
                 </h4>
                 <p key={item.createdAt + i}>
-                  Количество: {item.quantity} x {item.price}₽
+                  Количество: {item.quantity} x {convertPrice(item.price)}
                 </p>
               </div>
             </div>
@@ -100,7 +109,9 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
             >
               {getOrderStatusLabel(order.status).status}
             </Chip>
-            <span className="font-semibold pt-1">Итого: {order.total}₽</span>
+            <span className="font-semibold pt-1">
+              Итого: {convertPrice(order.total)}
+            </span>
           </div>
           {order.status !== EOrder.Canceled &&
             order.status !== EOrder.Delivered && (

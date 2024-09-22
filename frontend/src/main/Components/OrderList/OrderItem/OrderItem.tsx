@@ -21,18 +21,23 @@ interface OrderItemProps {
 const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
   const { cancelOrder } = useActions();
   const { isCancelOrderLoading } = useAppSelector((state) => state.orders);
+
   return (
     <Card>
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between w-full">
           <h3 className="text-lg font-semibold">Заказ № {order.orderId}</h3>
+
           <span className="text-sm text-gray-500">
-            {new Date(order.createdAt).toLocaleDateString()}
+            {`От ${new Date(order.createdAt).toLocaleDateString()}`}
           </span>
         </div>
       </CardHeader>
       <CardBody>
-        <Divider className="mb-2" />
+        <span>
+          Адрес: {`${order.address?.street}, ${order.address?.house}`}
+        </span>
+        <Divider className="mb-2 mt-2" />
         <div className="space-y-4">
           {order.items.map((item, i) => (
             <div key={item.uuid} className="flex space-x-4">

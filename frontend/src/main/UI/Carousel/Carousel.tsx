@@ -56,7 +56,7 @@ const Carousel = ({ images, isNew }: ICarouselProps) => {
         <Chip
           className="absolute text-white right-2 top-2"
           color="success"
-          style={{ zIndex: 999999 }}
+          style={{ zIndex: 20 }}
         >
           Новый
         </Chip>

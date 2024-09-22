@@ -9,6 +9,32 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+export class AddressItemDto {
+  @IsString()
+  uuid: string;
+
+  @IsString()
+  town: string;
+
+  @IsString()
+  street: string;
+
+  @IsString()
+  house: string;
+
+  @IsString()
+  apartment: string;
+
+  @IsString()
+  intercom: string;
+
+  @IsString()
+  entrance: string;
+
+  @IsString()
+  floor: string;
+}
+
 export class OrderDto {
   @IsOptional()
   @IsString()
@@ -24,31 +50,15 @@ export class OrderDto {
 
   @IsOptional()
   @IsString()
-  town: string;
-
-  @IsOptional()
-  @IsString()
   first_name: string;
-
-  @IsOptional()
-  @IsString()
-  second_name: string;
-
-  @IsString()
-  addressLine1: string;
-
-  @IsOptional()
-  @IsString()
-  addressLine2: string;
-
-  @IsOptional()
-  @IsString()
-  postalCode: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
+
+  @IsString()
+  addressUuid: string;
 }
 
 export class OrderItemDto {

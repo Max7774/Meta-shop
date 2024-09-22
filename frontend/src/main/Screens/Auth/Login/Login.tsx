@@ -21,7 +21,6 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const submit: SubmitHandler<TLogin> = (data) => {
-    console.log(data);
     login(data);
   };
 

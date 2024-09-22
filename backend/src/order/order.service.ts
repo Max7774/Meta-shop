@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { productReturnObject } from 'src/product/return-product.object';
-import { OrderDto } from './dto/order.dto';
+import { OrderDto, OrderItemDto } from './dto/order.dto';
 import { PaymentStatusDto } from './dto/payment-status.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { generateToken } from 'src/utils/generateToken';
@@ -23,14 +23,6 @@ export class OrderService {
         {
           user: {
             phone_number: {
-              contains: searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        },
-        {
-          user: {
-            town: {
               contains: searchTerm,
               mode: 'insensitive',
             },
@@ -70,11 +62,12 @@ export class OrderService {
               first_name: true,
               second_name: true,
               email: true,
-              town: true,
+              currentAddress: true,
               avatarPath: true,
               phone_number: true,
             },
           },
+          address: true,
           items: {
             include: {
               product: {
@@ -93,6 +86,7 @@ export class OrderService {
           createdAt: 'desc',
         },
         include: {
+          address: true,
           items: {
             include: {
               product: {
@@ -130,32 +124,14 @@ export class OrderService {
       return acc + item.price * item.quantity;
     }, 0);
 
-    for (let index = 0; index < dto.items.length; index++) {
-      const quantityProduct = await this.prisma.product.findUnique({
-        where: {
-          uuid: dto.items[index].productUuid,
-        },
-      });
-      await this.prisma.product.update({
-        where: {
-          uuid: dto.items[index].productUuid,
-        },
-        data: {
-          quantity: quantityProduct.quantity - 1,
-        },
-      });
-    }
+    await this.updateQuantityProduct(dto.items);
 
     const order = await this.prisma.order.create({
       data: {
         uuid: uuidGen(),
-        orderId: 'order-' + generateToken(10),
+        orderId: 'ORDER-' + generateToken(10),
         status: dto.status,
-        addressLine1: dto.addressLine1,
-        addressLine2: dto.addressLine2,
-        postalCode: dto.postalCode,
         comment: dto.comment,
-        town: dto.town,
         items: {
           create: dto.items.map((el) => {
             return {
@@ -170,17 +146,11 @@ export class OrderService {
             uuid: userUuid,
           },
         },
-      },
-    });
-
-    await this.prisma.user.update({
-      where: {
-        uuid: userUuid,
-      },
-      data: {
-        town: dto.town,
-        first_name: dto.first_name,
-        second_name: dto.second_name,
+        address: {
+          connect: {
+            uuid: dto.addressUuid,
+          },
+        },
       },
     });
 
@@ -211,5 +181,23 @@ export class OrderService {
     });
 
     return true;
+  }
+
+  private async updateQuantityProduct(items: OrderItemDto[]) {
+    for (let index = 0; index < items.length; index++) {
+      const quantityProduct = await this.prisma.product.findUnique({
+        where: {
+          uuid: items[index].productUuid,
+        },
+      });
+      await this.prisma.product.update({
+        where: {
+          uuid: items[index].productUuid,
+        },
+        data: {
+          quantity: quantityProduct.quantity - 1,
+        },
+      });
+    }
   }
 }

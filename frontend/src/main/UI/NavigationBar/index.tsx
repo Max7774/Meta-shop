@@ -18,7 +18,6 @@ import { useActions } from "@hooks/useActions";
 import { BASE_URL } from "@/const/baseUrl";
 import { AcmeLogo } from "./LogoIcon";
 import Cart from "../../Components/Cart/Cart";
-import Search from "@/main/Components/Search/Search";
 import { useProfile } from "@hooks/useProfile";
 import { ERoles } from "@enums/ERoles";
 import AdminItems from "./AdminItems/AdminItems";
@@ -92,11 +91,6 @@ export const NavigationBar = () => {
           )}
         </div>
       </NavbarMenu>
-      {!pathname.startsWith("/admin") && (
-        <NavbarContent justify="center">
-          <Search pageKey="products" />
-        </NavbarContent>
-      )}
       <NavbarContent as="div" className="items-center" justify="end">
         <Cart />
         {isAuth && (

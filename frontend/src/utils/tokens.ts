@@ -29,6 +29,7 @@ export const removeFromStorage = () => {
   Cookies.remove(ACCESS_TOKEN);
   Cookies.remove(REFRESH_TOKEN);
   localStorage.removeItem("user");
+  localStorage.removeItem("cart");
   window.location.reload();
 };
 

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserInitialState } from "./user.types";
 import {
+  createAddress,
   getNewAccessToken,
   getUserProfile,
   login,
@@ -8,6 +9,7 @@ import {
   register,
   resetPassword,
   sendEmailToResetPassword,
+  setCurrentAddress,
   verifyAccessToken,
   verifyTokenFromRegister,
 } from "./user.actions";
@@ -23,8 +25,10 @@ const info: TProfile = {
   town: "",
   avatarPath: "",
   phone_number: "",
+  currentAddress: "",
   favorites: [],
   orders: [],
+  addresses: [],
 };
 
 const initialState: IUserInitialState = {
@@ -181,6 +185,29 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isAuth = false;
         state.isError = true;
+      })
+      .addCase(setCurrentAddress.pending, (state) => {
+        /* ===================== SET CURRENT ADDRESS ===================== */
+        state.isProfileLoading = true;
+      })
+      .addCase(setCurrentAddress.fulfilled, (state, { payload }) => {
+        state.isProfileLoading = false;
+        state.profile.currentAddress = payload;
+      })
+      .addCase(setCurrentAddress.rejected, (state) => {
+        state.isProfileLoading = false;
+      })
+      .addCase(createAddress.pending, (state) => {
+        /* ===================== CREATE ADDRESS ===================== */
+        state.isProfileLoading = true;
+      })
+      .addCase(createAddress.fulfilled, (state, { payload }) => {
+        state.isProfileLoading = false;
+        state.profile.currentAddress = payload.uuid;
+        state.profile.addresses = [payload, ...state.profile.addresses];
+      })
+      .addCase(createAddress.rejected, (state) => {
+        state.isProfileLoading = false;
       });
   },
 });

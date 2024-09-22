@@ -20,11 +20,11 @@ export const cartSlice = createSlice({
       );
 
       if (!isExistSize) {
-        setLocalStorage("cart", state.items);
         state.items.push({
           ...action.payload,
           length: state.items.length,
         });
+        setLocalStorage("cart", state.items);
       }
     },
     removeFromCart: (state, action: PayloadAction<{ uuid: string }>) => {

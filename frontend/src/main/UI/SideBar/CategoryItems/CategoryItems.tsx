@@ -1,4 +1,4 @@
-import Loader from "../../Loader";
+import BlockSkeleton from "@UI/Skeleton/BlockSkeleton/BlockSkeleton";
 import { useCategory } from "@hooks/useCategory";
 import { Link, useParams } from "react-router-dom";
 import cn from "clsx";
@@ -24,7 +24,7 @@ const CategoryItems = () => {
         />
       )}
       {isLoading ? (
-        <Loader />
+        <BlockSkeleton />
       ) : (
         <>
           {categories.length === 0 && (

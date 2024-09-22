@@ -58,7 +58,6 @@ const AdminProducts = () => {
   const submit: SubmitHandler<TProductCreateForm> = async (data) => {
     data.images = selectedFiles;
     const result: any = await createProduct(data);
-    console.log(result);
     if (result.type === "products/createProduct/fulfilled") {
       toast.success("Продукт создан успешно!");
       setPreviewImages([]);

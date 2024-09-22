@@ -1,4 +1,6 @@
 import { ERoles } from "@enums/ERoles";
+import { TAddress } from "./TAddress";
+import { TProfileOrderItem } from "./TOrder";
 
 export type TProfile = {
   uuid: string;
@@ -9,6 +11,8 @@ export type TProfile = {
   avatarPath: string;
   phone_number: string;
   town: string;
+  currentAddress: string;
   favorites: [];
-  orders: [];
+  orders: TProfileOrderItem[];
+  addresses: TAddress[];
 };

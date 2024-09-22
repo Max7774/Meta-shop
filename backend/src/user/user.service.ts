@@ -35,6 +35,8 @@ export class UserService {
             reviews: true,
           },
         },
+        currentAddress: true,
+        addresses: true,
         orders: true,
         ...selectObject,
       },

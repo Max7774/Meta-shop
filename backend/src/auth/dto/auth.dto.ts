@@ -31,10 +31,6 @@ export class AuthDto {
   phone_number: string;
 
   @IsOptional()
-  @IsString()
-  town: string;
-
-  @IsOptional()
   @IsEnum(EnumRoleOfUser)
   role: EnumRoleOfUser;
 

@@ -1,20 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
+import { useNavigate, useParams } from "react-router-dom";
+import { RiShoppingCartLine } from "react-icons/ri";
 import { Button, Chip } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
 import { useCart } from "@hooks/useCart";
 import { convertPrice } from "@utils/convertPrice";
+import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
 
 const ProductPage = () => {
   const { productSlug } = useParams();
-  const { getProductBySlug, removeFromCart, addToCart } = useActions();
+  const { getProductBySlug, addToCart } = useActions();
   const { product } = useProducts();
   const { items } = useCart();
+  const navigate = useNavigate();
 
   const currentElement = items.find(
     (cartItem) => cartItem.product.uuid === product?.uuid
@@ -56,34 +58,43 @@ const ProductPage = () => {
             )}
           </div>
           <p>{product.description}</p>
-          <Button
-            color="primary"
-            className="w-full"
-            onClick={() =>
-              currentElement
-                ? removeFromCart({ uuid: currentElement.uuid })
-                : addToCart({
-                    product,
-                    discount: product.discount,
-                    quantity: 1,
-                    price: product.discount
-                      ? product.price - (product.price * product.discount) / 100
-                      : product.price,
-                    uuid: product?.uuid,
-                    productUuid: product?.uuid,
-                  })
-            }
-            startContent={
-              currentElement ? (
-                <RiShoppingCartFill size={25} />
-              ) : (
-                <RiShoppingCartLine size={25} />
-              )
-            }
-            disabled={!!currentElement}
-          >
-            {currentElement ? "Добавлено!" : "Добавить в корзину"}
-          </Button>
+          {currentElement ? (
+            <>
+              <CartActions
+                item={currentElement}
+                className="justify-center bg-default-100 py-1 rounded-xl"
+              />
+              <Button
+                color="primary"
+                onClick={() => navigate("/order")}
+                size="lg"
+                className="w-full"
+              >
+                Оформить заказ
+              </Button>
+            </>
+          ) : (
+            <Button
+              color="primary"
+              size="lg"
+              className="w-full"
+              onClick={() =>
+                addToCart({
+                  product,
+                  discount: product.discount,
+                  quantity: 1,
+                  price: product.discount
+                    ? product.price - (product.price * product.discount) / 100
+                    : product.price,
+                  uuid: product?.uuid,
+                  productUuid: product?.uuid,
+                })
+              }
+              startContent={<RiShoppingCartLine size={25} />}
+            >
+              {currentElement ? "Добавлено!" : "Добавить в корзину"}
+            </Button>
+          )}
         </div>
       </div>
       {/* Дополнительная информация */}

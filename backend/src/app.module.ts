@@ -12,6 +12,7 @@ import { ReviewModule } from './review/review.module';
 import { OrderModule } from './order/order.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { UserModule } from './user/user.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './user/user.module';
     OrderModule,
     StatisticsModule,
     UserModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

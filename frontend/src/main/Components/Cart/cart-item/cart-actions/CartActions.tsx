@@ -4,8 +4,12 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@/hooks/useCart";
 import { ICartItem } from "@store/cart/cart.types";
+import cn from "clsx";
 
-const CartActions: FC<{ item: ICartItem }> = ({ item }) => {
+const CartActions: FC<{ item: ICartItem; className?: string }> = ({
+  item,
+  className,
+}) => {
   const { removeFromCart, changeQuantity } = useActions();
 
   const { items } = useCart();
@@ -15,8 +19,13 @@ const CartActions: FC<{ item: ICartItem }> = ({ item }) => {
   )?.quantity;
 
   return (
-    <div className="flex flex-row sm:mt-2 items-center justify-end">
-      <div className="flex flex-row items-center">
+    <div
+      className={cn(
+        "flex flex-row sm:mt-2 items-center justify-end",
+        className
+      )}
+    >
+      <div className="flex w-full flex-row items-center justify-around">
         <FiMinus
           className="cursor-pointer"
           size={20}

@@ -11,25 +11,27 @@ datasource db {
 }
 
 model User {
-  uuid         String         @unique
-  createdAt    DateTime       @default(now()) @map("createdAt")
-  updatedAt    DateTime       @updatedAt @map("updatedAt")
-
-  email        String?        @unique
-  phone_number String         @unique
-  birth_day    String?
-  town         String?
-  first_name   String?      
-  second_name  String?      
-  password     String?        @unique
-  avatarPath   String?        @default("default-avatar.png") @map("avatar_path")
-  verified     Boolean?
-  verifyToken  String?        @unique
-  role         EnumRoleOfUser @default(DEFAULT_USER)
-  orders       Order[]
-  favorites    Product[]
-  reviews      Review[]
-  clicks       UserClick[]
+  uuid           String         @unique
+  createdAt      DateTime       @default(now()) @map("createdAt")
+  updatedAt      DateTime       @updatedAt @map("updatedAt")
+  
+  email          String?        @unique
+  phone_number   String         @unique
+  birth_day      String?
+  first_name     String?      
+  second_name    String?      
+  password       String?        @unique
+  avatarPath     String?        @default("default-avatar.png") @map("avatar_path")
+  verified       Boolean?
+  verifyToken    String?        @unique
+  role           EnumRoleOfUser @default(DEFAULT_USER)
+  currentAddress String?
+ 
+  addresses      Address[]
+  orders         Order[]
+  favorites      Product[]
+  reviews        Review[]
+  clicks         UserClick[]
 }
 
 model Product {
@@ -126,24 +128,22 @@ model Review {
 }
 
 model Order {
-  uuid        String         @unique
-  createdAt   DateTime       @default(now()) @map("createdAt")
-  updatedAt   DateTime       @updatedAt @map("updatedAt")
+  uuid         String         @unique
+  createdAt    DateTime       @default(now()) @map("createdAt")
+  updatedAt    DateTime       @updatedAt @map("updatedAt")
 
-  orderId      String        @unique
-  town         String
-  addressLine1 String
-  addressLine2 String?
-  postalCode   String?
+  orderId      String         @unique
   comment      String?
-
-  status      EnumOrderItemStatus @default(Pending)
-
-  items       OrderItem[]
-  total       Int
-
-  user        User           @relation(fields: [userUuid], references: [uuid])
-  userUuid    String         @map("userUuid")
+  total        Int
+  status       EnumOrderItemStatus @default(Pending)
+ 
+  items        OrderItem[]
+ 
+  address      Address        @relation(fields: [addressUuid], references: [uuid])
+  user         User           @relation(fields: [userUuid], references: [uuid])
+ 
+  addressUuid  String         @map("addressUuid")
+  userUuid     String         @map("userUuid")
 }
 
 model OrderItem {
@@ -161,6 +161,27 @@ model OrderItem {
   productUuid String         @map("productUuid")
 
   @@map("Order_item")
+}
+
+model Address {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
+
+  town        String
+  street      String
+  house       String
+  apartment   String
+  intercom    String
+  entrance    String
+  floor       String
+
+  
+  userUuid    String         @map("userUuid")
+
+  orders      Order[]
+
+  user        User           @relation(fields: [userUuid], references: [uuid])
 }
 
 enum EnumOrderItemStatus {

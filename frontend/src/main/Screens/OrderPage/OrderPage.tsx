@@ -1,20 +1,11 @@
 import CartActions from "@/main/Components/Cart/cart-item/cart-actions/CartActions";
 import Heading from "@/main/UI/Heading";
 import { TOrderForm } from "@/types/TOrder";
+import Address from "@Components/Address/Address";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
-import { useProfile } from "@hooks/useProfile";
-import {
-  Button,
-  Card,
-  CardBody,
-  Divider,
-  Image,
-  Input,
-  Progress,
-  Textarea,
-} from "@nextui-org/react";
+import { Button, Divider, Image, Progress, Textarea } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -24,9 +15,8 @@ import { toast } from "react-toastify";
 const OrderPage = () => {
   const { items, total } = useCart();
   const {
-    profile: { town },
-    isProfileLoading,
-  } = useProfile();
+    profile: { currentAddress },
+  } = useAppSelector((state) => state.user);
   const { createOrder, reset } = useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
   const [deliveryPrice, setDeliveryPrice] = useState(800);
@@ -42,11 +32,17 @@ const OrderPage = () => {
 
   const grandTotal = total + deliveryPrice;
 
-  const { handleSubmit, control, setValue } = useForm<TOrderForm>();
+  const {
+    handleSubmit,
+    control,
+    setError,
+    formState: { errors },
+  } = useForm<TOrderForm>();
 
   const submit: SubmitHandler<TOrderForm> = async (data) => {
     const result: any = await createOrder({
       ...data,
+      addressUuid: currentAddress,
       items: [...items].map((item) => {
         return {
           quantity: item.quantity,
@@ -64,14 +60,20 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    if (!isProfileLoading) {
-      setValue("town", town);
+    if (!currentAddress) {
+      setError("addressUuid", { message: "Обязательно напишите адрес!" });
     }
-  }, [isProfileLoading]);
+  }, [currentAddress]);
 
   return (
     <section>
       <Heading>Оформление заказа</Heading>
+      <div className="pb-4">
+        <Address />
+        {errors.addressUuid && (
+          <span className="text-danger">{errors.addressUuid.message}</span>
+        )}
+      </div>
       {items.length === 0 ? (
         <div className="text-center mt-8 text-lg">Корзина пуста!</div>
       ) : (
@@ -79,7 +81,7 @@ const OrderPage = () => {
           <Divider />
           <div className="flex flex-col mt-8 gap-8">
             {items.map((item) => (
-              <div className="flex flex-row justify-between">
+              <div key={item.uuid} className="flex flex-row justify-between">
                 <div className="flex flex-row gap-3">
                   <Image
                     src={item.product.images[0]}
@@ -110,64 +112,24 @@ const OrderPage = () => {
               </div>
             ))}
             <Divider />
-            <Card className="shadow-lg">
-              <CardBody className="flex flex-col gap-6">
-                <Heading className="text-center sm:text-left">
-                  Адрес доставки
-                </Heading>
-                <Controller
-                  control={control}
-                  name="addressLine1"
-                  render={({ field: { onChange, value } }) => (
-                    <Textarea
-                      label="Адрес (улица, дом, квартира)"
-                      placeholder="Введите адрес"
-                      name="addressLine1"
-                      value={value}
-                      onChange={onChange}
-                      required
-                      fullWidth
-                    />
-                  )}
+            <Controller
+              control={control}
+              name="comment"
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <Textarea
+                  label="Комментарий"
+                  placeholder="Оставьте комментарий к доставке"
+                  isInvalid={!!error?.message}
+                  errorMessage={error?.message}
+                  onChange={onChange}
+                  value={value}
+                  fullWidth
                 />
-                <div className="flex flex-col sm:flex-row gap-6">
-                  <Controller
-                    control={control}
-                    name="town"
-                    defaultValue={town}
-                    render={({ field: { onChange, value } }) => (
-                      <Input
-                        label="Город"
-                        placeholder="Введите город"
-                        name="city"
-                        value={value}
-                        onChange={onChange}
-                        required
-                        fullWidth
-                      />
-                    )}
-                  />
-                </div>
-                <Controller
-                  control={control}
-                  name="comment"
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Textarea
-                      label="Комментарий"
-                      placeholder="Введите комментарий к доставке"
-                      isInvalid={!!error?.message}
-                      errorMessage={error?.message}
-                      onChange={onChange}
-                      value={value}
-                      fullWidth
-                    />
-                  )}
-                />
-              </CardBody>
-            </Card>
+              )}
+            />
             <Divider />
             <div className="flex flex-col gap-4">
               <div className="flex justify-between font-bold text-sm sm:text-lg">

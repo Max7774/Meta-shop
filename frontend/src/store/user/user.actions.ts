@@ -1,5 +1,6 @@
 import { AuthService } from "@/service/auth.service";
 import { ProfileService } from "@/service/profile.service";
+import { TAddress, TAddressForm } from "@/types/TAddress";
 import {
   TAuthnResponse,
   TLogin,
@@ -188,6 +189,32 @@ export const getUserProfile = createAsyncThunk<TProfile, undefined>(
   async (_, thunkApi) => {
     try {
       const response = await ProfileService.getUserProfile();
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const setCurrentAddress = createAsyncThunk<string, string>(
+  "/setCurrentAddress",
+  async (addressUuid, thunkApi) => {
+    try {
+      const response = await ProfileService.setCurrentAddress(addressUuid);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const createAddress = createAsyncThunk<TAddress, TAddressForm>(
+  "/createAddress",
+  async (data, thunkApi) => {
+    try {
+      const response = await ProfileService.createAddress(data);
       return response.data;
     } catch (error: any) {
       console.log(error);

@@ -1,5 +1,6 @@
 import { EOrder } from "@enums/EOrder";
 import { TProduct } from "./TProduct";
+import { TAddress } from "./TAddress";
 
 export type TOrderItem = {
   createdAt: string;
@@ -20,15 +21,13 @@ export type TOrderCartItem = {
 
 export type TOrder = {
   uuid: string;
-  orderId: string;
   createdAt: string;
   updatedAt: string;
-  addressLine1: string;
-  addressLine2: string;
+  orderId: string;
   comment: string;
-  postalCode: string;
-  status: EOrder;
   total: number;
+  status: EOrder;
+  address: TAddress;
   userUuid: string;
   items: TOrderItem[];
   user?: {
@@ -42,13 +41,20 @@ export type TOrder = {
   };
 };
 
-export type TOrderForm = {
-  addressLine1: string;
-  addressLine2: string;
-  postalCode: string;
-  first_name: string;
-  second_name: string;
-  town: string;
+export type TProfileOrderItem = {
+  uuid: string;
+  createdAt: string;
+  updatedAt: string;
+  orderId: string;
   comment: string;
+  total: number;
+  status: EOrder;
+  addressUuid: string;
+  userUuid: string;
+};
+
+export type TOrderForm = {
+  comment: string;
+  addressUuid: string;
   items: TOrderCartItem[];
 };

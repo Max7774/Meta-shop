@@ -12,8 +12,6 @@ const OrderList: React.FC = () => {
     getAllOrders({ searchTerm: "" });
   }, []);
 
-  console.log(orders);
-
   if (isLoading) return <Loader />;
 
   if (orders.length === 0) {
