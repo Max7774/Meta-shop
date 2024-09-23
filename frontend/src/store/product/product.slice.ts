@@ -3,10 +3,13 @@ import { TProductState } from "./product.types";
 import {
   createProduct,
   deleteProduct,
+  deleteProductImage,
   getProductByCategory,
   getProductBySlug,
   getProductsAll,
+  updateProduct,
 } from "./product.actions";
+import { toast } from "react-toastify";
 
 const initialState: TProductState = {
   isLoading: false,
@@ -78,6 +81,28 @@ export const productsSlice = createSlice({
         );
       })
       .addCase(deleteProduct.rejected, (state) => {
+        state.isProductLoading = false;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        /* ===================== UPDATE PRODUCT ===================== */
+        state.isProductLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, { payload }) => {
+        state.isProductLoading = false;
+        state.product = payload;
+      })
+      .addCase(updateProduct.rejected, (state) => {
+        state.isProductLoading = false;
+      })
+      .addCase(deleteProductImage.pending, (state) => {
+        /* ===================== DELETE PRODUCT IMAGE PRODUCT ===================== */
+        state.isProductLoading = true;
+      })
+      .addCase(deleteProductImage.fulfilled, (state, { payload }) => {
+        state.isProductLoading = false;
+        toast.success(payload.message);
+      })
+      .addCase(deleteProductImage.rejected, (state) => {
         state.isProductLoading = false;
       });
   },

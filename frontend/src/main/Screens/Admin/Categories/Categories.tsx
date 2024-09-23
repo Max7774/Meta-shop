@@ -66,26 +66,30 @@ const AdminCategories = () => {
           </CardBody>
         </Card>
       ))}
-      <Modal isOpen={isModalOpen.open} placement="top">
+      <Modal
+        isOpen={isModalOpen.open}
+        onOpenChange={() => setIsModalOpen({ open: true, uuid: "" })}
+        placement="top"
+      >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1 text-warning text-center">
             Вы уверены что хотите удалить категорию?
           </ModalHeader>
           <ModalBody>
             <span className="font-bold text-center">
-              К этой категории могут быть привязаны продукты
+              К этой категории могут быть привязаны продукты!
             </span>
           </ModalBody>
           <ModalFooter>
             <Button
-              color="danger"
+              color="primary"
               variant="light"
               onPress={() => setIsModalOpen({ open: false, uuid: "" })}
             >
               Закрыть
             </Button>
             <Button
-              color="primary"
+              color="danger"
               onPress={() => {
                 deleteCategory(isModalOpen.uuid);
                 setIsModalOpen({ open: false, uuid: "" });

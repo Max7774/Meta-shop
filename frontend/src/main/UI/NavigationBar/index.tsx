@@ -15,7 +15,6 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
-import { BASE_URL } from "@/const/baseUrl";
 import { AcmeLogo } from "./LogoIcon";
 import Cart from "../../Components/Cart/Cart";
 import { useProfile } from "@hooks/useProfile";
@@ -23,6 +22,7 @@ import { ERoles } from "@enums/ERoles";
 import AdminItems from "./AdminItems/AdminItems";
 import CategoryItems from "./CategoryItems/CategoryItems";
 import { ADMIN_GlOBAL_PREFIX } from "@/const/globalPrefix";
+import { getImageUrl } from "@utils/getImageUrl";
 
 export const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -113,7 +113,7 @@ export const NavigationBar = () => {
                   color="default"
                   name="Jason Hughes"
                   size="sm"
-                  src={BASE_URL + "/file-upload/" + avatarPath}
+                  src={getImageUrl(avatarPath)}
                 />
               )}
             </DropdownTrigger>

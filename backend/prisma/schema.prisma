@@ -47,6 +47,7 @@ model Product {
   price         Int
   discount      Int
   images        String[]      @default(["default-product-photo.png"])
+  unitofmeasurement String
 
   categoryUuid  String?       @map("categoryUuid")
   userUuid      String?       @map("userUuid")
@@ -198,3 +199,4 @@ enum EnumRoleOfUser {
   MANAGER
   COURIER
 }
+

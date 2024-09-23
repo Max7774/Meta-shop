@@ -6,6 +6,7 @@ import { convertPrice } from "@utils/convertPrice";
 import { useNavigate } from "react-router-dom";
 import DefaultActions from "./Actions/DefaultActions/DefaultActions";
 import AdminActions from "./Actions/AdminActions/AdminActions";
+import { getImageUrl } from "@utils/getImageUrl";
 
 interface ICardProps {
   product: TProduct;
@@ -28,7 +29,7 @@ const CardUI = ({ product }: ICardProps) => {
           width="100%"
           alt={product.name}
           className="w-full object-cover h-[140px]"
-          src={product.images[0]}
+          src={getImageUrl(product.images[0])}
         />
       </CardBody>
       <CardFooter className="text-small gap-2 flex-col justify-between">
@@ -53,7 +54,7 @@ const CardUI = ({ product }: ICardProps) => {
         </p>
         <Divider />
         {role === ERoles.ADMIN ? (
-          <AdminActions productUuid={product.uuid} />
+          <AdminActions productUuid={product.uuid} productSlug={product.slug} />
         ) : (
           <DefaultActions product={product} />
         )}

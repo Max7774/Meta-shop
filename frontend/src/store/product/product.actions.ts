@@ -62,9 +62,8 @@ export const createProduct = createAsyncThunk<TProduct, TProductCreateForm>(
         price: product.price++,
         description: product.description,
         categoryUuid: product.categoryUuid,
-        peculiarities: product.peculiarities,
-        quantity: product.quantity++,
         discount: product.discount++,
+        unitofmeasurement: product.unitofmeasurement,
       };
       const response = await ProductService.createProduct(currentProduct);
 
@@ -92,6 +91,51 @@ export const deleteProduct = createAsyncThunk<TProduct, string>(
     } catch (error) {
       return rejectWithValue({
         errorMessage: "Failed to delete product",
+      });
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk<
+  TProduct,
+  { data: TProductCreateForm; uuid: string; images: File[] }
+>(
+  "products/updateProduct",
+  async ({ data, uuid, images }, { rejectWithValue }) => {
+    try {
+      const response = await ProductService.updateProduct(data, uuid);
+
+      if (images.length !== 0) {
+        for (let index = 0; index < (images || []).length; index++) {
+          const element = (images || [])[index];
+          await ProductService.uploadProductImages(response.data.uuid, element);
+        }
+      }
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        errorMessage: "Failed to update product",
+      });
+    }
+  }
+);
+
+export const deleteProductImage = createAsyncThunk<
+  { message: string },
+  { productUuid: string; filename: string }
+>(
+  "products/deleteProductImage",
+  async ({ productUuid, filename }, { rejectWithValue }) => {
+    try {
+      const response = await ProductService.deleteProductImage(
+        productUuid,
+        filename
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        errorMessage: "Failed to delete product image",
       });
     }
   }

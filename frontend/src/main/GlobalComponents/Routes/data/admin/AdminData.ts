@@ -6,6 +6,7 @@ import {
   AdminOrders,
   AdminProducts,
   AdminUsers,
+  EditProduct,
 } from "../components/root";
 
 export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
@@ -33,5 +34,10 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     id: "root-page",
     path: EAdminRoutes.PRODUCTS,
     component: AdminProducts,
+  },
+  {
+    id: "edit-product-root-page",
+    path: EAdminRoutes.EDIT_PRODUCT,
+    component: EditProduct,
   },
 ];

@@ -7,6 +7,7 @@ import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { Button, Divider, Image, Progress, Textarea } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
+import { getImageUrl } from "@utils/getImageUrl";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +24,7 @@ const OrderPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (total > 10000) {
+    if (total > 6000) {
       setDeliveryPrice(0);
     } else {
       setDeliveryPrice(800);
@@ -35,7 +36,6 @@ const OrderPage = () => {
   const {
     handleSubmit,
     control,
-    setError,
     formState: { errors },
   } = useForm<TOrderForm>();
 
@@ -53,17 +53,11 @@ const OrderPage = () => {
     });
     if (result.type === "/order/create/fulfilled") {
       reset();
-      navigate("/profile");
+      navigate("/orders");
     } else {
       toast.error("Ошибка создания заказа");
     }
   };
-
-  useEffect(() => {
-    if (!currentAddress) {
-      setError("addressUuid", { message: "Обязательно напишите адрес!" });
-    }
-  }, [currentAddress]);
 
   return (
     <section>
@@ -84,7 +78,7 @@ const OrderPage = () => {
               <div key={item.uuid} className="flex flex-row justify-between">
                 <div className="flex flex-row gap-3">
                   <Image
-                    src={item.product.images[0]}
+                    src={getImageUrl(item.product.images[0])}
                     className="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-lg"
                     alt={item.product.name}
                   />
@@ -151,10 +145,10 @@ const OrderPage = () => {
                 label={
                   deliveryPrice === 0
                     ? "Доставка бесплатная!"
-                    : `До бесплатной доставки: ${convertPrice(10000 - total)}`
+                    : `До бесплатной доставки: ${convertPrice(6000 - total)}`
                 }
                 color={deliveryPrice === 0 ? "success" : "warning"}
-                maxValue={10000}
+                maxValue={6000}
                 value={total}
               />
               <Divider />

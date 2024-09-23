@@ -10,7 +10,7 @@ import Carousel from "@/main/UI/Carousel/Carousel";
 import { useCart } from "@hooks/useCart";
 import { convertPrice } from "@utils/convertPrice";
 import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
-
+import { unitofmeasurementData } from "@/const/unitofmeasurement";
 const ProductPage = () => {
   const { productSlug } = useParams();
   const { getProductBySlug, addToCart } = useActions();
@@ -32,11 +32,15 @@ const ProductPage = () => {
 
   return (
     <section>
-      <Heading>{product.name}</Heading>
+      <Heading>{product?.name}</Heading>
       {/* Отображение категории или подкатегории */}
-      <Chip>{product.category.name}</Chip>
+      <Chip>{product?.category?.name}</Chip>
       <div className="container flex gap-4 flex-col lg:flex-row">
-        <Carousel images={product.images} isNew={product.isNew} />
+        <Carousel
+          images={product.images}
+          isNew={product.isNew}
+          discount={product.discount}
+        />
         {/* Информация о продукте */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center gap-4">
           <div className="flex items-center gap-2">
@@ -45,7 +49,7 @@ const ProductPage = () => {
                 <span className="text-xl font-semibold text-red-600">
                   {convertPrice(
                     product.price - (product.price * product.discount) / 100
-                  )}{" "}
+                  )}
                 </span>
                 <span className="text-sm line-through text-gray-500">
                   {convertPrice(product.price)}
@@ -56,6 +60,9 @@ const ProductPage = () => {
                 {convertPrice(product.price)}
               </span>
             )}
+            <span className="text-sm text-default-400">
+              / {unitofmeasurementData[product.unitofmeasurement]}
+            </span>
           </div>
           <p>{product.description}</p>
           {currentElement ? (

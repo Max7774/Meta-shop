@@ -15,4 +15,5 @@ export enum EAdminRoutes {
   CATEGORIES = "categories",
   USERS = "users",
   PRODUCTS = "products",
+  EDIT_PRODUCT = "product/:productSlug",
 }

@@ -6,37 +6,30 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import { FiTrash } from "react-icons/fi";
-import { FaRegEdit } from "react-icons/fa";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface IAdminActionsProps {
+interface IDeleteActionProps {
   productUuid: string;
-  productSlug: string;
 }
 
-const AdminActions = ({ productUuid, productSlug }: IAdminActionsProps) => {
+const DeleteAction = ({ productUuid }: IDeleteActionProps) => {
   const [isOpen, setIsOpen] = useState({ open: false, uuid: "" });
   const { isProductLoading } = useProducts();
   const { deleteProduct } = useActions();
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-row justify-around">
+    <div className="my-3">
       <Button
-        variant="light"
+        fullWidth
+        color="danger"
+        size="lg"
         onClick={() => setIsOpen({ open: true, uuid: productUuid })}
       >
-        <FiTrash size={20} />
-      </Button>
-      <Button
-        variant="light"
-        onClick={() => navigate(`/admin/product/${productSlug}`)}
-      >
-        <FaRegEdit size={20} />
+        Удалить продукт
       </Button>
       <Modal
         isOpen={isOpen.open}
@@ -66,6 +59,7 @@ const AdminActions = ({ productUuid, productSlug }: IAdminActionsProps) => {
               onPress={() => {
                 deleteProduct(isOpen.uuid);
                 setIsOpen({ open: false, uuid: "" });
+                navigate(-1);
               }}
             >
               Применить
@@ -77,4 +71,4 @@ const AdminActions = ({ productUuid, productSlug }: IAdminActionsProps) => {
   );
 };
 
-export default AdminActions;
+export default DeleteAction;

@@ -17,6 +17,7 @@ import { CategoryService } from 'src/category/category.service';
 import { convertToNumber } from 'src/utils/convert-to-number';
 import { convertToSlug } from 'src/utils/convertToSlug';
 import { uuidGen } from 'src/utils/uuidGenerator';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class ProductService {
@@ -258,9 +259,9 @@ export class ProductService {
       price,
       name,
       categoryUuid,
-      peculiarities,
-      quantity,
       discount,
+      unitofmeasurement,
+      quantity,
     } = dto;
 
     const isProduct = await this.prisma.product.findUnique({
@@ -285,11 +286,11 @@ export class ProductService {
         uuid: uuidGen(),
         name,
         description,
-        peculiarities,
         slug: convertToSlug(dto.name),
         price,
-        discount: discount || 0,
         quantity: quantity || 0,
+        unitofmeasurement,
+        discount: discount || 0,
         category: {
           connectOrCreate: {
             where: {
@@ -315,9 +316,8 @@ export class ProductService {
         price,
         name,
         categoryUuid,
-        quantity,
-        peculiarities,
         discount,
+        unitofmeasurement,
       } = dto;
 
       const { uuid: catUuid } = await this.categoryService.byId(categoryUuid);
@@ -331,8 +331,7 @@ export class ProductService {
           discount,
           price,
           name,
-          peculiarities,
-          quantity,
+          unitofmeasurement,
           slug: convertToSlug(name),
           category: {
             connect: {
@@ -340,6 +339,7 @@ export class ProductService {
             },
           },
         },
+        select: productReturnObjectFull,
       });
 
       return product;
@@ -350,6 +350,7 @@ export class ProductService {
 
   async deleteProduct(uuid: string) {
     try {
+      const product = await this.byId(uuid);
       // Начинаем транзакцию
       const deletedProduct = await this.prisma.$transaction(async (prisma) => {
         // 1. Удаляем связанные UserClick
@@ -389,7 +390,13 @@ export class ProductService {
           },
         });
 
-        // 6. Удаляем сам Product
+        product.images.forEach(async (image) => {
+          // 6. Удаляем связанные PhotoFile
+          const filePath = `uploads/${image}`;
+          await fs.unlink(filePath);
+        });
+
+        // 7. Удаляем сам Product
         const deletedProduct = await prisma.product.delete({
           where: {
             uuid,

@@ -8,6 +8,7 @@ import { useProducts } from "@hooks/useProducts";
 import {
   Button,
   Divider,
+  Image,
   Input,
   Select,
   SelectItem,
@@ -17,13 +18,14 @@ import { useEffect } from "react";
 import { useCategory } from "@hooks/useCategory";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { unitofmeasurementData } from "@/const/unitofmeasurement";
 
 const AdminProducts = () => {
   const { products, isLoading } = useProducts();
   const { categories } = useCategory();
   const { getProductsAll, getCategoriesAll, createProduct } = useActions();
 
-  const { control, handleSubmit, clearErrors, setError, setValue, reset } =
+  const { control, handleSubmit, clearErrors, setError, reset } =
     useForm<TProductCreateForm>();
 
   // Состояние для предварительного просмотра изображений
@@ -56,6 +58,7 @@ const AdminProducts = () => {
   };
 
   const submit: SubmitHandler<TProductCreateForm> = async (data) => {
+    console.log(data);
     data.images = selectedFiles;
     const result: any = await createProduct(data);
     if (result.type === "products/createProduct/fulfilled") {
@@ -63,6 +66,7 @@ const AdminProducts = () => {
       setPreviewImages([]);
       setSelectedFiles([]);
       reset();
+      window.location.reload();
     } else {
       toast.error("Ошибка создания продукта");
     }
@@ -72,10 +76,6 @@ const AdminProducts = () => {
     getCategoriesAll();
     getProductsAll({});
   }, []);
-
-  const handleCategoryChange = (categoryUuid: string) => {
-    setValue("categoryUuid", categoryUuid);
-  };
 
   return (
     <section>
@@ -135,6 +135,29 @@ const AdminProducts = () => {
         />
         <Controller
           control={control}
+          name="unitofmeasurement"
+          rules={{ required: "Выберите единицу измерения" }}
+          render={({ field, fieldState: { error } }) => (
+            <Select
+              label="Единица измерения"
+              placeholder="Выберите единицу измерения"
+              selectedKeys={[field.value]}
+              onSelectionChange={(keys) => {
+                const selectedKey = Array.from(keys)[0] as string;
+                field.onChange(selectedKey);
+              }}
+              isInvalid={!!error?.message}
+              errorMessage={error?.message}
+              fullWidth
+            >
+              {Object.entries(unitofmeasurementData).map(([key, value]) => (
+                <SelectItem key={key}>{value}</SelectItem>
+              ))}
+            </Select>
+          )}
+        />
+        <Controller
+          control={control}
           name="categoryUuid"
           rules={{ required: "Выберите категорию" }}
           render={({ field, fieldState: { error } }) => (
@@ -144,7 +167,7 @@ const AdminProducts = () => {
               selectedKeys={[field.value]}
               onSelectionChange={(keys) => {
                 const selectedKey = Array.from(keys)[0] as string;
-                handleCategoryChange(selectedKey);
+                field.onChange(selectedKey);
               }}
               isInvalid={!!error?.message}
               errorMessage={error?.message}
@@ -213,7 +236,7 @@ const AdminProducts = () => {
           <div className="flex flex-wrap gap-4 mt-4">
             {previewImages.map((src, index) => (
               <div key={index} className="relative">
-                <img
+                <Image
                   src={src}
                   alt={`Preview ${index}`}
                   className="sm:w-32 sm:h-32 object-cover rounded-2xl"
@@ -229,7 +252,7 @@ const AdminProducts = () => {
                     setPreviewImages(newPreviewImages);
                     setSelectedFiles(newSelectedFiles);
                   }}
-                  className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  className="absolute -top-2 -right-2 z-10 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
                 >
                   <IoClose size={20} />
                 </button>

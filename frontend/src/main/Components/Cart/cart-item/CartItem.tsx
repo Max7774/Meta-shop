@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { ICartItem } from "@store/cart/cart.types";
 import { convertPrice } from "@utils/convertPrice";
 import { Image } from "@nextui-org/react";
-
+import { getImageUrl } from "@utils/getImageUrl";
 interface IItem {
   item: ICartItem;
 }
@@ -15,7 +15,7 @@ const CartItem: FC<IItem> = ({ item }) => {
     <div className="flex flex-row gap-3 py-3">
       <Link to={`/product/${item.product?.category?.slug}`}>
         <Image
-          src={item.product.images[0]}
+          src={getImageUrl(item.product.images[0])}
           alt={item.product.name}
           width={50}
           height={50}

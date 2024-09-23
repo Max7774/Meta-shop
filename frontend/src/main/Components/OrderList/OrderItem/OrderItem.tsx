@@ -7,12 +7,14 @@ import {
   CardHeader,
   Chip,
   Divider,
+  Image,
 } from "@nextui-org/react";
 import { TOrder } from "@/types/TOrder";
 import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
 import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { EOrder } from "@enums/EOrder";
+import { getImageUrl } from "@utils/getImageUrl";
 
 interface OrderItemProps {
   order: TOrder;
@@ -41,9 +43,9 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
         <div className="space-y-4">
           {order.items.map((item, i) => (
             <div key={item.uuid} className="flex space-x-4">
-              <img
+              <Image
                 key={item.uuid + i}
-                src={item.product.images[0]}
+                src={getImageUrl(item.product.images[0])}
                 alt={item.product.name}
                 className="w-16 h-16 object-cover rounded"
               />

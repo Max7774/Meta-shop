@@ -14,6 +14,7 @@ import { EOrder } from "@enums/EOrder";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { convertPrice } from "@utils/convertPrice";
+import { getImageUrl } from "@utils/getImageUrl";
 
 interface IAdminOrderItemProps {
   order: TOrder;
@@ -79,7 +80,7 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
             <div key={item.uuid} className="flex space-x-4">
               <Image
                 key={item.uuid + i}
-                src={item.product.images[0]}
+                src={getImageUrl(item.product.images[0])}
                 alt={item.product.name}
                 className="w-16 h-16 object-cover"
               />

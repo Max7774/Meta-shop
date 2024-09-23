@@ -1,7 +1,10 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   MaxFileSizeValidator,
   Param,
   ParseFilePipe,
@@ -18,6 +21,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { promises as fs } from 'fs';
 
 @Controller('file-upload')
 @ApiTags('File-upload')
@@ -73,6 +77,29 @@ export class FileUploadController {
     @CurrentUser('uuid') uuid: string,
   ) {
     return this.fileUploadService.updateAvatar(file, uuid);
+  }
+
+  @Delete(':fileName/:productUuid')
+  async deleteFile(
+    @Param('fileName') fileName: string,
+    @Param('productUuid') productUuid: string,
+  ): Promise<any> {
+    const filePath = `uploads/${fileName}`;
+    try {
+      const result = await this.fileUploadService.deleteImageInProduct(
+        productUuid,
+        fileName,
+      );
+
+      if (result) {
+        await fs.unlink(filePath);
+        return { message: 'Файл успешно удален' };
+      } else {
+        return { message: 'Ошибка удаления файла' };
+      }
+    } catch (err) {
+      throw new HttpException('Файл не найден', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Get(':fileName')

@@ -114,9 +114,9 @@ const Address = ({ disabled }: IAddressProps) => {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <Button fullWidth onClick={onOpen}>
-          <span className="flex flex-row gap-2 items-center">
-            <FiPlus size={15} />
+        <Button fullWidth size="lg" onClick={onOpen}>
+          <span className="flex flex-row gap-2 items-center text-white">
+            <FiPlus size={20} />
             <span>Новый адрес</span>
           </span>
         </Button>

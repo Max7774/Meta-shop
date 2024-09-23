@@ -39,3 +39,6 @@ export const AdminUsers = lazy(
 export const AdminProducts = lazy(
   () => import("@/main/Screens/Admin/Products/Products")
 );
+export const EditProduct = lazy(
+  () => import("@/main/Screens/Admin/EditProduct/EditProduct")
+);

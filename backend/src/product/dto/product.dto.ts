@@ -8,26 +8,21 @@ export class ProductDto implements Prisma.ProductUpdateInput {
   @IsNumber()
   price: number;
 
-  @IsOptional()
   @IsString()
-  description: string;
+  unitofmeasurement: string;
 
   @IsString()
   categoryUuid: string;
 
   @IsOptional()
   @IsString()
-  subcategoryUuid: string;
-
-  @IsOptional()
-  @IsString()
-  peculiarities: string;
-
-  @IsOptional()
-  @IsNumber()
-  quantity: number;
+  description: string;
 
   @IsOptional()
   @IsNumber()
   discount: number;
+
+  @IsOptional()
+  @IsNumber()
+  quantity: number;
 }

@@ -26,7 +26,7 @@ export class FileUploadService {
           productUuid: productUuid.uuid,
         },
       });
-      return result.url;
+      return result.filename;
     });
 
     const product = await this.prismaFileService.product.findUnique({
@@ -89,6 +89,31 @@ export class FileUploadService {
       });
 
       return result.avatarPath;
+    } catch (error) {
+      throw new BadGatewayException(error);
+    }
+  }
+
+  async deleteImageInProduct(productUuid: string, filename: string) {
+    try {
+      const product = await this.prismaFileService.product.findUnique({
+        where: {
+          uuid: productUuid,
+        },
+      });
+
+      const result = product.images.filter((image) => image !== filename);
+
+      await this.prismaFileService.product.update({
+        where: {
+          uuid: productUuid,
+        },
+        data: {
+          images: result,
+        },
+      });
+
+      return true;
     } catch (error) {
       throw new BadGatewayException(error);
     }

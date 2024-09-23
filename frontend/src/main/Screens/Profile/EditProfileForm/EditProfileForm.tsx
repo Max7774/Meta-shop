@@ -18,6 +18,7 @@ import { TProfileEdit } from "@/types/TProfile";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { getImageUrl } from "@utils/getImageUrl";
 
 interface IEditProfileFormProps {
   isOpen: boolean;
@@ -133,7 +134,7 @@ const EditProfileForm = ({ isOpen, onClose }: IEditProfileFormProps) => {
             />
             <div>
               <Avatar
-                src={avatarFile.avatarPath}
+                src={getImageUrl(avatarFile.avatarPath)}
                 alt={profile.first_name}
                 size="lg"
                 className="mb-4 md:mb-0"

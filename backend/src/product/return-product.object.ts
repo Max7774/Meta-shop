@@ -13,6 +13,7 @@ export const productReturnObject: Prisma.ProductSelect = {
   peculiarities: true,
   slug: true,
   quantity: true,
+  unitofmeasurement: true,
   category: { select: returnCategoryObject },
   reviews: {
     select: returnReviewObject,

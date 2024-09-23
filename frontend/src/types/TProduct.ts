@@ -3,6 +3,7 @@ import { TCategory, TSubCategory } from "./TCategory";
 export type TProduct = {
   images: string[];
   description: string;
+  unitofmeasurement: string;
   uuid: string;
   name: string;
   price: number;
@@ -27,9 +28,7 @@ export type TProductCreateForm = {
   price: number;
   description: string;
   categoryUuid: string;
-  peculiarities: string;
-  quantity: number;
   discount: number;
-  subcategoryUuid?: string;
+  unitofmeasurement: string;
   images?: File[];
 };

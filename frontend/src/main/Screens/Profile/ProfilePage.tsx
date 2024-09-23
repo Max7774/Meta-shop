@@ -1,9 +1,9 @@
-import { BASE_URL } from "@/const/baseUrl";
 import Address from "@Components/Address/Address";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { Avatar, Button } from "@nextui-org/react";
 import EditProfileForm from "./EditProfileForm/EditProfileForm";
 import { useState } from "react";
+import { getImageUrl } from "@utils/getImageUrl";
 
 const ProfilePage = () => {
   const { profile } = useAppSelector((state) => state.user);
@@ -16,7 +16,7 @@ const ProfilePage = () => {
     <div className="container mx-auto">
       <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
         <Avatar
-          src={BASE_URL + "/file-upload/" + profile.avatarPath}
+          src={getImageUrl(profile.avatarPath)}
           alt={profile.first_name}
           size="lg"
           className="mb-4 md:mb-0"

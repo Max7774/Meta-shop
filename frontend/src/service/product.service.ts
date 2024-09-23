@@ -55,4 +55,19 @@ export const ProductService = {
       method: "DELETE",
     });
   },
+
+  async updateProduct(data: TProductCreateForm, productUuid: string) {
+    return await instance<TProduct>({
+      url: `${PRODUCTS}/${productUuid}`,
+      method: "PUT",
+      data,
+    });
+  },
+
+  async deleteProductImage(productUuid: string, filename: string) {
+    return await instance<{ message: string }>({
+      url: `/file-upload/${filename}/${productUuid}`,
+      method: "DELETE",
+    });
+  },
 };
