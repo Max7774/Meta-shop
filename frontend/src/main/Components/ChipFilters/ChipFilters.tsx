@@ -35,9 +35,9 @@ const getSortLabel = (value: string) => {
 const getFilterLabel = (key: string, value: string) => {
   switch (key) {
     case "minPrice":
-      return `Мин. цена: ${value}₽`;
+      return `Мин. цена: ${value}`;
     case "maxPrice":
-      return `Макс. цена: ${value}₽`;
+      return `Макс. цена: ${value}`;
     case "ratings":
       return `Рейтинг: ${value}+`;
     case "categoryUuid":

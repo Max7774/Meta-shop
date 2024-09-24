@@ -140,7 +140,7 @@ export class OrderService {
             };
           }),
         },
-        total,
+        total: total <= 6000 ? total + 800 : total,
         user: {
           connect: {
             uuid: userUuid,

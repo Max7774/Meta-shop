@@ -40,6 +40,10 @@ const OrderPage = () => {
   } = useForm<TOrderForm>();
 
   const submit: SubmitHandler<TOrderForm> = async (data) => {
+    if (!currentAddress) {
+      toast.error("Заполните свой адрес!");
+      return;
+    }
     const result: any = await createOrder({
       ...data,
       addressUuid: currentAddress,

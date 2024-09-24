@@ -15,6 +15,8 @@ import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { EOrder } from "@enums/EOrder";
 import { getImageUrl } from "@utils/getImageUrl";
+import { convertPrice } from "@utils/convertPrice";
+import { useNavigate } from "react-router-dom";
 
 interface OrderItemProps {
   order: TOrder;
@@ -23,6 +25,7 @@ interface OrderItemProps {
 const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
   const { cancelOrder } = useActions();
   const { isCancelOrderLoading } = useAppSelector((state) => state.orders);
+  const navigate = useNavigate();
 
   return (
     <Card>
@@ -42,12 +45,16 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
         <Divider className="mb-2 mt-2" />
         <div className="space-y-4">
           {order.items.map((item, i) => (
-            <div key={item.uuid} className="flex space-x-4">
+            <div
+              key={item.uuid}
+              className="flex space-x-4 cursor-pointer"
+              onClick={() => navigate(`/product/${item.product.slug}`)}
+            >
               <Image
                 key={item.uuid + i}
                 src={getImageUrl(item.product.images[0])}
                 alt={item.product.name}
-                className="w-16 h-16 object-cover rounded"
+                className="w-16 h-16 object-cover rounded-2xl"
               />
               <div
                 key={item.productUuid}
@@ -57,7 +64,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
                   {item.product.name}
                 </h4>
                 <p key={item.createdAt + i}>
-                  Количество: {item.quantity} x {item.price}₽
+                  Количество: {item.quantity} x {convertPrice(item.price)}
                 </p>
               </div>
             </div>
@@ -67,15 +74,17 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
       </CardBody>
       <CardFooter>
         <div className="flex flex-col gap-3 w-full">
-          <div className="flex justify-between item-enter w-full px-1">
+          <div className="flex justify-between items-center w-full px-1">
             <Chip
               color={getOrderStatusLabel(order.status).color}
               size="lg"
-              className="text-white"
+              variant="bordered"
             >
               {getOrderStatusLabel(order.status).status}
             </Chip>
-            <span className="font-semibold pt-1">Итого: {order.total}₽</span>
+            <span className="font-semibold pt-1">
+              Итого: {convertPrice(order.total)}
+            </span>
           </div>
           {order.status !== EOrder.Canceled &&
             order.status !== EOrder.Delivered && (

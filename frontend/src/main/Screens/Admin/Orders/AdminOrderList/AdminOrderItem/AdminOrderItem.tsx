@@ -8,6 +8,9 @@ import {
   Chip,
   Divider,
   Image,
+  Input,
+  Accordion,
+  AccordionItem,
 } from "@nextui-org/react";
 import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
 import { EOrder } from "@enums/EOrder";
@@ -52,7 +55,6 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
             </span>
           </div>
           <Divider />
-          <h1 className="font-bold">Адрес:</h1>
           <div className="flex flex-col gap-2">
             {!!order.user?.first_name ||
               (!!order.user?.second_name && (
@@ -60,13 +62,68 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
                   Заказал: {order.user?.first_name} {order.user?.second_name}
                 </h3>
               ))}
-            <h3>Город: {order.address.town}</h3>
-            <h3>Улица: {order.address.street}</h3>
-            <h3>Дом/корпус: {order.address.house}</h3>
-            <h3>Квартира: {order.address.apartment}</h3>
-            <h3>Домофон: {order.address.intercom}</h3>
-            <h3>Подъезд: {order.address.entrance}</h3>
-            <h3>Этаж: {order.address.floor}</h3>
+            <Accordion>
+              <AccordionItem key="1" aria-label="Адрес" title="Адрес">
+                <div className="w-full flex flex-col gap-3">
+                  <Input
+                    fullWidth
+                    readOnly
+                    value={order.address.town}
+                    label="Город:"
+                    labelPlacement="outside"
+                    className="justify-between"
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    value={order.address.street}
+                    label="Улица:"
+                    labelPlacement="outside"
+                    className="justify-between"
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    value={order.address.house}
+                    label="Дом/корпус:"
+                    labelPlacement="outside"
+                    className="justify-between"
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    value={order.address.apartment}
+                    label="Квартира:"
+                    labelPlacement="outside"
+                    className="justify-between"
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    value={order.address.intercom}
+                    label="Домофон:"
+                    labelPlacement="outside"
+                    className="justify-between"
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    labelPlacement="outside"
+                    className="justify-between"
+                    label="Подъезд:"
+                    value={order.address.entrance}
+                  />
+                  <Input
+                    fullWidth
+                    readOnly
+                    labelPlacement="outside"
+                    className="justify-between"
+                    label="Этаж:"
+                    value={order.address.floor}
+                  />
+                </div>
+              </AccordionItem>
+            </Accordion>
             <Divider className="mb-4" />
             <h3>Телефон: {order.user?.phone_number}</h3>
             {!!order.comment && <h3>Комментарий: {order.comment}</h3>}
@@ -102,11 +159,11 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
       </CardBody>
       <CardFooter>
         <div className="flex flex-col w-full gap-4">
-          <div className="flex justify-between item-enter w-full px-1">
+          <div className="flex justify-between items-center w-full px-1">
             <Chip
               color={getOrderStatusLabel(order.status).color}
               size="lg"
-              className="text-white"
+              variant="faded"
             >
               {getOrderStatusLabel(order.status).status}
             </Chip>

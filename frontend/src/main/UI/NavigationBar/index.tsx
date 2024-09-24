@@ -41,28 +41,40 @@ export const NavigationBar = () => {
     {
       role: [ERoles.ADMIN],
       key: "admin-panel",
-      onClick: () => navigate(`${ADMIN_GlOBAL_PREFIX}products`),
+      onClick: () => {
+        navigate(`${ADMIN_GlOBAL_PREFIX}products`);
+        setIsMenuOpen(false);
+      },
       color: "default",
       label: "Админ панель",
     },
     {
       role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
       key: "profile",
-      onClick: () => navigate("/profile"),
+      onClick: () => {
+        navigate("/profile");
+        setIsMenuOpen(false);
+      },
       color: "default",
       label: "Профиль",
     },
     {
-      role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
+      role: [ERoles.DEFAULT_USER],
       key: "orders",
-      onClick: () => navigate("/orders"),
+      onClick: () => {
+        navigate("/orders");
+        setIsMenuOpen(false);
+      },
       color: "default",
       label: "Заказы",
     },
     {
       role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
       key: "logout",
-      onClick: () => logout(),
+      onClick: () => {
+        logout();
+        setIsMenuOpen(false);
+      },
       color: "danger",
       label: "Выйти",
     },

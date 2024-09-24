@@ -7,7 +7,7 @@ export function getOrderStatusLabel(value: EOrder): {
   switch (value) {
     case EOrder.Pending:
       return {
-        status: "Ожидает оплаты",
+        status: "Оформлен",
         color: "warning",
       };
     case EOrder.Delivered:
