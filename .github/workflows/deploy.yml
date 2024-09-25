@@ -100,11 +100,10 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
       - name: Seed directory [Backend]
-        working-directory: ./backend
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           mkdir seed
-          cat > /Meta-shop/frontend/.env << EOT
+          cat > /Meta-shop/backend/seed/seeder.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
           EOF
