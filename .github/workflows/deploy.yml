@@ -78,9 +78,10 @@ jobs:
           EOF
 
       - name: Install dependencies [Frontend]
-        working-directory: ./frontend
-        run: |
-          npm install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: "frontend"
 
       - name: Set .env [Frontend]
         run: |
@@ -91,23 +92,19 @@ jobs:
           EOF
 
       - name: Build [Frontend]
-        working-directory: ./frontend
-        run: |
-          npm run build
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: "frontend"
 
       - name: Copy built frontend to server
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
-      - name: Seed directory [Backend]
-        working-directory: ./backend
-        run: |
-          mkdir seed
-
-      - name: Set seeder.ts [Backend]
+      - name: Set seeder.prod.ts [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          cat > /Meta-shop/backend/seed/seeder.ts << EOT
+          cat > /Meta-shop/backend/seed/seeder.prod.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
           EOF
