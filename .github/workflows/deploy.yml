@@ -76,6 +76,12 @@ jobs:
             pgdata:
           EOD
           EOF
+
+      - name: Install dependencies [Frontend]
+        working-directory: ./frontend
+        run: |
+          npm install
+
       - name: Set .env [Frontend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
@@ -83,11 +89,6 @@ jobs:
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           EOT
           EOF
-
-      - name: Install dependencies [Frontend]
-        working-directory: ./frontend
-        run: |
-          npm install
 
       - name: Build [Frontend]
         working-directory: ./frontend
@@ -97,6 +98,16 @@ jobs:
       - name: Copy built frontend to server
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
+
+      - name: Seed directory [Backend]
+        working-directory: ./backend
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          mkdir seed
+          cat > /Meta-shop/frontend/.env << EOT
+          ${{ secrets.SEEDER }}
+          EOT
+          EOF
 
       - name: Deploy by SSH
         run: |
