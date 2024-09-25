@@ -26,10 +26,9 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
 
-      - name: Execute SSH command
+      - name: Execute SSH command .env [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-            # Создаём .env для бэкенда
             cat > /Meta-shop/backend/.env << EOT
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             SERVER_URL=${{ secrets.SERVER_URL }}
@@ -39,8 +38,10 @@ jobs:
             MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
             MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
             EOT
-
-            # Создаём docker-compose.yml для бэкенда
+          EOF
+      - name: Execute SSH command docker-compose.yml [Backend]
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cat > /Meta-shop/backend/docker-compose.yml << EOD
             version: '3.8'
 
@@ -68,17 +69,21 @@ jobs:
             volumes:
               pgdata:
             EOD
-             # Создаём .env для фронтенда
+          EOF
+      - name: Set .env [Frontend]
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cat > /Meta-shop/frontend/.env << EOT
             VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
             EOT
-
-            # Переходим в директорию бэкенда и запускаем Docker Compose
+          EOF
+      - name: Deploy by SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cd /Meta-shop/backend
             docker-compose down
             docker-compose up -d --build
 
-            # Переходим в директорию фронтенда и выполняем сборку
             cd ../frontend
             npm install
             npm run build
