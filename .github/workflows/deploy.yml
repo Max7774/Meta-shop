@@ -103,6 +103,12 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           mkdir seed
+          EOF
+
+      - name: Set seeder.ts [Backend]
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          mkdir seed
           cat > /Meta-shop/backend/seed/seeder.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
