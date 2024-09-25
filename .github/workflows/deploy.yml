@@ -91,9 +91,9 @@ jobs:
           EOF
 
       - name: Build [Frontend]
+        working-directory: ./frontend
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          cd /Meta-shop/frontend
           ls -la
           npm run build
           EOF
@@ -103,9 +103,9 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
       - name: Seed directory [Backend]
+        working-directory: ./backend
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          cd /Meta-shop/backend
           mkdir seed
           npm install
           EOF
@@ -119,9 +119,9 @@ jobs:
           EOF
 
       - name: Deploy by SSH
+        working-directory: ./backend
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          cd /Meta-shop/backend
           docker-compose down -v
           docker-compose build
           docker-compose up -d
