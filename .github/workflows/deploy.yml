@@ -18,6 +18,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
+      # Сборка фронтенда в GitHub Actions
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21.5.0"
+
       - name: Copy files via SCP [Backend]
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
@@ -77,6 +83,21 @@ jobs:
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           EOT
           EOF
+
+      - name: Install dependencies [Frontend]
+        working-directory: ./frontend
+        run: |
+          npm install
+
+      - name: Build [Frontend]
+        working-directory: ./frontend
+        run: |
+          npm run build
+
+      - name: Copy built frontend to server
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
+
       - name: Deploy by SSH
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
@@ -84,9 +105,6 @@ jobs:
           docker-compose down -v
           docker-compose build
           docker-compose up -d
-          cd ../frontend
-          npm install
-          npm run build
-          cp -r build/* /var/www/html
+
           systemctl restart nginx
           EOF
