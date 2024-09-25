@@ -18,9 +18,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
-      - name: Copy files via SCP
+      - name: Copy files via SCP [Backend]
         run: |
-          scp -o StrictHostKeyChecking=no -r . root@185.129.49.148:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
+          
+      - name: Copy files via SCP [Frontend]
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
 
       - name: Execute SSH command
         run: |
