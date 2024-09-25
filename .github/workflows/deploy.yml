@@ -94,7 +94,7 @@ jobs:
       - name: Build [Frontend]
         uses: borales/actions-yarn@v4
         with:
-          cmd: install
+          cmd: build
           dir: "frontend"
 
       - name: Copy built frontend to server
