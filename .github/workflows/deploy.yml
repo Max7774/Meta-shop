@@ -1,0 +1,40 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: 185.129.49.148
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "."
+          target: "/Meta-shop"
+
+      - name: Execute SSH command
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: 185.129.49.148
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /Meta-shop/backend
+            docker-compose down
+            docker-compose up -d --build
+            cd ../frontend
+            npm install
+            npm run build
+            sudo cp -r build/* /var/www/html
+            sudo systemctl restart nginx
