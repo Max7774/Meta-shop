@@ -93,10 +93,7 @@ jobs:
       - name: Build [Frontend]
         working-directory: ./frontend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          ls -la
           npm run build
-          EOF
 
       - name: Copy built frontend to server
         run: |
@@ -105,10 +102,8 @@ jobs:
       - name: Seed directory [Backend]
         working-directory: ./backend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           mkdir seed
           npm install
-          EOF
 
       - name: Set seeder.ts [Backend]
         run: |
@@ -119,7 +114,6 @@ jobs:
           EOF
 
       - name: Deploy by SSH
-        working-directory: ./backend
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           docker-compose down -v
