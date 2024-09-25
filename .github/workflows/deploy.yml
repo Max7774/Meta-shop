@@ -20,11 +20,11 @@ jobs:
 
       - name: Copy files via SCP [Backend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop/backend
 
       - name: Copy files via SCP [Frontend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop/frontend
 
       - name: Execute SSH command .env [Backend]
         run: |
