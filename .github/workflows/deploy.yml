@@ -3,7 +3,6 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master
       - main
 
 jobs:
@@ -12,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install SSH Key
         uses: webfactory/ssh-agent@v0.7.0
@@ -21,20 +20,17 @@ jobs:
 
       - name: Copy files via SCP
         run: |
-            scp -o StrictHostKeyChecking=no -r . root@185.129.49.148:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r . root@185.129.49.148:/Meta-shop
 
       - name: Execute SSH command
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: 185.129.49.148
-          username: root
-          key: ${{ secrets.DEPLOY_KEY }}
-          script: |
+        run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cd /Meta-shop/backend
             docker-compose down
             docker-compose up -d --build
             cd ../frontend
             npm install
             npm run build
-            sudo cp -r build/* /var/www/html
-            sudo systemctl restart nginx
+            cp -r build/* /var/www/html
+            systemctl restart nginx
+          EOF
