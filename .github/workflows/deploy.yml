@@ -24,17 +24,9 @@ jobs:
         with:
           node-version: "21.5.0"
 
-      - name: Copy files via SCP [Backend]
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
-
-      - name: Copy files via SCP [Frontend]
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
-
       - name: Execute SSH command .env [Backend]
+        working-directory: ./backend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           cat > /Meta-shop/backend/.env << EOT
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
@@ -44,10 +36,9 @@ jobs:
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
           EOT
-          EOF
       - name: Execute SSH command docker-compose.yml [Backend]
+        working-directory: ./backend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           cat > /Meta-shop/backend/docker-compose.yml << EOD
           version: '3.8'
 
@@ -75,7 +66,6 @@ jobs:
           volumes:
             pgdata:
           EOD
-          EOF
 
       - name: Install dependencies [Frontend]
         uses: borales/actions-yarn@v4
@@ -84,12 +74,11 @@ jobs:
           dir: "frontend"
 
       - name: Set .env [Frontend]
+        working-directory: ./frontend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           cat > /Meta-shop/frontend/.env << EOT
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           EOT
-          EOF
 
       - name: Build [Frontend]
         uses: borales/actions-yarn@v4
@@ -102,12 +91,19 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
       - name: Set seeder.prod.ts [Backend]
+        working-directory: ./backend
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           cat > /Meta-shop/backend/seed/seeder.prod.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
-          EOF
+
+      - name: Copy files via SCP [Backend]
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
+
+      - name: Copy files via SCP [Frontend]
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
 
       - name: Deploy by SSH
         run: |
