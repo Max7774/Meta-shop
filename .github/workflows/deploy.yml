@@ -20,61 +20,61 @@ jobs:
 
       - name: Copy files via SCP [Backend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop/backend
+          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
 
       - name: Copy files via SCP [Frontend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop/frontend
+          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
 
       - name: Execute SSH command .env [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cat > /Meta-shop/backend/.env << EOT
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            SERVER_URL=${{ secrets.SERVER_URL }}
-            DESINATION=./uploads
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
-            MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
-            MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
+              DATABASE_URL=${{ secrets.DATABASE_URL }}
+              SERVER_URL=${{ secrets.SERVER_URL }}
+              DESINATION=./uploads
+              JWT_SECRET=${{ secrets.JWT_SECRET }}
+              MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
+              MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
+              MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
             EOT
           EOF
       - name: Execute SSH command docker-compose.yml [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cat > /Meta-shop/backend/docker-compose.yml << EOD
-            version: '3.8'
-
-            services:
-              app:
-                build: .
-                restart: always
-                ports:
-                  - "3000:3000"
-                env_file:
-                  - .env
-                depends_on:
-                  - db
-
-              db:
-                image: postgres:13
-                restart: always
-                environment:
-                  POSTGRES_USER: ${{ secrets.DB_USER }}
-                  POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-                  POSTGRES_DB: ${{ secrets.DB_NAME }}
-                volumes:
-                  - pgdata:/var/lib/postgresql/data
-
-            volumes:
-              pgdata:
+              version: '3.8'
+  
+              services:
+                app:
+                  build: .
+                  restart: always
+                  ports:
+                    - "3000:3000"
+                  env_file:
+                    - .env
+                  depends_on:
+                    - db
+  
+                db:
+                  image: postgres:13
+                  restart: always
+                  environment:
+                    POSTGRES_USER: ${{ secrets.DB_USER }}
+                    POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                    POSTGRES_DB: ${{ secrets.DB_NAME }}
+                  volumes:
+                    - pgdata:/var/lib/postgresql/data
+  
+              volumes:
+                pgdata:
             EOD
           EOF
       - name: Set .env [Frontend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
             cat > /Meta-shop/frontend/.env << EOT
-            VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
+              VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
             EOT
           EOF
       - name: Deploy by SSH
