@@ -27,7 +27,7 @@ jobs:
       - name: Execute SSH command .env [Backend]
         working-directory: ./backend
         run: |
-          cat > /Meta-shop/backend/.env << EOT
+          cat > .env << EOT
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
           DESINATION=./uploads
@@ -39,7 +39,7 @@ jobs:
       - name: Execute SSH command docker-compose.yml [Backend]
         working-directory: ./backend
         run: |
-          cat > /Meta-shop/backend/docker-compose.yml << EOD
+          cat > docker-compose.yml << EOD
           version: '3.8'
 
           services:
@@ -76,7 +76,7 @@ jobs:
       - name: Set .env [Frontend]
         working-directory: ./frontend
         run: |
-          cat > /Meta-shop/frontend/.env << EOT
+          cat > .env << EOT
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           EOT
 
@@ -90,10 +90,15 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
+      - name: Seed dir [Backend]
+        working-directory: ./backend
+        run: |
+          mkdir seed
+
       - name: Set seeder.prod.ts [Backend]
         working-directory: ./backend
         run: |
-          cat > /Meta-shop/backend/seed/seeder.prod.ts << EOT
+          cat > seed/seeder.prod.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
 
