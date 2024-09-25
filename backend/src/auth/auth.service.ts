@@ -109,7 +109,7 @@ export class AuthService {
     });
 
     await this.transporter.sendMail({
-      from: 'mega_ymbetov@mail.ru',
+      from: process.env.MAILDEV_INCOMING_USER,
       to: dto.email,
       subject: 'Подтверждение аккаунта',
       text: `Пожалуйста, подтвердите свой аккаунт с помощью кода подтверждения: ${verificationToken}`,
@@ -154,8 +154,8 @@ export class AuthService {
     });
 
     await this.transporter.sendMail({
-      from: 'mega_ymbetov@mail.ru',
-      to: 'agrozakupkz@gmail.com',
+      from: process.env.MAILDEV_INCOMING_USER,
+      to: process.env.MAILDEV_AUDIT_USER,
       subject: 'Регистрация пользователя',
       text: `Зарегистрировался новый пользователь под номером телефона: ${data.phone_number}`,
     });
@@ -256,7 +256,7 @@ export class AuthService {
     });
 
     await this.transporter.sendMail({
-      from: 'mega_ymbetov@mail.ru', // Адрес отправителя
+      from: process.env.MAILDEV_INCOMING_USER, // Адрес отправителя
       to: email, // Адрес получателя
       subject: 'Сброс пароля', // Тема письма
       text: `Код для сброса пароля: ${resetToken}`, // Текст письма
