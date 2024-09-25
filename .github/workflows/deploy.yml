@@ -91,9 +91,11 @@ jobs:
           EOF
 
       - name: Build [Frontend]
-        working-directory: ./frontend
         run: |
+          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          cd /Meta-shop/frontend
           npm run build
+          EOF
 
       - name: Copy built frontend to server
         run: |
