@@ -90,11 +90,6 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
 
-      - name: Seed dir [Backend]
-        working-directory: ./backend
-        run: |
-          mkdir seed
-
       - name: Set seeder.prod.ts [Backend]
         working-directory: ./backend
         run: |
