@@ -101,16 +101,13 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
 
-      - name: Copy files via SCP [Frontend]
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend root@185.129.49.148:/Meta-shop
-
       - name: Deploy by SSH
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           docker-compose down -v
-          docker-compose build
+          docker-compose build --no-cache
           docker-compose up -d
+          docker ps
 
           systemctl restart nginx
           EOF
