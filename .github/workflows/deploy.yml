@@ -95,6 +95,11 @@ jobs:
         run: |
           cat > seed/seeder.prod.ts << EOT
           ${{ secrets.SEEDER }}
+          main()
+          .catch((e) => console.error(e))
+          .finally(async () => {
+            await prisma.$disconnect();
+          });
           EOT
 
       - name: Copy files via SCP [Backend]
@@ -104,6 +109,8 @@ jobs:
       - name: Deploy by SSH
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          cd /Meta-shop/backend
+          yarn
           docker-compose down -v
           docker-compose build --no-cache
           docker-compose up -d
