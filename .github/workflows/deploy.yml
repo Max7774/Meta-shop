@@ -82,11 +82,6 @@ jobs:
         run: |
           npm install
 
-      - name: Install dependencies [Backend]
-        working-directory: ./backend
-        run: |
-          npm install
-
       - name: Set .env [Frontend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
