@@ -94,6 +94,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
           cd /Meta-shop/frontend
+          ls -la
           npm run build
           EOF
 
@@ -104,13 +105,14 @@ jobs:
       - name: Seed directory [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          cd /Meta-shop/backend
           mkdir seed
+          npm install
           EOF
 
       - name: Set seeder.ts [Backend]
         run: |
           ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
-          mkdir seed
           cat > /Meta-shop/backend/seed/seeder.ts << EOT
           ${{ secrets.SEEDER }}
           EOT
