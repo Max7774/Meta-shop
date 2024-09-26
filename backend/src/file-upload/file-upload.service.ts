@@ -102,18 +102,32 @@ export class FileUploadService {
         },
       });
 
-      const result = product.images.filter((image) => image !== filename);
+      if (product.images.length <= 1) {
+        const result = product.images.filter((image) => image !== filename);
+        await this.prismaFileService.product.update({
+          where: {
+            uuid: productUuid,
+          },
+          data: {
+            images: [...result, 'default-product-photo.png'],
+          },
+        });
 
-      await this.prismaFileService.product.update({
-        where: {
-          uuid: productUuid,
-        },
-        data: {
-          images: result,
-        },
-      });
+        return true;
+      } else {
+        const result = product.images.filter((image) => image !== filename);
 
-      return true;
+        await this.prismaFileService.product.update({
+          where: {
+            uuid: productUuid,
+          },
+          data: {
+            images: result,
+          },
+        });
+
+        return true;
+      }
     } catch (error) {
       throw new BadGatewayException(error);
     }
