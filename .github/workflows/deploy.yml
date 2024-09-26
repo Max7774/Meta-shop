@@ -111,7 +111,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
           docker-compose down
-          EOFF
+          EOF
 
       - name: Deploy by SSH [Compose]
         run: |
