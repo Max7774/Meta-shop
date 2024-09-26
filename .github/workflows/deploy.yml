@@ -106,11 +106,24 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop
 
-      - name: Deploy by SSH
+      - name: Deploy by SSH [Down volumes]
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop/backend
           docker-compose down -v
+          EOF
+
+      - name: Deploy by SSH [Compose]
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop/backend
           docker-compose build --no-cache
+          EOF
+
+      - name: Deploy by SSH [Compose up]
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop/backend
           docker-compose up -d
           docker ps
 
