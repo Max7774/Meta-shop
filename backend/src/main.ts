@@ -15,9 +15,9 @@ async function bootstrap() {
   app.enableCors({ credentials: true, origin: true });
 
   const config = new DocumentBuilder()
-    .setTitle('Shop')
-    .setDescription('Testing e-commerce shop')
-    .setVersion('1.0')
+    .setTitle('AgroZakupKz Shop')
+    .setDescription('AgroZakupKz shop API')
+    .setVersion('1.0.0')
     .addBearerAuth(
       {
         type: 'http',
