@@ -11,6 +11,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
     "stop:prod": "pm2 delete shop-nest-backend",
     "start:prod": "pm2 start dist/src/main.js --name shop-nest-backend",
     "prod": "yarn build && yarn stop:prod && yarn start:prod && yarn seed",
