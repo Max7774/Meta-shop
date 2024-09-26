@@ -31,6 +31,7 @@ module.exports = {
         "profile-background": "url('/profile-background.jpg')",
       },
       screens: {
+        mobileMin: "370px",
         mobile: "600px",
         tablet: "885px",
         laptop: "1024px",

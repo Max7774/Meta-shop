@@ -5,6 +5,7 @@ import {
   TRegister,
   TResetPassword,
 } from "@/types/TAuth";
+import { TAdminUser } from "@/types/TUser";
 import { axiosClassic, instance } from "@api/api.interceptor";
 import { ERoles } from "@enums/ERoles";
 import { updateAccessToken } from "@utils/tokens";
@@ -73,6 +74,13 @@ export const AuthService = {
       url: `${AUTH}/reset`,
       method: "PATCH",
       data,
+    });
+  },
+
+  async getAllUsers() {
+    return await instance<TAdminUser[]>({
+      url: "/users/all",
+      method: "GET",
     });
   },
 };

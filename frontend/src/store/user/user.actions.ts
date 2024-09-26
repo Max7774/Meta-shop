@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuthService } from "@/service/auth.service";
 import { ProfileService } from "@/service/profile.service";
 import { TAddress, TAddressForm } from "@/types/TAddress";
@@ -8,6 +9,7 @@ import {
   TResetPassword,
 } from "@/types/TAuth";
 import { TProfile, TProfileEdit } from "@/types/TProfile";
+import { TAdminUser } from "@/types/TUser";
 import { ERoles } from "@enums/ERoles";
 import { RootState } from "@hooks/redux-hooks/reduxHooks";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -242,6 +244,19 @@ export const setNewUserAvatar = createAsyncThunk<string, File>(
     try {
       const response = await ProfileService.setNewUserAvatar(image);
 
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllUsers = createAsyncThunk<TAdminUser[], undefined>(
+  "/getAllUsers",
+  async (_, thunkApi) => {
+    try {
+      const response = await AuthService.getAllUsers();
       return response.data;
     } catch (error: any) {
       console.log(error);

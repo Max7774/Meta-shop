@@ -1,11 +1,11 @@
 import { ADMIN_GlOBAL_PREFIX } from "@/const/globalPrefix";
 
 export const ADMIN_SIDEBAR_ITEMS = [
-  // {
-  //   uuid: "0",
-  //   name: "Пользователи",
-  //   slug: ADMIN_GlOBAL_PREFIX + "users",
-  // },
+  {
+    uuid: "0",
+    name: "Пользователи",
+    slug: ADMIN_GlOBAL_PREFIX + "users",
+  },
   {
     uuid: "1",
     name: "Продукты",

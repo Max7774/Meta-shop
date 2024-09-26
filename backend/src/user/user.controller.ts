@@ -45,4 +45,11 @@ export class UserController {
   ) {
     return this.userService.toggleFavourite(uuid, productUuid);
   }
+
+  @HttpCode(200)
+  @Auth('ADMIN')
+  @Get('all')
+  async getAll() {
+    return this.userService.getAll();
+  }
 }

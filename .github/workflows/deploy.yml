@@ -104,7 +104,7 @@ jobs:
 
       - name: Copy files via SCP [Backend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./backend ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r ./backend/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend
 
       - name: Deploy by SSH [Down volumes]
         run: |

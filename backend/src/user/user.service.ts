@@ -120,4 +120,19 @@ export class UserService {
 
     return 'Success';
   }
+
+  async getAll() {
+    return await this.prisma.user.findMany({
+      select: {
+        uuid: true,
+        email: true,
+        first_name: true,
+        second_name: true,
+        avatarPath: true,
+        phone_number: true,
+        role: true,
+        orders: true,
+      },
+    });
+  }
 }

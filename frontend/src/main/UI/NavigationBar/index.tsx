@@ -98,7 +98,9 @@ export const NavigationBar = () => {
         />
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit ml-2">AgroZakupKz</p>
+          <p className="font-bold text-inherit ml-2 hidden mobileMin:block">
+            AgroZakupKz
+          </p>
         </NavbarBrand>
       </NavbarContent>
       <NavbarMenu>

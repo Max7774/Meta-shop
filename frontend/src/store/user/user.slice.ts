@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IUserInitialState } from "./user.types";
 import {
   createAddress,
+  getAllUsers,
   getNewAccessToken,
   getUserProfile,
   login,
@@ -34,12 +35,14 @@ const info: TProfile = {
 
 const initialState: IUserInitialState = {
   profile: { ...info },
+  userList: [],
   isLoading: false,
   registerCode: "none",
   resetPasswordCode: "none",
   isAuth: false,
   isError: false,
   isProfileLoading: false,
+  isAdminUserLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -231,6 +234,17 @@ export const userSlice = createSlice({
       })
       .addCase(setNewUserAvatar.rejected, (state) => {
         state.isProfileLoading = false;
+      })
+      .addCase(getAllUsers.pending, (state) => {
+        /* ===================== GET ALL USERS ===================== */
+        state.isAdminUserLoading = true;
+      })
+      .addCase(getAllUsers.fulfilled, (state, { payload }) => {
+        state.isAdminUserLoading = false;
+        state.userList = payload;
+      })
+      .addCase(getAllUsers.rejected, (state) => {
+        state.isAdminUserLoading = false;
       });
   },
 });
