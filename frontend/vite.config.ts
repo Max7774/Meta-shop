@@ -1,14 +1,38 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig, loadEnv } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
 export default () => {
   const env = loadEnv("all", process.cwd());
   const port = env.VITE_PORT;
 
   return defineConfig({
-    plugins: [react()],
+    plugins: [
+      react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        manifest: {
+          name: "Agro Zakup KZ",
+          short_name: "AgroZakupKZ",
+          description:
+            "Заказывайте свежие и качественные продукты прямо от фермеров. Натуральные продукты питания с быстрой доставкой к вашей двери.",
+          theme_color: "#ffffff",
+          icons: [
+            {
+              src: "/images/favicon-16x16.png",
+              sizes: "16x16",
+              type: "image/png",
+            },
+            {
+              src: "/images/favicon-32x32.png",
+              sizes: "32x32",
+              type: "image/png",
+            },
+          ],
+        },
+      }),
+    ],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src/"),
