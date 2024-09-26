@@ -13,6 +13,6 @@ const normalizeFileName = (req, file, callback) => {
 };
 
 export const fileStorage = diskStorage({
-  destination: process.env.DESINATION,
+  destination: process.env.DESTINATION,
   filename: normalizeFileName,
 });

@@ -30,7 +30,7 @@ jobs:
           cat > .env << EOT
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
-          DESINATION=./uploads
+          DESTINATION=/backend_meta_shop/uploads
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
@@ -50,6 +50,8 @@ jobs:
                 - "3000:3000"
               env_file:
                 - .env
+              volumes:
+                - ./backend/uploads:/backend_meta_shop/uploads
               depends_on:
                 - db
 
