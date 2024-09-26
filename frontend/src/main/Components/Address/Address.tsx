@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useActions } from "@hooks/useActions";
 import {
   Modal,
@@ -64,7 +65,7 @@ const Address = ({ disabled }: IAddressProps) => {
 
   return (
     <section>
-      {!!currentAddress ? (
+      {currentAddress ? (
         <Dropdown isDisabled={disabled}>
           <DropdownTrigger>
             <Button
@@ -114,7 +115,7 @@ const Address = ({ disabled }: IAddressProps) => {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <Button fullWidth size="lg" onClick={onOpen}>
+        <Button fullWidth size="lg" color="secondary" onClick={onOpen}>
           <span className="flex flex-row gap-2 items-center text-white">
             <FiPlus size={20} />
             <span>Новый адрес</span>
