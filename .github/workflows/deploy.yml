@@ -88,7 +88,7 @@ jobs:
 
       - name: Copy built frontend to server
         run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend/build/* root@185.129.49.148:/var/www/html
+          scp -o StrictHostKeyChecking=no -r ./frontend/build/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
 
       - name: Set seeder.prod.ts [Backend]
         working-directory: ./backend
@@ -104,11 +104,11 @@ jobs:
 
       - name: Copy files via SCP [Backend]
         run: |
-          scp -o StrictHostKeyChecking=no -r ./backend root@185.129.49.148:/Meta-shop
+          scp -o StrictHostKeyChecking=no -r ./backend ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop
 
       - name: Deploy by SSH
         run: |
-          ssh -o StrictHostKeyChecking=no root@185.129.49.148 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           docker-compose down -v
           docker-compose build --no-cache
           docker-compose up -d
