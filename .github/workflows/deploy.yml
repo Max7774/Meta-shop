@@ -110,21 +110,14 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
-          docker-compose down -v
-          EOF
+          docker-compose down
+          EOFF
 
       - name: Deploy by SSH [Compose]
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
-          docker-compose build --no-cache
-          EOF
-
-      - name: Deploy by SSH [Compose up]
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
-          cd /Meta-shop/backend
-          docker-compose up -d
+          docker-compose up -d build --no-cache
           docker ps
 
           systemctl restart nginx
