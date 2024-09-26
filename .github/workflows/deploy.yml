@@ -117,7 +117,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
-          docker-compose up -d build --no-cache
+          docker-compose build --no-cache
+          docker ps
+          EOF
+
+      - name: Deploy by SSH [Compose]
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop/backend
+          docker-compose up -d
           docker ps
 
           systemctl restart nginx
