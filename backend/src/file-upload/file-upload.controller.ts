@@ -84,7 +84,7 @@ export class FileUploadController {
     @Param('fileName') fileName: string,
     @Param('productUuid') productUuid: string,
   ): Promise<any> {
-    const filePath = `uploads/${fileName}`;
+    const filePath = `${process.env.DESTINATION}/${fileName}`;
     try {
       const result = await this.fileUploadService.deleteImageInProduct(
         productUuid,

@@ -6,7 +6,7 @@ const generateId = () =>
     .map(() => Math.round(Math.random() * 16).toString(16))
     .join('');
 
-const normalizeFileName = (req, file, callback) => {
+const normalizeFileName = (_req: any, file: any, callback: any) => {
   const fileExtName = file.originalname.split('.').pop();
 
   callback(null, `${generateId()}.${fileExtName}`);
