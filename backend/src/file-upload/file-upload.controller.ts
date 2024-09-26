@@ -107,6 +107,6 @@ export class FileUploadController {
     @Param('fileName') fileName: string,
     @Res() res: any,
   ): Promise<any> {
-    res.sendFile(fileName, { root: 'uploads' });
+    res.sendFile(fileName, { root: process.env.DESTINATION });
   }
 }
