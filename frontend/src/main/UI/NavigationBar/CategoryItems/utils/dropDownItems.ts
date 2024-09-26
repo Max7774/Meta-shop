@@ -4,7 +4,7 @@ export const dropDownItems = [
     label: "О нас",
   },
   {
-    to: "/contact",
+    to: "/contacts",
     label: "Контакты",
   },
 ];

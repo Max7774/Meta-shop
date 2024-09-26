@@ -7,7 +7,7 @@ const colors = {
   black: "black",
   gray: "#CDCDCD",
   white: twColors.white,
-  primary: "#02735E",
+  primary: "#17C964",
   secondary: "#038C65",
   // "bg-color": "#F2F2F5",
   aqua: "#268697",
@@ -94,5 +94,15 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: { DEFAULT: colors.primary, contrastText: "#ffffff" },
+          },
+        },
+      },
+    }),
+  ],
 };
