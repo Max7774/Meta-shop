@@ -1,6 +1,8 @@
 import { TRoutes } from "@/types/TRoutesData";
 import { ERoutes } from "@enums/ERoutes";
 import {
+  About,
+  Contacts,
   MainPage,
   OrderPage,
   ProductPage,
@@ -45,5 +47,15 @@ export const ROOT_DATA: TRoutes<ERoutes>[] = [
     id: "user-order-page",
     path: ERoutes.ORDERS,
     component: UserOrders,
+  },
+  {
+    id: "about-page",
+    path: ERoutes.ABOUT,
+    component: About,
+  },
+  {
+    id: "contacts-page",
+    path: ERoutes.CONTACTS,
+    component: Contacts,
   },
 ];

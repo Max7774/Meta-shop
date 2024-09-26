@@ -22,6 +22,8 @@ export const ProfilePage = lazy(
 export const UserOrders = lazy(
   () => import("@/main/Screens/UserOrders/UserOrders")
 );
+export const About = lazy(() => import("@/main/Screens/About/About"));
+export const Contacts = lazy(() => import("@/main/Screens/Contacts/Contacts"));
 
 /* ADMIN */
 export const AdminMainPage = lazy(

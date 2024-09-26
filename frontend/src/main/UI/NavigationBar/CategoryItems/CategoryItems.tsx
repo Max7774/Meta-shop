@@ -1,6 +1,7 @@
 import { useCategory } from "@hooks/useCategory";
 import { Card, CardBody, NavbarMenuItem } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { dropDownItems } from "./utils/dropDownItems";
 
 const CategoryItems = ({
   setIsMenuOpen,
@@ -14,7 +15,6 @@ const CategoryItems = ({
     <>
       {categories.map(({ uuid, name, slug }, index) => (
         <NavbarMenuItem
-          // onClick={() => setIsMenuOpen(false)}
           className="justify-self-center w-full"
           key={`${uuid}-${index}`}
         >
@@ -29,6 +29,23 @@ const CategoryItems = ({
           >
             <CardBody>
               <p className="font-bold">{name}</p>
+            </CardBody>
+          </Card>
+        </NavbarMenuItem>
+      ))}
+      {dropDownItems.map(({ to, label }, index) => (
+        <NavbarMenuItem className="justify-self-center w-full" key={index}>
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              navigate(to);
+              setIsMenuOpen(false);
+            }}
+          >
+            <CardBody>
+              <p className="font-bold">{label}</p>
             </CardBody>
           </Card>
         </NavbarMenuItem>

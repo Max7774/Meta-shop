@@ -41,11 +41,17 @@ export class ProductService {
     });
 
     const products = currentProducts.map((product) => {
-      return {
-        ...product,
-        isNew:
-          product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      };
+      if (product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        return {
+          ...product,
+          isNew: true,
+        };
+      } else {
+        return {
+          ...product,
+          isNew: false,
+        };
+      }
     });
 
     return {
@@ -201,13 +207,17 @@ export class ProductService {
         throw new NotFoundException('Product not found');
       }
 
-      const currentProduct = {
-        ...product,
-        isNew:
-          product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      };
-
-      return currentProduct;
+      if (product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        return {
+          ...product,
+          isNew: true,
+        };
+      } else {
+        return {
+          ...product,
+          isNew: false,
+        };
+      }
     } catch (error) {
       console.error('Failed to delete product:', error);
       throw error;

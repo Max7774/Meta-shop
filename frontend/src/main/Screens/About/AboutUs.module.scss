@@ -1,0 +1,104 @@
+.about-us-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 2em;
+  margin: 40px 0 20px;
+}
+
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  align-items: center;
+}
+
+.image-container,
+.text-container {
+  flex: 1 1 50%;
+  padding: 10px;
+}
+
+.responsive-image {
+  width: 100%;
+  height: auto;
+}
+
+.text-container p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.advantages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.advantage-card {
+  @apply rounded-2xl p-2;
+  flex: 1 1 200px;
+  max-width: 250px;
+  margin: 10px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.advantage-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.advantage-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.read-more-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.read-more-button:hover {
+  background-color: #45a049;
+}
+
+.contact-text {
+  text-align: center;
+  font-size: 1.1em;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+  }
+
+  .image-container,
+  .text-container {
+    flex: 1 1 100%;
+  }
+
+  .advantages {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .advantage-card {
+    max-width: 100%;
+  }
+}

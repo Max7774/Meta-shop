@@ -5,6 +5,7 @@ import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
 import { useProducts } from "@hooks/useProducts";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 
 const SubCategories = () => {
@@ -15,26 +16,32 @@ const SubCategories = () => {
 
   useEffect(() => {
     getProductByCategory(categorySlug || "");
-  }, [categorySlug]);
+  }, [getProductByCategory, categorySlug]);
 
   const title = categories.find(({ slug }) => categorySlug === slug)?.name;
 
   if (isLoading) return <Loader />;
 
   return (
-    <section>
-      {products.length === 0 ? (
-        <>
-          <Heading>{title}</Heading>
-          <span>Товаров нет в наличии!</span>
-        </>
-      ) : (
-        <>
-          <Heading>{products[0]?.category?.name}</Heading>
-          <Products products={products} />
-        </>
-      )}
-    </section>
+    <>
+      <Helmet>
+        <title>Страница категории</title>
+        <meta name="description" content="Страница категории - AgroZakupKz" />
+      </Helmet>
+      <section>
+        {products.length === 0 ? (
+          <>
+            <Heading>{title}</Heading>
+            <span>Товаров нет в наличии!</span>
+          </>
+        ) : (
+          <>
+            <Heading>{products[0]?.category?.name}</Heading>
+            <Products products={products} />
+          </>
+        )}
+      </section>
+    </>
   );
 };
 

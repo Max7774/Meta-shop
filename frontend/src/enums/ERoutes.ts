@@ -7,6 +7,8 @@ export enum ERoutes {
   ORDER = "/order",
   ORDERS = "/orders",
   PROFILE = "/profile",
+  ABOUT = "/about",
+  CONTACTS = "/contacts",
 }
 
 export enum EAdminRoutes {

@@ -1,0 +1,65 @@
+/* Contacts.module.css */
+.contacts-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+}
+
+.contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  flex: 1 1 300px;
+  max-width: 400px;
+  margin: 10px;
+}
+
+.icon {
+  font-size: 2em;
+  color: #4caf50;
+  margin-right: 15px;
+}
+
+.contact-item h3 {
+  margin: 0;
+}
+
+.contact-item p {
+  margin: 5px 0 0 0;
+}
+
+.contact-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-item a:hover {
+  text-decoration: underline;
+}
+
+.map-container {
+  @apply rounded-2xl;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .contact-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-item {
+    max-width: 100%;
+  }
+}
