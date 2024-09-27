@@ -40,7 +40,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
       </CardHeader>
       <CardBody>
         {order.isDelivery && (
-          <Chip variant="bordered" size="lg" color="secondary">
+          <Chip variant="bordered" className="mb-2" size="sm" color="secondary">
             Доставка {convertPrice(800)}
           </Chip>
         )}

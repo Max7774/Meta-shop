@@ -14,10 +14,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors({ credentials: true, origin: true });
 
+  const version = process.env.APP_VERSION;
+
   const config = new DocumentBuilder()
     .setTitle('AgroZakupKz Shop')
     .setDescription('AgroZakupKz shop API')
-    .setVersion(process.env.VERSION)
+    .setVersion(version)
     .addBearerAuth(
       {
         type: 'http',

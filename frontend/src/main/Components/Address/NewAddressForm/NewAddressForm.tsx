@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TAddressForm } from "@/types/TAddress";
 import { useActions } from "@hooks/useActions";
 import { Input } from "@nextui-org/react";
@@ -81,36 +82,24 @@ const NewAddressForm = ({ onClose }: INewAddressFormProps) => {
             <Controller
               control={control}
               name="apartment"
-              rules={{ required: "Это поле обязательно!" }}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Квартира"
                   label="Квартира"
                   onChange={onChange}
                   value={value}
-                  isInvalid={!!error?.message}
-                  errorMessage={error?.message}
                 />
               )}
             />
             <Controller
               control={control}
               name="intercom"
-              rules={{ required: "Это поле обязательно!" }}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Домофон"
                   label="Домофон"
                   onChange={onChange}
                   value={value}
-                  isInvalid={!!error?.message}
-                  errorMessage={error?.message}
                 />
               )}
             />
@@ -119,36 +108,24 @@ const NewAddressForm = ({ onClose }: INewAddressFormProps) => {
             <Controller
               control={control}
               name="entrance"
-              rules={{ required: "Это поле обязательно!" }}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Подъезд"
                   label="Подъезд"
                   onChange={onChange}
                   value={value}
-                  isInvalid={!!error?.message}
-                  errorMessage={error?.message}
                 />
               )}
             />
             <Controller
               control={control}
               name="floor"
-              rules={{ required: "Это поле обязательно!" }}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Этаж"
                   label="Этаж"
                   onChange={onChange}
                   value={value}
-                  isInvalid={!!error?.message}
-                  errorMessage={error?.message}
                 />
               )}
             />

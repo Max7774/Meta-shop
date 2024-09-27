@@ -30,11 +30,11 @@ jobs:
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
           DESTINATION=uploads/
+          APP_VERSION="1.0.${GITHUB_RUN_NUMBER}"
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
-          VERSION="1.0.${GITHUB_RUN_NUMBER}"
           EOT
       - name: Execute SSH command docker-compose.yml
         working-directory: ./backend

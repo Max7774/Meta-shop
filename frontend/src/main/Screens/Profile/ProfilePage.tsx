@@ -22,8 +22,10 @@ const ProfilePage = () => {
           className="mb-4 md:mb-0"
         />
         <div className="flex w-full flex-col space-y-2">
-          <h1 className="text-2xl font-bold">{profile.first_name}</h1>
-          <h1 className="text-2xl font-bold">{profile.second_name}</h1>
+          <div className="flex flex-row sm:justify-center gap-3">
+            <h1 className="text-2xl font-bold">{profile.first_name}</h1>
+            <h1 className="text-2xl font-bold">{profile.second_name}</h1>
+          </div>
           <p className="w-full overflow-hidden whitespace-nowrap text-ellipsis">
             Email: {`${profile.email}` || "Почты нет"}
           </p>
