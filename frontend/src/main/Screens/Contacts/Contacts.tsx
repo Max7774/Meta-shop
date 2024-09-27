@@ -1,11 +1,7 @@
 import { Helmet } from "react-helmet-async";
-import {
-  FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaClock,
-} from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaClock } from "react-icons/fa";
 import styles from "./Contacts.module.scss";
+import { Divider } from "@nextui-org/react";
 
 const Contacts = () => {
   return (
@@ -46,19 +42,15 @@ const Contacts = () => {
         </div>
 
         <div className={styles["contact-item"]}>
-          <FaMapMarkerAlt className={styles.icon} />
-          <div>
-            <h3>Адрес</h3>
-            <p>г. Москва, ул. Примерная, д. 1</p>
-          </div>
-        </div>
-
-        <div className={styles["contact-item"]}>
           <FaClock className={styles.icon} />
           <div>
             <h3>Часы работы</h3>
-            <p>Пн-Пт: 9:00 — 18:00</p>
-            <p>Сб-Вс: 10:00 — 16:00</p>
+            <p>Пн-Вс:</p>
+            <p>Принимаются заказы: 9:00 — 13:00</p>
+            <p className="text-warning">Ягоды до 9:00</p>
+            <Divider className="my-1" />
+            <p>Доставка: 13:00 — 20:00</p>
+            <p className="text-warning">Ягоды до 13:00</p>
           </div>
         </div>
       </div>
