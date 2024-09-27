@@ -49,6 +49,11 @@ const UserItem = ({ user }: IUserItemProps) => {
               {user.addresses.map((el) => (
                 <div className="px-3 py-2 border border-default rounded-2xl">
                   {el.street + ", " + el.house}
+                  <p className="pr-2">- Дом: {el.house}</p>
+                  <p className="pr-2">- Квартира: {el.apartment}</p>
+                  <p className="pr-2">- Подъезд: {el.entrance}</p>
+                  <p className="pr-2">- Домофон: {el.intercom}</p>
+                  <p className="pr-2">- Этаж: {el.floor}</p>
                 </div>
               ))}
             </div>
