@@ -7,10 +7,9 @@ import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
 import { useCart } from "@hooks/useCart";
-import { convertPrice } from "@utils/convertPrice";
 import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
-import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import { Helmet } from "react-helmet-async";
+import Price from "@UI/Price/Price";
 
 const ProductPage = () => {
   const { productSlug } = useParams();
@@ -37,40 +36,38 @@ const ProductPage = () => {
         <title>Страница продукта</title>
         <meta name="description" content="Страница продукта - AgroZakupKz" />
       </Helmet>
-      <section>
-        <Heading>{product?.name}</Heading>
-        {/* Отображение категории или подкатегории */}
-        <Chip>{product?.category?.name}</Chip>
-        <div className="container flex gap-4 flex-col lg:flex-row">
-          <Carousel
-            images={product.images}
-            isNew={product.isNew}
-            discount={product.discount}
-          />
-          {/* Информация о продукте */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center gap-4">
-            <div className="flex items-center gap-2">
-              {product.discount > 0 ? (
-                <>
-                  <span className="text-xl font-semibold text-red-600">
-                    {convertPrice(
-                      product.price - (product.price * product.discount) / 100
-                    )}
-                  </span>
-                  <span className="text-sm line-through text-gray-500">
-                    {convertPrice(product.price)}
-                  </span>
-                </>
-              ) : (
-                <span className="text-xl font-semibold">
-                  {convertPrice(product.price)}
-                </span>
-              )}
-              <span className="text-sm text-default-400">
-                / {unitofmeasurementData[product.unitofmeasurement]}
-              </span>
-            </div>
-            <p>{product.description}</p>
+      <section className="w-full">
+        <div className="px-6">
+          <Heading>{product?.name}</Heading>
+          <div className="flex flex-row flex-wrap gap-2">
+            <Chip
+              size="lg"
+              className="cursor-pointer"
+              onClick={() => navigate(`/categories/${product?.category?.slug}`)}
+            >
+              {product?.category?.name}
+            </Chip>
+            {product?.discount !== 0 && (
+              <Chip size="lg" className="text-white" color="danger">
+                Скидка {product?.discount}%
+              </Chip>
+            )}
+            {product?.isNew && (
+              <Chip size="lg" className="text-white" color="success">
+                Новый
+              </Chip>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
+          <Carousel images={product.images} />
+          <div className="grid grid-rows-3 px-6 gap-4">
+            <Price
+              discount={product.discount}
+              price={product.price}
+              unitofmeasurement={product.unitofmeasurement}
+            />
+            <p className="text-wrap">{product.description}</p>
             {currentElement ? (
               <>
                 <CartActions
@@ -110,7 +107,6 @@ const ProductPage = () => {
             )}
           </div>
         </div>
-        {/* Дополнительная информация */}
         {product.peculiarities && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Характеристики</h2>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CartActions from "@/main/Components/Cart/cart-item/cart-actions/CartActions";
 import Heading from "@/main/UI/Heading";
 import { TOrderForm } from "@/types/TOrder";

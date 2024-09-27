@@ -29,6 +29,7 @@ export type TOrder = {
   status: EOrder;
   address: TAddress;
   userUuid: string;
+  isDelivery: boolean;
   items: TOrderItem[];
   user?: {
     uuid: string;

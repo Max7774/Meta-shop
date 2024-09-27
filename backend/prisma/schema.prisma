@@ -137,6 +137,7 @@ model Order {
   comment      String?
   total        Int
   status       EnumOrderItemStatus @default(Pending)
+  isDelivery   Boolean?        @default(false)
  
   items        OrderItem[]
  

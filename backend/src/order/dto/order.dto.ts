@@ -22,15 +22,19 @@ export class AddressItemDto {
   @IsString()
   house: string;
 
+  @IsOptional()
   @IsString()
   apartment: string;
 
+  @IsOptional()
   @IsString()
   intercom: string;
 
+  @IsOptional()
   @IsString()
   entrance: string;
 
+  @IsOptional()
   @IsString()
   floor: string;
 }

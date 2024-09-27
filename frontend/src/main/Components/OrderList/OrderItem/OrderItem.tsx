@@ -82,6 +82,11 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
             >
               {getOrderStatusLabel(order.status).status}
             </Chip>
+            {order.isDelivery && (
+              <Chip variant="bordered" size="lg" color="secondary">
+                Доставка {convertPrice(800)}
+              </Chip>
+            )}
             <span className="font-semibold pt-1">
               Итого: {convertPrice(order.total)}
             </span>
