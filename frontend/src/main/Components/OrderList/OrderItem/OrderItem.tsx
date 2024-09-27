@@ -37,13 +37,13 @@ const OrderItem: React.FC<OrderItemProps> = ({ order }) => {
             {`От ${new Date(order.createdAt).toLocaleDateString()}`}
           </span>
         </div>
+      </CardHeader>
+      <CardBody>
         {order.isDelivery && (
           <Chip variant="bordered" size="lg" color="secondary">
             Доставка {convertPrice(800)}
           </Chip>
         )}
-      </CardHeader>
-      <CardBody>
         <span>
           Адрес: {`${order.address?.street}, ${order.address?.house}`}
         </span>

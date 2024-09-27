@@ -10,7 +10,7 @@ const OrderList: React.FC = () => {
 
   useEffect(() => {
     getAllOrders({ searchTerm: "" });
-  }, []);
+  }, [getAllOrders]);
 
   if (isLoading) return <Loader />;
 

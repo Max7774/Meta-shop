@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import styles from "./AboutUs.module.scss";
 import { Button, Image } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
+import { VERSION } from "@/const/version";
 const About = () => {
   const navigate = useNavigate();
 
@@ -91,6 +92,9 @@ const About = () => {
             Связаться
           </Button>
         </div>
+        <span className="text-center text-default-300 font-bold">
+          Версия приложения: {VERSION}
+        </span>
       </section>
     </>
   );

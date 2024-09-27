@@ -17,7 +17,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('AgroZakupKz Shop')
     .setDescription('AgroZakupKz shop API')
-    .setVersion('1.0.0')
+    .setVersion(process.env.VERSION)
     .addBearerAuth(
       {
         type: 'http',
