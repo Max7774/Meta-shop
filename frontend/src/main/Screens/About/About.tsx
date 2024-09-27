@@ -92,9 +92,9 @@ const About = () => {
             Связаться
           </Button>
         </div>
-        <span className="text-center text-default-300 font-bold">
-          Версия приложения: {VERSION}
-        </span>
+        <div className="flex justify-center my-5 text-default-300 font-bold">
+          <span>Версия приложения: {VERSION}</span>
+        </div>
       </section>
     </>
   );
