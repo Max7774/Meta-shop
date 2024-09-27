@@ -125,6 +125,7 @@ export class UserService {
     return await this.prisma.user.findMany({
       select: {
         uuid: true,
+        createdAt: true,
         email: true,
         first_name: true,
         second_name: true,
@@ -132,6 +133,8 @@ export class UserService {
         phone_number: true,
         role: true,
         orders: true,
+        addresses: true,
+        currentAddress: true,
       },
     });
   }

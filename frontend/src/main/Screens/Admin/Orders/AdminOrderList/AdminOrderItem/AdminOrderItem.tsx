@@ -127,6 +127,11 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
             <Divider className="mb-4" />
             <h3>Телефон: {order.user?.phone_number}</h3>
             {!!order.comment && <h3>Комментарий: {order.comment}</h3>}
+            {!!order.user?.first_name && !!order.user?.second_name && (
+              <h3>
+                ФИО: {order.user?.first_name} {order.user?.second_name}
+              </h3>
+            )}
           </div>
         </div>
       </CardHeader>

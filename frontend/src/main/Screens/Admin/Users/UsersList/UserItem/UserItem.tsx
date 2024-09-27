@@ -1,22 +1,20 @@
 import { TAdminUser } from "@/types/TUser";
 import {
+  Accordion,
+  AccordionItem,
   Avatar,
-  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
 } from "@nextui-org/react";
 import { getImageUrl } from "@utils/getImageUrl";
-import { useState } from "react";
 
 interface IUserItemProps {
   user: TAdminUser;
 }
 
 const UserItem = ({ user }: IUserItemProps) => {
-  const [isFollowed, setIsFollowed] = useState(false);
-
   return (
     <Card className="w-full">
       <CardHeader className="justify-between">
@@ -36,36 +34,37 @@ const UserItem = ({ user }: IUserItemProps) => {
             </h5>
           </div>
         </div>
-        <Button
-          className={
-            isFollowed
-              ? "bg-transparent text-foreground border-default-200"
-              : ""
-          }
-          color="primary"
-          radius="full"
-          size="sm"
-          variant={isFollowed ? "bordered" : "solid"}
-          onPress={() => setIsFollowed(!isFollowed)}
-        >
-          {isFollowed ? "Unfollow" : "Follow"}
-        </Button>
       </CardHeader>
-      <CardBody className="px-3 py-0 text-small text-default-400">
-        <p>Email: {user.email}</p>
+      <CardBody className="px-3 py-0 text-small">
         <p>Uuid: {user.uuid}</p>
-        <span className="pt-2">{user.phone_number}</span>
+        <p>Email: {user.email}</p>
+        <span className="pt-2">Телефон: {user.phone_number}</span>
+        <Accordion>
+          <AccordionItem
+            key="1"
+            aria-label="Адреса пользователя"
+            title="Адреcа пользователя"
+          >
+            <div className="flex flex-col gap-3">
+              {user.addresses.map((el) => (
+                <div className="px-3 py-2 border border-default rounded-2xl">
+                  {el.street + ", " + el.house}
+                </div>
+              ))}
+            </div>
+          </AccordionItem>
+        </Accordion>
       </CardBody>
       <CardFooter className="gap-3">
         <div className="flex gap-1">
-          <p className="text-default-400 text-small">Заказов</p>
-          <p className="font-semibold text-default-400 text-small">
-            {user.orders.length}
-          </p>
+          <p className="text-small">Заказов</p>
+          <p className="font-semibold  text-small">{user.orders.length}</p>
         </div>
         <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">97.1K</p>
-          <p className="text-default-400 text-small">Followers</p>
+          <p className="text-small">Зарегистрирован:</p>
+          <p className="font-semibold text-small">
+            {new Date(user.createdAt).toLocaleDateString()}
+          </p>
         </div>
       </CardFooter>
     </Card>

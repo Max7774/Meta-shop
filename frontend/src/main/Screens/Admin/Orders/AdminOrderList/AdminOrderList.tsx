@@ -14,7 +14,7 @@ const AdminOrderList = () => {
 
   useEffect(() => {
     getAllOrders({ searchTerm: queryParams.searchTerm || "" });
-  }, [queryParams]);
+  }, [getAllOrders, queryParams]);
 
   if (isLoading) return <Loader />;
 
