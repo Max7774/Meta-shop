@@ -1,18 +1,18 @@
 const CACHE_NAME = "api-cache-v1";
 const API_URLS = [
-  "/login",
-  "/register",
-  "/phone-register",
-  "/verify/",
-  "/verify-token",
-  "/login/access-token",
-  "/reset-password",
-  "/reset",
-  "/users/all",
-  "/products",
-  "/products/by-slug/",
-  "/products/by-category/",
-  "/categories",
+  "/api/login",
+  "/api/register",
+  "/api/phone-register",
+  "/api/verify/",
+  "/api/verify-token",
+  "/api/login/access-token",
+  "/api/reset-password",
+  "/api/reset",
+  "/api/users/all",
+  "/api/products",
+  "/api/products/by-slug/",
+  "/api/products/by-category/",
+  "/api/categories",
   // Добавь другие API эндпоинты по необходимости
 ];
 
