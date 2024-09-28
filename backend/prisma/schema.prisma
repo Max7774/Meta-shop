@@ -48,8 +48,7 @@ model Product {
   discount      Int
   images        String[]      @default(["default-product-photo.png"])
   unitofmeasurement String
-
-  categoryUuid  String?       @map("categoryUuid")
+  
   userUuid      String?       @map("userUuid")
   subcategoryUuid String?     @map("subcategoryUuid")
 
@@ -58,7 +57,6 @@ model Product {
   photoFiles    PhotoFile[]
   clicks        UserClick[]
 
-  category      Category?     @relation(fields: [categoryUuid], references: [uuid])
   user          User?         @relation(fields: [userUuid], references: [uuid])
   subcategory   Subcategory?  @relation(fields: [subcategoryUuid], references: [uuid])
 }
@@ -87,7 +85,7 @@ model PhotoFile {
   path         String
   productUuid  String?       @map("productUuid")
   product      Product?      @relation(fields: [productUuid], references: [uuid])
-  categoryUuid String?      @map("categoryUuid") @unique
+  subcategoryUuid String?    @map("subcategoryUuid") @unique
 }
 
 model Category {
@@ -98,8 +96,8 @@ model Category {
   icon        String?        @default("default-product-photo.png")
   name        String         @unique
   slug        String         @unique
+
   subcategory Subcategory[]
-  products    Product[]
 }
 
 model Subcategory {
@@ -109,6 +107,7 @@ model Subcategory {
 
   name        String
   slug        String         @unique
+  icon        String?        @default("default-product-photo.png")
 
   categoryUuid String?       @map("categoryUuid")
   category     Category?     @relation(fields: [categoryUuid], references: [uuid])

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
-import { returnCategoryObject } from 'src/category/return-category.object';
 import { returnReviewObject } from 'src/review/return-review.object';
+import { returnSubcategoryObject } from 'src/subcategory/returnSubcategoryObject';
 
 export const productReturnObject: Prisma.ProductSelect = {
   images: true,
@@ -14,17 +14,11 @@ export const productReturnObject: Prisma.ProductSelect = {
   slug: true,
   quantity: true,
   unitofmeasurement: true,
-  category: { select: returnCategoryObject },
+  subcategory: { select: returnSubcategoryObject },
   reviews: {
     select: returnReviewObject,
     orderBy: {
       createdAt: 'desc',
-    },
-  },
-  subcategory: {
-    select: {
-      name: true,
-      slug: true,
     },
   },
 };
@@ -42,7 +36,7 @@ export const returnProductSchema = {
   discount: 0,
   createdAt: new Date(),
   slug: 'string',
-  category: {
+  subcategory: {
     name: 'string',
     slug: 'string',
   },
@@ -51,8 +45,4 @@ export const returnProductSchema = {
       uuid: 'string',
     },
   ],
-  subcategory: {
-    name: 'string',
-    slug: 'string',
-  },
 };

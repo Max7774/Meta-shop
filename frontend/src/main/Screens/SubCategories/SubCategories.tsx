@@ -1,43 +1,42 @@
-import Products from "@/main/Components/Products/Products";
-import Heading from "@/main/UI/Heading";
 import Loader from "@/main/UI/Loader";
+import SubcategoriesList from "@Components/SubcategoriesList/SubcategoriesList";
 import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
-import { useProducts } from "@hooks/useProducts";
+import Heading from "@UI/Heading";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 
 const SubCategories = () => {
   const { categorySlug } = useParams();
-  const { products, isLoading } = useProducts();
-  const { getProductByCategory } = useActions();
-  const { categories } = useCategory();
+  const { categories, isSubcategoryLoading } = useCategory();
+  const { getAllByCategory } = useActions();
 
   useEffect(() => {
-    getProductByCategory(categorySlug || "");
-  }, [getProductByCategory, categorySlug]);
+    getAllByCategory(categorySlug || "");
+  }, [getAllByCategory, categorySlug]);
 
-  const title = categories.find(({ slug }) => categorySlug === slug)?.name;
+  const currentCategory = categories.find(({ slug }) => categorySlug == slug);
 
-  if (isLoading) return <Loader />;
+  if (isSubcategoryLoading) return <Loader />;
 
   return (
     <>
       <Helmet>
-        <title>Страница категории</title>
-        <meta name="description" content="Страница категории - AgroZakupKz" />
+        <title>Страница категорий</title>
+        <meta name="description" content="Страница категорий - AgroZakupKz" />
       </Helmet>
       <section>
-        {products.length === 0 ? (
+        {currentCategory && (
           <>
-            <Heading>{title}</Heading>
-            <span>Товаров нет в наличии!</span>
-          </>
-        ) : (
-          <>
-            <Heading>{products[0]?.category?.name}</Heading>
-            <Products products={products} />
+            <Heading>{currentCategory.name}</Heading>
+            {currentCategory.subcategory.length === 0 && (
+              <span>Продуктов пока что нет, но они обязательно появятся!</span>
+            )}
+            <SubcategoriesList
+              categorySlug={currentCategory.slug}
+              subcategories={currentCategory.subcategory}
+            />
           </>
         )}
       </section>

@@ -23,6 +23,7 @@ const Search = ({ placeholder, pageKey, className }: ISearchProps) => {
       value: debouncedSearchTerm,
       pageKey,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   return (

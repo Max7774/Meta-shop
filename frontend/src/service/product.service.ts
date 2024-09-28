@@ -23,9 +23,9 @@ export const ProductService = {
     });
   },
 
-  async getByCategory(categorySlug: string) {
+  async getBySubCategory(subcategorySlug: string) {
     return await axiosClassic<TProduct[]>({
-      url: `${PRODUCTS}/by-category/${categorySlug}`,
+      url: `${PRODUCTS}/by-subcategory/${subcategorySlug}`,
       method: "GET",
     });
   },

@@ -12,7 +12,7 @@ export class ProductDto implements Prisma.ProductUpdateInput {
   unitofmeasurement: string;
 
   @IsString()
-  categoryUuid: string;
+  subcategoryUuid: string;
 
   @IsOptional()
   @IsString()

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import Products from "@/main/Components/Products/Products";
@@ -28,15 +29,14 @@ const AdminProducts = () => {
   const { control, handleSubmit, clearErrors, setError, reset } =
     useForm<TProductCreateForm>();
 
-  // Состояние для предварительного просмотра изображений
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  // Обработка выбора изображений
+  const [selectedCategory, setCategory] = useState("");
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
 
-    // Проверка на количество файлов
     if (files.length > 5) {
       setError("images", {
         type: "manual",
@@ -74,8 +74,11 @@ const AdminProducts = () => {
 
   useEffect(() => {
     getCategoriesAll();
+  }, [getCategoriesAll]);
+
+  useEffect(() => {
     getProductsAll({});
-  }, []);
+  }, [getProductsAll]);
 
   return (
     <section>
@@ -156,31 +159,52 @@ const AdminProducts = () => {
             </Select>
           )}
         />
-        <Controller
-          control={control}
-          name="categoryUuid"
-          rules={{ required: "Выберите категорию" }}
-          render={({ field, fieldState: { error } }) => (
-            <Select
-              label="Категория"
-              placeholder="Выберите категорию"
-              selectedKeys={[field.value]}
-              onSelectionChange={(keys) => {
-                const selectedKey = Array.from(keys)[0] as string;
-                field.onChange(selectedKey);
-              }}
-              isInvalid={!!error?.message}
-              errorMessage={error?.message}
-              fullWidth
-            >
-              {categories.map((category) => (
-                <SelectItem key={category.uuid} value={category.uuid}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </Select>
-          )}
-        />
+        <Select
+          label="Категория"
+          placeholder="Выберите категорию"
+          selectedKeys={[selectedCategory]}
+          onSelectionChange={(keys) => {
+            const selectedKey = Array.from(keys)[0] as string;
+            setCategory(selectedKey);
+          }}
+          fullWidth
+        >
+          {categories.map((category) => (
+            <SelectItem key={category.uuid} value={category.uuid}>
+              {category.name}
+            </SelectItem>
+          ))}
+        </Select>
+        {!!selectedCategory && (
+          <Controller
+            control={control}
+            name="subcategoryUuid"
+            rules={{ required: "Выберите подкатегорию" }}
+            render={({ field, fieldState: { error } }) => (
+              <Select
+                label="Подкатегория"
+                placeholder="Выберите подкатегорию"
+                selectedKeys={[field.value]}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0] as string;
+                  field.onChange(selectedKey);
+                }}
+                isInvalid={!!error?.message}
+                errorMessage={error?.message}
+                fullWidth
+              >
+                {(
+                  categories.find((cat) => cat.uuid === selectedCategory)
+                    ?.subcategory || []
+                ).map((subcategory) => (
+                  <SelectItem key={subcategory.uuid} value={subcategory.uuid}>
+                    {subcategory.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+          />
+        )}
         <Controller
           control={control}
           name="discount"

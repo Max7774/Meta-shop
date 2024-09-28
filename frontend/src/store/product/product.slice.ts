@@ -4,7 +4,7 @@ import {
   createProduct,
   deleteProduct,
   deleteProductImage,
-  getProductByCategory,
+  getProductBySubCategory,
   getProductBySlug,
   getProductsAll,
   updateProduct,
@@ -48,15 +48,15 @@ export const productsSlice = createSlice({
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
       })
-      .addCase(getProductByCategory.pending, (state) => {
+      .addCase(getProductBySubCategory.pending, (state) => {
         /* ===================== GET PRODUCT BY CATEGORY ===================== */
         state.isLoading = true;
       })
-      .addCase(getProductByCategory.fulfilled, (state, { payload }) => {
+      .addCase(getProductBySubCategory.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.products = payload;
       })
-      .addCase(getProductByCategory.rejected, (state) => {
+      .addCase(getProductBySubCategory.rejected, (state) => {
         state.isLoading = false;
       })
       .addCase(createProduct.pending, (state) => {

@@ -48,7 +48,7 @@ export class FileUploadController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Auth('ADMIN' || 'MANAGER')
-  @Post('create/category/icon/:uuid')
+  @Post('create/subcategory/icon/:subcategoryUuid')
   @UseInterceptors(FileInterceptor('file'))
   async createIcon(
     @UploadedFile(
@@ -57,9 +57,9 @@ export class FileUploadController {
       }),
     )
     file: Express.Multer.File,
-    @Param() uuid: { uuid: string },
+    @Param('subcategoryUuid') subcategoryUuid: string,
   ) {
-    return this.fileUploadService.uploadFile(file, uuid);
+    return this.fileUploadService.uploadFile(file, subcategoryUuid);
   }
 
   @UsePipes(new ValidationPipe())

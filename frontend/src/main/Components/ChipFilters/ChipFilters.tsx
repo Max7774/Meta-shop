@@ -59,6 +59,7 @@ const ChipFilters = () => {
 
   // Преобразуем фильтры в массив для отображения
   const filters = Object.entries(queryParams).filter(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([_key, value]) => value && value !== ""
   );
 

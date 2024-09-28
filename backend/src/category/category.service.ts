@@ -57,6 +57,12 @@ export class CategoryService {
         name: dto.category_name,
         slug: convertToSlug(dto.category_name),
       },
+      select: {
+        name: true,
+        slug: true,
+        uuid: true,
+        subcategory: true,
+      },
     });
 
     return {
@@ -77,10 +83,18 @@ export class CategoryService {
   }
 
   async deleteCategory(uuid: string) {
-    return await this.prisma.category.delete({
+    const category = await this.prisma.category.delete({
       where: {
         uuid,
       },
     });
+
+    await this.prisma.subcategory.deleteMany({
+      where: {
+        categoryUuid: uuid,
+      },
+    });
+
+    return category;
   }
 }

@@ -13,18 +13,18 @@ import {
   productReturnObject,
   productReturnObjectFull,
 } from './return-product.object';
-import { CategoryService } from 'src/category/category.service';
 import { convertToNumber } from 'src/utils/convert-to-number';
 import { convertToSlug } from 'src/utils/convertToSlug';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { promises as fs } from 'fs';
+import { SubcategoryService } from 'src/subcategory/subcategory.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     private prisma: PrismaService,
     private paginationService: PaginationService,
-    private categoryService: CategoryService,
+    private subcategoryService: SubcategoryService,
   ) {}
 
   async getAll(dto: GetAllProductDto = {}) {
@@ -105,14 +105,6 @@ export class ProductService {
     return {
       OR: [
         {
-          category: {
-            name: {
-              contains: searchTerm,
-              mode: 'insensitive',
-            },
-          },
-        },
-        {
           subcategory: {
             name: {
               contains: searchTerm,
@@ -173,9 +165,9 @@ export class ProductService {
     };
   }
 
-  private getCategoryFilter(categoryUuid: string): Prisma.ProductWhereInput {
+  private getCategoryFilter(subcategoryUuid: string): Prisma.ProductWhereInput {
     return {
-      categoryUuid,
+      subcategoryUuid,
     };
   }
 
@@ -224,11 +216,11 @@ export class ProductService {
     }
   }
 
-  async byCategory(categorySlug: string) {
+  async bySubcategory(subcategorySlug: string) {
     const products = await this.prisma.product.findMany({
       where: {
-        category: {
-          slug: categorySlug,
+        subcategory: {
+          slug: subcategorySlug,
         },
       },
       select: productReturnObjectFull,
@@ -247,8 +239,8 @@ export class ProductService {
 
     const products = await this.prisma.product.findMany({
       where: {
-        category: {
-          name: currentProduct.category.name,
+        subcategory: {
+          name: currentProduct.subcategory.name,
         },
         NOT: {
           uuid: currentProduct.uuid,
@@ -268,7 +260,7 @@ export class ProductService {
       description,
       price,
       name,
-      categoryUuid,
+      subcategoryUuid,
       discount,
       unitofmeasurement,
       quantity,
@@ -279,15 +271,6 @@ export class ProductService {
         name,
       },
     });
-
-    // Проверка существования категории
-    const categoryExists = await this.prisma.category.findUnique({
-      where: {
-        uuid: categoryUuid,
-      },
-    });
-
-    if (!categoryExists) throw new NotFoundException('Category not found');
 
     if (isProduct) throw new NotFoundException('Product is exist');
 
@@ -301,16 +284,9 @@ export class ProductService {
         quantity: quantity || 0,
         unitofmeasurement,
         discount: discount || 0,
-        category: {
-          connectOrCreate: {
-            where: {
-              uuid: categoryUuid,
-            },
-            create: {
-              uuid: categoryUuid,
-              name: categoryExists.name,
-              slug: categoryExists.slug,
-            },
+        subcategory: {
+          connect: {
+            uuid: subcategoryUuid,
           },
         },
       },
@@ -325,12 +301,14 @@ export class ProductService {
         description,
         price,
         name,
-        categoryUuid,
+        subcategoryUuid,
         discount,
         unitofmeasurement,
       } = dto;
 
-      const { uuid: catUuid } = await this.categoryService.byId(categoryUuid);
+      const { uuid: subcatUuid } = await this.subcategoryService.byId(
+        subcategoryUuid,
+      );
 
       const product = await this.prisma.product.update({
         where: {
@@ -343,9 +321,9 @@ export class ProductService {
           name,
           unitofmeasurement,
           slug: convertToSlug(name),
-          category: {
+          subcategory: {
             connect: {
-              uuid: catUuid,
+              uuid: subcatUuid,
             },
           },
         },
@@ -386,13 +364,6 @@ export class ProductService {
           },
         });
 
-        // 4. Удаляем связанные Review
-        await prisma.review.deleteMany({
-          where: {
-            productUuid: uuid,
-          },
-        });
-
         // 5. Удаляем связанные PhotoFile
         await prisma.photoFile.deleteMany({
           where: {
@@ -402,7 +373,7 @@ export class ProductService {
 
         product.images.forEach(async (image) => {
           // 6. Удаляем связанные PhotoFile
-          const filePath = `uploads/${image}`;
+          const filePath = `${process.env.DESTINATION}/${image}`;
           await fs.unlink(filePath);
         });
 

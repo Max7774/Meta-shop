@@ -1,7 +1,6 @@
-import ProductsList from "./ProductsList/ProductsList";
-import Filters from "@/main/Components/Filters/Filters";
-import Search from "@Components/Search/Search";
 import { Helmet } from "react-helmet-async";
+import Heading from "@UI/Heading";
+import CategoriesList from "./CategoriesList/CategoriesList";
 
 const MainPage = () => {
   return (
@@ -11,11 +10,8 @@ const MainPage = () => {
         <meta name="description" content="Главная страница - AgroZakupKz" />
       </Helmet>
       <section>
-        <div className="flex flex-row justify-between items-center pb-4">
-          <Search pageKey="products" className="w-full pr-3" />
-          <Filters />
-        </div>
-        <ProductsList />
+        <Heading>Добро пожаловать!</Heading>
+        <CategoriesList />
       </section>
     </>
   );

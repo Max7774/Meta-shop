@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ProductService } from "@/service/product.service";
 import { TFilters } from "@/types/TFilters";
 import {
@@ -37,12 +38,12 @@ export const getProductBySlug = createAsyncThunk<TProduct, string>(
   }
 );
 
-/* getProductByCategory */
-export const getProductByCategory = createAsyncThunk<TProduct[], string>(
-  "products/getProductByCategory",
-  async (categorySlug, { rejectWithValue }) => {
+/* getProductBySubCategory */
+export const getProductBySubCategory = createAsyncThunk<TProduct[], string>(
+  "products/getProductBySubCategory",
+  async (subcategorySlug, { rejectWithValue }) => {
     try {
-      const response = await ProductService.getByCategory(categorySlug);
+      const response = await ProductService.getBySubCategory(subcategorySlug);
       return response.data;
     } catch (error) {
       return rejectWithValue({
@@ -61,7 +62,7 @@ export const createProduct = createAsyncThunk<TProduct, TProductCreateForm>(
         name: product.name,
         price: product.price++,
         description: product.description,
-        categoryUuid: product.categoryUuid,
+        subcategoryUuid: product.subcategoryUuid,
         discount: product.discount++,
         unitofmeasurement: product.unitofmeasurement,
       };

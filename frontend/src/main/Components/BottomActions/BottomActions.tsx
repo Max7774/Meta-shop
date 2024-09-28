@@ -3,13 +3,14 @@ import { useProducts } from "@hooks/useProducts";
 import { convertPrice } from "@utils/convertPrice";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import CartActions from "../Cart/cart-item/cart-actions/CartActions";
-import { Button } from "@nextui-org/react";
+import { Button, useDisclosure } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions } from "@hooks/useActions";
 import { RiShoppingCartLine } from "react-icons/ri";
 import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
 
 const BottomActions = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { items } = useCart();
   const { addToCart } = useActions();
   const { product } = useProducts();
@@ -22,14 +23,21 @@ const BottomActions = () => {
 
   return (
     <div className="fixed bottom-0 bg-white z-30 w-full px-4 pt-3 pb-8 shadow-[0px_-7px_22px_1px_rgba(34,60,80,0.29)] rounded-t-3xl sm:hidden">
-      <div className="flex flex-row gap-2 justify-center pb-2 items-center">
+      <div
+        className="flex flex-row gap-2 justify-center pb-6 items-center"
+        onClick={onOpen}
+      >
         <div>
           <MdOutlineDeliveryDining size={20} />
         </div>
         <span className="text-xs text-center pt-0.5">
           Доставка {convertPrice(0)} - {convertPrice(800)}
         </span>
-        <DeliveryInfo />
+        <DeliveryInfo
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onOpenChange={onOpenChange}
+        />
       </div>
       <div>
         <>

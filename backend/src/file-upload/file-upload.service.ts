@@ -49,7 +49,7 @@ export class FileUploadService {
     return urls;
   }
 
-  async uploadFile(file: Express.Multer.File, categoryUuid: { uuid: string }) {
+  async uploadFile(file: Express.Multer.File, subcategoryUuid: string) {
     const { filename, mimetype, originalname, size, path } = file;
     const url = `${process.env.SERVER_URL}/file-upload/${filename}`;
 
@@ -62,19 +62,20 @@ export class FileUploadService {
         originalname,
         size,
         path,
-        categoryUuid: categoryUuid.uuid,
+        subcategoryUuid: subcategoryUuid,
       },
     });
 
-    await this.prismaFileService.category.update({
+    await this.prismaFileService.subcategory.update({
       where: {
-        uuid: categoryUuid.uuid,
+        uuid: subcategoryUuid,
       },
       data: {
-        icon: result.url,
+        icon: result.filename,
       },
     });
-    return result.url;
+
+    return result.filename;
   }
 
   async updateAvatar(file: Express.Multer.File, uuid: string) {

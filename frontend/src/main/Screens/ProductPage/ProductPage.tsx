@@ -43,9 +43,11 @@ const ProductPage = () => {
             <Chip
               size="lg"
               className="cursor-pointer"
-              onClick={() => navigate(`/categories/${product?.category?.slug}`)}
+              onClick={() =>
+                navigate(`/categories/${product?.subcategory?.slug}`)
+              }
             >
-              {product?.category?.name}
+              {product?.subcategory?.name}
             </Chip>
             {product?.discount !== 0 && (
               <Chip size="lg" className="text-white" color="danger">

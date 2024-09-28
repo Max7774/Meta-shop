@@ -39,11 +39,11 @@ export class UserController {
   @HttpCode(200)
   @Auth('DEFAULT_USER' || 'MANAGER' || 'ADMIN')
   @Patch('profile/favorites/:productUuid')
-  async toggleFavourites(
+  async toggleFavorites(
     @CurrentUser('uuid') uuid: string,
     @Param('productUuid') productUuid: string,
   ) {
-    return this.userService.toggleFavourite(uuid, productUuid);
+    return this.userService.toggleFavorite(uuid, productUuid);
   }
 
   @HttpCode(200)

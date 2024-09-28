@@ -1,24 +1,17 @@
 import Heading from "@/main/UI/Heading";
 import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
-import {
-  Button,
-  Card,
-  CardBody,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@nextui-org/react";
-import { useState } from "react";
+import { Button, Card, CardBody, Input } from "@nextui-org/react";
+import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FiTrash } from "react-icons/fi";
+import DeleteCategoryModal from "./DeleteCategoryModal/DeleteCategoryModal";
+import Subcategories from "./Subcategories/Subcategories";
+import BlockSkeleton from "@UI/Skeleton/BlockSkeleton/BlockSkeleton";
 
 const AdminCategories = () => {
   const [isModalOpen, setIsModalOpen] = useState({ open: false, uuid: "" });
-  const { createCategory, deleteCategory } = useActions();
+  const { createCategory } = useActions();
   const { categories, isLoading, isDeleteLoading } = useCategory();
   const { control, handleSubmit, reset } = useForm<{ category_name: string }>();
 
@@ -26,6 +19,8 @@ const AdminCategories = () => {
     createCategory(data);
     reset();
   };
+
+  if (isLoading) return <BlockSkeleton />;
 
   return (
     <section>
@@ -50,56 +45,33 @@ const AdminCategories = () => {
           </Button>
         </div>
       </form>
-      {categories.map(({ name, uuid }) => (
-        <Card fullWidth className="my-4">
-          <CardBody>
-            <div className="flex flex-row justify-between items-center">
-              <p className="font-bold">{name}</p>
-              <Button
-                variant="light"
-                isLoading={isDeleteLoading}
-                onClick={() => setIsModalOpen({ open: true, uuid })}
-              >
-                <FiTrash size={20} />
-              </Button>
-            </div>
-          </CardBody>
-        </Card>
+      {categories.map(({ name, uuid, subcategory }) => (
+        <React.Fragment key={uuid}>
+          <Card fullWidth className="mt-4">
+            <CardBody>
+              <div className="flex flex-row justify-between items-center">
+                <p className="font-bold">{name}</p>
+                <Button
+                  variant="light"
+                  isLoading={isDeleteLoading}
+                  onClick={() => setIsModalOpen({ open: true, uuid })}
+                >
+                  <FiTrash size={20} />
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+          <Subcategories
+            subcategory={subcategory}
+            categoryName={name}
+            uuid={uuid}
+          />
+        </React.Fragment>
       ))}
-      <Modal
-        isOpen={isModalOpen.open}
-        onOpenChange={() => setIsModalOpen({ open: true, uuid: "" })}
-        placement="top"
-      >
-        <ModalContent>
-          <ModalHeader className="flex flex-col gap-1 text-warning text-center">
-            Вы уверены что хотите удалить категорию?
-          </ModalHeader>
-          <ModalBody>
-            <span className="font-bold text-center">
-              К этой категории могут быть привязаны продукты!
-            </span>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="primary"
-              variant="light"
-              onPress={() => setIsModalOpen({ open: false, uuid: "" })}
-            >
-              Закрыть
-            </Button>
-            <Button
-              color="danger"
-              onPress={() => {
-                deleteCategory(isModalOpen.uuid);
-                setIsModalOpen({ open: false, uuid: "" });
-              }}
-            >
-              Применить
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <DeleteCategoryModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </section>
   );
 };

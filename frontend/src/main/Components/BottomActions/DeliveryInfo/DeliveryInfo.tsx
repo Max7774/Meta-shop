@@ -5,13 +5,16 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
 } from "@nextui-org/react";
 import { FaAngleRight } from "react-icons/fa";
 
-const DeliveryInfo = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+interface IDeliveryInfoProps {
+  isOpen: boolean;
+  onOpen: () => void;
+  onOpenChange: () => void;
+}
 
+const DeliveryInfo = ({ isOpen, onOpen, onOpenChange }: IDeliveryInfoProps) => {
   return (
     <section>
       <div className="rounded-full bg-default-200 p-1">
@@ -25,9 +28,7 @@ const DeliveryInfo = () => {
                 Доставка
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-col gap-5">
-                    
-                </div>
+                <div className="flex flex-col gap-5"></div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>

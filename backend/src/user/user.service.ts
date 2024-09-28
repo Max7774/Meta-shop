@@ -27,7 +27,7 @@ export class UserService {
             price: true,
             images: true,
             slug: true,
-            category: {
+            subcategory: {
               select: {
                 slug: true,
               },
@@ -80,7 +80,7 @@ export class UserService {
             price: true,
             images: true,
             slug: true,
-            category: {
+            subcategory: {
               select: {
                 slug: true,
               },
@@ -96,7 +96,7 @@ export class UserService {
     });
   }
 
-  async toggleFavourite(uuid: string, productUuid: string) {
+  async toggleFavorite(uuid: string, productUuid: string) {
     const user = await this.byId(uuid);
 
     if (!user) throw new NotFoundException('User not found');
