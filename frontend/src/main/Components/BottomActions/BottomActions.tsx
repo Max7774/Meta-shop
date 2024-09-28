@@ -21,7 +21,7 @@ const BottomActions = () => {
   );
 
   return (
-    <div className="fixed bottom-0 bg-white z-30 w-full px-2 py-3 shadow-[0px_-7px_22px_1px_rgba(34,60,80,0.29)] rounded-t-3xl sm:hidden">
+    <div className="fixed bottom-0 bg-white z-30 w-full px-4 pt-3 pb-6 shadow-[0px_-7px_22px_1px_rgba(34,60,80,0.29)] rounded-t-3xl sm:hidden">
       <div className="flex flex-row gap-2 justify-center pb-2 items-center">
         <div>
           <MdOutlineDeliveryDining size={20} />
