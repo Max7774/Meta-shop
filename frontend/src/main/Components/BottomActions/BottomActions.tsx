@@ -3,11 +3,19 @@ import { useProducts } from "@hooks/useProducts";
 import { convertPrice } from "@utils/convertPrice";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import CartActions from "../Cart/cart-item/cart-actions/CartActions";
-import { Button, useDisclosure } from "@nextui-org/react";
+import {
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions } from "@hooks/useActions";
 import { RiShoppingCartLine } from "react-icons/ri";
-import DeliveryInfo from "./DeliveryInfo/DeliveryInfo";
+import { FaAngleRight } from "react-icons/fa";
 
 const BottomActions = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -33,11 +41,9 @@ const BottomActions = () => {
         <span className="text-xs text-center pt-0.5">
           Доставка {convertPrice(0)} - {convertPrice(800)}
         </span>
-        <DeliveryInfo
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onOpenChange={onOpenChange}
-        />
+        <div className="rounded-full bg-default-200 p-1">
+          <FaAngleRight size={15} color="gray" onClick={onOpen} />
+        </div>
       </div>
       <div>
         <>
@@ -87,6 +93,25 @@ const BottomActions = () => {
           )}
         </>
       </div>
+      <Modal isOpen={isOpen} placement="bottom" onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Доставка
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex flex-col gap-5"></div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Закрыть
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
