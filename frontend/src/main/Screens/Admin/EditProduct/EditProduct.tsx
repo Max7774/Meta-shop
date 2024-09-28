@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -68,7 +69,7 @@ const EditProduct = () => {
       description: data.description,
       price: Number(data.price),
       discount: Number(data.discount),
-      categoryUuid: data.categoryUuid,
+      subcategoryUuid: data.subcategoryUuid,
       unitofmeasurement: data?.unitofmeasurement || "",
     };
 
@@ -86,7 +87,7 @@ const EditProduct = () => {
   };
 
   const handleCategoryChange = (categoryUuid: string) => {
-    setValue("categoryUuid", categoryUuid);
+    setValue("subcategoryUuid", categoryUuid);
   };
 
   useEffect(() => {
@@ -102,7 +103,7 @@ const EditProduct = () => {
         description: product.description || "",
         price: product.price || 0,
         discount: product.discount || 0,
-        categoryUuid: product?.category?.uuid || "",
+        subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
       });
 
@@ -191,7 +192,7 @@ const EditProduct = () => {
           />
 
           <Controller
-            name="categoryUuid"
+            name="subcategoryUuid"
             control={control}
             render={({ field }) => (
               <Select

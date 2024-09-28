@@ -14,7 +14,7 @@ export type TProduct = {
   quantity: number;
   category: Pick<TCategory, "name" | "slug" | "uuid">;
   reviews: [];
-  subcategory: Pick<TSubCategory, "name" | "slug">;
+  subcategory: TSubCategory;
   isNew: boolean;
 };
 
