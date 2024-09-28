@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 
-// import { useActions } from "@hooks/useActions";
 import { useCart } from "@/hooks/useCart";
 import { convertPrice } from "@/utils/convertPrice";
 
@@ -20,8 +19,6 @@ const Cart: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { items, total } = useCart();
   const navigate = useNavigate();
-
-  //   const { reset } = useActions();
 
   return (
     <Popover

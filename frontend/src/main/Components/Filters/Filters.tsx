@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useActions } from "@hooks/useActions";
 import { useFilters } from "@hooks/useFilters";
 import {

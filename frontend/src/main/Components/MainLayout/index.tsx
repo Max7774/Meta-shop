@@ -1,11 +1,18 @@
 import { NavigationBar } from "@/main/UI/NavigationBar";
 import Sidebar from "@/main/UI/SideBar";
+import BottomActions from "@Components/BottomActions/BottomActions";
 import cn from "clsx";
 import { PropsWithChildren } from "react";
 import { useLocation } from "react-router-dom";
 
+const bottomActionsPath = ["/order", "/admin"];
+
 const MainLayout = ({ children }: PropsWithChildren) => {
   const { pathname } = useLocation();
+
+  const isBottomActions = bottomActionsPath.some((path) =>
+    pathname.startsWith(path)
+  );
 
   return (
     <>
@@ -23,6 +30,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
           {children}
         </main>
       </div>
+      {!isBottomActions && <BottomActions />}
     </>
   );
 };

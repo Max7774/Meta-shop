@@ -61,50 +61,53 @@ const ProductPage = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
           <Carousel images={product.images} />
-          <div className="grid grid-rows-3 px-6 gap-4">
+          <div className="relative flex flex-col px-6 gap-4">
             <Price
               discount={product.discount}
               price={product.price}
               unitofmeasurement={product.unitofmeasurement}
             />
             <p className="text-wrap">{product.description}</p>
-            {currentElement ? (
-              <>
-                <CartActions
-                  item={currentElement}
-                  className="justify-center bg-default-100 py-1 rounded-xl"
-                />
+            <div className="hidden sm:flex flex-col gap-5">
+              {currentElement ? (
+                <>
+                  <CartActions
+                    item={currentElement}
+                    className="justify-center bg-default-100 py-1 rounded-xl"
+                  />
+                  <Button
+                    color="primary"
+                    onClick={() => navigate("/order")}
+                    size="lg"
+                    className="w-full"
+                  >
+                    Оформить заказ
+                  </Button>
+                </>
+              ) : (
                 <Button
                   color="primary"
-                  onClick={() => navigate("/order")}
                   size="lg"
                   className="w-full"
+                  onClick={() =>
+                    addToCart({
+                      product,
+                      discount: product.discount,
+                      quantity: 1,
+                      price: product.discount
+                        ? product.price -
+                          (product.price * product.discount) / 100
+                        : product.price,
+                      uuid: product?.uuid,
+                      productUuid: product?.uuid,
+                    })
+                  }
+                  startContent={<RiShoppingCartLine size={25} />}
                 >
-                  Оформить заказ
+                  Добавить в корзину
                 </Button>
-              </>
-            ) : (
-              <Button
-                color="primary"
-                size="lg"
-                className="w-full"
-                onClick={() =>
-                  addToCart({
-                    product,
-                    discount: product.discount,
-                    quantity: 1,
-                    price: product.discount
-                      ? product.price - (product.price * product.discount) / 100
-                      : product.price,
-                    uuid: product?.uuid,
-                    productUuid: product?.uuid,
-                  })
-                }
-                startContent={<RiShoppingCartLine size={25} />}
-              >
-                {currentElement ? "Добавлено!" : "Добавить в корзину"}
-              </Button>
-            )}
+              )}
+            </div>
           </div>
         </div>
         {product.peculiarities && (
