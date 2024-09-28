@@ -44,7 +44,9 @@ const ProductPage = () => {
               size="lg"
               className="cursor-pointer"
               onClick={() =>
-                navigate(`/categories/${product?.subcategory?.slug}`)
+                navigate(
+                  `/categories/${product?.category?.slug}/${product?.subcategory?.slug}`
+                )
               }
             >
               {product?.subcategory?.name}

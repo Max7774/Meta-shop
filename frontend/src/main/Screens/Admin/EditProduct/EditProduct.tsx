@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,6 +42,14 @@ const EditProduct = () => {
   // Обработка выбора изображений
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
+    console.log(files);
+    files.forEach((file) => {
+      console.log(file.size);
+      if (file.size > 1024) {
+        toast.error("Размер файла должен быть меньше 2MB");
+        return "Размер файла должен быть меньше 2MB";
+      }
+    });
 
     // Проверка на количество файлов
     if (files.length > 5) {
@@ -86,8 +95,8 @@ const EditProduct = () => {
     }
   };
 
-  const handleCategoryChange = (categoryUuid: string) => {
-    setValue("subcategoryUuid", categoryUuid);
+  const handleCategoryChange = (subcategoryUuid: string) => {
+    setValue("subcategoryUuid", subcategoryUuid);
   };
 
   useEffect(() => {
@@ -191,22 +200,33 @@ const EditProduct = () => {
             )}
           />
 
+          <Input
+            placeholder="Категория"
+            label="Категория"
+            isDisabled
+            value={product.subcategory.category?.name}
+          />
+
           <Controller
             name="subcategoryUuid"
             control={control}
             render={({ field }) => (
               <Select
-                label="Категория"
+                label="Подкатегория"
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
                   handleCategoryChange(selectedKey);
                 }}
-                placeholder="Выберите категорию"
+                placeholder="Выберите подкатегорию"
               >
-                {categories.map((category) => (
-                  <SelectItem key={category.uuid} value={category.uuid}>
-                    {category.name}
+                {(
+                  categories.find(
+                    ({ slug }) => product.subcategory.category?.slug === slug
+                  )?.subcategory || []
+                ).map((item) => (
+                  <SelectItem key={item.uuid} value={item.uuid}>
+                    {item.name}
                   </SelectItem>
                 ))}
               </Select>
@@ -220,14 +240,14 @@ const EditProduct = () => {
               min: { value: 0, message: "Скидка не может быть отрицательной" },
               max: { value: 100, message: "Скидка не может превышать 100%" },
             }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Input
                 label="Скидка (%)"
                 placeholder="Введите скидку"
                 onChange={onChange}
                 value={value?.toString()}
-                // status={fieldState.invalid ? "error" : "default"}
-                // helperText={fieldState.error?.message}
+                isInvalid={!!error?.message}
+                errorMessage={error?.message}
               />
             )}
           />

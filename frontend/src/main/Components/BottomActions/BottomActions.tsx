@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Divider,
 } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions } from "@hooks/useActions";
@@ -101,7 +102,15 @@ const BottomActions = () => {
                 Доставка
               </ModalHeader>
               <ModalBody>
-                <div className="flex flex-col gap-5"></div>
+                <div className="flex flex-col gap-1">
+                  <p>Бесплатная доставка от {convertPrice(6000)}</p>
+                  <Divider className="my-1" />
+                  <p>Принимаются заказы: 9:00 — 13:00</p>
+                  <p className="text-warning">Ягоды до 9:00</p>
+                  <Divider className="my-1" />
+                  <p>Доставка: 13:00 — 20:00</p>
+                  <p className="text-warning">Ягоды до 13:00</p>
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>

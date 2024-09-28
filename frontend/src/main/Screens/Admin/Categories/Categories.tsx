@@ -1,7 +1,7 @@
 import Heading from "@/main/UI/Heading";
 import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
-import { Button, Card, CardBody, Input } from "@nextui-org/react";
+import { Button, Card, CardBody, Chip, Input } from "@nextui-org/react";
 import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FiTrash } from "react-icons/fi";
@@ -49,10 +49,20 @@ const AdminCategories = () => {
         <React.Fragment key={uuid}>
           <Card fullWidth className="mt-4">
             <CardBody>
-              <div className="flex flex-row justify-between items-center">
+              <div className="grid grid-cols-3 items-center">
                 <p className="font-bold">{name}</p>
+                <Chip
+                  size="sm"
+                  className="text-white justify-self-center"
+                  color={subcategory.length === 0 ? "warning" : "success"}
+                >
+                  {subcategory.length === 0
+                    ? "Не отображается"
+                    : "Отображается"}
+                </Chip>
                 <Button
                   variant="light"
+                  className="justify-self-end"
                   isLoading={isDeleteLoading}
                   onClick={() => setIsModalOpen({ open: true, uuid })}
                 >

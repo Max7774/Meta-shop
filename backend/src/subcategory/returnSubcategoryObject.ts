@@ -5,4 +5,11 @@ export const returnSubcategoryObject: Prisma.SubcategorySelect = {
   name: true,
   slug: true,
   icon: true,
+  category: {
+    select: {
+      uuid: true,
+      name: true,
+      slug: true,
+    },
+  },
 };

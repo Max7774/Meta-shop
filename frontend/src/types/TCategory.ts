@@ -4,6 +4,7 @@ export type TSubCategory = {
   slug: string;
   icon: string;
   categoryUuid?: string;
+  category?: TCategory;
 };
 
 export type TCreateSubCategory = {
