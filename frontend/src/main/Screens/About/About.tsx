@@ -46,7 +46,11 @@ const About = () => {
 
           <div className={styles.advantages}>
             <div className={styles["advantage-card"]}>
-              <Image src="/images/freshness.jpg" alt="Свежесть и качество" />
+              <Image
+                src="/images/freshness.jpg"
+                className="max-h-[400px]"
+                alt="Свежесть и качество"
+              />
               <h3>Свежесть и качество</h3>
               <p>
                 Продукты доставляются прямо с ферм без долгого хранения на
@@ -56,6 +60,7 @@ const About = () => {
             <div className={styles["advantage-card"]}>
               <Image
                 src="/images/support-local.jpg"
+                className="max-h-[400px]"
                 alt="Поддержка местных производителей"
               />
               <h3>Поддержка местных производителей</h3>
@@ -64,13 +69,18 @@ const About = () => {
             <div className={styles["advantage-card"]}>
               <Image
                 src="/images/ecology.jpg"
+                className="max-h-[400px]"
                 alt="Экологическая ответственность"
               />
               <h3>Экологическая ответственность</h3>
               <p>Мы поощряем использование органических методов выращивания.</p>
             </div>
             <div className={styles["advantage-card"]}>
-              <Image src="/images/convenience.jpg" alt="Удобство" />
+              <Image
+                src="/images/convenience.jpg"
+                className="max-h-[400px]"
+                alt="Удобство"
+              />
               <h3>Удобство</h3>
               <p>Простой заказ онлайн и быстрая доставка на дом.</p>
             </div>
