@@ -26,7 +26,7 @@ jobs:
       - name: Execute SSH command .env
         working-directory: ./backend
         run: |
-          cat > .env << EOT
+          nano > .env << EOT
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
           DESTINATION=uploads/
