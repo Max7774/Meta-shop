@@ -83,14 +83,14 @@ jobs:
 
       - name: Copy files via SCP
         run: |
-          scp -o StrictHostKeyChecking=no -r ./backend/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend
+          scp -o StrictHostKeyChecking=no -r ./backend/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop
 
-      # - name: SSH [Down volumes]
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
-      #     cd /Meta-shop
-      #     docker-compose down
-      #     EOF
+      - name: SSH [Down volumes]
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop
+          docker-compose down
+          EOF
 
       - name: SSH [Compose - Build]
         run: |
