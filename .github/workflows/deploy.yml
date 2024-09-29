@@ -85,12 +85,12 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend
 
-      - name: SSH [Down volumes]
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
-          cd /Meta-shop/backend
-          docker-compose down
-          EOF
+      # - name: SSH [Down volumes]
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+      #     cd /Meta-shop
+      #     docker-compose down
+      #     EOF
 
       - name: SSH [Compose - Build]
         run: |
