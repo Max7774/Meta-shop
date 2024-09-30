@@ -14,6 +14,13 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
 
   const currentItem = items.find((el) => el.product.uuid === product.uuid);
 
+  if (!product.inStock)
+    return (
+      <Button color="default" fullWidth isDisabled>
+        Нет в наличии
+      </Button>
+    );
+
   return (
     <>
       {!!currentItem && currentItem.quantity >= 1 ? (

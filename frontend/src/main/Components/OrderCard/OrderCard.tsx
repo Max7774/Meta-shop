@@ -1,4 +1,5 @@
 import { TOrder } from "@/types/TOrder";
+import { EOrder } from "@enums/EOrder";
 import {
   Button,
   Card,
@@ -8,41 +9,32 @@ import {
   Chip,
   Divider,
   Image,
-  Input,
   Accordion,
   AccordionItem,
 } from "@nextui-org/react";
+import { convertPrice } from "@utils/convertPrice";
 import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
-import { EOrder } from "@enums/EOrder";
+import { getNextStatus } from "./utils/getNextStatus";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
-import { convertPrice } from "@utils/convertPrice";
 import { getImageUrl } from "@utils/getImageUrl";
+import { useAuth } from "@hooks/auth-hooks/useAuth";
+import { ERoles } from "@enums/ERoles";
 
-interface IAdminOrderItemProps {
+interface IOrderCardProps {
   order: TOrder;
 }
 
-const getNextStatus = (currentStatus: EOrder) => {
-  switch (currentStatus) {
-    case EOrder.Pending:
-      return EOrder.Payed;
-    case EOrder.Payed:
-      return EOrder.In_Delivery;
-    case EOrder.In_Delivery:
-      return EOrder.Delivered;
-    case EOrder.Delivered:
-      return null;
-    default:
-      return null;
-  }
-};
-
-const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
+const OrderCard = ({ order }: IOrderCardProps) => {
   const { isOrderStatusChangeLoading, isCancelOrderLoading } = useAppSelector(
     (state) => state.orders
   );
+  const {
+    profile: { role },
+  } = useAuth();
   const { updateStatus, cancelOrder } = useActions();
+
+  const isAdmin = role === ERoles.ADMIN;
 
   return (
     <Card>
@@ -64,69 +56,35 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
               ))}
             <Accordion>
               <AccordionItem key="1" aria-label="Адрес" title="Адрес">
-                <div className="w-full flex flex-col gap-3">
-                  <Input
-                    fullWidth
-                    readOnly
-                    value={order.address.town}
-                    label="Город:"
-                    labelPlacement="outside"
-                    className="justify-between"
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    value={order.address.street}
-                    label="Улица:"
-                    labelPlacement="outside"
-                    className="justify-between"
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    value={order.address.house}
-                    label="Дом/корпус:"
-                    labelPlacement="outside"
-                    className="justify-between"
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    value={order.address.apartment}
-                    label="Квартира:"
-                    labelPlacement="outside"
-                    className="justify-between"
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    value={order.address.intercom}
-                    label="Домофон:"
-                    labelPlacement="outside"
-                    className="justify-between"
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    labelPlacement="outside"
-                    className="justify-between"
-                    label="Подъезд:"
-                    value={order.address.entrance}
-                  />
-                  <Input
-                    fullWidth
-                    readOnly
-                    labelPlacement="outside"
-                    className="justify-between"
-                    label="Этаж:"
-                    value={order.address.floor}
-                  />
+                <div className="px-3 py-2 border border-default rounded-2xl">
+                  {order.address.street + ", " + order.address.house}
+                  <p className="pr-2">- Город: {order.address.town}</p>
+                  <p className="pr-2">- Улица: {order.address.street}</p>
+                  <p className="pr-2">- Дом: {order.address.house}</p>
+                  {order.address.apartment && (
+                    <p className="pr-2">
+                      - Квартира: {order.address.apartment}
+                    </p>
+                  )}
+                  {order.address.entrance && (
+                    <p className="pr-2">- Подъезд: {order.address.entrance}</p>
+                  )}
+                  {order.address.intercom && (
+                    <p className="pr-2">- Домофон: {order.address.intercom}</p>
+                  )}
+                  {order.address.floor && (
+                    <p className="pr-2">- Этаж: {order.address.floor}</p>
+                  )}
                 </div>
               </AccordionItem>
             </Accordion>
-            <Divider className="mb-4" />
-            <h3>Телефон: {order.user?.phone_number}</h3>
-            {!!order.comment && <h3>Комментарий: {order.comment}</h3>}
+            {isAdmin && !!order.user?.phone_number && (
+              <>
+                <Divider className="mb-4" />
+                <h3>Телефон: {order.user?.phone_number}</h3>
+              </>
+            )}
+            <h3>Комментарий: {order.comment ? order.comment : "Отсутсвует"}</h3>
             {!!order.user?.first_name && !!order.user?.second_name && (
               <h3>
                 ФИО: {order.user?.first_name} {order.user?.second_name}
@@ -164,6 +122,16 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
       </CardBody>
       <CardFooter>
         <div className="flex flex-col w-full gap-4">
+          {order.isDelivery && (
+            <Chip
+              variant="bordered"
+              className="px-1"
+              size="sm"
+              color="secondary"
+            >
+              Доставка {convertPrice(800)}
+            </Chip>
+          )}
           <div className="flex justify-between items-center w-full px-1">
             <Chip
               color={getOrderStatusLabel(order.status).color}
@@ -179,24 +147,26 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
           {order.status !== EOrder.Canceled &&
             order.status !== EOrder.Delivered && (
               <>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    const nextStatus = getNextStatus(order.status);
-                    if (nextStatus) {
-                      updateStatus({
-                        orderUuid: order.uuid,
-                        status: nextStatus,
-                      });
-                    }
-                  }}
-                  isLoading={isOrderStatusChangeLoading}
-                >
-                  {order.status === EOrder.Pending && "Подтвердить оплату"}
-                  {order.status === EOrder.Payed && "Отправить в доставку"}
-                  {order.status === EOrder.In_Delivery &&
-                    "Подтвердить доставку"}
-                </Button>
+                {isAdmin && (
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      const nextStatus = getNextStatus(order.status);
+                      if (nextStatus) {
+                        updateStatus({
+                          orderUuid: order.uuid,
+                          status: nextStatus,
+                        });
+                      }
+                    }}
+                    isLoading={isOrderStatusChangeLoading}
+                  >
+                    {order.status === EOrder.Pending && "Подтвердить оплату"}
+                    {order.status === EOrder.Payed && "Отправить в доставку"}
+                    {order.status === EOrder.In_Delivery &&
+                      "Подтвердить доставку"}
+                  </Button>
+                )}
                 <Button
                   color="danger"
                   onClick={() => cancelOrder(order.uuid)}
@@ -212,4 +182,4 @@ const AdminOrderItem = ({ order }: IAdminOrderItemProps) => {
   );
 };
 
-export default AdminOrderItem;
+export default OrderCard;

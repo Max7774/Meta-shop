@@ -4,7 +4,6 @@ import { productReturnObject } from 'src/product/return-product.object';
 import { OrderDto, OrderItemDto } from './dto/order.dto';
 import { PaymentStatusDto } from './dto/payment-status.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
-import { generateToken } from 'src/utils/generateToken';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -47,9 +46,9 @@ export class OrderService {
         uuid: userUuid,
       },
     });
+    const filters = this.createFilter(params);
 
     if (role === 'ADMIN') {
-      const filters = this.createFilter(params);
       return await this.prisma.order.findMany({
         where: filters,
         orderBy: {
@@ -80,6 +79,7 @@ export class OrderService {
     } else {
       return await this.prisma.order.findMany({
         where: {
+          ...filters,
           userUuid,
         },
         orderBy: {
@@ -126,10 +126,13 @@ export class OrderService {
 
     await this.updateQuantityProduct(dto.items);
 
+    const timestamp = Date.now().toString(36); // Преобразуем в 36-ричную систему для сокращения длины
+    const randomNum = Math.floor(Math.random() * 1e6).toString(36);
+
     const order = await this.prisma.order.create({
       data: {
         uuid: uuidGen(),
-        orderId: 'ORDER-' + generateToken(10),
+        orderId: 'ORDER-' + timestamp + '-' + randomNum,
         status: dto.status,
         comment: dto.comment,
         items: {

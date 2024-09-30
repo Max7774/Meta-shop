@@ -51,6 +51,13 @@ const ProductPage = () => {
             >
               {product?.subcategory?.name}
             </Chip>
+            <Chip
+              size="lg"
+              className="text-white"
+              color={product.inStock ? "success" : "danger"}
+            >
+              {product.inStock ? "В наличии!" : "Нет в наличии!"}
+            </Chip>
             {product?.discount !== 0 && (
               <Chip size="lg" className="text-white" color="danger">
                 Скидка {product?.discount}%

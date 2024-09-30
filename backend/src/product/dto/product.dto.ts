@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ProductDto implements Prisma.ProductUpdateInput {
   @IsString()
@@ -10,6 +10,9 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
   @IsString()
   unitofmeasurement: string;
+
+  @IsBoolean()
+  inStock: boolean;
 
   @IsString()
   subcategoryUuid: string;

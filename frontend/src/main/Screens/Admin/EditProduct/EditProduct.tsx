@@ -12,6 +12,7 @@ import {
   Select,
   Image,
   SelectItem,
+  Checkbox,
 } from "@nextui-org/react";
 import Heading from "@UI/Heading";
 import { TProductCreateForm } from "@/types/TProduct";
@@ -78,6 +79,7 @@ const EditProduct = () => {
       description: data.description,
       price: Number(data.price),
       discount: Number(data.discount),
+      inStock: data.inStock,
       subcategoryUuid: data.subcategoryUuid,
       unitofmeasurement: data?.unitofmeasurement || "",
     };
@@ -111,6 +113,7 @@ const EditProduct = () => {
         name: product.name || "",
         description: product.description || "",
         price: product.price || 0,
+        inStock: product.inStock,
         discount: product.discount || 0,
         subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
@@ -173,6 +176,20 @@ const EditProduct = () => {
                 onChange={onChange}
                 value={value?.toString()}
               />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="inStock"
+            render={({ field: { onChange, value } }) => (
+              <div className="flex flex-row gap-2">
+                <Checkbox
+                  onValueChange={(isSelected) => onChange(isSelected)}
+                  isSelected={value}
+                />
+                <p className="text-default-500">Наличие</p>
+              </div>
             )}
           />
 

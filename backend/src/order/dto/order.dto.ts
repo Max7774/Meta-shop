@@ -24,19 +24,19 @@ export class AddressItemDto {
 
   @IsOptional()
   @IsString()
-  apartment: string;
+  apartment?: string;
 
   @IsOptional()
   @IsString()
-  intercom: string;
+  intercom?: string;
 
   @IsOptional()
   @IsString()
-  entrance: string;
+  entrance?: string;
 
   @IsOptional()
   @IsString()
-  floor: string;
+  floor?: string;
 }
 
 export class OrderDto {

@@ -1,9 +1,9 @@
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import AdminOrderItem from "./AdminOrderItem/AdminOrderItem";
 import { useEffect } from "react";
 import Loader from "@UI/Loader";
 import { useActions } from "@hooks/useActions";
 import { useFilters } from "@hooks/useFilters";
+import OrderCard from "@Components/OrderCard/OrderCard";
 
 const AdminOrderList = () => {
   const { getAllOrders } = useActions();
@@ -25,7 +25,7 @@ const AdminOrderList = () => {
   return (
     <div className="flex flex-col gap-5">
       {orders?.map((order) => (
-        <AdminOrderItem order={order} />
+        <OrderCard order={order} key={order.uuid} />
       ))}
     </div>
   );

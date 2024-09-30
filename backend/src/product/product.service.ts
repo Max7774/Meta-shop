@@ -263,6 +263,7 @@ export class ProductService {
       subcategoryUuid,
       discount,
       unitofmeasurement,
+      inStock,
       quantity,
     } = dto;
 
@@ -283,6 +284,7 @@ export class ProductService {
         price,
         quantity: quantity || 0,
         unitofmeasurement,
+        inStock: inStock || true,
         discount: discount || 0,
         subcategory: {
           connect: {
@@ -303,6 +305,7 @@ export class ProductService {
         name,
         subcategoryUuid,
         discount,
+        inStock,
         unitofmeasurement,
       } = dto;
 
@@ -319,6 +322,7 @@ export class ProductService {
           discount,
           price,
           name,
+          inStock,
           unitofmeasurement,
           slug: convertToSlug(name),
           subcategory: {

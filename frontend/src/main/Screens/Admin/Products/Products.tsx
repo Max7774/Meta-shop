@@ -8,6 +8,7 @@ import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import {
   Button,
+  Checkbox,
   Divider,
   Image,
   Input,
@@ -143,6 +144,26 @@ const AdminProducts = () => {
             />
           )}
         />
+
+        <Controller
+          control={control}
+          name="inStock"
+          rules={{ required: "Это поле обязательно" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <div>
+              <div className="flex flex-row gap-2">
+                <Checkbox
+                  color="primary"
+                  onValueChange={(isSelected) => onChange(isSelected)}
+                  isSelected={value}
+                />
+                <p className="text-default-500">Наличие</p>
+              </div>
+              {error && <p className="text-xs text-red-600">{error.message}</p>}
+            </div>
+          )}
+        />
+
         <Controller
           control={control}
           name="unitofmeasurement"

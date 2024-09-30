@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import OrderItem from "./OrderItem/OrderItem";
 import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import Loader from "@/main/UI/Loader";
+import OrderCard from "@Components/OrderCard/OrderCard";
 
 const OrderList: React.FC = () => {
   const { getAllOrders } = useActions();
@@ -21,7 +21,7 @@ const OrderList: React.FC = () => {
   return (
     <div className="space-y-6">
       {orders?.map((order) => (
-        <OrderItem key={order.uuid} order={order} />
+        <OrderCard key={order.uuid} order={order} />
       ))}
     </div>
   );

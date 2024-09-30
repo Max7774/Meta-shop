@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateAddressDto {
   @IsString()
@@ -10,15 +10,19 @@ export class CreateAddressDto {
   @IsString()
   house: string;
 
+  @IsOptional()
   @IsString()
   apartment: string;
 
+  @IsOptional()
   @IsString()
   intercom: string;
 
+  @IsOptional()
   @IsString()
   entrance: string;
 
+  @IsOptional()
   @IsString()
   floor: string;
 }

@@ -16,6 +16,7 @@ export type TProduct = {
   reviews: [];
   subcategory: TSubCategory;
   isNew: boolean;
+  inStock: boolean;
 };
 
 export type TProductsResponse = {
@@ -29,6 +30,7 @@ export type TProductCreateForm = {
   description: string;
   subcategoryUuid: string;
   discount: number;
+  inStock: boolean;
   unitofmeasurement: string;
   images?: File[];
 };

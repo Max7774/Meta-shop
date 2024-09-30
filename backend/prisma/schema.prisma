@@ -48,6 +48,7 @@ model Product {
   discount      Int
   images        String[]      @default(["default-product-photo.png"])
   unitofmeasurement String
+  inStock       Boolean?      @default(false)
   
   userUuid      String?       @map("userUuid")
   subcategoryUuid String?     @map("subcategoryUuid")
@@ -172,10 +173,10 @@ model Address {
   town        String
   street      String
   house       String
-  apartment   String
-  intercom    String
-  entrance    String
-  floor       String
+  apartment   String?
+  intercom    String?
+  entrance    String?
+  floor       String?
 
   
   userUuid    String         @map("userUuid")

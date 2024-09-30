@@ -14,6 +14,7 @@ export const productReturnObject: Prisma.ProductSelect = {
   slug: true,
   quantity: true,
   unitofmeasurement: true,
+  inStock: true,
   subcategory: { select: returnSubcategoryObject },
   reviews: {
     select: returnReviewObject,
@@ -34,6 +35,7 @@ export const returnProductSchema = {
   name: 'string',
   price: 0,
   discount: 0,
+  inStock: true,
   createdAt: new Date(),
   slug: 'string',
   subcategory: {

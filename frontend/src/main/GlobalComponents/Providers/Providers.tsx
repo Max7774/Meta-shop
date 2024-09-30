@@ -9,6 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { NextUIProvider } from "@nextui-org/react";
 
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "./ScrollTop/ScrollTop";
 
 const Providers = ({ children }: PropsWithChildren) => {
   return (
@@ -16,6 +17,7 @@ const Providers = ({ children }: PropsWithChildren) => {
       <BrowserRouter>
         <Provider store={store}>
           <NextUIProvider>
+            <ScrollToTop />
             <AuthProvider>{children}</AuthProvider>
             <ToastContainer {...toastConfig} />
           </NextUIProvider>
