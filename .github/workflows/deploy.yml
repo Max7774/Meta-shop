@@ -26,7 +26,7 @@ jobs:
       - name: Execute SSH command .env
         working-directory: ./backend
         run: |
-          nano > .env << EOT
+          nano > .env << EOD
           DATABASE_URL=${{ secrets.DATABASE_URL }}
           SERVER_URL=${{ secrets.SERVER_URL }}
           DESTINATION=uploads/
@@ -35,7 +35,7 @@ jobs:
           MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
-          EOT
+          EOD
       - name: Execute SSH command docker-compose.yml
         working-directory: ./backend
         run: |
