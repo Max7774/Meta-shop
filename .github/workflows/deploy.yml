@@ -114,6 +114,9 @@ jobs:
           cd /Meta-shop/backend
           docker-compose up -d
           docker ps
+          docker system prune
+          docker system prune -a
+
 
           systemctl restart nginx
           EOF
