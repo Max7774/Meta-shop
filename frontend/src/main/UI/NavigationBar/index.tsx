@@ -90,7 +90,7 @@ export const NavigationBar = () => {
       <NavbarContent
         onClick={() => {
           navigate("/");
-          setIsMenuOpen((prev) => !prev);
+          setIsMenuOpen(false);
         }}
         style={{ cursor: "pointer" }}
       >
