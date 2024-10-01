@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import {
   Button,
@@ -132,9 +133,13 @@ const EditProfileForm = ({ isOpen, onClose }: IEditProfileFormProps) => {
                 </div>
               )}
             />
-            <div>
+            <div className="w-full flex flex-col justify-center">
               <Avatar
-                src={getImageUrl(avatarFile.avatarPath)}
+                src={
+                  !avatarFile.avatarPath.includes("blob")
+                    ? getImageUrl(profile.avatarPath)
+                    : avatarFile.avatarPath
+                }
                 alt={profile.first_name}
                 size="lg"
                 className="mb-4 md:mb-0"

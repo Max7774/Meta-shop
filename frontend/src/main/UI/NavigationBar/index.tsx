@@ -88,7 +88,10 @@ export const NavigationBar = () => {
       shouldHideOnScroll
     >
       <NavbarContent
-        onClick={() => navigate("/")}
+        onClick={() => {
+          navigate("/");
+          setIsMenuOpen((prev) => !prev);
+        }}
         style={{ cursor: "pointer" }}
       >
         <NavbarMenuToggle

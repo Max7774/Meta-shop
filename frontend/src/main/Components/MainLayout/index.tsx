@@ -26,7 +26,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
             "px-0": pathname.startsWith("/product"),
             "px-6": !pathname.startsWith("/product"),
             "py-5": isBottomActions,
-            "pt-5 pb-36": !isBottomActions,
+            "pt-5 pb-36": !isBottomActions && !pathname.startsWith("/product"),
           })}
         >
           {children}

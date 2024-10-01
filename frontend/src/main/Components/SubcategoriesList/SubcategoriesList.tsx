@@ -40,6 +40,9 @@ const SubcategoriesList = ({
                 color="default"
                 radius="lg"
                 size="sm"
+                onPress={() =>
+                  navigate(`/categories/${categorySlug}/${item.slug}`)
+                }
               >
                 {item.name}
               </Button>
