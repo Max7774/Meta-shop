@@ -85,9 +85,13 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
 
-      - name: Copy files via SCP
+      - name: Copy files and deploy .env
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/.env ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
+
+      - name: Copy files and deploy .dockerignore
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./backend/.dockerignore ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
 
       - name: SSH [Down volumes]
         run: |
