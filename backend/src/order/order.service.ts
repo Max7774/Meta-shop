@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { productReturnObject } from 'src/product/return-product.object';
 import { OrderDto, OrderItemDto } from './dto/order.dto';
@@ -124,7 +124,28 @@ export class OrderService {
       return acc + item.price * item.quantity;
     }, 0);
 
-    await this.updateQuantityProduct(dto.items);
+    const productsInStock = Promise.all(
+      dto.items.map(async (element) => {
+        const { inStock } = await this.prisma.product.findUnique({
+          where: {
+            uuid: element.productUuid,
+          },
+        });
+
+        return {
+          ...element,
+          inStock,
+        };
+      }),
+    );
+
+    const items = await productsInStock;
+
+    if (items.some((el) => !el.inStock)) {
+      throw new BadGatewayException({
+        itemsInStock: items.filter((el) => !el.inStock),
+      });
+    }
 
     const timestamp = Date.now().toString(36); // Преобразуем в 36-ричную систему для сокращения длины
     const randomNum = Math.floor(Math.random() * 1e6).toString(36);
@@ -136,7 +157,7 @@ export class OrderService {
         status: dto.status,
         comment: dto.comment,
         items: {
-          create: dto.items.map((el) => {
+          create: items.map((el) => {
             return {
               uuid: uuidGen(),
               ...el,

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  IAddToCartPayload,
   ICartInitialState,
+  ICartItem,
   IChangeQuantityPayload,
+  IUpdateItemsInStockPayload,
 } from "./cart.types";
 import { getStoreLocal, setLocalStorage } from "@utils/local-storage";
 
@@ -14,7 +15,7 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<IAddToCartPayload>) => {
+    addToCart: (state, action: PayloadAction<ICartItem>) => {
       const isExistSize = state.items.some(
         (item) => item.product.uuid === action.payload.product.uuid
       );
@@ -55,6 +56,25 @@ export const cartSlice = createSlice({
     },
     reset: (state) => {
       state.items = [];
+      setLocalStorage("cart", state.items);
+    },
+    updateItemsInStock: (
+      state,
+      action: PayloadAction<IUpdateItemsInStockPayload>
+    ) => {
+      const { itemsInStock } = action.payload;
+      state.items = state.items.map((item) => {
+        const stockItem = itemsInStock.find(
+          (stockItem) => stockItem.productUuid === item.productUuid
+        );
+        if (stockItem) {
+          return {
+            ...item,
+            inStock: stockItem.inStock,
+          };
+        }
+        return item;
+      });
       setLocalStorage("cart", state.items);
     },
   },

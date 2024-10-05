@@ -39,9 +39,8 @@ const AdminProducts = () => {
     const files = e.target.files ? Array.from(e.target.files) : [];
 
     files.forEach((file) => {
-      if (file.size > 1024) {
+      if (file.size > 1024 * 1024) {
         toast.error("Размер файла должен быть меньше 2MB");
-        return "Размер файла должен быть меньше 2MB";
       }
     });
 

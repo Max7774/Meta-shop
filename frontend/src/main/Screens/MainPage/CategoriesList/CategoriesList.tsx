@@ -9,13 +9,15 @@ const CategoriesList = () => {
   if (isLoading) return <SubCategorySkeleton />;
 
   return (
-    <div className="flex flex-col gap-5 mb-4">
+    <div className="flex flex-col gap-5 mb-4 p-2 md:p-4">
       {categories.map((category) => {
         if (category.subcategory.length === 0)
           return <React.Fragment key={category.uuid}></React.Fragment>;
         return (
           <div key={category.uuid} className="flex flex-col gap-3">
-            <span className="text-lg font-bold">{category.name}</span>
+            <span className="text-base sm:text-lg md:text-xl font-bold">
+              {category.name}
+            </span>
             <SubcategoriesList
               subcategories={category.subcategory}
               categorySlug={category.slug}

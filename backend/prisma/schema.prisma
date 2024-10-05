@@ -155,6 +155,7 @@ model OrderItem {
 
   quantity    Int
   price       Int
+  inStock     Boolean?       @default(false)
 
   order       Order?         @relation(fields: [orderUuid], references: [uuid])
   orderUuid   String?        @map("orderUuid")

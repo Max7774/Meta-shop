@@ -39,7 +39,7 @@ const Cart: FC = () => {
           <>
             <span className="text-xl font-bold">Моя корзина</span>
             <Divider className="mt-5" />
-            <div className="cart-items-container max-h-64 overflow-y-auto">
+            <div className="cart-items-container max-h-64 my-3 overflow-y-auto">
               {items.map((item) => (
                 <CartItem item={item} key={item.uuid} />
               ))}

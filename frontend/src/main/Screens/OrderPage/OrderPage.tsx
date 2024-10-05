@@ -1,27 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CartActions from "@/main/Components/Cart/cart-item/cart-actions/CartActions";
 import Heading from "@/main/UI/Heading";
 import { TOrderForm } from "@/types/TOrder";
 import Address from "@Components/Address/Address";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
-import { Button, Divider, Image, Progress, Textarea } from "@nextui-org/react";
+import { Button, Divider, Progress, Textarea } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
-import { getImageUrl } from "@utils/getImageUrl";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import OrderCard from "./OrderCard/OrderCard";
 
 const OrderPage = () => {
   const { items, total } = useCart();
   const {
     profile: { currentAddress },
   } = useAppSelector((state) => state.user);
-  const { createOrder, reset } = useActions();
+  const { createOrder, reset, updateItemsInStock } = useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
   const [deliveryPrice, setDeliveryPrice] = useState(800);
+  const [itemsInStock, setInStock] = useState<any>([
+    ...items.filter((el) => !el.inStock),
+  ]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const OrderPage = () => {
           quantity: item.quantity,
           price: item.price,
           productUuid: item.uuid,
+          inStock: item.inStock,
         };
       }),
     });
@@ -60,6 +63,11 @@ const OrderPage = () => {
       reset();
       navigate("/orders");
     } else {
+      setInStock(result.payload.itemsInStock);
+      updateItemsInStock({
+        itemsInStock: result.payload.itemsInStock,
+      });
+
       toast.error("Ошибка создания заказа");
     }
   };
@@ -80,35 +88,7 @@ const OrderPage = () => {
           <Divider />
           <div className="flex flex-col mt-8 gap-8">
             {items.map((item) => (
-              <div key={item.uuid} className="flex flex-row justify-between">
-                <div className="flex flex-row gap-3">
-                  <Image
-                    src={getImageUrl(item.product.images[0])}
-                    className="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-lg"
-                    alt={item.product.name}
-                  />
-                  <div className="flex flex-col gap-2">
-                    <div className="text-sm">{item.product.name}</div>
-                    <div>
-                      {item.discount > 0 ? (
-                        <>
-                          <span className="text-sm font-semibold text-red-600 mr-2">
-                            {convertPrice(item.price)}
-                          </span>
-                          <span className="text-sm line-through text-gray-500">
-                            {convertPrice(item.product.price)}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-sm font-semibold">
-                          {convertPrice(item.price)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <CartActions item={item} />
-              </div>
+              <OrderCard item={item} itemsInStock={itemsInStock} />
             ))}
             <Divider />
             <Controller

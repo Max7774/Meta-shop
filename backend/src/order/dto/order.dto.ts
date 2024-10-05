@@ -2,6 +2,7 @@ import { EnumOrderItemStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -74,4 +75,7 @@ export class OrderItemDto {
 
   @IsString()
   productUuid: string;
+
+  @IsBoolean()
+  inStock: boolean;
 }

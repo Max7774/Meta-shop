@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OrderService } from "@/service/order.service";
-import { TOrder, TOrderForm } from "@/types/TOrder";
+import { AsyncThunkConfig } from "@/types/TError";
+import { TOrder, TOrderCartItem, TOrderForm } from "@/types/TOrder";
 import { EOrder } from "@enums/EOrder";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 export const getAllOrders = createAsyncThunk<TOrder[], { searchTerm: string }>(
   "/order/get-all",
@@ -16,18 +19,21 @@ export const getAllOrders = createAsyncThunk<TOrder[], { searchTerm: string }>(
   }
 );
 
-export const createOrder = createAsyncThunk<boolean, TOrderForm>(
-  "/order/create",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await OrderService.createOrder(data);
+export const createOrder = createAsyncThunk<
+  boolean,
+  TOrderForm,
+  AsyncThunkConfig<{ itemsInStock: TOrderCartItem[] }>
+>("/order/create", async (data, { rejectWithValue }) => {
+  try {
+    const response = await OrderService.createOrder(data);
 
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    const e = error as AxiosError<{ itemsInStock: TOrderCartItem[] }>;
+    return rejectWithValue(e.response?.data);
   }
-);
+});
 
 export const cancelOrder = createAsyncThunk<boolean, string>(
   "/order/cancel",

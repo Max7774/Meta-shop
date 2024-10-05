@@ -23,10 +23,10 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         </div>
         <main
           className={cn("min-h-screen", {
-            "px-0": pathname.startsWith("/product"),
+            "px-0 pt-6 pb-40": pathname.startsWith("/product"),
             "px-6": !pathname.startsWith("/product"),
             "py-5": isBottomActions,
-            "pt-5 pb-36": !isBottomActions && !pathname.startsWith("/product"),
+            "pt-5 pb-40": !isBottomActions && !pathname.startsWith("/product"),
           })}
         >
           {children}

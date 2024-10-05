@@ -1,26 +1,19 @@
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { RiShoppingCartLine } from "react-icons/ri";
-import { Button, Chip } from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
-import { useCart } from "@hooks/useCart";
-import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
 import { Helmet } from "react-helmet-async";
 import Price from "@UI/Price/Price";
+import Actions from "@Components/BottomActions/Actions/Actions";
 
 const ProductPage = () => {
   const { productSlug } = useParams();
-  const { getProductBySlug, addToCart } = useActions();
+  const { getProductBySlug } = useActions();
   const { product } = useProducts();
-  const { items } = useCart();
   const navigate = useNavigate();
-
-  const currentElement = items.find(
-    (cartItem) => cartItem.product.uuid === product?.uuid
-  );
 
   useEffect(() => {
     getProductBySlug(productSlug || "");
@@ -58,66 +51,29 @@ const ProductPage = () => {
             >
               {product.inStock ? "В наличии!" : "Нет в наличии!"}
             </Chip>
-            {product?.discount !== 0 && (
-              <Chip size="lg" className="text-white" color="danger">
-                Скидка {product?.discount}%
-              </Chip>
-            )}
             {product?.isNew && (
               <Chip size="lg" className="text-white" color="success">
                 Новый
+              </Chip>
+            )}
+            {product?.discount !== 0 && (
+              <Chip size="lg" className="text-white" color="danger">
+                Скидка {product?.discount}%
               </Chip>
             )}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
           <Carousel images={product.images} />
-          <div className="relative flex flex-col px-6 gap-4">
+          <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
               discount={product.discount}
               price={product.price}
               unitofmeasurement={product.unitofmeasurement}
             />
-            <p className="text-wrap">{product.description}</p>
+            <p className="break-words">{product.description}</p>
             <div className="hidden sm:flex flex-col gap-5">
-              {currentElement ? (
-                <>
-                  <CartActions
-                    item={currentElement}
-                    className="justify-center bg-default-100 py-1 rounded-xl"
-                  />
-                  <Button
-                    color="primary"
-                    onClick={() => navigate("/order")}
-                    size="lg"
-                    className="w-full"
-                  >
-                    Оформить заказ
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  color="primary"
-                  size="lg"
-                  className="w-full"
-                  onClick={() =>
-                    addToCart({
-                      product,
-                      discount: product.discount,
-                      quantity: 1,
-                      price: product.discount
-                        ? product.price -
-                          (product.price * product.discount) / 100
-                        : product.price,
-                      uuid: product?.uuid,
-                      productUuid: product?.uuid,
-                    })
-                  }
-                  startContent={<RiShoppingCartLine size={25} />}
-                >
-                  Добавить в корзину
-                </Button>
-              )}
+              <Actions />
             </div>
           </div>
         </div>

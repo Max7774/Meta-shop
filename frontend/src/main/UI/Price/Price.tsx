@@ -12,18 +12,25 @@ const Price = ({ discount, price, unitofmeasurement }: IPriceProps) => {
     <div className="flex items-center gap-2">
       {discount > 0 ? (
         <div className="flex flex-col flex-wrap gap-2">
-          <span className="text-xl font-semibold text-red-600">
+          <span className="text-[15px] font-semibold text-red-600">
             {convertPrice(price - (price * discount) / 100)}
-            <span className="text-sm pl-2 text-default-400">
+            <span className="text-[15px] pl-2 text-default-400">
               / {unitofmeasurementData[unitofmeasurement]}
             </span>
           </span>
-          <span className="text-sm line-through text-gray-500">
+          <span className="text-[15px] line-through text-gray-500">
             {convertPrice(price)}
           </span>
         </div>
       ) : (
-        <span className="text-xl font-semibold">{convertPrice(price)}</span>
+        <div className="flex flex-col flex-wrap gap-2">
+          <span className="text-[15px] font-semibold">
+            {convertPrice(price)}
+            <span className="text-[15px] pl-2 text-default-400">
+              / {unitofmeasurementData[unitofmeasurement]}
+            </span>
+          </span>
+        </div>
       )}
     </div>
   );

@@ -6,6 +6,7 @@ export type TOrderItem = {
   createdAt: string;
   orderUuid: string;
   price: number;
+  inStock: boolean;
   product: TProduct;
   productUuid: string;
   quantity: number;
@@ -17,6 +18,7 @@ export type TOrderCartItem = {
   quantity: number;
   price: number;
   productUuid: string;
+  inStock: boolean;
 };
 
 export type TOrder = {
