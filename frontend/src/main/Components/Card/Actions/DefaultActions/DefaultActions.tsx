@@ -55,6 +55,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
           onClick={() =>
             addToCart({
               product,
+              inStock: product.inStock,
               discount: product.discount,
               quantity: 1,
               price: product.discount
