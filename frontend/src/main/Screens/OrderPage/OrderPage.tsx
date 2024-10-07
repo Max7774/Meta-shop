@@ -27,7 +27,7 @@ const OrderPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (total > 6000) {
+    if (total > 7000) {
       setDeliveryPrice(0);
     } else {
       setDeliveryPrice(800);
@@ -130,10 +130,10 @@ const OrderPage = () => {
                 label={
                   deliveryPrice === 0
                     ? "Доставка бесплатная!"
-                    : `До бесплатной доставки: ${convertPrice(6000 - total)}`
+                    : `До бесплатной доставки: ${convertPrice(7000 - total)}`
                 }
                 color={deliveryPrice === 0 ? "success" : "warning"}
-                maxValue={6000}
+                maxValue={7000}
                 value={total}
               />
               <Divider />

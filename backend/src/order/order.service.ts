@@ -164,8 +164,8 @@ export class OrderService {
             };
           }),
         },
-        isDelivery: total <= 6000 ? true : false,
-        total: total <= 6000 ? total + 800 : total,
+        isDelivery: total <= 7000 ? true : false,
+        total: total <= 7000 ? total + 800 : total,
         user: {
           connect: {
             uuid: userUuid,
