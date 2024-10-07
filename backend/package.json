@@ -40,7 +40,9 @@
     "nodemailer": "^6.9.4",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
+    "pdfkit": "^0.15.0",
     "prisma": "^5.2.0",
+    "qrcode": "^1.5.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "yookassa": "^0.1.1"
@@ -52,6 +54,8 @@
     "@types/express": "^4.17.13",
     "@types/jest": "29.2.4",
     "@types/node": "18.11.18",
+    "@types/pdfkit": "^0.13.5",
+    "@types/qrcode": "^1.5.5",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",

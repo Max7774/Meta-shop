@@ -28,7 +28,7 @@ export class ReviewController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   @Post('leave/:productUuid')
   async leaveReview(
     @CurrentUser('uuid') uuid: string,

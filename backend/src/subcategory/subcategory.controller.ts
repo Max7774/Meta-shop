@@ -24,7 +24,7 @@ export class SubcategoryController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Post()
   async create(@Body() createSubcategoryDto: CreateSubcategoryDto) {
     return await this.subcategoryService.create(createSubcategoryDto);
@@ -37,7 +37,7 @@ export class SubcategoryController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Delete(':uuid')
   async remove(@Param('uuid') uuid: string) {
     try {

@@ -126,6 +126,10 @@ export class AuthService {
     });
 
     if (oldUser) {
+      if (oldUser.role === 'ADMIN') {
+        throw new BadGatewayException('This number is invalid');
+      }
+
       const tokens = await this.issueTokens(oldUser.uuid);
 
       return {

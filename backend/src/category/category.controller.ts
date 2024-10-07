@@ -31,28 +31,28 @@ export class CategoryController {
   }
 
   @Get(':uuid')
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   async byId(@Param('uuid') uuid: string) {
     return this.categoryService.byId(uuid);
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Put(':uuid')
   async updateCategory(@Param('uuid') uuid: string, @Body() dto: CategoryDto) {
     return this.categoryService.updateCategory(uuid, dto);
   }
 
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Post()
   async createCategory(@Body() dto: CategoryDto) {
     return this.categoryService.createCategory(dto);
   }
 
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Delete(':uuid')
   async deleteCategory(@Param('uuid') uuid: string) {
     return this.categoryService.deleteCategory(uuid);

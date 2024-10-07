@@ -9,7 +9,7 @@ export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get('main')
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   getMainStatistics() {
     return this.statisticsService.getMain();
   }
