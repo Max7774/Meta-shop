@@ -298,6 +298,7 @@ export class OrderService {
 
     doc.fontSize(12).text(`Номер заказа: ${order.orderId}`);
     doc.text(`Дата заказа: ${new Date(order.createdAt).toLocaleDateString()}`);
+    doc.text(`Доставка: ${order.isDelivery ? '800' : '0'} тенге`);
     doc.text(`Общая сумма: ${order.total} тенге`);
 
     doc.moveDown();
@@ -311,7 +312,7 @@ export class OrderService {
     });
 
     // Генерируем данные для QR-кода (например, ссылка на заказ)
-    const qrData = `http://localhost:4200/order/${order.uuid}`;
+    const qrData = `https://i-forvard.kz/order/${order.uuid}`;
 
     // Генерируем QR-код в формате Data URL
     const qrCodeDataURL = await this.qr.generateQRCode(qrData);
