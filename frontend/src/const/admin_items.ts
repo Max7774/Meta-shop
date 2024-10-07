@@ -21,4 +21,9 @@ export const ADMIN_SIDEBAR_ITEMS = [
     name: "Заказы",
     slug: ADMIN_GlOBAL_PREFIX + "orders",
   },
+  {
+    uuid: "4",
+    name: "Заказы в архиве",
+    slug: ADMIN_GlOBAL_PREFIX + "archived-orders",
+  },
 ];

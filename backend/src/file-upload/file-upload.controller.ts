@@ -30,7 +30,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Post('create/:uuid')
   @UseInterceptors(FilesInterceptor('files'))
   async createProduct(
@@ -47,7 +47,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   @Post('create/subcategory/icon/:subcategoryUuid')
   @UseInterceptors(FileInterceptor('file'))
   async createIcon(
@@ -64,7 +64,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   @Post('update/user/avatar')
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(

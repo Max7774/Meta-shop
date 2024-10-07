@@ -10,6 +10,7 @@ async function bootstrap() {
   });
 
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+  app.use('/receipts', express.static(join(__dirname, '..', 'receipts')));
 
   app.setGlobalPrefix('api');
   app.enableCors({ credentials: true, origin: true });

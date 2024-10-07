@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     getCategoriesAll();
-  }, []);
+  }, [getCategoriesAll]);
 
   return (
     <>

@@ -3,14 +3,18 @@ import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import Loader from "@/main/UI/Loader";
 import OrderCard from "@Components/OrderCard/OrderCard";
+import { useFilters } from "@hooks/useFilters";
 
 const OrderList: React.FC = () => {
   const { getAllOrders } = useActions();
   const { isLoading, orders } = useAppSelector((state) => state.orders);
+  const {
+    order: { queryParams },
+  } = useFilters();
 
   useEffect(() => {
-    getAllOrders({ searchTerm: "" });
-  }, [getAllOrders]);
+    getAllOrders({ searchTerm: queryParams.searchTerm || "" });
+  }, [getAllOrders, queryParams.searchTerm]);
 
   if (isLoading) return <Loader />;
 

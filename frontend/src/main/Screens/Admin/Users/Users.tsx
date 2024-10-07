@@ -3,6 +3,7 @@ import { useActions } from "@hooks/useActions";
 import BlockSkeleton from "@UI/Skeleton/BlockSkeleton/BlockSkeleton";
 import { useEffect } from "react";
 import UsersList from "./UsersList/UsersList";
+import Heading from "@UI/Heading";
 
 const Users = () => {
   const { getAllUsers } = useActions();
@@ -16,6 +17,7 @@ const Users = () => {
 
   return (
     <section>
+      <Heading>Все пользователи</Heading>
       <UsersList />
     </section>
   );

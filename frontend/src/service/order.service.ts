@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ORDERS } from "@/const/startApi";
 import { TOrder, TOrderForm } from "@/types/TOrder";
 import { instance } from "@api/api.interceptor";
 import { EOrder } from "@enums/EOrder";
 
 export const OrderService = {
-  async getAllOrders(params?: { searchTerm: string }) {
+  async getAllOrders(params?: { searchTerm: string; status?: EOrder }) {
     return await instance<TOrder[]>({
       url: ORDERS,
       method: "GET",
@@ -33,5 +34,22 @@ export const OrderService = {
       method: "POST",
       data: { status, orderUuid },
     });
+  },
+
+  async getOrderById(orderId: string) {
+    return await instance<TOrder>({
+      url: `${ORDERS}/${orderId}`,
+      method: "GET",
+    });
+  },
+
+  async getReceiptFile(orderId: string) {
+    const result = await instance<any>({
+      url: `${ORDERS}/receipt/${orderId}`,
+      method: "GET",
+      responseType: "blob",
+    });
+
+    return result;
   },
 };

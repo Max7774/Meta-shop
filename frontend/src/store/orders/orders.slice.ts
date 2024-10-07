@@ -3,6 +3,7 @@ import {
   cancelOrder,
   createOrder,
   getAllOrders,
+  getOrderById,
   updateStatus,
 } from "./orders.actions";
 import { TOrder } from "@/types/TOrder";
@@ -11,6 +12,7 @@ import { EOrder } from "@enums/EOrder";
 
 type TOrdersState = {
   orders: TOrder[];
+  oneOrder: TOrder;
   isLoading: boolean;
   isCancelOrderLoading: boolean;
   isOrderStatusChangeLoading: boolean;
@@ -18,6 +20,7 @@ type TOrdersState = {
 
 const initialState: TOrdersState = {
   orders: [],
+  oneOrder: {} as TOrder,
   isLoading: false,
   isCancelOrderLoading: false,
   isOrderStatusChangeLoading: false,
@@ -81,6 +84,17 @@ export const ordersSlice = createSlice({
       .addCase(updateStatus.rejected, (state) => {
         state.isOrderStatusChangeLoading = false;
         toast.error("Не удалось обновить статус заказа");
+      })
+      .addCase(getOrderById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderById.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.oneOrder = payload;
+      })
+      .addCase(getOrderById.rejected, (state) => {
+        state.isLoading = false;
+        state.oneOrder = {} as TOrder;
       });
   },
 });

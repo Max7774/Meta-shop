@@ -4,8 +4,13 @@ import Loader from "@UI/Loader";
 import { useActions } from "@hooks/useActions";
 import { useFilters } from "@hooks/useFilters";
 import OrderCard from "@Components/OrderCard/OrderCard";
+import { EOrder } from "@enums/EOrder";
 
-const AdminOrderList = () => {
+interface IAdminOrderListProps {
+  optionQueryStatus?: EOrder;
+}
+
+const AdminOrderList = ({ optionQueryStatus }: IAdminOrderListProps) => {
   const { getAllOrders } = useActions();
   const { orders, isLoading } = useAppSelector((state) => state.orders);
   const {
@@ -13,8 +18,11 @@ const AdminOrderList = () => {
   } = useFilters();
 
   useEffect(() => {
-    getAllOrders({ searchTerm: queryParams.searchTerm || "" });
-  }, [getAllOrders, queryParams]);
+    getAllOrders({
+      searchTerm: queryParams.searchTerm || "",
+      status: optionQueryStatus,
+    });
+  }, [getAllOrders, queryParams.searchTerm, optionQueryStatus]);
 
   if (isLoading) return <Loader />;
 

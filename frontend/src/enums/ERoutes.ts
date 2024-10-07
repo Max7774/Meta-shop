@@ -9,6 +9,7 @@ export enum ERoutes {
   PROFILE = "/profile",
   ABOUT = "/about",
   CONTACTS = "/contacts",
+  RECEIPT = "/order/:orderId",
 }
 
 export enum EAdminRoutes {
@@ -18,4 +19,5 @@ export enum EAdminRoutes {
   USERS = "users",
   PRODUCTS = "products",
   EDIT_PRODUCT = "product/:productSlug",
+  ARCHIVED_ORDERS = "archived-orders",
 }

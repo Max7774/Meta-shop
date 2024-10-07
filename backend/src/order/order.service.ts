@@ -1,14 +1,29 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { productReturnObject } from 'src/product/return-product.object';
-import { OrderDto, OrderItemDto } from './dto/order.dto';
+import { OrderDto } from './dto/order.dto';
 import { PaymentStatusDto } from './dto/payment-status.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
-import { Prisma } from '@prisma/client';
+import {
+  EnumOrderItemStatus,
+  Order,
+  OrderItem,
+  Prisma,
+  Product,
+} from '@prisma/client';
+import { QRCodeService } from 'src/qrcode/qrcode.service';
+import * as PDFDocument from 'pdfkit';
+import { join } from 'path';
+import { createWriteStream, existsSync, mkdirSync } from 'fs';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private qr: QRCodeService) {}
 
   private getSearchTermFilter(searchTerm = ''): Prisma.OrderWhereInput {
     return {
@@ -31,22 +46,44 @@ export class OrderService {
     };
   }
 
-  private createFilter(params: { searchTerm: string }): Prisma.OrderWhereInput {
+  private getStatusFilter(status: EnumOrderItemStatus): Prisma.OrderWhereInput {
+    return {
+      status,
+    };
+  }
+
+  private createFilter(params: {
+    searchTerm: string;
+    status?: EnumOrderItemStatus;
+  }): Prisma.OrderWhereInput {
     const filters: Prisma.OrderWhereInput[] = [];
 
-    if (params.searchTerm)
+    if (params.searchTerm) {
       filters.push(this.getSearchTermFilter(params.searchTerm));
+    }
+    if (params.status) {
+      filters.push(this.getStatusFilter(params.status));
+    }
 
     return filters.length ? { AND: filters } : {};
   }
 
-  async getAll(userUuid: string, params: { searchTerm: string }) {
+  async getAll(
+    userUuid: string,
+    params: { searchTerm: string; status?: EnumOrderItemStatus },
+  ) {
     const { role } = await this.prisma.user.findUnique({
       where: {
         uuid: userUuid,
       },
     });
     const filters = this.createFilter(params);
+
+    if (!params.status) {
+      filters.status = {
+        notIn: [EnumOrderItemStatus.Delivered, EnumOrderItemStatus.Canceled],
+      };
+    }
 
     if (role === 'ADMIN') {
       return await this.prisma.order.findMany({
@@ -183,7 +220,7 @@ export class OrderService {
   }
 
   async updateStatus(dto: PaymentStatusDto) {
-    await this.prisma.order.update({
+    const order = await this.prisma.order.update({
       where: {
         uuid: dto.orderUuid,
       },
@@ -192,7 +229,21 @@ export class OrderService {
       },
     });
 
-    return { uuid: dto.orderUuid, status: dto.status };
+    if (order.status === 'Payed') {
+      const orderItems = await this.prisma.orderItem.findMany({
+        where: {
+          orderUuid: order.uuid,
+        },
+        include: {
+          product: {
+            select: productReturnObject,
+          },
+        },
+      });
+      await this.generatePdfReceipt(orderItems, order);
+    }
+
+    return { uuid: order.uuid, status: order.status };
   }
 
   async cancelOrder(orderUuid: string) {
@@ -208,21 +259,128 @@ export class OrderService {
     return true;
   }
 
-  private async updateQuantityProduct(items: OrderItemDto[]) {
-    for (let index = 0; index < items.length; index++) {
-      const quantityProduct = await this.prisma.product.findUnique({
-        where: {
-          uuid: items[index].productUuid,
-        },
-      });
-      await this.prisma.product.update({
-        where: {
-          uuid: items[index].productUuid,
-        },
-        data: {
-          quantity: quantityProduct.quantity - 1,
-        },
-      });
+  private async generatePdfReceipt(
+    orderItems: (OrderItem & { product: Product })[],
+    order: Order,
+  ) {
+    // Путь к директории для сохранения чеков
+    const receiptsDir = join(process.cwd(), 'receipts');
+
+    console.log('Receipts directory path:', receiptsDir);
+
+    // Проверяем, существует ли директория, и создаем ее при необходимости
+    if (!existsSync(receiptsDir)) {
+      mkdirSync(receiptsDir);
+      console.log('Receipts directory created.');
+    } else {
+      console.log('Receipts directory already exists.');
     }
+
+    const doc = new PDFDocument();
+
+    // Путь к файлу шрифта
+    const fontPath = join(process.cwd(), 'fonts', 'Roboto-Regular.ttf');
+
+    // Регистрируем шрифт
+    doc.registerFont('Roboto', fontPath);
+
+    // Устанавливаем шрифт по умолчанию
+    doc.font('Roboto');
+
+    const filePath = join(receiptsDir, `receipt-${order.orderId}.pdf`);
+
+    const writeStream = createWriteStream(filePath);
+    doc.pipe(writeStream);
+
+    doc.fontSize(20).text('Чек', { align: 'center' });
+
+    doc.moveDown();
+
+    doc.fontSize(12).text(`Номер заказа: ${order.orderId}`);
+    doc.text(`Дата заказа: ${new Date(order.createdAt).toLocaleDateString()}`);
+    doc.text(`Общая сумма: ${order.total} тенге`);
+
+    doc.moveDown();
+
+    doc.text('Товары:');
+
+    orderItems.forEach((item) => {
+      doc.text(
+        `- ${item.product.name} x${item.quantity} - ${item.price} тенге`,
+      );
+    });
+
+    // Генерируем данные для QR-кода (например, ссылка на заказ)
+    const qrData = `http://localhost:4200/order/${order.uuid}`;
+
+    // Генерируем QR-код в формате Data URL
+    const qrCodeDataURL = await this.qr.generateQRCode(qrData);
+
+    // Преобразуем Data URL в буфер
+    const qrImageBuffer = Buffer.from(qrCodeDataURL.split(',')[1], 'base64');
+
+    // // Добавляем QR-код в PDF
+    // doc.addPage();
+    doc.moveDown();
+
+    doc.fontSize(16).text('Сканируйте QR-код для просмотра заказа:', {
+      align: 'center',
+    });
+
+    doc.moveDown();
+
+    doc.image(qrImageBuffer, {
+      fit: [150, 150],
+      align: 'center',
+      valign: 'center',
+    });
+
+    // Завершаем создание PDF и закрываем поток
+    doc.end();
+
+    // Ждем завершения записи файла
+    return new Promise((resolve, reject) => {
+      writeStream.on('finish', () => {
+        resolve(true);
+      });
+      writeStream.on('error', (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  async getOrderById(orderId: string, userUuid: string) {
+    const order = await this.prisma.order.findUnique({
+      where: {
+        orderId,
+      },
+      include: {
+        items: {
+          include: {
+            product: {
+              select: productReturnObject,
+            },
+          },
+        },
+        user: true,
+        address: true,
+      },
+    });
+
+    const currentUser = await this.prisma.user.findUnique({
+      where: {
+        uuid: userUuid,
+      },
+    });
+
+    if (!order) {
+      throw new HttpException('Order not found!', HttpStatus.NOT_FOUND);
+    }
+
+    if (order.userUuid !== currentUser.uuid && currentUser.role !== 'ADMIN') {
+      throw new HttpException('Order not found!', HttpStatus.NOT_FOUND);
+    }
+
+    return order;
   }
 }

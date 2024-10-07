@@ -67,14 +67,14 @@ export class ProductController {
 
   @HttpCode(200)
   @Get('recommendations')
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   async getRecommendedProducts(@CurrentUser('uuid') uuid: string) {
     return this.productService.recommendations(uuid);
   }
 
   @HttpCode(200)
   @Get('click/:productUuid')
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   async click(
     @Param('productUuid') productUuid: string,
     @CurrentUser('uuid') uuid: string,
@@ -84,7 +84,7 @@ export class ProductController {
 
   @HttpCode(200)
   @Post('create')
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   async createProduct(@Body() dto: ProductDto) {
     return this.productService.createProduct(dto);
   }
@@ -92,20 +92,20 @@ export class ProductController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Put(':uuid')
-  @Auth('ADMIN' || 'MANAGER')
+  @Auth(['ADMIN', 'MANAGER'])
   async updateProduct(@Param('uuid') uuid: string, @Body() dto: ProductDto) {
     return this.productService.updateProduct(uuid, dto);
   }
 
   @HttpCode(200)
   @Delete(':uuid')
-  @Auth('ADMIN')
+  @Auth(['ADMIN'])
   async deleteProduct(@Param('uuid') uuid: string) {
     return this.productService.deleteProduct(uuid);
   }
 
   @Get(':uuid')
-  @Auth('ADMIN')
+  @Auth(['ADMIN'])
   async getProduct(@Param('uuid') uuid: string) {
     return this.productService.byId(uuid);
   }

@@ -24,7 +24,7 @@ export class AddressController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   @Post()
   async create(
     @Body() createAddressDto: CreateAddressDto,
@@ -35,7 +35,7 @@ export class AddressController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   @Get()
   async findAll(@CurrentUser('uuid') userUuid: string) {
     return await this.addressService.findAll(userUuid);
@@ -43,7 +43,7 @@ export class AddressController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth('DEFAULT_USER')
+  @Auth(['DEFAULT_USER'])
   @Get(':addressUuid')
   async findOne(
     @Param('addressUuid') addressUuid: string,
