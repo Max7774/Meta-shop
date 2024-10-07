@@ -25,6 +25,8 @@ export const UserOrders = lazy(
 export const About = lazy(() => import("@/main/Screens/About/About"));
 export const Contacts = lazy(() => import("@/main/Screens/Contacts/Contacts"));
 
+export const Receipt = lazy(() => import("@/main/Screens/Receipt/Receipt"));
+
 /* ADMIN */
 export const AdminMainPage = lazy(
   () => import("@/main/Screens/Admin/Main/Main")
@@ -43,4 +45,7 @@ export const AdminProducts = lazy(
 );
 export const EditProduct = lazy(
   () => import("@/main/Screens/Admin/EditProduct/EditProduct")
+);
+export const ArchivedOrders = lazy(
+  () => import("@/main/Screens/Admin/ArchivedOrders/ArchivedOrders")
 );

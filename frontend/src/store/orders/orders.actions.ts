@@ -6,18 +6,18 @@ import { EOrder } from "@enums/EOrder";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
-export const getAllOrders = createAsyncThunk<TOrder[], { searchTerm: string }>(
-  "/order/get-all",
-  async (searchTerm, { rejectWithValue }) => {
-    try {
-      const response = await OrderService.getAllOrders(searchTerm);
+export const getAllOrders = createAsyncThunk<
+  TOrder[],
+  { searchTerm: string; status?: EOrder }
+>("/order/get-all", async (searchTerm, { rejectWithValue }) => {
+  try {
+    const response = await OrderService.getAllOrders(searchTerm);
 
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 export const createOrder = createAsyncThunk<
   boolean,
@@ -63,3 +63,30 @@ export const updateStatus = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const getOrderById = createAsyncThunk<TOrder, string>(
+  "/order/get-by-id",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const response = await OrderService.getOrderById(orderId);
+
+      return response.data;
+    } catch (error: any) {
+      window.location.href = "/";
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getReceiptFile = createAsyncThunk<any, string>(
+  "/order/get-receipt-file",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const response = await OrderService.getReceiptFile(orderId);
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

@@ -7,6 +7,7 @@ import {
   OrderPage,
   ProductPage,
   ProfilePage,
+  Receipt,
   SubCategories,
   SubCategoriesProducts,
   UserOrders,
@@ -57,5 +58,10 @@ export const ROOT_DATA: TRoutes<ERoutes>[] = [
     id: "contacts-page",
     path: ERoutes.CONTACTS,
     component: Contacts,
+  },
+  {
+    id: "receipt-page",
+    path: ERoutes.RECEIPT,
+    component: Receipt,
   },
 ];

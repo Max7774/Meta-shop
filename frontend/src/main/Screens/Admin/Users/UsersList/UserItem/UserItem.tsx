@@ -47,7 +47,10 @@ const UserItem = ({ user }: IUserItemProps) => {
           >
             <div className="flex flex-col gap-3">
               {user.addresses.map((el) => (
-                <div className="px-3 py-2 border border-default rounded-2xl">
+                <div
+                  key={el.uuid}
+                  className="px-3 py-2 border border-default rounded-2xl"
+                >
                   {el.street + ", " + el.house}
                   <p className="pr-2">- Дом: {el.house}</p>
                   <p className="pr-2">- Квартира: {el.apartment}</p>

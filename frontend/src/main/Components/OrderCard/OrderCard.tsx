@@ -13,13 +13,15 @@ import {
   AccordionItem,
 } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
-import { getOrderStatusLabel } from "./utils/getOrderStatusLabel";
+import { getOrderStatusLabel } from "@utils/getOrderStatusLabel";
 import { getNextStatus } from "./utils/getNextStatus";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { getImageUrl } from "@utils/getImageUrl";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { ERoles } from "@enums/ERoles";
+import { unitofmeasurementData } from "@/const/unitofmeasurement";
+import UploadReceipt from "./UploadReceipt/UploadReceipt";
 
 interface IOrderCardProps {
   order: TOrder;
@@ -112,7 +114,10 @@ const OrderCard = ({ order }: IOrderCardProps) => {
                   {item.product.name}
                 </h4>
                 <p key={item.createdAt + i}>
-                  Количество: {item.quantity} x {convertPrice(item.price)}
+                  Количество: {item.quantity} x {convertPrice(item.price)}{" "}
+                  <span className="text-[15px] text-default-400">
+                    / {unitofmeasurementData[item.product.unitofmeasurement]}
+                  </span>
                 </p>
               </div>
             </div>
@@ -176,6 +181,8 @@ const OrderCard = ({ order }: IOrderCardProps) => {
                 </Button>
               </>
             )}
+          {order.status !== EOrder.Canceled &&
+            order.status !== EOrder.Pending && <UploadReceipt orderId={order.orderId} />}
         </div>
       </CardFooter>
     </Card>

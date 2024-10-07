@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.receiptCard {
+  width: 100%;
+  max-width: 800px;
+}
+
+.cardHeader .headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderDate {
+  font-size: 14px;
+  color: gray;
+}
+
+.infoSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.infoColumn {
+  flex: 1;
+  min-width: 200px;
+}
+
+.textGray {
+  @apply whitespace-nowrap text-ellipsis;
+  color: gray;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.footerText {
+  font-size: 14px;
+  color: gray;
+}
+
+@media (max-width: 600px) {
+  .infoSection {
+    flex-direction: column;
+  }
+}
