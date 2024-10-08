@@ -11,8 +11,8 @@ const ArchivedOrders = () => {
   return (
     <section>
       <Heading>Архив заказов</Heading>
-      <div className="grid grid-cols-5 gap-5 mb-4">
-        <div className="col-span-4">
+      <div className="grid grid-cols-10 gap-5 mb-4">
+        <div className="col-span-6">
           <Search
             pageKey="order"
             placeholder="Поиск заказов..."

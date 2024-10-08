@@ -9,17 +9,24 @@ import {
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
 
-const StatusSort = ({
-  setSelectedStatus,
-}: {
+interface IStatusSortProps {
   setSelectedStatus: React.Dispatch<React.SetStateAction<EOrder>>;
-}) => {
+}
+
+const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
   const [selectedKeys, setSelectedKeys] = useState(new Set([EOrder.Canceled]));
 
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
+  const selectedValue = useMemo(() => {
+    const key = Array.from(selectedKeys)[0];
+    switch (key) {
+      case EOrder.Canceled:
+        return "Отменен";
+      case EOrder.Delivered:
+        return "Доставлен";
+      default:
+        return "";
+    }
+  }, [selectedKeys]);
 
   const handleStatusChange = (keys: any) => {
     setSelectedKeys(keys);
@@ -29,7 +36,7 @@ const StatusSort = ({
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered" fullWidth className="capitalize">
+        <Button variant="bordered" fullWidth>
           {selectedValue}
         </Button>
       </DropdownTrigger>
