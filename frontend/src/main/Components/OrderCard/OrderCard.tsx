@@ -22,6 +22,7 @@ import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { ERoles } from "@enums/ERoles";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import UploadReceipt from "./UploadReceipt/UploadReceipt";
+import ActualizeOrderItem from "./ActualizeOrderItem/ActualizeOrderItem";
 
 interface IOrderCardProps {
   order: TOrder;
@@ -42,11 +43,33 @@ const OrderCard = ({ order }: IOrderCardProps) => {
     <Card>
       <CardHeader>
         <div className="flex flex-col w-full gap-1">
-          <div className="flex flex-col sm:flex-row justify-between w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full">
             <h3 className="text-lg font-semibold">Заказ № {order.orderId}</h3>
             <span className="text-sm text-gray-500">
               От: {new Date(order.createdAt).toLocaleDateString()}
             </span>
+            <div className="flex flex-row gap-3 my-2">
+              {order.isDelivery && (
+                <Chip
+                  variant="solid"
+                  className="px-1"
+                  size="sm"
+                  color="secondary"
+                >
+                  Доставка {convertPrice(800)}
+                </Chip>
+              )}
+              {order.isActual && (
+                <Chip
+                  variant="solid"
+                  className="px-1 text-white"
+                  size="sm"
+                  color="success"
+                >
+                  Заказ актуалализирован!
+                </Chip>
+              )}
+            </div>
           </div>
           <Divider />
           <div className="flex flex-col gap-2">
@@ -59,7 +82,7 @@ const OrderCard = ({ order }: IOrderCardProps) => {
             <Accordion>
               <AccordionItem key="1" aria-label="Адрес" title="Адрес">
                 <div className="px-3 py-2 border border-default rounded-2xl">
-                  {order.address.street + ", " + order.address.house}
+                  {order.address?.street + ", " + order.address.house}
                   <p className="pr-2">- Город: {order.address.town}</p>
                   <p className="pr-2">- Улица: {order.address.street}</p>
                   <p className="pr-2">- Дом: {order.address.house}</p>
@@ -127,16 +150,6 @@ const OrderCard = ({ order }: IOrderCardProps) => {
       </CardBody>
       <CardFooter>
         <div className="flex flex-col w-full gap-4">
-          {order.isDelivery && (
-            <Chip
-              variant="bordered"
-              className="px-1"
-              size="sm"
-              color="secondary"
-            >
-              Доставка {convertPrice(800)}
-            </Chip>
-          )}
           <div className="flex justify-between items-center w-full px-1">
             <Chip
               color={getOrderStatusLabel(order.status).color}
@@ -153,24 +166,35 @@ const OrderCard = ({ order }: IOrderCardProps) => {
             order.status !== EOrder.Delivered && (
               <>
                 {isAdmin && (
-                  <Button
-                    color="primary"
-                    onClick={() => {
-                      const nextStatus = getNextStatus(order.status);
-                      if (nextStatus) {
-                        updateStatus({
-                          orderUuid: order.uuid,
-                          status: nextStatus,
-                        });
-                      }
-                    }}
-                    isLoading={isOrderStatusChangeLoading}
-                  >
-                    {order.status === EOrder.Pending && "Подтвердить оплату"}
-                    {order.status === EOrder.Payed && "Отправить в доставку"}
-                    {order.status === EOrder.In_Delivery &&
-                      "Подтвердить доставку"}
-                  </Button>
+                  <>
+                    {!order.isActual ? (
+                      <ActualizeOrderItem
+                        items={order.items}
+                        orderId={order.orderId}
+                      />
+                    ) : (
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          const nextStatus = getNextStatus(order.status);
+                          if (nextStatus) {
+                            updateStatus({
+                              orderUuid: order.uuid,
+                              status: nextStatus,
+                            });
+                          }
+                        }}
+                        isLoading={isOrderStatusChangeLoading}
+                      >
+                        {order.status === EOrder.Pending &&
+                          "Подтвердить оплату"}
+                        {order.status === EOrder.Payed &&
+                          "Отправить в доставку"}
+                        {order.status === EOrder.In_Delivery &&
+                          "Подтвердить доставку"}
+                      </Button>
+                    )}
+                  </>
                 )}
                 <Button
                   color="danger"
@@ -182,7 +206,9 @@ const OrderCard = ({ order }: IOrderCardProps) => {
               </>
             )}
           {order.status !== EOrder.Canceled &&
-            order.status !== EOrder.Pending && <UploadReceipt orderId={order.orderId} />}
+            order.status !== EOrder.Pending && (
+              <UploadReceipt orderId={order.orderId} isAdmin={isAdmin} />
+            )}
         </div>
       </CardFooter>
     </Card>

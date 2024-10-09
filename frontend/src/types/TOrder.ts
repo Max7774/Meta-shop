@@ -32,6 +32,7 @@ export type TOrder = {
   address: TAddress;
   userUuid: string;
   isDelivery: boolean;
+  isActual: boolean;
   items: TOrderItem[];
   user?: {
     uuid: string;

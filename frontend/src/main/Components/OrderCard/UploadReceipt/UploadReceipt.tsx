@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 interface IUploadReceiptProps {
   orderId: string;
+  isAdmin: boolean;
 }
 
 const UploadReceipt = ({ orderId }: IUploadReceiptProps) => {
@@ -33,7 +34,7 @@ const UploadReceipt = ({ orderId }: IUploadReceiptProps) => {
 
   return (
     <>
-      <Divider className="my-2" />
+      <Divider />
       <Button onClick={upload} fullWidth color="warning" className="text-white">
         Выгрузить чек
       </Button>

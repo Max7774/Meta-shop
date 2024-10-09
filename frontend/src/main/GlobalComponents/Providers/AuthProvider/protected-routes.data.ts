@@ -1,1 +1,6 @@
-export const PROTECTED_ROUTES = ["/order", "/admin", "/profile"];
+export const PROTECTED_ROUTES = [
+  "/order",
+  "/admin",
+  "/profile",
+  "/archived-orders",
+];

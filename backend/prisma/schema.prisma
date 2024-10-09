@@ -138,6 +138,7 @@ model Order {
   total        Int
   status       EnumOrderItemStatus @default(Pending)
   isDelivery   Boolean?        @default(false)
+  isActual     Boolean?        @default(false)
  
   items        OrderItem[]
  
@@ -153,7 +154,7 @@ model OrderItem {
   createdAt   DateTime       @default(now()) @map("createdAt")
   updatedAt   DateTime       @updatedAt @map("updatedAt")
 
-  quantity    Int
+  quantity    Decimal
   price       Int
   inStock     Boolean?       @default(false)
 

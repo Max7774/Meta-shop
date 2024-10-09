@@ -30,8 +30,6 @@ const Receipt = () => {
   const { orderId } = useParams();
   const { isLoading, oneOrder } = useAppSelector((state) => state.orders);
 
-  console.log(orderId);
-
   useEffect(() => {
     getOrderById(orderId || "");
   }, [getOrderById, orderId]);

@@ -23,7 +23,7 @@ export class StatisticsService {
     });
 
     const total = totalOrders.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.total,
+      (accumulator, currentValue) => accumulator + Number(currentValue.total),
       0,
     );
 

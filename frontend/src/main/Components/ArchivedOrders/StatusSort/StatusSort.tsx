@@ -20,9 +20,9 @@ const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
     const key = Array.from(selectedKeys)[0];
     switch (key) {
       case EOrder.Canceled:
-        return "Отменен";
+        return "Статус: Отменен";
       case EOrder.Delivered:
-        return "Доставлен";
+        return "Статус: Доставлен";
       default:
         return "";
     }
@@ -36,7 +36,7 @@ const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="bordered" fullWidth>
+        <Button variant="solid" size="md" fullWidth>
           {selectedValue}
         </Button>
       </DropdownTrigger>

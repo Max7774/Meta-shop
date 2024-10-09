@@ -2,6 +2,7 @@ import { TRoutes } from "@/types/TRoutesData";
 import { ERoutes } from "@enums/ERoutes";
 import {
   About,
+  ArchivedOrders,
   Contacts,
   MainPage,
   OrderPage,
@@ -63,5 +64,10 @@ export const ROOT_DATA: TRoutes<ERoutes>[] = [
     id: "receipt-page",
     path: ERoutes.RECEIPT,
     component: Receipt,
+  },
+  {
+    id: "archived-orders-root-page",
+    path: ERoutes.ARCHIVED_ORDERS,
+    component: ArchivedOrders,
   },
 ];
