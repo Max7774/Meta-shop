@@ -23,6 +23,7 @@ import { ERoles } from "@enums/ERoles";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import UploadReceipt from "./UploadReceipt/UploadReceipt";
 import ActualizeOrderItem from "./ActualizeOrderItem/ActualizeOrderItem";
+import DeleteOrder from "./DeleteOrder/DeleteOrder";
 
 interface IOrderCardProps {
   order: TOrder;
@@ -209,15 +210,7 @@ const OrderCard = ({ order }: IOrderCardProps) => {
             order.status !== EOrder.Pending && (
               <UploadReceipt orderId={order.orderId} isAdmin={isAdmin} />
             )}
-          {isAdmin && (
-            <Button
-              color="danger"
-              onClick={() => cancelOrder(order.uuid)}
-              isLoading={isCancelOrderLoading}
-            >
-              Отменить заказ
-            </Button>
-          )}
+          {isAdmin && <DeleteOrder orderId={order.orderId} />}
         </div>
       </CardFooter>
     </Card>
