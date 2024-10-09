@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Address, Order, OrderItem, Product } from '@prisma/client';
-import TelegramBot from 'node-telegram-bot-api';
+import * as TelegramBot from 'node-telegram-bot-api';
 
 interface IOrder extends Order {
   items: (OrderItem & { product: Product })[];
