@@ -147,7 +147,7 @@ jobs:
   deploy_frontend:
     runs-on: ubuntu-latest
     needs: [check_changes, deploy_backend]
-    if: needs.check_changes.outputs.frontend_changed == 'true'
+    if: needs.check_changes.outputs.frontend_changed == 'true' && (needs.deploy_backend.result == 'success' || needs.deploy_backend.result == 'skipped')
     outputs:
       frontend_version: ${{ steps.set_frontend_version.outputs.frontend_version }}
     steps:
