@@ -13,30 +13,21 @@ const API_URLS = [
   "/api/products/by-slug/",
   "/api/products/by-category/",
   "/api/categories",
-  // Добавь другие API эндпоинты по необходимости
 ];
 
-// Функция для проверки, является ли запрос API
 const isApiRequest = (url) => {
   return API_URLS.some((endpoint) => url.includes(endpoint));
 };
 
 self.addEventListener("install", (event) => {
-  // Предварительное кэширование, если необходимо
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Можно добавить статические ресурсы для кэширования
-      return cache.addAll([
-        "/", // Главная страница
-        "/index.html",
-        // Другие статические файлы
-      ]);
+      return cache.addAll(["/", "/index.html"]);
     })
   );
 });
 
 self.addEventListener("activate", (event) => {
-  // Очистка старых кэшей, если версия изменилась
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -57,16 +48,13 @@ self.addEventListener("fetch", (event) => {
       caches.open(CACHE_NAME).then(async (cache) => {
         try {
           const networkResponse = await fetch(request);
-          // Кэшируем свежий ответ
           cache.put(request, networkResponse.clone());
           return networkResponse;
         } catch (error) {
-          // В случае ошибки возвращаем кэшированный ответ, если он есть
           const cachedResponse = await cache.match(request);
           if (cachedResponse) {
             return cachedResponse;
           }
-          // Можно вернуть fallback ответ или ошибку
           return new Response(
             JSON.stringify({
               error: "Network error and no cached data available.",
@@ -80,7 +68,6 @@ self.addEventListener("fetch", (event) => {
       })
     );
   } else {
-    // Для остальных запросов используем стандартное поведение
     event.respondWith(
       caches.match(request).then((response) => {
         return response || fetch(request);
