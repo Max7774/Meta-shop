@@ -46,6 +46,7 @@ jobs:
           node-version: "21.5.0"
 
       - name: Execute SSH command .env
+        id: set_backend_version
         working-directory: ./backend
         run: |
           cat > .env << EOD
@@ -170,6 +171,7 @@ jobs:
           dir: "frontend"
 
       - name: Set .env
+        id: set_frontend_version
         working-directory: ./frontend
         run: |
           cat > .env << EOT

@@ -22,7 +22,7 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     component: AdminOrders,
   },
   {
-    id: "root-page-admin",
+    id: "categories-subcategories-page-admin",
     path: EAdminRoutes.CATEGORIES,
     component: AdminCategories,
   },
@@ -32,7 +32,7 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     component: AdminUsers,
   },
   {
-    id: "root-page-admin",
+    id: "create-products-page-admin",
     path: EAdminRoutes.PRODUCTS,
     component: AdminProducts,
   },
