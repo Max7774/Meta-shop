@@ -160,3 +160,14 @@ jobs:
       - name: Copy built frontend to server
         run: |
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Telegram // https://t.me/+gYmU18RQj-ZmMGI6
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          MESSAGE="Новая сборка: $GITHUB_REF_NAME"
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" -d chat_id="$TELEGRAM_CHAT_ID" -d text="$MESSAGE"
