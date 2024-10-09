@@ -6,9 +6,31 @@ on:
       - main
 
 jobs:
+  check_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend_changed: ${{ steps.filter.outputs.backend }}
+      frontend_changed: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Determine which folders changed
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+
   deploy_backend:
     runs-on: ubuntu-latest
-
+    needs: [check_changes]
+    if: needs.check_changes.outputs.backend_changed == 'true'
+    outputs:
+      backend_version: ${{ steps.set_backend_version.outputs.backend_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,7 +59,7 @@ jobs:
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
           EOD
-          echo "::set-output name=backend_version::1.0.1-${{ github.run_number }}"
+          echo "backend_version=1.0.1-${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
       - name: Execute SSH command docker-compose.yml
         working-directory: ./backend
         run: |
@@ -124,7 +146,10 @@ jobs:
 
   deploy_frontend:
     runs-on: ubuntu-latest
-
+    needs: [check_changes, deploy_backend]
+    if: needs.check_changes.outputs.frontend_changed == 'true'
+    outputs:
+      frontend_version: ${{ steps.set_frontend_version.outputs.frontend_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -151,7 +176,7 @@ jobs:
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           VITE_VERSION="1.0.1-${{ github.run_number }}"
           EOT
-          echo "::set-output name=frontend_version::1.0.1-${{ github.run_number }}"
+          echo "frontend_version=1.0.1-${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
 
       - name: Build
         uses: borales/actions-yarn@v4
@@ -165,7 +190,13 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: [deploy_backend, deploy_frontend]
+    if: needs.deploy_backend.result == 'success' || needs.deploy_frontend.result == 'success'
     steps:
+      - name: Set default versions if jobs were skipped
+        id: set_defaults
+        run: |
+          echo "BACKEND_VERSION=${{ needs.deploy_backend.outputs.backend_version || 'не обновлялся' }}" >> $GITHUB_ENV
+          echo "FRONTEND_VERSION=${{ needs.deploy_frontend.outputs.frontend_version || 'не обновлялся' }}" >> $GITHUB_ENV
       - name: Send notification to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -176,13 +207,13 @@ jobs:
           BACKEND_VERSION: ${{ needs.deploy_backend.outputs.backend_version }}
           FRONTEND_VERSION: ${{ needs.deploy_frontend.outputs.frontend_version }}
         run: |
-          MESSAGE="🚀 *Деплой завершен!*\n\n"
-          MESSAGE+="*Номер сборки:* \`${BUILD_NUMBER}\`\n"
-          MESSAGE+="*Коммит:* \`${COMMIT_MESSAGE}\`\n"
-          MESSAGE+="*Автор:* \`${COMMIT_AUTHOR}\`\n"
-          MESSAGE+="*Версия бэкенда:* \`${BACKEND_VERSION}\`\n"
-          MESSAGE+="*Версия фронтенда:* \`${FRONTEND_VERSION}\`"
+          MESSAGE=$'🚀 *Деплой завершен!*\n\n'
+          MESSAGE+=$'*Номер сборки:* `'${BUILD_NUMBER}$'`\n'
+          MESSAGE+=$'*Коммит:* `'${COMMIT_MESSAGE}$'`\n'
+          MESSAGE+=$'*Автор:* `'${COMMIT_AUTHOR}$'`\n'
+          MESSAGE+=$'*Версия бэкенда:* `'${BACKEND_VERSION}$'`\n'
+          MESSAGE+=$'*Версия фронтенда:* `'${FRONTEND_VERSION}$'`'
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
           -d chat_id=${TELEGRAM_CHAT_ID} \
           -d parse_mode="Markdown" \
-          -d text="$MESSAGE"
+          --data-urlencode text="$MESSAGE"
