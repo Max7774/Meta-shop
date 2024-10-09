@@ -27,11 +27,11 @@ const DeleteOrder = ({ orderId }: IDeleteOrderProps) => {
       >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1 text-warning text-center">
-            Вы уверены что хотите удалить категорию?
+            Вы уверены что хотите удалить заказ?
           </ModalHeader>
           <ModalBody>
             <span className="font-bold text-center">
-              К этой категории могут быть привязаны продукты!
+              Это может оказать влияние на пользователей!
             </span>
           </ModalBody>
           <ModalFooter>
