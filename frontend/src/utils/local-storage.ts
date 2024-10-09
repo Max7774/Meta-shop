@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getStoreLocal = (name: string) => {
   if (typeof localStorage !== "undefined") {
     const ls = localStorage.getItem(name);
