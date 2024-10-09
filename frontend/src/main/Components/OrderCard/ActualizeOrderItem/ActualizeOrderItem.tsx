@@ -60,7 +60,6 @@ const ActualizeOrderItem = ({
     <Modal
       isOpen={isOpen}
       placement="top"
-      scrollBehavior="inside"
       onOpenChange={(isOpenModal) => setIsOpen(isOpenModal)}
     >
       <ModalContent>
