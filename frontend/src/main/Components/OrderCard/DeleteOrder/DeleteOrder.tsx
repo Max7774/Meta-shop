@@ -1,3 +1,4 @@
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import {
   Button,
@@ -16,10 +17,14 @@ interface IDeleteOrderProps {
 const DeleteOrder = ({ orderId }: IDeleteOrderProps) => {
   const [isOpen, setIsOpen] = useState({ open: false, orderId });
 
+  const { isDeleteLoading } = useAppSelector((state) => state.orders);
   const { deleteOrder } = useActions();
 
   return (
     <>
+      <Button color="danger" onClick={() => setIsOpen({ open: true, orderId })}>
+        Удалить заказ
+      </Button>
       <Modal
         isOpen={isOpen.open}
         onOpenChange={() => setIsOpen({ open: false, orderId: "" })}
@@ -48,6 +53,7 @@ const DeleteOrder = ({ orderId }: IDeleteOrderProps) => {
                 deleteOrder(isOpen.orderId);
                 setIsOpen({ open: false, orderId: "" });
               }}
+              isLoading={isDeleteLoading}
             >
               Применить
             </Button>
