@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  actualizeOrder,
   cancelOrder,
   createOrder,
   getAllOrders,
@@ -15,6 +16,7 @@ type TOrdersState = {
   oneOrder: TOrder;
   isLoading: boolean;
   isCancelOrderLoading: boolean;
+  isActualLoading: boolean;
   isOrderStatusChangeLoading: boolean;
 };
 
@@ -23,6 +25,7 @@ const initialState: TOrdersState = {
   oneOrder: {} as TOrder,
   isLoading: false,
   isCancelOrderLoading: false,
+  isActualLoading: false,
   isOrderStatusChangeLoading: false,
 };
 
@@ -95,6 +98,33 @@ export const ordersSlice = createSlice({
       .addCase(getOrderById.rejected, (state) => {
         state.isLoading = false;
         state.oneOrder = {} as TOrder;
+      })
+      .addCase(actualizeOrder.pending, (state) => {
+        state.isActualLoading = true;
+      })
+      .addCase(
+        actualizeOrder.fulfilled,
+        (
+          state,
+          {
+            payload,
+            meta: {
+              arg: { orderId },
+            },
+          }
+        ) => {
+          state.isActualLoading = false;
+          state.orders = state.orders.map((order) => {
+            if (order.orderId === orderId) {
+              return payload;
+            } else {
+              return order;
+            }
+          });
+        }
+      )
+      .addCase(actualizeOrder.rejected, (state) => {
+        state.isActualLoading = false;
       });
   },
 });

@@ -20,6 +20,8 @@ import { QRCodeService } from 'src/qrcode/qrcode.service';
 import * as PDFDocument from 'pdfkit';
 import { join } from 'path';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
+import { Decimal } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class OrderService {
@@ -201,6 +203,7 @@ export class OrderService {
             };
           }),
         },
+        isActual: false,
         isDelivery: total <= 7000 ? true : false,
         total: total <= 7000 ? total + 800 : total,
         user: {
@@ -217,6 +220,62 @@ export class OrderService {
     });
 
     return order;
+  }
+
+  async actualizeOrder(items: OrderItem[], orderId: string) {
+    try {
+      for (const item of items) {
+        await this.prisma.orderItem.update({
+          where: {
+            uuid: item.uuid,
+          },
+          data: {
+            quantity: item.quantity,
+            price: item.price,
+          },
+        });
+      }
+
+      const { uuid, isDelivery } = await this.prisma.order.findUnique({
+        where: { orderId },
+      });
+
+      const updatedItems = await this.prisma.orderItem.findMany({
+        where: { orderUuid: uuid },
+      });
+
+      // Вычисляем новую общую сумму заказа
+      const totalDecimal = updatedItems.reduce((sum: Decimal, item) => {
+        const priceDecimal = new Decimal(item.quantity); // Преобразуем price в Decimal
+        const itemTotal = priceDecimal.mul(item.price); // price * quantity
+        return sum.add(itemTotal); // Суммируем
+      }, new Decimal(0));
+
+      const totalInt = totalDecimal
+        .toNearest(1, Decimal.ROUND_HALF_UP)
+        .toNumber();
+
+      console.log('totalDecimal', totalDecimal);
+
+      const order = await this.prisma.order.update({
+        where: { orderId },
+        data: { total: isDelivery ? totalInt + 800 : totalInt, isActual: true },
+        include: {
+          address: true,
+          items: {
+            include: {
+              product: {
+                select: productReturnObject,
+              },
+            },
+          },
+        },
+      });
+
+      return order;
+    } catch (error) {
+      console.error('Error updating order items:', error);
+    }
   }
 
   async updateStatus(dto: PaymentStatusDto) {
@@ -307,7 +366,9 @@ export class OrderService {
 
     orderItems.forEach((item) => {
       doc.text(
-        `- ${item.product.name} x${item.quantity} - ${item.price} тенге`,
+        `- ${item.product.name} ${item.quantity}/${
+          unitofmeasurementData[item.product.unitofmeasurement]
+        } x ${item.price} тенге`,
       );
     });
 

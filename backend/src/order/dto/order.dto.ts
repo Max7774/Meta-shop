@@ -67,6 +67,10 @@ export class OrderDto {
 }
 
 export class OrderItemDto {
+  @IsOptional()
+  @IsString()
+  uuid: string;
+
   @IsNumber()
   quantity: number;
 

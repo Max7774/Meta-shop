@@ -69,6 +69,16 @@ export const NavigationBar = () => {
       label: "Заказы",
     },
     {
+      role: [ERoles.DEFAULT_USER],
+      key: "archived-orders",
+      onClick: () => {
+        navigate("/archived-orders");
+        setIsMenuOpen(false);
+      },
+      color: "default",
+      label: "Архив заказов",
+    },
+    {
       role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
       key: "logout",
       onClick: () => {

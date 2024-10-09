@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { OrderService } from "@/service/order.service";
 import { AsyncThunkConfig } from "@/types/TError";
-import { TOrder, TOrderCartItem, TOrderForm } from "@/types/TOrder";
+import { TOrder, TOrderCartItem, TOrderForm, TOrderItem } from "@/types/TOrder";
 import { EOrder } from "@enums/EOrder";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -90,3 +90,27 @@ export const getReceiptFile = createAsyncThunk<any, string>(
     }
   }
 );
+
+export const actualizeOrder = createAsyncThunk<
+  TOrder,
+  { items: TOrderItem[]; orderId: string }
+>("/order/actualize", async (data, { rejectWithValue }) => {
+  try {
+    const response = await OrderService.actualizeOrder(
+      {
+        items: data.items.map((item) => {
+          return {
+            ...item,
+            price: Number(item.price),
+            quantity: Number(item.quantity),
+          };
+        }),
+      },
+      data.orderId
+    );
+
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});
