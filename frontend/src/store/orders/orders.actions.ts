@@ -114,3 +114,16 @@ export const actualizeOrder = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const deleteOrder = createAsyncThunk<TOrder, string>(
+  "/order/delete-by-id",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const response = await OrderService.deleteOrder(orderId);
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

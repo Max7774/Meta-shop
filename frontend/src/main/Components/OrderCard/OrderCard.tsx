@@ -209,6 +209,15 @@ const OrderCard = ({ order }: IOrderCardProps) => {
             order.status !== EOrder.Pending && (
               <UploadReceipt orderId={order.orderId} isAdmin={isAdmin} />
             )}
+          {isAdmin && (
+            <Button
+              color="danger"
+              onClick={() => cancelOrder(order.uuid)}
+              isLoading={isCancelOrderLoading}
+            >
+              Отменить заказ
+            </Button>
+          )}
         </div>
       </CardFooter>
     </Card>

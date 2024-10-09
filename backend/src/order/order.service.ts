@@ -445,4 +445,36 @@ export class OrderService {
 
     return order;
   }
+
+  async deleteOrder(orderId: string) {
+    try {
+      const { uuid } = await this.prisma.order.findUnique({
+        where: {
+          orderId,
+        },
+      });
+      const deletedOrder = await this.prisma.$transaction(async (prisma) => {
+        await prisma.orderItem.deleteMany({
+          where: {
+            orderUuid: uuid,
+          },
+        });
+
+        const order = await prisma.order.delete({
+          where: {
+            uuid,
+          },
+          include: {
+            items: true,
+          },
+        });
+
+        return order;
+      });
+
+      return deletedOrder;
+    } catch (error) {
+      throw new HttpException('Delete order error!', HttpStatus.BAD_REQUEST);
+    }
+  }
 }

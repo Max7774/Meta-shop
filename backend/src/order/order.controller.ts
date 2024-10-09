@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpException,
@@ -107,5 +108,13 @@ export class OrderController {
     @Body() dto: { items: OrderItem[] },
   ) {
     return this.orderService.actualizeOrder(dto.items, orderId);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth(['ADMIN'])
+  @Delete(':orderId')
+  async deleteOrder(@Param('orderId') orderId: string) {
+    return this.orderService.deleteOrder(orderId);
   }
 }
