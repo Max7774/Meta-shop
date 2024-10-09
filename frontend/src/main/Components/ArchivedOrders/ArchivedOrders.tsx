@@ -6,7 +6,9 @@ import { useState } from "react";
 import AdminOrderList from "@Screens/Admin/Orders/AdminOrderList/AdminOrderList";
 
 const ArchivedOrders = () => {
-  const [selectedStatus, setSelectedStatus] = useState<EOrder>(EOrder.Canceled);
+  const [selectedStatus, setSelectedStatus] = useState<EOrder>(
+    EOrder.Delivered
+  );
 
   return (
     <section>

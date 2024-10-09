@@ -22,10 +22,27 @@ import { join } from 'path';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
 import { Decimal } from '@prisma/client/runtime/library';
+import { createTransport } from 'nodemailer';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService, private qr: QRCodeService) {}
+  private transporter;
+
+  constructor(private prisma: PrismaService, private qr: QRCodeService) {
+    this.transporter = createTransport({
+      pool: true,
+      host: 'smtp.mail.ru',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.MAILDEV_INCOMING_USER,
+        pass: process.env.MAILDEV_INCOMING_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+  }
 
   private getSearchTermFilter(searchTerm = ''): Prisma.OrderWhereInput {
     return {
@@ -219,6 +236,13 @@ export class OrderService {
       },
     });
 
+    await this.transporter.sendMail({
+      from: process.env.MAILDEV_INCOMING_USER,
+      to: process.env.MAILDEV_AUDIT_USER,
+      subject: 'Новый заказ!',
+      text: `Зарегистрирован новый заказ под номером:: ${order.orderId}!`,
+    });
+
     return order;
   }
 
@@ -254,8 +278,6 @@ export class OrderService {
       const totalInt = totalDecimal
         .toNearest(1, Decimal.ROUND_HALF_UP)
         .toNumber();
-
-      console.log('totalDecimal', totalDecimal);
 
       const order = await this.prisma.order.update({
         where: { orderId },
@@ -324,8 +346,6 @@ export class OrderService {
   ) {
     // Путь к директории для сохранения чеков
     const receiptsDir = join(process.cwd(), 'receipts');
-
-    console.log('Receipts directory path:', receiptsDir);
 
     // Проверяем, существует ли директория, и создаем ее при необходимости
     if (!existsSync(receiptsDir)) {
