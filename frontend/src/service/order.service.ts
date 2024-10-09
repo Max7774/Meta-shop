@@ -58,4 +58,11 @@ export const OrderService = {
       data,
     });
   },
+
+  async deleteOrder(orderId: string) {
+    return await instance<TOrder>({
+      url: `${ORDERS}/${orderId}`,
+      method: "DELETE",
+    });
+  },
 };

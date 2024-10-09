@@ -3,6 +3,7 @@ import {
   actualizeOrder,
   cancelOrder,
   createOrder,
+  deleteOrder,
   getAllOrders,
   getOrderById,
   updateStatus,
@@ -18,6 +19,7 @@ type TOrdersState = {
   isCancelOrderLoading: boolean;
   isActualLoading: boolean;
   isOrderStatusChangeLoading: boolean;
+  isDeleteLoading: boolean;
 };
 
 const initialState: TOrdersState = {
@@ -27,6 +29,7 @@ const initialState: TOrdersState = {
   isCancelOrderLoading: false,
   isActualLoading: false,
   isOrderStatusChangeLoading: false,
+  isDeleteLoading: false,
 };
 
 export const ordersSlice = createSlice({
@@ -125,6 +128,16 @@ export const ordersSlice = createSlice({
       )
       .addCase(actualizeOrder.rejected, (state) => {
         state.isActualLoading = false;
+      })
+      .addCase(deleteOrder.pending, (state) => {
+        state.isDeleteLoading = true;
+      })
+      .addCase(deleteOrder.fulfilled, (state, { meta: { arg } }) => {
+        state.isDeleteLoading = false;
+        state.orders = state.orders.filter((order) => order.orderId !== arg);
+      })
+      .addCase(deleteOrder.rejected, (state) => {
+        state.isDeleteLoading = false;
       });
   },
 });
