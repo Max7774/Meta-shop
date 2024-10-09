@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Address, Order, OrderItem, Product } from '@prisma/client';
 import * as TelegramBot from 'node-telegram-bot-api';
+import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
 
 interface IOrder extends Order {
   items: (OrderItem & { product: Product })[];
@@ -45,7 +46,9 @@ export class BotService {
 
     message += `\n📦 *Состав заказа:*\n`;
     order.items.forEach((item) => {
-      message += `- ${item.product.name} x${item.quantity}\n`;
+      message += `- ${item.product.name} x ${item.quantity} /${
+        unitofmeasurementData[item.product.unitofmeasurement]
+      } \n`;
     });
 
     message += `\n🚚 *Адрес доставки:*\n`;

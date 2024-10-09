@@ -17,6 +17,7 @@ import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { ERoles } from "@enums/ERoles";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import Actions from "./Actions/Actions";
+import { EOrder } from "@enums/EOrder";
 
 interface IOrderCardProps {
   order: TOrder;
@@ -152,7 +153,9 @@ const OrderCard = ({ order }: IOrderCardProps) => {
               Итого: {convertPrice(order.total)}
             </span>
           </div>
-          <Actions order={order} isAdmin={isAdmin} />
+          {order.status !== EOrder.Canceled && (
+            <Actions order={order} isAdmin={isAdmin} />
+          )}
         </div>
       </CardFooter>
     </Card>
