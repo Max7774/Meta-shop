@@ -6,6 +6,7 @@ import { QRCodeService } from 'src/qrcode/qrcode.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { fileStorage } from './storage';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { BotService } from 'src/bot/bot.service';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
   ],
   controllers: [OrderController],
-  providers: [OrderService, PrismaService, QRCodeService],
+  providers: [OrderService, PrismaService, QRCodeService, BotService],
 })
 export class OrderModule {}

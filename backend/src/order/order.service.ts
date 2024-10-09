@@ -23,12 +23,17 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
 import { Decimal } from '@prisma/client/runtime/library';
 import { createTransport } from 'nodemailer';
+import { BotService } from 'src/bot/bot.service';
 
 @Injectable()
 export class OrderService {
   private transporter;
 
-  constructor(private prisma: PrismaService, private qr: QRCodeService) {
+  constructor(
+    private prisma: PrismaService,
+    private qr: QRCodeService,
+    private bot: BotService,
+  ) {
     this.transporter = createTransport({
       pool: true,
       host: 'smtp.mail.ru',
@@ -234,6 +239,23 @@ export class OrderService {
           },
         },
       },
+      include: {
+        address: true,
+        items: {
+          include: {
+            product: {
+              select: productReturnObject,
+            },
+          },
+        },
+        user: {
+          select: {
+            first_name: true,
+            second_name: true,
+            phone_number: true,
+          },
+        },
+      },
     });
 
     await this.transporter.sendMail({
@@ -242,6 +264,8 @@ export class OrderService {
       subject: 'Новый заказ!',
       text: `Зарегистрирован новый заказ под номером:: ${order.orderId}!`,
     });
+
+    await this.bot.sendOrderNotification(order);
 
     return order;
   }

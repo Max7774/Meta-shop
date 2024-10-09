@@ -59,6 +59,8 @@ jobs:
           MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
+          TELEGRAM_BOT_TOKEN=${{ secrets.ORDER_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID=${{ secrets.ORDER_CHAT_ID }}
           EOD
           echo "backend_version=1.0.1-${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
       - name: Execute SSH command docker-compose.yml
