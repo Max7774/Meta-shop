@@ -37,6 +37,7 @@ jobs:
           MAILDEV_AUDIT_USER=${{ secrets.MAILDEV_AUDIT_USER }}
           MAILDEV_INCOMING_PASS=${{ secrets.MAILDEV_INCOMING_PASS }}
           EOD
+          echo "::set-output name=backend_version::1.0.1-${{ github.run_number }}"
       - name: Execute SSH command docker-compose.yml
         working-directory: ./backend
         run: |
@@ -150,6 +151,7 @@ jobs:
           VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}
           VITE_VERSION="1.0.1-${{ github.run_number }}"
           EOT
+          echo "::set-output name=frontend_version::1.0.1-${{ github.run_number }}"
 
       - name: Build
         uses: borales/actions-yarn@v4
@@ -162,13 +164,25 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
   notify:
     runs-on: ubuntu-latest
+    needs: [deploy_backend, deploy_frontend]
     steps:
       - name: Send notification to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          GITHUB_REF_NAME: ${{ github.ref_name }}
+          BUILD_NUMBER: ${{ github.run_number }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }}
+          BACKEND_VERSION: ${{ needs.deploy_backend.outputs.backend_version }}
+          FRONTEND_VERSION: ${{ needs.deploy_frontend.outputs.frontend_version }}
         run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="New commit in repository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}\nAuthor: ${{ github.actor }}\nMessage: ${{ github.event.head_commit.message }}"
+          MESSAGE="🚀 *Деплой завершен!*\n\n"
+          MESSAGE+="*Номер сборки:* \`${BUILD_NUMBER}\`\n"
+          MESSAGE+="*Коммит:* \`${COMMIT_MESSAGE}\`\n"
+          MESSAGE+="*Автор:* \`${COMMIT_AUTHOR}\`\n"
+          MESSAGE+="*Версия бэкенда:* \`${BACKEND_VERSION}\`\n"
+          MESSAGE+="*Версия фронтенда:* \`${FRONTEND_VERSION}\`"
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
+          -d chat_id=${TELEGRAM_CHAT_ID} \
+          -d parse_mode="Markdown" \
+          -d text="$MESSAGE"
