@@ -35,7 +35,8 @@ export class BotService {
   private constructOrderMessage(order: IOrder): string {
     let message = `🆕 *Новый заказ получен!*\n\n`;
     message += `📄 *ID заказа:* \`${order.orderId}\`\n`;
-    message += `💰 *Сумма заказа:* \`${order.total}₽\`\n`;
+    message += `💰 *Сумма заказа:* \`${order.total}₸\`\n`;
+    message += `🛵 *Стоимость доставки:* ${order.isDelivery ? 800 : 0}₸\n`;
     message += `📅 *Дата заказа:* \`${order.createdAt.toLocaleString()}\`\n`;
 
     if (order.comment) {
@@ -47,14 +48,18 @@ export class BotService {
       message += `- ${item.product.name} x${item.quantity}\n`;
     });
 
-    if (order.isDelivery && order.address) {
-      message += `\n🚚 *Адрес доставки:*\n`;
-      message += `${order.address.street}, ${order.address.town}\n`;
-      message += `Дом: ${order.address.house}, Подъезд: ${order.address.entrance}\n`;
+    message += `\n🚚 *Адрес доставки:*\n`;
+    message += `${order.address.street}, ${order.address.town}\n`;
+    message += `Дом: ${order.address.house}, Подъезд: ${
+      order.address.entrance || 'не указан'
+    }\n`;
+    if (order.address.intercom) {
       message += `Домофон: ${order.address.intercom}, Этаж: ${order.address.floor}\n`;
     }
 
-    message += `\n👤 *Автор заказа:* ${order.user.first_name} ${order.user.second_name}`;
+    if (order.user.first_name) {
+      message += `\n👤 *Автор заказа:* ${order.user.first_name} ${order.user.second_name}`;
+    }
     message += `\n👤 *Телефон:* ${order.user.phone_number}`;
 
     return message;
