@@ -163,7 +163,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send notification to Telegram // https://t.me/+gYmU18RQj-ZmMGI6
+      - name: Send notification to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
