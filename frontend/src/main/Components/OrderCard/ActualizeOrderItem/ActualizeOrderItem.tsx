@@ -56,11 +56,18 @@ const ActualizeOrderItem = ({ items, orderId }: IActualizeOrderItemProps) => {
       <Button color="primary" onPress={onOpen}>
         Актуализировать цены
       </Button>
-      <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        placement="top"
+        scrollBehavior="outside"
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <form onSubmit={handleSubmit(submit)}>
-              <ModalHeader className="flex flex-col gap-1">Фильтры</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Актуализация
+              </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-5">
                   {fields.map((item, index) => (
