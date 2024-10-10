@@ -13,6 +13,7 @@ const API_URLS = [
   "/api/products/by-slug/",
   "/api/products/by-category/",
   "/api/categories",
+  "/api/order",
 ];
 
 const isApiRequest = (url) => {

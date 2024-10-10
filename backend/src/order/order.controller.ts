@@ -86,8 +86,6 @@ export class OrderController {
     try {
       const order = await this.orderService.getOrderById(orderId, userUuid);
 
-      console.log(order);
-
       if (!order) {
         throw new HttpException('Order not found!', HttpStatus.NOT_FOUND);
       }

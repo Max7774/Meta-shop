@@ -25,6 +25,82 @@ jobs:
             frontend:
               - 'frontend/**'
 
+  sonarqube_analysis_backend:
+    runs-on: ubuntu-latest
+    needs: [check_changes]
+    if: needs.check_changes.outputs.backend_changed == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: yarn install
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v3.1.0
+        with:
+          args: >
+            -Dsonar.organization=max7774
+            -Dsonar.projectKey=Max7774_Meta-shop
+            -Dsonar.sources=.
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  sonarqube_analysis_frontend:
+    runs-on: ubuntu-latest
+    needs: [check_changes]
+    if: needs.check_changes.outputs.frontend_changed == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: yarn install
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v3.1.0
+        with:
+          args: >
+            -Dsonar.organization=max7774
+            -Dsonar.projectKey=Max7774_Meta-shop
+            -Dsonar.sources=.
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   deploy_backend:
     runs-on: ubuntu-latest
     needs: [check_changes]
@@ -54,6 +130,7 @@ jobs:
           SERVER_URL=${{ secrets.SERVER_URL }}
           DESTINATION=uploads/
           DESTINATION_RECEIPTS='receipts/'
+          FRONTEND_URL="https://i-forvard.kz"
           APP_VERSION="1.0.1-${{ github.run_number }}"
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           MAILDEV_INCOMING_USER=${{ secrets.MAILDEV_INCOMING_USER }}
@@ -120,14 +197,14 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/.dockerignore ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
 
-      - name: SSH [Down volumes]
+      - name: SSH [Docker compose - Down volumes]
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
           docker-compose down
           EOF
 
-      - name: SSH [Compose - Build]
+      - name: SSH [Docker compose - Build]
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
           cd /Meta-shop/backend
@@ -166,6 +243,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "21.5.0"
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         uses: borales/actions-yarn@v4
         with:
@@ -193,8 +281,12 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./frontend/build/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
   notify:
     runs-on: ubuntu-latest
-    needs: [deploy_backend, deploy_frontend]
-    if: always() # Обеспечиваем, что задача всегда будет выполнена
+    needs:
+      - deploy_backend
+      - deploy_frontend
+      - sonarqube_analysis_backend
+      - sonarqube_analysis_frontend
+    if: always()
     steps:
       - name: Determine if we should send notification
         id: should_notify
@@ -223,6 +315,33 @@ jobs:
           else
             echo "FRONTEND_VERSION=не обновлялся" >> $GITHUB_ENV
           fi
+
+          # Определяем результаты проверок для бэкенда
+          if [[ "$BACKEND_CHECK_RESULT" == "success" ]]; then
+            echo "BACKEND_CHECK_STATUS=✅ Проверка пройдена" >> $GITHUB_ENV
+            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+          elif [[ "$BACKEND_CHECK_RESULT" == "failure" ]]; then
+            echo "BACKEND_CHECK_STATUS=❌ Проверка не пройдена" >> $GITHUB_ENV
+            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+          elif [[ "$BACKEND_CHECK_RESULT" == "skipped" ]]; then
+            echo "BACKEND_CHECK_STATUS=⏭️ Проверка не выполнялась" >> $GITHUB_ENV
+          else
+            echo "BACKEND_CHECK_STATUS=⚠️ Проверка прервана" >> $GITHUB_ENV
+          fi
+
+          # Определяем результаты проверок для фронтенда
+          if [[ "$FRONTEND_CHECK_RESULT" == "success" ]]; then
+            echo "FRONTEND_CHECK_STATUS=✅ Проверка пройдена" >> $GITHUB_ENV
+            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+          elif [[ "$FRONTEND_CHECK_RESULT" == "failure" ]]; then
+            echo "FRONTEND_CHECK_STATUS=❌ Проверка не пройдена" >> $GITHUB_ENV
+            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+          elif [[ "$FRONTEND_CHECK_RESULT" == "skipped" ]]; then
+            echo "FRONTEND_CHECK_STATUS=⏭️ Проверка не выполнялась" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_CHECK_STATUS=⚠️ Проверка прервана" >> $GITHUB_ENV
+          fi
+
       - name: Send notification to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -232,14 +351,44 @@ jobs:
           COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }}
           BACKEND_VERSION: ${{ env.BACKEND_VERSION }}
           FRONTEND_VERSION: ${{ env.FRONTEND_VERSION }}
+          BACKEND_CHECK_STATUS: ${{ env.BACKEND_CHECK_STATUS }}
+          FRONTEND_CHECK_STATUS: ${{ env.FRONTEND_CHECK_STATUS }}
+          BACKEND_SONAR_URL: ${{ env.BACKEND_SONAR_URL }}
+          FRONTEND_SONAR_URL: ${{ env.FRONTEND_SONAR_URL }}
         run: |
+          # Экранируем специальные символы для MarkdownV2
+          escape() {
+            echo "$1" | sed 's/\([_\*\[\]\(\)\~\`\>\#\+\-\=\|\{\}\.\!\$]\)/\\\1/g'
+          }
+
+          COMMIT_MESSAGE_SHORT=$(echo "${COMMIT_MESSAGE}" | cut -c1-100)
+          COMMIT_MESSAGE_ESCAPED=$(escape "${COMMIT_MESSAGE_SHORT}")
+          COMMIT_AUTHOR_ESCAPED=$(escape "${COMMIT_AUTHOR}")
+          BACKEND_VERSION_ESCAPED=$(escape "${BACKEND_VERSION}")
+          FRONTEND_VERSION_ESCAPED=$(escape "${FRONTEND_VERSION}")
+
           MESSAGE=$'🚀 *Деплой обновлений!*\n\n'
-          MESSAGE+=$'*Номер сборки:* `'${BUILD_NUMBER}$'`\n'
-          MESSAGE+=$'*Коммит:* `'${COMMIT_MESSAGE}$'`\n'
-          MESSAGE+=$'*Автор:* `'${COMMIT_AUTHOR}$'`\n'
-          MESSAGE+=$'*Версия бэкенда:* `'${BACKEND_VERSION}$'`\n'
-          MESSAGE+=$'*Версия фронтенда:* `'${FRONTEND_VERSION}$'`'
+          MESSAGE+=$'🔢 *Номер сборки:* `'${BUILD_NUMBER}$'`\n'
+          MESSAGE+=$'📝 *Коммит:* `'${COMMIT_MESSAGE}$'`\n'
+          MESSAGE+=$'👤 *Автор:* `'${COMMIT_AUTHOR}$'`\n'
+          MESSAGE+=$'🛠️ *Версия бэкенда:* `'${BACKEND_VERSION}$'`\n'
+          MESSAGE+=$'💻 *Версия фронтенда:* `'${FRONTEND_VERSION}$'`'
+
+          # Добавляем информацию о проверке бэкенда
+          if [[ -n "${BACKEND_SONAR_URL}" ]]; then
+            MESSAGE+=$'🔍 *Проверка бэкенда:* '${BACKEND_CHECK_STATUS}$' \([отчет]('${BACKEND_SONAR_URL//./\\.}$')\)\n'
+          else
+            MESSAGE+=$'🔍 *Проверка бэкенда:* '${BACKEND_CHECK_STATUS}$'\n'
+          fi
+
+          # Добавляем информацию о проверке фронтенда
+          if [[ -n "${FRONTEND_SONAR_URL}" ]]; then
+            MESSAGE+=$'🔍 *Проверка фронтенда:* '${FRONTEND_CHECK_STATUS}$' \([отчет]('${FRONTEND_SONAR_URL//./\\.}$')\)\n'
+          else
+            MESSAGE+=$'🔍 *Проверка фронтенда:* '${FRONTEND_CHECK_STATUS}$'\n'
+          fi
+
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
           -d chat_id=${TELEGRAM_CHAT_ID} \
-          -d parse_mode="Markdown" \
+          -d parse_mode="MarkdownV2" \
           --data-urlencode text="$MESSAGE"

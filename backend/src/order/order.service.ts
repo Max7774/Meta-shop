@@ -9,25 +9,16 @@ import { productReturnObject } from 'src/product/return-product.object';
 import { OrderDto } from './dto/order.dto';
 import { PaymentStatusDto } from './dto/payment-status.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
-import {
-  EnumOrderItemStatus,
-  Order,
-  OrderItem,
-  Prisma,
-  Product,
-} from '@prisma/client';
+import { EnumOrderItemStatus, OrderItem, Prisma } from '@prisma/client';
 import { QRCodeService } from 'src/qrcode/qrcode.service';
-import * as PDFDocument from 'pdfkit';
-import { join } from 'path';
-import { createWriteStream, existsSync, mkdirSync } from 'fs';
-import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
 import { Decimal } from '@prisma/client/runtime/library';
-import { createTransport } from 'nodemailer';
+import { createTransport, Transporter } from 'nodemailer';
 import { BotService } from 'src/bot/bot.service';
+import { generatePdfReceipt } from './generatePdfReceipt';
 
 @Injectable()
 export class OrderService {
-  private transporter;
+  private transporter: Transporter;
 
   constructor(
     private prisma: PrismaService,
@@ -292,11 +283,10 @@ export class OrderService {
         where: { orderUuid: uuid },
       });
 
-      // Вычисляем новую общую сумму заказа
       const totalDecimal = updatedItems.reduce((sum: Decimal, item) => {
-        const priceDecimal = new Decimal(item.quantity); // Преобразуем price в Decimal
-        const itemTotal = priceDecimal.mul(item.price); // price * quantity
-        return sum.add(itemTotal); // Суммируем
+        const priceDecimal = new Decimal(item.quantity);
+        const itemTotal = priceDecimal.mul(item.price);
+        return sum.add(itemTotal);
       }, new Decimal(0));
 
       const totalInt = totalDecimal
@@ -345,7 +335,12 @@ export class OrderService {
           },
         },
       });
-      await this.generatePdfReceipt(orderItems, order);
+
+      const qrData = `${process.env.FRONTEND_URL}/order/${order.uuid}`;
+
+      const qrCodeDataURL = await this.qr.generateQRCode(qrData);
+
+      await generatePdfReceipt(orderItems, order, qrCodeDataURL);
     }
 
     return { uuid: order.uuid, status: order.status };
@@ -362,97 +357,6 @@ export class OrderService {
     });
 
     return true;
-  }
-
-  private async generatePdfReceipt(
-    orderItems: (OrderItem & { product: Product })[],
-    order: Order,
-  ) {
-    // Путь к директории для сохранения чеков
-    const receiptsDir = join(process.cwd(), 'receipts');
-
-    // Проверяем, существует ли директория, и создаем ее при необходимости
-    if (!existsSync(receiptsDir)) {
-      mkdirSync(receiptsDir);
-      console.log('Receipts directory created.');
-    } else {
-      console.log('Receipts directory already exists.');
-    }
-
-    const doc = new PDFDocument();
-
-    // Путь к файлу шрифта
-    const fontPath = join(process.cwd(), 'fonts', 'Roboto-Regular.ttf');
-
-    // Регистрируем шрифт
-    doc.registerFont('Roboto', fontPath);
-
-    // Устанавливаем шрифт по умолчанию
-    doc.font('Roboto');
-
-    const filePath = join(receiptsDir, `receipt-${order.orderId}.pdf`);
-
-    const writeStream = createWriteStream(filePath);
-    doc.pipe(writeStream);
-
-    doc.fontSize(20).text('Чек', { align: 'center' });
-
-    doc.moveDown();
-
-    doc.fontSize(12).text(`Номер заказа: ${order.orderId}`);
-    doc.text(`Дата заказа: ${new Date(order.createdAt).toLocaleDateString()}`);
-    doc.text(`Доставка: ${order.isDelivery ? '800' : '0'} тенге`);
-    doc.text(`Общая сумма: ${order.total} тенге`);
-
-    doc.moveDown();
-
-    doc.text('Товары:');
-
-    orderItems.forEach((item) => {
-      doc.text(
-        `- ${item.product.name} ${item.quantity}/${
-          unitofmeasurementData[item.product.unitofmeasurement]
-        } x ${item.price} тенге`,
-      );
-    });
-
-    // Генерируем данные для QR-кода (например, ссылка на заказ)
-    const qrData = `https://i-forvard.kz/order/${order.uuid}`;
-
-    // Генерируем QR-код в формате Data URL
-    const qrCodeDataURL = await this.qr.generateQRCode(qrData);
-
-    // Преобразуем Data URL в буфер
-    const qrImageBuffer = Buffer.from(qrCodeDataURL.split(',')[1], 'base64');
-
-    // // Добавляем QR-код в PDF
-    // doc.addPage();
-    doc.moveDown();
-
-    doc.fontSize(16).text('Сканируйте QR-код для просмотра заказа:', {
-      align: 'center',
-    });
-
-    doc.moveDown();
-
-    doc.image(qrImageBuffer, {
-      fit: [150, 150],
-      align: 'center',
-      valign: 'center',
-    });
-
-    // Завершаем создание PDF и закрываем поток
-    doc.end();
-
-    // Ждем завершения записи файла
-    return new Promise((resolve, reject) => {
-      writeStream.on('finish', () => {
-        resolve(true);
-      });
-      writeStream.on('error', (err) => {
-        reject(err);
-      });
-    });
   }
 
   async getOrderById(orderId: string, userUuid: string) {
