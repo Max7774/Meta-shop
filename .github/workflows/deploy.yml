@@ -394,11 +394,11 @@ jobs:
           FRONTEND_SONAR_URL_ESCAPED=$(escape "${FRONTEND_SONAR_URL}")
 
           MESSAGE=$"🚀 *Деплой обновлений\\!*\n\n"
-          MESSAGE+=$"🔢 *Номер сборки\\:* `'${BUILD_NUMBER}$'`\n"
-          MESSAGE+=$"📝 *Коммит\\:* `'${COMMIT_MESSAGE}$'`\n"
-          MESSAGE+=$"👤 *Автор\\:* `'${COMMIT_AUTHOR}$'`\n"
-          MESSAGE+=$"🛠️ *Версия бэкенда\\:* `'${BACKEND_VERSION}$'`\n"
-          MESSAGE+=$"💻 *Версия фронтенда\\:* `'${FRONTEND_VERSION}$'`\n\n"
+          MESSAGE+=$"🔢 *Номер сборки\\:* `${BUILD_NUMBER}`\n"
+          MESSAGE+=$"📝 *Коммит\\:* `${COMMIT_MESSAGE}`\n"
+          MESSAGE+=$"👤 *Автор\\:* `${COMMIT_AUTHOR}`\n"
+          MESSAGE+=$"🛠️ *Версия бэкенда\\:* `${BACKEND_VERSION}`\n"
+          MESSAGE+=$"💻 *Версия фронтенда\\:* `${FRONTEND_VERSION}`\n\n"
 
           MESSAGE=$"🛠️ *Sonar Qube\\:*\n"
 
