@@ -103,8 +103,7 @@ jobs:
 
   deploy_backend:
     runs-on: ubuntu-latest
-    needs: [check_changes]
-    if: needs.check_changes.outputs.backend_changed == 'true'
+    needs: [sonarqube_analysis_backend]
     outputs:
       backend_version: ${{ steps.set_backend_version.outputs.backend_version }}
     steps:
@@ -226,8 +225,7 @@ jobs:
 
   deploy_frontend:
     runs-on: ubuntu-latest
-    needs: [check_changes]
-    if: needs.check_changes.outputs.frontend_changed == 'true'
+    needs: [sonarqube_analysis_frontend]
     outputs:
       frontend_version: ${{ steps.set_frontend_version.outputs.frontend_version }}
     steps:
@@ -255,10 +253,8 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-          dir: "frontend"
+        working-directory: ./frontend
+        run: yarn install
 
       - name: Set .env
         id: set_frontend_version
@@ -293,9 +289,13 @@ jobs:
         run: |
           BACKEND_RESULT="${{ needs.deploy_backend.result }}"
           FRONTEND_RESULT="${{ needs.deploy_frontend.result }}"
+          BACKEND_CHECK_RESULT="${{ needs.sonarqube_analysis_backend.result }}"
+          FRONTEND_CHECK_RESULT="${{ needs.sonarqube_analysis_frontend.result }}"
 
           echo "BACKEND_RESULT=$BACKEND_RESULT"
           echo "FRONTEND_RESULT=$FRONTEND_RESULT"
+          echo "BACKEND_CHECK_RESULT=$BACKEND_CHECK_RESULT"
+          echo "FRONTEND_CHECK_RESULT=$FRONTEND_CHECK_RESULT"
 
           if [[ "$BACKEND_RESULT" == "success" || "$FRONTEND_RESULT" == "success" ]]; then
             echo "should_notify=true" >> $GITHUB_OUTPUT
@@ -319,10 +319,10 @@ jobs:
           # Определяем результаты проверок для бэкенда
           if [[ "$BACKEND_CHECK_RESULT" == "success" ]]; then
             echo "BACKEND_CHECK_STATUS=✅ Проверка пройдена" >> $GITHUB_ENV
-            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+            echo "BACKEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
           elif [[ "$BACKEND_CHECK_RESULT" == "failure" ]]; then
             echo "BACKEND_CHECK_STATUS=❌ Проверка не пройдена" >> $GITHUB_ENV
-            echo "FRONTEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
+            echo "BACKEND_SONAR_URL=https://sonarcloud.io/dashboard?id=Max7774_Meta-shop" >> $GITHUB_ENV
           elif [[ "$BACKEND_CHECK_RESULT" == "skipped" ]]; then
             echo "BACKEND_CHECK_STATUS=⏭️ Проверка не выполнялась" >> $GITHUB_ENV
           else
@@ -376,14 +376,14 @@ jobs:
 
           # Добавляем информацию о проверке бэкенда
           if [[ -n "${BACKEND_SONAR_URL}" ]]; then
-            MESSAGE+=$'🔍 *Проверка бэкенда:* '${BACKEND_CHECK_STATUS}$' \([отчет]('${BACKEND_SONAR_URL//./\\.}$')\)\n'
+            MESSAGE+=$'🔍 *Проверка бэкенда:* '${BACKEND_CHECK_STATUS}$' \([отчет]('${BACKEND_SONAR_URL_ESCAPED}$')\)\n'
           else
             MESSAGE+=$'🔍 *Проверка бэкенда:* '${BACKEND_CHECK_STATUS}$'\n'
           fi
 
           # Добавляем информацию о проверке фронтенда
           if [[ -n "${FRONTEND_SONAR_URL}" ]]; then
-            MESSAGE+=$'🔍 *Проверка фронтенда:* '${FRONTEND_CHECK_STATUS}$' \([отчет]('${FRONTEND_SONAR_URL//./\\.}$')\)\n'
+            MESSAGE+=$'🔍 *Проверка фронтенда:* '${FRONTEND_CHECK_STATUS}$' \([отчет]('${FRONTEND_SONAR_URL_ESCAPED}$')\)\n'
           else
             MESSAGE+=$'🔍 *Проверка фронтенда:* '${FRONTEND_CHECK_STATUS}$'\n'
           fi
