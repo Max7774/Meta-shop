@@ -8,7 +8,7 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
 import NewAddressForm from "./NewAddressForm/NewAddressForm";
