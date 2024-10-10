@@ -391,12 +391,12 @@ jobs:
           BACKEND_CHECK_STATUS_ESCAPED=$(escape "${BACKEND_CHECK_STATUS}")
           FRONTEND_CHECK_STATUS_ESCAPED=$(escape "${FRONTEND_CHECK_STATUS}")
 
-          MESSAGE=$'🚀 *Деплой обновлений!*\n\n'
-          MESSAGE+=$'🔢 *Номер сборки:* `'${BUILD_NUMBER}$'`\n'
-          MESSAGE+=$'📝 *Коммит:* `'${COMMIT_MESSAGE}$'`\n'
-          MESSAGE+=$'👤 *Автор:* `'${COMMIT_AUTHOR}$'`\n'
-          MESSAGE+=$'🛠️ *Версия бэкенда:* `'${BACKEND_VERSION}$'`\n'
-          MESSAGE+=$'💻 *Версия фронтенда:* `'${FRONTEND_VERSION}$'`'
+          MESSAGE=$'🚀 *Деплой обновлений\\!*\n\n'
+          MESSAGE+=$'🔢 *Номер сборки\\:* `'${BUILD_NUMBER}$'`\n'
+          MESSAGE+=$'📝 *Коммит\\:* `'${COMMIT_MESSAGE}$'`\n'
+          MESSAGE+=$'👤 *Автор\\:* `'${COMMIT_AUTHOR}$'`\n'
+          MESSAGE+=$'🛠️ *Версия бэкенда\\:* `'${BACKEND_VERSION}$'`\n'
+          MESSAGE+=$'💻 *Версия фронтенда\\:* `'${FRONTEND_VERSION}$'`\n'
 
           # Добавляем информацию о проверке бэкенда
           if [[ -n "${BACKEND_SONAR_URL}" ]]; then
