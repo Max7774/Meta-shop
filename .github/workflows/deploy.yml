@@ -374,8 +374,8 @@ jobs:
               str="${str//-/\\-}"     # Экранируем '-'
               str="${str//=/\\=}"     # Экранируем '='
               str="${str//|/\\|}"     # Экранируем '|'
-              str="${str//\{/\\{}"    
-              str="${str//\}/\\}}"   
+              str="${str//\{/\\\{}"    
+              str="${str//\}/\\\}}"   
               str="${str//./\\.}"     # Экранируем '.'
               str="${str//!/\\!}"     # Экранируем '!'
               str="${str//^/\\^}"     # Экранируем '^'
@@ -392,6 +392,9 @@ jobs:
           FRONTEND_CHECK_STATUS_ESCAPED=$(escape "${FRONTEND_CHECK_STATUS}")
           BACKEND_SONAR_URL_ESCAPED=$(escape "${BACKEND_SONAR_URL}")
           FRONTEND_SONAR_URL_ESCAPED=$(escape "${FRONTEND_SONAR_URL}")
+
+          echo "COMMIT_MESSAGE_ESCAPED: $COMMIT_MESSAGE_ESCAPED"
+          echo "BACKEND_CHECK_STATUS_ESCAPED: $BACKEND_CHECK_STATUS_ESCAPED"
 
           MESSAGE=$'🚀 *Деплой обновлений\\!*\n\n'
           MESSAGE+=$'🔢 *Номер сборки\\:* `${BUILD_NUMBER}`\n'
