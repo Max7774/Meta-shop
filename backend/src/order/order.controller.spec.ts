@@ -12,8 +12,8 @@ import { Response } from 'express';
 function createMockOrder(overrides = {}): any {
   return {
     uuid: 'order-uuid',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date('2024-10-11T18:42:20.344Z'),
+    updatedAt: new Date('2024-10-11T18:42:20.344Z'),
     orderId: 'ORDER123',
     comment: 'Test comment',
     total: 1000,
