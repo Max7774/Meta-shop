@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { BadGatewayException } from '@nestjs/common';
 
-// Mock dependencies
 const mockAuthService = {
   login: jest.fn(),
   getNewToken: jest.fn(),

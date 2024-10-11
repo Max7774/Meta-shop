@@ -63,7 +63,8 @@ jobs:
         if: ${{ always() }}
         working-directory: ./backend/src
         run: |
-          find . -type f -name "*.spec.ts" -delete
+          find . -type f -name "*.service.spec.ts" -delete
+          find . -type f -name "*.controller.spec.ts" -delete
 
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest
