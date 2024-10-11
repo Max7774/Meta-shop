@@ -436,7 +436,6 @@ jobs:
           BACKEND_SONAR_URL: ${{ env.BACKEND_SONAR_URL }}
           FRONTEND_SONAR_URL: ${{ env.FRONTEND_SONAR_URL }}
           BACKEND_TEST_STATUS: ${{ env.BACKEND_TEST_STATUS }}
-          TEST_COVERAGE_URL: ${{ secrets.TEST_COVERAGE_URL }}
         run: |
           # Экранируем специальные символы для MarkdownV2
           escape() {
@@ -525,9 +524,7 @@ jobs:
                   [
                     {
                       "text": "Посмотреть отчет о покрытии",
-                      "web_app": {
-                        "url": "${TEST_COVERAGE_URL}"
-                      }
+                      "url": "${TEST_COVERAGE_URL}"
                     }
                   ]
                 ]
