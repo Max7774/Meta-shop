@@ -34,6 +34,12 @@ describe('FileUploadController', () => {
 
     controller = module.get<FileUploadController>(FileUploadController);
     service = module.get<FileUploadService>(FileUploadService);
+    process.env.DESTINATION = './uploads';
+  });
+
+  afterEach(() => {
+    delete process.env.DESTINATION;
+    jest.restoreAllMocks();
   });
 
   it('should be defined', () => {
@@ -87,6 +93,7 @@ describe('FileUploadController', () => {
       const mockFileName = 'file1.png';
       const mockProductUuid = 'product-uuid';
       jest.spyOn(service, 'deleteImageInProduct').mockResolvedValue(true);
+      jest.spyOn(fs, 'unlink').mockResolvedValue();
 
       const result = await controller.deleteFile(mockFileName, mockProductUuid);
 

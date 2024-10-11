@@ -88,6 +88,13 @@ export class FileUploadController {
     @Param('fileName') fileName: string,
     @Param('productUuid') productUuid: string,
   ): Promise<any> {
+    if (!process.env.DESTINATION) {
+      throw new HttpException(
+        'Переменная окружения DESTINATION не настроена',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
     const baseDirectory = path.resolve(process.env.DESTINATION);
     const filePath = path.join(baseDirectory, fileName);
 

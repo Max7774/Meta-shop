@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-coverage-report
-          path: ./coverage
+          path: ./backend/coverage
 
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest
@@ -341,7 +341,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: backend-coverage-report
-          path: ./coverage
+          path: ./backend/coverage
 
       - name: Install SSH Key
         uses: webfactory/ssh-agent@v0.7.0
@@ -351,7 +351,7 @@ jobs:
       - name: Copy Coverage Report to Server
         if: needs.run_tests_backend.outputs.tests_success == 'true' # Копируем, если тесты успешны
         run: |
-          scp -o StrictHostKeyChecking=no -r ./coverage ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html/
+          scp -o StrictHostKeyChecking=no -r ./backend/coverage ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html/
 
       - name: Determine if we should send notification
         id: should_notify
