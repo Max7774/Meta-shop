@@ -396,29 +396,32 @@ jobs:
           echo "COMMIT_MESSAGE_ESCAPED: $COMMIT_MESSAGE_ESCAPED"
           echo "BACKEND_CHECK_STATUS_ESCAPED: $BACKEND_CHECK_STATUS_ESCAPED"
 
-          MESSAGE=$'🚀 *Деплой обновлений\\!*\n\n'
-          MESSAGE+=$'🔢 *Номер сборки\\:* `${BUILD_NUMBER}`\n'
-          MESSAGE+=$'📝 *Коммит\\:* `${COMMIT_MESSAGE}`\n'
-          MESSAGE+=$'👤 *Автор\\:* `${COMMIT_AUTHOR}`\n'
-          MESSAGE+=$'🛠️ *Версия бэкенда\\:* `${BACKEND_VERSION}`\n'
-          MESSAGE+=$'💻 *Версия фронтенда\\:* `${FRONTEND_VERSION}`\n\n'
+          read -r -d '' MESSAGE << EOM
+          🚀 *Деплой обновлений\\!*
 
-          MESSAGE=$'🛠️ *Sonar Qube\\:*\n'
+          🔢 *Номер сборки\\:* \`${BUILD_NUMBER}\`
+          📝 *Коммит\\:* \`${COMMIT_MESSAGE_ESCAPED}\`
+          👤 *Автор\\:* \`${COMMIT_AUTHOR_ESCAPED}\`
+          🛠️ *Версия бэкенда\\:* \`${BACKEND_VERSION_ESCAPED}\`
+          💻 *Версия фронтенда\\:* \`${FRONTEND_VERSION_ESCAPED}\`
+
+          🛠️ *Sonar Qube\\:*
+          EOM
 
           echo -e "$MESSAGE"
 
           # Добавляем информацию о проверке бэкенда
           if [[ -n "${BACKEND_SONAR_URL}" ]]; then
-            MESSAGE+=$'🔍 *Проверка бэкенда\\:* ${BACKEND_CHECK_STATUS_ESCAPED} \\([отчет](${BACKEND_SONAR_URL_ESCAPED})\\)\n'
+            MESSAGE+="\n🔍 *Проверка бэкенда\\:* ${BACKEND_CHECK_STATUS_ESCAPED} \\([отчет](${BACKEND_SONAR_URL_ESCAPED})\\)\n"
           else
-            MESSAGE+=$'🔍 *Проверка бэкенда\\:* ${BACKEND_CHECK_STATUS_ESCAPED}\n'
+            MESSAGE+="\n🔍 *Проверка бэкенда\\:* ${BACKEND_CHECK_STATUS_ESCAPED}\n"
           fi
 
           # Добавляем информацию о проверке фронтенда
           if [[ -n "${FRONTEND_SONAR_URL}" ]]; then
-            MESSAGE+=$'🔍 *Проверка фронтенда\\:* ${FRONTEND_CHECK_STATUS_ESCAPED} \\([отчет](${FRONTEND_SONAR_URL_ESCAPED})\\)\n'
+            MESSAGE+="\n🔍 *Проверка фронтенда\\:* ${FRONTEND_CHECK_STATUS_ESCAPED} \\([отчет](${FRONTEND_SONAR_URL_ESCAPED})\\)\n"
           else
-            MESSAGE+=$'🔍 *Проверка фронтенда\\:* ${FRONTEND_CHECK_STATUS_ESCAPED}\n'
+            MESSAGE+="\n🔍 *Проверка фронтенда\\:* ${FRONTEND_CHECK_STATUS_ESCAPED}\n"
           fi
 
           echo -e "$MESSAGE"
