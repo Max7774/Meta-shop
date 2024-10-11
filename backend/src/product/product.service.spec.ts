@@ -507,7 +507,6 @@ describe('ProductService', () => {
         subcategoryUuid: 'invalid-subcategory-uuid',
       };
 
-      // Исправляем мок, чтобы возвращался NotFoundException корректно
       jest.spyOn(subcategoryService, 'byId').mockImplementation(() => {
         throw new NotFoundException('Subcategory not found');
       });
