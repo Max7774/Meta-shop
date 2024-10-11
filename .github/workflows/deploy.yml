@@ -30,7 +30,7 @@ jobs:
     needs: [check_changes]
     if: needs.check_changes.outputs.backend_changed == 'true'
     outputs:
-      tests_success: ${{ steps.run_backend_tests.outcome == 'success' }}
+      tests_success: ${{ steps.run_backend_tests.outputs.tests_success == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -346,6 +346,8 @@ jobs:
           echo "BACKEND_CHECK_RESULT=$BACKEND_CHECK_RESULT"
           echo "FRONTEND_CHECK_RESULT=$FRONTEND_CHECK_RESULT"
           echo "TESTS_BACKEND_RESULT=$TESTS_BACKEND_RESULT"
+
+          echo -e "TESTS_BACKEND_RESULT"
 
           if [[ "$BACKEND_RESULT" == "success" || "$FRONTEND_RESULT" == "success" ]]; then
             echo "should_notify=true" >> $GITHUB_OUTPUT
