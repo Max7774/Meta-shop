@@ -9,7 +9,8 @@ function createMockUser(overrides = {}): any {
   return {
     uuid: 'user-uuid',
     favorites: [],
-    updatedAt: new Date(),
+    updatedAt: new Date('2024-10-11T18:42:20.344Z'),
+    createdAt: new Date('2024-10-11T18:42:20.344Z'),
     email: 'test@example.com',
     first_name: 'John',
     second_name: 'Doe',
@@ -78,7 +79,7 @@ describe('UserService', () => {
     it('should return a user by uuid', async () => {
       const uuid = 'user-uuid';
 
-      const mockUser = createMockUser({ createdAt: new Date(2020, 0, 1) });
+      const mockUser = createMockUser();
 
       jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser);
 
@@ -110,15 +111,11 @@ describe('UserService', () => {
         phone_number: '1234567890',
       };
 
-      jest
-        .spyOn(prisma.user, 'findUnique')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
-      jest
-        .spyOn(prisma.user, 'update')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(createMockUser());
+      jest.spyOn(prisma.user, 'update').mockResolvedValue(createMockUser());
 
       const result = await service.updateProfile(uuid, dto);
-      expect(result).toEqual(createMockUser({ createdAt: new Date() }));
+      expect(result).toEqual(createMockUser());
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { uuid },
         data: {
@@ -171,12 +168,8 @@ describe('UserService', () => {
       const uuid = 'user-uuid';
       const productUuid = 'product-uuid';
 
-      jest
-        .spyOn(service, 'byId')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
-      jest
-        .spyOn(prisma.user, 'update')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest.spyOn(service, 'byId').mockResolvedValue(createMockUser());
+      jest.spyOn(prisma.user, 'update').mockResolvedValue(createMockUser());
 
       const result = await service.toggleFavorite(uuid, productUuid);
       expect(result).toBe('Success');
@@ -194,12 +187,8 @@ describe('UserService', () => {
       const uuid = 'user-uuid';
       const productUuid = 'product-uuid';
 
-      jest
-        .spyOn(service, 'byId')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
-      jest
-        .spyOn(prisma.user, 'update')
-        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest.spyOn(service, 'byId').mockResolvedValue(createMockUser());
+      jest.spyOn(prisma.user, 'update').mockResolvedValue(createMockUser());
 
       const result = await service.toggleFavorite(uuid, productUuid);
       expect(result).toBe('Success');
@@ -216,10 +205,7 @@ describe('UserService', () => {
 
   describe('getAll', () => {
     it('should return all users', async () => {
-      const mockUsers = [
-        createMockUser({ createdAt: new Date() }),
-        createMockUser({ createdAt: new Date(2020, 0, 1) }),
-      ];
+      const mockUsers = [createMockUser(), createMockUser()];
 
       jest.spyOn(prisma.user, 'findMany').mockResolvedValue(mockUsers);
 
