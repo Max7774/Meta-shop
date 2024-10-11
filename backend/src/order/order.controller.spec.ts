@@ -52,7 +52,7 @@ function createMockOrder(overrides = {}): any {
       floor: 'test-floor',
     },
     items: [],
-    ...overrides, // позволяет переопределять свойства при необходимости
+    ...overrides,
   };
 }
 

@@ -436,6 +436,7 @@ jobs:
           BACKEND_SONAR_URL: ${{ env.BACKEND_SONAR_URL }}
           FRONTEND_SONAR_URL: ${{ env.FRONTEND_SONAR_URL }}
           BACKEND_TEST_STATUS: ${{ env.BACKEND_TEST_STATUS }}
+          TEST_COVERAGE_URL: ${{ secrets.TEST_COVERAGE_URL }}
         run: |
           # Экранируем специальные символы для MarkdownV2
           escape() {
@@ -504,27 +505,19 @@ jobs:
           echo -e "$MESSAGE"
 
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
-          -d chat_id=${TELEGRAM_CHAT_ID} \
-          -d parse_mode="MarkdownV2" \
-          --data-urlencode text="$MESSAGE"
-      - name: Send Message with Button to Telegram
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
-            -H "Content-Type: application/json" \
-            -d @- <<EOF
-            {
+          -H "Content-Type: application/json" \
+          -d @- <<EOF
+          {
               "chat_id": "${TELEGRAM_CHAT_ID}",
-              "text": "Проверка покрытия кода и результаты тестов.",
+              "text": "${MESSAGE}",
+              "parse_mode": "MarkdownV2",
               "reply_markup": {
                 "inline_keyboard": [
                   [
                     {
-                      "text": "Посмотреть отчет о покрытии",
+                      "text": "Посмотреть отчет о покрытии тестов",
                       "web_app": {
-                        "url": "${{ secrets.TEST_COVERAGE_URL }}"
+                        "url": "${TEST_COVERAGE_URL}"
                       }
                     }
                   ]
