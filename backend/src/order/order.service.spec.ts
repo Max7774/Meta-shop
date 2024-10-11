@@ -11,7 +11,7 @@ import { EnumOrderItemStatus, EnumRoleOfUser } from '@prisma/client';
 import { Message } from 'node-telegram-bot-api';
 import * as QRCode from 'qrcode';
 import * as path from 'path';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 
 jest.mock('nodemailer', () => ({
   createTransport: jest.fn(() => ({
@@ -57,7 +57,6 @@ describe('OrderService', () => {
           provide: QRCodeService,
           useValue: {
             generateQRCode: jest.fn(async (data: string) => {
-              // Генерируем корректные данные Base64 для QR-кода с использованием библиотеки qrcode
               return await QRCode.toDataURL(data);
             }),
           },
@@ -82,13 +81,24 @@ describe('OrderService', () => {
     jest.restoreAllMocks();
   });
 
-  afterAll(() => {
-    const receiptsPath = path.join(process.cwd(), 'src', 'receipts');
+  afterAll(async () => {
+    const receiptsPath = path.join(__dirname, '../../receipts');
+    console.log('Путь к папке receipts:', receiptsPath);
 
-    if (fs.existsSync(receiptsPath)) {
-      const files = fs.readdirSync(receiptsPath);
-      for (const file of files) {
-        fs.unlinkSync(path.join(receiptsPath, file));
+    if (await fs.stat(receiptsPath).catch(() => false)) {
+      const files = await fs.readdir(receiptsPath);
+
+      if (files.length === 0) {
+        console.log('Файлы в папке отсутствуют, удаление не требуется');
+      } else {
+        const deletePromises = files.map(async (file) => {
+          try {
+            await fs.unlink(path.join(receiptsPath, file));
+          } catch (err) {
+            console.error(`Ошибка при удалении файла ${file}:`, err);
+          }
+        });
+        await Promise.all(deletePromises);
       }
     }
   });

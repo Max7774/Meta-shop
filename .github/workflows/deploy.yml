@@ -523,7 +523,9 @@ jobs:
                   [
                     {
                       "text": "Посмотреть отчет о покрытии",
-                      "url": "${{ secrets.TEST_COVERAGE_URL }}"
+                      "web_app": {
+                        "url": "${{ secrets.TEST_COVERAGE_URL }}"
+                      }
                     }
                   ]
                 ]
