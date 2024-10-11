@@ -199,7 +199,7 @@ export class OrderService {
       });
     }
 
-    const timestamp = Date.now().toString(36); // Преобразуем в 36-ричную систему для сокращения длины
+    const timestamp = Date.now().toString(36);
     const randomNum = Math.floor(Math.random() * 1e6).toString(36);
 
     const order = await this.prisma.order.create({

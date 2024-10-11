@@ -30,7 +30,7 @@ jobs:
     needs: [check_changes]
     if: needs.check_changes.outputs.backend_changed == 'true'
     outputs:
-      tests_success: ${{ steps.run_backend_tests.outputs.tests_success == 'success' }}
+      tests_success: ${{ steps.check_tests_success.outputs.tests_success }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -58,6 +58,16 @@ jobs:
         id: run_backend_tests
         working-directory: ./backend
         run: yarn test --ci --json --outputFile=test-report.json
+        continue-on-error: true
+
+      - name: Check Test Result
+        id: check_tests_success
+        run: |
+          if [ "${{ steps.run_backend_tests.conclusion }}" == "success" ]; then
+            echo "tests_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_success=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Archive Test Report
         if: always()
@@ -347,7 +357,7 @@ jobs:
           echo "FRONTEND_CHECK_RESULT=$FRONTEND_CHECK_RESULT"
           echo "TESTS_BACKEND_RESULT=$TESTS_BACKEND_RESULT"
 
-          echo -e "TESTS_BACKEND_RESULT"
+          echo -e "$TESTS_BACKEND_RESULT"
 
           if [[ "$BACKEND_RESULT" == "success" || "$FRONTEND_RESULT" == "success" ]]; then
             echo "should_notify=true" >> $GITHUB_OUTPUT
