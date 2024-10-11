@@ -504,28 +504,33 @@ jobs:
 
           echo -e "$MESSAGE"
 
-          MESSAGE_ESCAPED=$(escape "$MESSAGE")
-
-          echo -e "$MESSAGE_ESCAPED"
-
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
-          -H "Content-Type: application/json" \
-          -d @- <<EOF
-          {
-            "chat_id": "${TELEGRAM_CHAT_ID}",
-            "text": "${MESSAGE_ESCAPED}",
-            "parse_mode": "MarkdownV2",
-            "reply_markup": {
-              "inline_keyboard": [
-                [
-                  {
-                    "text": "Посмотреть отчет о покрытии тестов",
-                    "web_app": {
-                      "url": "${TEST_COVERAGE_URL}"
+          -d chat_id=${TELEGRAM_CHAT_ID} \
+          -d parse_mode="MarkdownV2" \
+          --data-urlencode text="$MESSAGE"
+      - name: Send Message with Button to Telegram
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TEST_COVERAGE_URL: ${{ secrets.TEST_COVERAGE_URL }}
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+            {
+              "chat_id": "${TELEGRAM_CHAT_ID}",
+              "text": "Проверка покрытия кода и результаты тестов.",
+              "reply_markup": {
+                "inline_keyboard": [
+                  [
+                    {
+                      "text": "Посмотреть отчет о покрытии",
+                      "web_app": {
+                        "url": "${TEST_COVERAGE_URL}"
+                      }
                     }
-                  }
+                  ]
                 ]
-              ]
+              }
             }
-          }
-          EOF
+            EOF

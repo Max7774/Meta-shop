@@ -21,7 +21,6 @@ export const mockUser: User = {
   currentAddress: '123 Street',
 };
 
-// Mock dependencies
 const mockPrismaService = {
   address: {
     create: jest.fn().mockResolvedValue({
