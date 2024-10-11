@@ -23,7 +23,6 @@ jest.mock('nodemailer', () => ({
   }),
 }));
 
-// Mock data to be used in tests
 const mockUser: User = {
   uuid: '12345',
   createdAt: new Date(),

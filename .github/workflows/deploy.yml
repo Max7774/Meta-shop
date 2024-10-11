@@ -57,14 +57,6 @@ jobs:
       - name: Run Backend Tests
         working-directory: ./backend
         run: yarn test
-        continue-on-error: true
-
-      - name: Remove Test Files
-        if: ${{ always() }}
-        working-directory: ./backend/src
-        run: |
-          find . -type f -name "*.service.spec.ts" -delete
-          find . -type f -name "*.controller.spec.ts" -delete
 
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest
@@ -99,6 +91,7 @@ jobs:
             -Dsonar.organization=max7774
             -Dsonar.projectKey=Max7774_Meta-shop
             -Dsonar.sources=.
+            -Dsonar.exclusions=**/*.spec.ts
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
