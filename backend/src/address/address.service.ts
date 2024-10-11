@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAddressDto } from './dto/create-address.dto';
-import { UpdateAddressDto } from './dto/update-address.dto';
 import { PrismaService } from 'src/prisma.service';
 import { uuidGen } from 'src/utils/uuidGenerator';
 
@@ -62,14 +61,5 @@ export class AddressService {
     } catch (error) {
       throw new BadRequestException(error);
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} address`;
   }
 }
