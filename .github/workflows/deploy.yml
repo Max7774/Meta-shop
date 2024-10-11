@@ -393,9 +393,6 @@ jobs:
           BACKEND_SONAR_URL_ESCAPED=$(escape "${BACKEND_SONAR_URL}")
           FRONTEND_SONAR_URL_ESCAPED=$(escape "${FRONTEND_SONAR_URL}")
 
-          echo "COMMIT_MESSAGE_ESCAPED: $COMMIT_MESSAGE_ESCAPED"
-          echo "BACKEND_CHECK_STATUS_ESCAPED: $BACKEND_CHECK_STATUS_ESCAPED"
-
           read -r -d '' MESSAGE << EOM
           🚀 *Деплой обновлений\\!*
 
