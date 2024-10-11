@@ -10,6 +10,8 @@ import { mockOrder } from 'src/bot/bot.service.spec';
 import { EnumOrderItemStatus, EnumRoleOfUser } from '@prisma/client';
 import { Message } from 'node-telegram-bot-api';
 import * as QRCode from 'qrcode';
+import * as path from 'path';
+import * as fs from 'fs';
 
 jest.mock('nodemailer', () => ({
   createTransport: jest.fn(() => ({
@@ -78,6 +80,17 @@ describe('OrderService', () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    const receiptsPath = path.join(process.cwd(), 'src', 'receipts');
+
+    if (fs.existsSync(receiptsPath)) {
+      const files = fs.readdirSync(receiptsPath);
+      for (const file of files) {
+        fs.unlinkSync(path.join(receiptsPath, file));
+      }
+    }
   });
 
   it('should be defined', () => {

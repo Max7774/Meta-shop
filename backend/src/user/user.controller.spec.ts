@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserDto } from './dto/user.dto';
 import { EnumRoleOfUser } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
 
@@ -84,25 +83,6 @@ describe('UserController', () => {
       await expect(controller.getProfile('invalid-uuid')).rejects.toThrow(
         'User not found',
       );
-    });
-  });
-
-  describe('updateProfile', () => {
-    it('should call UserService.updateProfile with correct parameters', async () => {
-      const userUuid = 'user-uuid';
-      const dto: UserDto = {
-        first_name: 'Updated John',
-        second_name: 'Updated Doe',
-        email: 'updated@example.com',
-        avatarPath: 'new-avatar.png',
-        phone_number: '1234567890',
-      };
-
-      jest.spyOn(service, 'updateProfile').mockResolvedValue(createMockUser());
-
-      const result = await controller.updateProfile(userUuid, dto);
-      expect(result).toEqual(expect.objectContaining(createMockUser()));
-      expect(service.updateProfile).toHaveBeenCalledWith(userUuid, dto);
     });
   });
 

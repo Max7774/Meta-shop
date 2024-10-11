@@ -37,8 +37,6 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    console.log(error?.response);
-
     if (
       (error?.response?.status === 401 ||
         errorCatch(error) === "jwt expired" ||
@@ -72,8 +70,6 @@ formDataInstance.interceptors.response.use(
   (config) => config,
   async (error) => {
     const originalRequest = error.config;
-
-    console.log(error?.response);
 
     if (
       (error?.response?.status === 401 ||

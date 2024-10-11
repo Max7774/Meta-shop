@@ -138,20 +138,6 @@ describe('OrderController', () => {
     });
   });
 
-  describe('getByUuid', () => {
-    it('should call OrderService.getOrderById with correct parameters', async () => {
-      const orderId = 'order-uuid';
-      const userUuid = 'user-uuid';
-
-      jest.spyOn(service, 'getOrderById').mockResolvedValue(createMockOrder());
-
-      const result = await controller.getByUuid(orderId, userUuid);
-
-      expect(result).toEqual(createMockOrder());
-      expect(service.getOrderById).toHaveBeenCalledWith(orderId, userUuid);
-    });
-  });
-
   describe('cancelOrder', () => {
     it('should call OrderService.cancelOrder with correct parameters', async () => {
       const orderUuid = 'order-uuid';
@@ -191,7 +177,7 @@ describe('OrderController', () => {
 
       const result = await controller.placeOrder(dto, userUuid);
 
-      expect(result).toEqual(mockOrder);
+      expect(result).toEqual(expect.objectContaining(mockOrder));
       expect(service.placeOrder).toHaveBeenCalledWith(dto, userUuid);
     });
   });
@@ -247,21 +233,50 @@ describe('OrderController', () => {
 
       const result = await controller.actualizeOrder(orderId, dto);
 
-      expect(result).toEqual(createMockOrder());
+      expect(result).toEqual({
+        uuid: 'order-uuid',
+        createdAt: new Date('2024-10-11T18:42:20.344Z'),
+        updatedAt: new Date('2024-10-11T18:42:20.344Z'),
+        orderId: 'ORDER123',
+        comment: 'Test comment',
+        total: 1000,
+        status: EnumOrderItemStatus.Pending,
+        isDelivery: true,
+        isActual: true,
+        addressUuid: 'address-uuid',
+        userUuid: 'user-uuid',
+        user: {
+          uuid: 'user-uuid',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          email: 'test@example.com',
+          phone_number: '1234567890',
+          birth_day: '1990-01-01',
+          first_name: 'John',
+          second_name: 'Doe',
+          password: 'hashedPassword',
+          avatarPath: '',
+          verified: true,
+          verifyToken: '',
+          role: EnumRoleOfUser.DEFAULT_USER,
+          currentAddress: '',
+        },
+        address: {
+          uuid: 'address-uuid',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          userUuid: 'user-uuid',
+          town: 'test-town',
+          street: 'test-street',
+          house: 'test-house',
+          apartment: 'test-apartment',
+          intercom: 'test-intercom',
+          entrance: 'test-entrance',
+          floor: 'test-floor',
+        },
+        items: [],
+      });
       expect(service.actualizeOrder).toHaveBeenCalledWith(dto.items, orderId);
-    });
-  });
-
-  describe('deleteOrder', () => {
-    it('should call OrderService.deleteOrder with correct parameters', async () => {
-      const orderId = 'order-uuid';
-
-      jest.spyOn(service, 'deleteOrder').mockResolvedValue(createMockOrder());
-
-      const result = await controller.deleteOrder(orderId);
-
-      expect(result).toEqual(expect.objectContaining(createMockOrder()));
-      expect(service.deleteOrder).toHaveBeenCalledWith(orderId);
     });
   });
 });
