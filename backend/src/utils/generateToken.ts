@@ -1,13 +1,15 @@
-export function generateToken(length: any) {
-  // Возможные символы, которые могут быть использованы в токене
+import { randomBytes } from 'crypto';
+
+export function generateToken(length: number): string {
   const chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
+  const charsLength = chars.length;
   let token = '';
+
+  const randomValues = randomBytes(length);
+
   for (let i = 0; i < length; i++) {
-    // Генерируем случайный индекс символа
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    // Получаем символ по индексу и добавляем к токену
+    const randomIndex = randomValues[i] % charsLength;
     token += chars[randomIndex];
   }
 

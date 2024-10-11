@@ -57,7 +57,7 @@ jobs:
       - name: Run Backend Tests
         id: run_backend_tests
         working-directory: ./backend
-        run: yarn test --ci --json --outputFile=test-report.json
+        run: yarn test
         continue-on-error: true
 
       - name: Check Test Result
@@ -69,12 +69,12 @@ jobs:
             echo "tests_success=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Archive Test Report
+      - name: Archive Coverage Report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: backend-test-report
-          path: ./backend/test-report.json
+          name: backend-coverage-report
+          path: ./coverage
 
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest
@@ -336,12 +336,22 @@ jobs:
       - run_tests_backend
     if: always()
     steps:
-      - name: Download Test Report
-        if: needs.run_tests_backend.outputs.tests_success == 'true'
+      - name: Download Coverage Report
+        if: always()
         uses: actions/download-artifact@v3
         with:
-          name: backend-test-report
-          path: ./backend
+          name: backend-coverage-report
+          path: ./coverage
+
+      - name: Install SSH Key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Copy Coverage Report to Server
+        if: needs.run_tests_backend.outputs.tests_success == 'true' # Копируем, если тесты успешны
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./coverage ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html/
 
       - name: Determine if we should send notification
         id: should_notify
@@ -497,12 +507,26 @@ jobs:
           -d chat_id=${TELEGRAM_CHAT_ID} \
           -d parse_mode="MarkdownV2" \
           --data-urlencode text="$MESSAGE"
-      - name: Send Test Report to Telegram
-        if: needs.run_tests_backend.outputs.tests_success == 'true'
+      - name: Send Message with Button to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          curl -F chat_id=${TELEGRAM_CHAT_ID} \
-               -F document=@./backend/test-report.json \
-               https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendDocument
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+            {
+              "chat_id": "${TELEGRAM_CHAT_ID}",
+              "text": "Проверка покрытия кода и результаты тестов.",
+              "reply_markup": {
+                "inline_keyboard": [
+                  [
+                    {
+                      "text": "Посмотреть отчет о покрытии",
+                      "url": "${{ secrets.TEST_COVERAGE_URL }}"
+                    }
+                  ]
+                ]
+              }
+            }
+            EOF
