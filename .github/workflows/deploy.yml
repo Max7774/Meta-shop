@@ -508,20 +508,20 @@ jobs:
           -H "Content-Type: application/json" \
           -d @- <<EOF
           {
-              "chat_id": "${TELEGRAM_CHAT_ID}",
-              "text": "${MESSAGE}",
-              "parse_mode": "MarkdownV2",
-              "reply_markup": {
-                "inline_keyboard": [
-                  [
-                    {
-                      "text": "Посмотреть отчет о покрытии тестов",
-                      "web_app": {
-                        "url": "${TEST_COVERAGE_URL}"
-                      }
+            "chat_id": "${TELEGRAM_CHAT_ID}",
+            "text": "${MESSAGE}",
+            "parse_mode": "MarkdownV2",
+            "reply_markup": {
+              "inline_keyboard": [
+                [
+                  {
+                    "text": "Посмотреть отчет о покрытии тестов",
+                    "web_app": {
+                      "url": "${TEST_COVERAGE_URL}"
                     }
-                  ]
+                  }
                 ]
-              }
+              ]
             }
-            EOF
+          }
+          EOF

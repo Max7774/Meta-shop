@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AddressController } from './address.controller';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
-import { mockUser } from './address.service.spec'; // предположим, что вы можете использовать mockUser из теста сервиса
+import { mockUser } from './address.service.spec';
 
 const mockAddressService = {
   create: jest.fn(),
