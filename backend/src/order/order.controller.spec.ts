@@ -9,6 +9,53 @@ import { PaymentStatusDto } from './dto/payment-status.dto';
 import { EnumOrderItemStatus, EnumRoleOfUser } from '@prisma/client';
 import { Response } from 'express';
 
+function createMockOrder(overrides = {}): any {
+  return {
+    uuid: 'order-uuid',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    orderId: 'ORDER123',
+    comment: 'Test comment',
+    total: 1000,
+    status: EnumOrderItemStatus.Pending,
+    isDelivery: true,
+    isActual: true,
+    addressUuid: 'address-uuid',
+    userUuid: 'user-uuid',
+    user: {
+      uuid: 'user-uuid',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      email: 'test@example.com',
+      phone_number: '1234567890',
+      birth_day: '1990-01-01',
+      first_name: 'John',
+      second_name: 'Doe',
+      password: 'hashedPassword',
+      avatarPath: '',
+      verified: true,
+      verifyToken: '',
+      role: EnumRoleOfUser.DEFAULT_USER,
+      currentAddress: '',
+    },
+    address: {
+      uuid: 'address-uuid',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userUuid: 'user-uuid',
+      town: 'test-town',
+      street: 'test-street',
+      house: 'test-house',
+      apartment: 'test-apartment',
+      intercom: 'test-intercom',
+      entrance: 'test-entrance',
+      floor: 'test-floor',
+    },
+    items: [],
+    ...overrides, // позволяет переопределять свойства при необходимости
+  };
+}
+
 jest.mock('express', () => ({
   ...jest.requireActual('express'),
   Response: {
@@ -67,35 +114,7 @@ describe('OrderController', () => {
         searchTerm: 'test',
         status: EnumOrderItemStatus.Pending,
       };
-      const mockOrders = [
-        {
-          uuid: 'order-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          orderId: 'ORDER123',
-          comment: 'Test comment',
-          total: 1000,
-          status: EnumOrderItemStatus.Pending,
-          isDelivery: true,
-          isActual: true,
-          addressUuid: 'address-uuid',
-          userUuid: userUuid,
-          address: {
-            uuid: 'address-uuid',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            userUuid: userUuid,
-            town: 'test-town',
-            street: 'test-street',
-            house: 'test-house',
-            apartment: 'test-apartment',
-            intercom: 'test-intercom',
-            entrance: 'test-entrance',
-            floor: 'test-floor',
-          },
-          items: [],
-        },
-      ];
+      const mockOrders = [createMockOrder()];
       jest.spyOn(service, 'getAll').mockResolvedValue(mockOrders);
 
       const result = await controller.getAll(userUuid, params);
@@ -108,38 +127,7 @@ describe('OrderController', () => {
   describe('getByUserId', () => {
     it('should call OrderService.getByUserId with correct parameters', async () => {
       const userUuid = 'user-uuid';
-      const mockOrders = [
-        {
-          uuid: 'order-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          orderId: 'ORDER123',
-          comment: 'Test comment',
-          total: 1000,
-          status: EnumOrderItemStatus.Pending,
-          isDelivery: true,
-          isActual: true,
-          addressUuid: 'address-uuid',
-          userUuid: userUuid,
-          user: {
-            uuid: 'user-uuid',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            email: 'test@example.com',
-            phone_number: '1234567890',
-            birth_day: '1990-01-01',
-            first_name: 'John',
-            second_name: 'Doe',
-            password: 'hashedPassword',
-            avatarPath: '',
-            verified: true,
-            verifyToken: '',
-            role: EnumRoleOfUser.DEFAULT_USER,
-            currentAddress: '',
-          },
-          items: [],
-        },
-      ];
+      const mockOrders = [createMockOrder()];
 
       jest.spyOn(service, 'getByUserId').mockResolvedValue(mockOrders);
 
@@ -154,55 +142,12 @@ describe('OrderController', () => {
     it('should call OrderService.getOrderById with correct parameters', async () => {
       const orderId = 'order-uuid';
       const userUuid = 'user-uuid';
-      const mockOrder = {
-        uuid: orderId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: 'ORDER123',
-        comment: 'Test comment',
-        total: 1000,
-        status: EnumOrderItemStatus.Pending,
-        isDelivery: true,
-        isActual: true,
-        addressUuid: 'address-uuid',
-        userUuid: userUuid,
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'test@example.com',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: 'hashedPassword',
-          avatarPath: '',
-          verified: true,
-          verifyToken: '',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          currentAddress: '',
-        },
-        address: {
-          uuid: 'address-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userUuid: 'user-uuid',
-          town: 'test-town',
-          street: 'test-street',
-          house: 'test-house',
-          apartment: 'test-apartment',
-          intercom: 'test-intercom',
-          entrance: 'test-entrance',
-          floor: 'test-floor',
-        },
-        items: [],
-      };
 
-      jest.spyOn(service, 'getOrderById').mockResolvedValue(mockOrder);
+      jest.spyOn(service, 'getOrderById').mockResolvedValue(createMockOrder());
 
       const result = await controller.getByUuid(orderId, userUuid);
 
-      expect(result).toEqual(mockOrder);
+      expect(result).toEqual(createMockOrder());
       expect(service.getOrderById).toHaveBeenCalledWith(orderId, userUuid);
     });
   });
@@ -239,49 +184,8 @@ describe('OrderController', () => {
         comment: 'Test comment',
         first_name: 'John',
       };
-      const mockOrder = {
-        uuid: 'order-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: 'ORDER123',
-        comment: 'Test comment',
-        total: 1000,
-        status: EnumOrderItemStatus.Pending,
-        isDelivery: true,
-        isActual: true,
-        addressUuid: 'address-uuid',
-        userUuid: userUuid,
-        items: [],
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'test@example.com',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: 'hashedPassword',
-          avatarPath: '',
-          verified: true,
-          verifyToken: '',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          currentAddress: '',
-        },
-        address: {
-          uuid: 'address-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userUuid: userUuid,
-          town: 'test-town',
-          street: 'test-street',
-          house: 'test-house',
-          apartment: 'test-apartment',
-          intercom: 'test-intercom',
-          entrance: 'test-entrance',
-          floor: 'test-floor',
-        },
-      };
+
+      const mockOrder = createMockOrder({ status: EnumOrderItemStatus.Payed });
 
       jest.spyOn(service, 'placeOrder').mockResolvedValue(mockOrder);
 
@@ -316,58 +220,16 @@ describe('OrderController', () => {
     it('should call OrderService.getOrderById and send receipt file', async () => {
       const orderId = 'order-uuid';
       const userUuid = 'user-uuid';
-      const mockOrder = {
-        uuid: 'order-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: 'ORDER123',
-        comment: 'Test comment',
-        total: 1000,
-        status: EnumOrderItemStatus.Pending,
-        isDelivery: true,
-        isActual: true,
-        addressUuid: 'address-uuid',
-        userUuid: userUuid,
-        items: [],
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'test@example.com',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: 'hashedPassword',
-          avatarPath: '',
-          verified: true,
-          verifyToken: '',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          currentAddress: '',
-        },
-        address: {
-          uuid: 'address-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userUuid: userUuid,
-          town: 'test-town',
-          street: 'test-street',
-          house: 'test-house',
-          apartment: 'test-apartment',
-          intercom: 'test-intercom',
-          entrance: 'test-entrance',
-          floor: 'test-floor',
-        },
-      };
+
       const res = { sendFile: jest.fn() } as unknown as Response;
 
-      jest.spyOn(service, 'getOrderById').mockResolvedValue(mockOrder);
+      jest.spyOn(service, 'getOrderById').mockResolvedValue(createMockOrder());
 
       await controller.uploadReceipt(orderId, userUuid, res);
 
       expect(service.getOrderById).toHaveBeenCalledWith(orderId, userUuid);
       expect(res.sendFile).toHaveBeenCalledWith(
-        `receipt-${mockOrder.orderId}.pdf`,
+        `receipt-${createMockOrder().orderId}.pdf`,
         {
           root: process.env.DESTINATION_RECEIPTS,
         },
@@ -378,57 +240,14 @@ describe('OrderController', () => {
   describe('actualizeOrder', () => {
     it('should call OrderService.actualizeOrder with correct parameters', async () => {
       const orderId = 'order-uuid';
-      const userUuid = 'user-uuid';
       const dto = { items: [] };
-      const mockOrder = {
-        uuid: 'order-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: 'ORDER123',
-        comment: 'Test comment',
-        total: 1000,
-        status: EnumOrderItemStatus.Pending,
-        isDelivery: true,
-        isActual: true,
-        addressUuid: 'address-uuid',
-        userUuid: userUuid,
-        items: [],
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'test@example.com',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: 'hashedPassword',
-          avatarPath: '',
-          verified: true,
-          verifyToken: '',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          currentAddress: '',
-        },
-        address: {
-          uuid: 'address-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userUuid: userUuid,
-          town: 'test-town',
-          street: 'test-street',
-          house: 'test-house',
-          apartment: 'test-apartment',
-          intercom: 'test-intercom',
-          entrance: 'test-entrance',
-          floor: 'test-floor',
-        },
-      };
-
-      jest.spyOn(service, 'actualizeOrder').mockResolvedValue(mockOrder);
+      jest
+        .spyOn(service, 'actualizeOrder')
+        .mockResolvedValue(createMockOrder());
 
       const result = await controller.actualizeOrder(orderId, dto);
 
-      expect(result).toEqual(mockOrder);
+      expect(result).toEqual(createMockOrder());
       expect(service.actualizeOrder).toHaveBeenCalledWith(dto.items, orderId);
     });
   });
@@ -436,56 +255,12 @@ describe('OrderController', () => {
   describe('deleteOrder', () => {
     it('should call OrderService.deleteOrder with correct parameters', async () => {
       const orderId = 'order-uuid';
-      const userUuid = 'user-uuid';
-      const mockOrder = {
-        uuid: 'order-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        orderId: 'ORDER123',
-        comment: 'Test comment',
-        total: 1000,
-        status: EnumOrderItemStatus.Pending,
-        isDelivery: true,
-        isActual: true,
-        addressUuid: 'address-uuid',
-        userUuid: userUuid,
-        items: [],
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'test@example.com',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: 'hashedPassword',
-          avatarPath: '',
-          verified: true,
-          verifyToken: '',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          currentAddress: '',
-        },
-        address: {
-          uuid: 'address-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userUuid: userUuid,
-          town: 'test-town',
-          street: 'test-street',
-          house: 'test-house',
-          apartment: 'test-apartment',
-          intercom: 'test-intercom',
-          entrance: 'test-entrance',
-          floor: 'test-floor',
-        },
-      };
 
-      jest.spyOn(service, 'deleteOrder').mockResolvedValue(mockOrder);
+      jest.spyOn(service, 'deleteOrder').mockResolvedValue(createMockOrder());
 
       const result = await controller.deleteOrder(orderId);
 
-      expect(result).toEqual(mockOrder);
+      expect(result).toEqual(createMockOrder());
       expect(service.deleteOrder).toHaveBeenCalledWith(orderId);
     });
   });

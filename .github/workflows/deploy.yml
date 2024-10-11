@@ -58,6 +58,10 @@ jobs:
         working-directory: ./backend
         run: yarn test
 
+      - name: Remove Backend Tests
+        working-directory: ./backend
+        run: find . -name "*.spec.ts" -type f -delete
+
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest
     needs: [run_tests_backend]
@@ -227,13 +231,6 @@ jobs:
       - name: Copy files and deploy .dockerignore
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/.dockerignore ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
-
-      - name: Remove Test Files
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
-          cd /Meta-shop/backend
-          find . -name "*.spec.ts" -type f -delete
-          EOF
 
       - name: SSH [Docker compose - Down volumes]
         run: |
@@ -449,9 +446,9 @@ jobs:
           MESSAGE+=$'🛠️ *Версия бэкенда\\:* `'${BACKEND_VERSION}$'`\n'
           MESSAGE+=$'💻 *Версия фронтенда\\:* `'${FRONTEND_VERSION}$'`\n\n'
 
-          MESSAGE+=$'🛠️ *Тесты Бэкенда\\:* '${BACKEND_TEST_STATUS_ESCAPED}$'\n\n'
+          MESSAGE+=$'🛠️ *Тесты Бэкенда\\:* '${BACKEND_TEST_STATUS}$'\n\n'
 
-          MESSAGE+=$'🛠️ *Sonar Qube\\:*\n'
+          MESSAGE+=$'🔐 *Sonar Qube\\:*\n'
 
           echo -e "'${FRONTEND_CHECK_STATUS}$'"
 

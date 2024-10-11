@@ -37,7 +37,7 @@ describe('AuthController', () => {
     it('should successfully login a user and return tokens', async () => {
       const authLoginDto: AuthLoginDto = {
         email: 'test@example.com',
-        password: 'password',
+        password: '',
       };
 
       mockAuthService.login.mockResolvedValue({
@@ -95,7 +95,7 @@ describe('AuthController', () => {
         second_name: 'Doe',
         phone_number: '1234567890',
         email: 'test@example.com',
-        password: 'password',
+        password: '',
         role: 'DEFAULT_USER',
         birth_day: '1990-01-01',
       };
@@ -113,7 +113,7 @@ describe('AuthController', () => {
         second_name: 'Doe',
         phone_number: '1234567890',
         email: 'test@example.com',
-        password: 'password',
+        password: '',
         role: 'DEFAULT_USER',
         birth_day: '1990-01-01',
       };
@@ -145,7 +145,7 @@ describe('AuthController', () => {
   describe('updatePassword', () => {
     it('should successfully update the password for a user', async () => {
       const resetPasswordType = {
-        new_pass: 'newPassword',
+        new_pass: '',
         resetToken: 'validResetToken',
       };
 

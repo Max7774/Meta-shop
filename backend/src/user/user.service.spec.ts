@@ -5,8 +5,39 @@ import { UserDto } from './dto/user.dto';
 import { BadRequestException } from '@nestjs/common';
 import { EnumRoleOfUser } from '@prisma/client';
 
+function createMockUser(overrides = {}): any {
+  return {
+    uuid: 'user-uuid',
+    favorites: [],
+    updatedAt: new Date(),
+    email: 'test@example.com',
+    first_name: 'John',
+    second_name: 'Doe',
+    role: EnumRoleOfUser.DEFAULT_USER,
+    phone_number: '1234567890',
+    birth_day: '1990-01-01',
+    password: '',
+    avatarPath: 'avatar.png',
+    verified: true,
+    verifyToken: 'token',
+    currentAddress: 'current-address',
+    addresses: [],
+    orders: [],
+    reviews: [],
+    clicks: [],
+    _count: {
+      addresses: 0,
+      orders: 0,
+      favorites: 0,
+      reviews: 0,
+      clicks: 0,
+    },
+    ...overrides,
+  };
+}
+
 jest.mock('argon2', () => ({
-  hash: jest.fn().mockResolvedValue('hashedPassword'),
+  hash: jest.fn().mockResolvedValue(''),
 }));
 
 describe('UserService', () => {
@@ -47,27 +78,15 @@ describe('UserService', () => {
   describe('byId', () => {
     it('should return a user by uuid', async () => {
       const uuid = 'user-uuid';
-      const mockUser = {
-        uuid,
-        email: 'test@example.com',
-        first_name: 'John',
-        second_name: 'Doe',
-        role: EnumRoleOfUser.DEFAULT_USER,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        phone_number: '1234567890',
-        birth_day: '1990-01-01',
-        password: 'hashedPassword',
-        avatarPath: 'avatar.png',
-        verified: true,
-        verifyToken: 'token',
-        currentAddress: 'current-address',
-      };
 
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser);
+      jest
+        .spyOn(prisma.user, 'findUnique')
+        .mockResolvedValue(createMockUser({ createdAt: new Date(2020, 0, 1) }));
 
       const result = await service.byId(uuid);
-      expect(result).toEqual(mockUser);
+      expect(result).toEqual(
+        createMockUser({ createdAt: new Date(2020, 0, 1, 0, 0, 0) }),
+      );
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { uuid },
         select: expect.any(Object),
@@ -93,28 +112,15 @@ describe('UserService', () => {
         phone_number: '1234567890',
       };
 
-      const mockUser = {
-        uuid,
-        email: dto.email,
-        first_name: dto.first_name,
-        second_name: dto.second_name,
-        avatarPath: dto.avatarPath,
-        phone_number: dto.phone_number,
-        password: 'hashedPassword',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        birth_day: '1990-01-01',
-        role: EnumRoleOfUser.DEFAULT_USER,
-        verified: true,
-        verifyToken: 'token',
-        currentAddress: 'current-address',
-      };
-
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser);
-      jest.spyOn(prisma.user, 'update').mockResolvedValue(mockUser);
+      jest
+        .spyOn(prisma.user, 'findUnique')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest
+        .spyOn(prisma.user, 'update')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
 
       const result = await service.updateProfile(uuid, dto);
-      expect(result).toEqual(mockUser);
+      expect(result).toEqual(createMockUser({ createdAt: new Date() }));
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { uuid },
         data: {
@@ -123,7 +129,7 @@ describe('UserService', () => {
           second_name: dto.second_name,
           avatarPath: dto.avatarPath,
           phone_number: dto.phone_number,
-          password: 'hashedPassword',
+          password: '',
         },
         select: expect.any(Object),
       });
@@ -150,7 +156,7 @@ describe('UserService', () => {
         avatarPath: 'avatar.png',
         role: EnumRoleOfUser.DEFAULT_USER,
         birth_day: '',
-        password: 'hashedPassword',
+        password: '',
         verified: true,
         verifyToken: 'token',
         currentAddress: 'current-address',
@@ -166,37 +172,13 @@ describe('UserService', () => {
     it('should add product to favorites if not already exists', async () => {
       const uuid = 'user-uuid';
       const productUuid = 'product-uuid';
-      const mockUser = {
-        uuid,
-        favorites: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        email: 'test@example.com',
-        first_name: 'John',
-        second_name: 'Doe',
-        role: EnumRoleOfUser.DEFAULT_USER,
-        phone_number: '1234567890',
-        birth_day: '1990-01-01',
-        password: 'hashedPassword',
-        avatarPath: 'avatar.png',
-        verified: true,
-        verifyToken: 'token',
-        currentAddress: 'current-address',
-        addresses: [],
-        orders: [],
-        reviews: [],
-        clicks: [],
-        _count: {
-          addresses: 0,
-          orders: 0,
-          favorites: 0,
-          reviews: 0,
-          clicks: 0,
-        },
-      };
 
-      jest.spyOn(service, 'byId').mockResolvedValue(mockUser);
-      jest.spyOn(prisma.user, 'update').mockResolvedValue(mockUser);
+      jest
+        .spyOn(service, 'byId')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest
+        .spyOn(prisma.user, 'update')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
 
       const result = await service.toggleFavorite(uuid, productUuid);
       expect(result).toBe('Success');
@@ -213,37 +195,13 @@ describe('UserService', () => {
     it('should remove product from favorites if it already exists', async () => {
       const uuid = 'user-uuid';
       const productUuid = 'product-uuid';
-      const mockUser = {
-        uuid,
-        favorites: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        email: 'test@example.com',
-        first_name: 'John',
-        second_name: 'Doe',
-        role: EnumRoleOfUser.DEFAULT_USER,
-        phone_number: '1234567890',
-        birth_day: '1990-01-01',
-        password: 'hashedPassword',
-        avatarPath: 'avatar.png',
-        verified: true,
-        verifyToken: 'token',
-        currentAddress: 'current-address',
-        addresses: [],
-        orders: [],
-        reviews: [],
-        clicks: [],
-        _count: {
-          addresses: 0,
-          orders: 0,
-          favorites: 0,
-          reviews: 0,
-          clicks: 0,
-        },
-      };
 
-      jest.spyOn(service, 'byId').mockResolvedValue(mockUser);
-      jest.spyOn(prisma.user, 'update').mockResolvedValue(mockUser);
+      jest
+        .spyOn(service, 'byId')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
+      jest
+        .spyOn(prisma.user, 'update')
+        .mockResolvedValue(createMockUser({ createdAt: new Date() }));
 
       const result = await service.toggleFavorite(uuid, productUuid);
       expect(result).toBe('Success');
@@ -261,42 +219,8 @@ describe('UserService', () => {
   describe('getAll', () => {
     it('should return all users', async () => {
       const mockUsers = [
-        {
-          uuid: 'user-uuid-1',
-          email: 'user1@example.com',
-          first_name: 'User',
-          second_name: 'One',
-          avatarPath: 'avatar1.png',
-          phone_number: '1234567890',
-          birth_day: '1990-01-01',
-          password: 'hashedPassword',
-          verified: true,
-          verifyToken: null,
-          role: EnumRoleOfUser.DEFAULT_USER,
-          orders: [],
-          addresses: [],
-          currentAddress: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          uuid: 'user-uuid-2',
-          email: 'user2@example.com',
-          first_name: 'User',
-          second_name: 'Two',
-          birth_day: '1990-01-01',
-          password: 'hashedPassword',
-          verified: true,
-          verifyToken: null,
-          avatarPath: 'avatar2.png',
-          phone_number: '0987654321',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          orders: [],
-          addresses: [],
-          currentAddress: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+        createMockUser({ createdAt: new Date() }),
+        createMockUser({ createdAt: new Date(2020, 0, 1) }),
       ];
 
       jest.spyOn(prisma.user, 'findMany').mockResolvedValue(mockUsers);

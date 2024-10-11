@@ -199,7 +199,7 @@ describe('OrderService', () => {
           birth_day: '1990-01-01',
           first_name: 'John',
           second_name: 'Doe',
-          password: 'hashedPassword',
+          password: '',
           avatarPath: '',
           verified: true,
           verifyToken: '',

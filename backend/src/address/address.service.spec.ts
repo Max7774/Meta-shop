@@ -14,7 +14,7 @@ export const mockUser: User = {
   birth_day: '1990-01-01',
   first_name: 'John',
   second_name: 'Doe',
-  password: 'hashedPassword',
+  password: '',
   avatarPath: 'default-avatar.png',
   verified: true,
   verifyToken: null,

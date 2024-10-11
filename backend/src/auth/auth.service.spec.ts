@@ -33,7 +33,7 @@ const mockUser: User = {
   birth_day: '1990-01-01',
   first_name: 'John',
   second_name: 'Doe',
-  password: 'hashedPassword',
+  password: '',
   avatarPath: 'default-avatar.png',
   verified: true,
   verifyToken: null,
@@ -85,7 +85,7 @@ describe('AuthService', () => {
         .mockResolvedValue(mockUser);
       const result = await authService.login({
         email: 'test@example.com',
-        password: 'password',
+        password: '',
       });
       expect(result).toEqual({
         user: expect.objectContaining({
@@ -104,7 +104,7 @@ describe('AuthService', () => {
       await expect(
         authService.login({
           email: 'invalid@example.com',
-          password: 'password',
+          password: '',
         }),
       ).rejects.toThrow(UnauthorizedException);
     });
@@ -139,7 +139,7 @@ describe('AuthService', () => {
         birth_day: '1990-01-01',
         phone_number: '1234567890',
         email: 'test@example.com',
-        password: 'password',
+        password: '',
         role: 'DEFAULT_USER',
       };
 
@@ -147,7 +147,7 @@ describe('AuthService', () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce(null);
 
       (generateToken as jest.Mock).mockReturnValue('verificationToken');
-      (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
+      (argon2.hash as jest.Mock).mockResolvedValue('');
 
       const result = await authService.register(dto);
       expect(result).toEqual('Success');
@@ -171,7 +171,7 @@ describe('AuthService', () => {
         birth_day: '1990-01-01',
         phone_number: '1234567890',
         email: 'test@example.com',
-        password: 'password',
+        password: '',
         role: 'DEFAULT_USER',
       };
 
@@ -245,7 +245,7 @@ describe('AuthService', () => {
     it('should successfully update the password for a user with a valid reset token', async () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(mockUser);
       const body: ResetPasswordType = {
-        new_pass: 'newPassword',
+        new_pass: '',
         resetToken: 'validToken',
       };
 
@@ -264,7 +264,7 @@ describe('AuthService', () => {
     it('should throw NotFoundException if reset token is invalid', async () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValueOnce(null);
       const body: ResetPasswordType = {
-        new_pass: 'newPassword',
+        new_pass: '',
         resetToken: 'invalidToken',
       };
 
