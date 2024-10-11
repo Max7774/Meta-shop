@@ -3,7 +3,7 @@ import { Address, Order, OrderItem, Product } from '@prisma/client';
 import * as TelegramBot from 'node-telegram-bot-api';
 import { unitofmeasurementData } from 'src/utils/unitofmeasurementData';
 
-interface IOrder extends Order {
+export interface IOrder extends Order {
   items: (OrderItem & { product: Product })[];
   address: Address;
   user: {

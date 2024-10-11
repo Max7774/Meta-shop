@@ -14,8 +14,6 @@ export async function generatePdfReceipt(
   if (!existsSync(receiptsDir)) {
     mkdirSync(receiptsDir);
     console.log('Receipts directory created.');
-  } else {
-    console.log('Receipts directory already exists.');
   }
 
   const doc = new PDFDocument();
@@ -52,21 +50,46 @@ export async function generatePdfReceipt(
     );
   });
 
-  const qrImageBuffer = Buffer.from(qrCodeDataURL.split(',')[1], 'base64');
+  //   const qrImageBuffer = Buffer.from(qrCodeDataURL.split(',')[1], 'base64');
 
-  doc.moveDown();
+  //   doc.moveDown();
 
-  doc.fontSize(16).text('Сканируйте QR-код для просмотра заказа:', {
-    align: 'center',
-  });
+  //   doc.fontSize(16).text('Сканируйте QR-код для просмотра заказа:', {
+  //     align: 'center',
+  //   });
 
-  doc.moveDown();
+  //   doc.moveDown();
 
-  doc.image(qrImageBuffer, {
-    fit: [150, 150],
-    align: 'center',
-    valign: 'center',
-  });
+  //   doc.image(qrImageBuffer, {
+  //     fit: [150, 150],
+  //     align: 'center',
+  //     valign: 'center',
+  //   });
+
+  if (qrCodeDataURL && qrCodeDataURL.startsWith('data:image/png;base64,')) {
+    const base64Data = qrCodeDataURL.split(',')[1];
+    if (base64Data) {
+      const qrImageBuffer = Buffer.from(base64Data, 'base64');
+
+      doc.moveDown();
+
+      doc.fontSize(16).text('Сканируйте QR-код для просмотра заказа:', {
+        align: 'center',
+      });
+
+      doc.moveDown();
+
+      doc.image(qrImageBuffer, {
+        fit: [150, 150],
+        align: 'center',
+        valign: 'center',
+      });
+    } else {
+      console.error('Ошибка: Некорректный формат данных QR-кода.');
+    }
+  } else {
+    console.error('Ошибка: Некорректный формат URL-данных QR-кода.');
+  }
 
   doc.end();
 

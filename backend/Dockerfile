@@ -1,4 +1,4 @@
-FROM node:21.5.0
+FROM node:20.10.0
 
 WORKDIR /backend_meta_shop
 
