@@ -4,7 +4,6 @@ import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { mockUser } from './address.service.spec'; // предположим, что вы можете использовать mockUser из теста сервиса
 
-// Mock AddressService
 const mockAddressService = {
   create: jest.fn(),
   findAll: jest.fn(),

@@ -63,7 +63,7 @@ jobs:
       - name: Check Test Result
         id: check_tests_success
         run: |
-          if [ "${{ steps.run_backend_tests.conclusion }}" == "success" ]; then
+          if [ "${{ steps.run_backend_tests.outcome }}" == "success" ]; then
             echo "tests_success=true" >> $GITHUB_OUTPUT
           else
             echo "tests_success=false" >> $GITHUB_OUTPUT
@@ -333,6 +333,7 @@ jobs:
       - deploy_frontend
       - sonarqube_analysis_backend
       - sonarqube_analysis_frontend
+      - run_tests_backend
     if: always()
     steps:
       - name: Download Test Report
