@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { User } from '@prisma/client';
 
-// Mock data for testing
 export const mockUser: User = {
   uuid: '12345',
   createdAt: new Date(),

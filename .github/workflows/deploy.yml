@@ -504,12 +504,16 @@ jobs:
 
           echo -e "$MESSAGE"
 
+          MESSAGE_ESCAPED=$(escape "$MESSAGE")
+
+          echo -e "$MESSAGE_ESCAPED"
+
           curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage \
           -H "Content-Type: application/json" \
           -d @- <<EOF
           {
             "chat_id": "${TELEGRAM_CHAT_ID}",
-            "text": "${MESSAGE}",
+            "text": "${MESSAGE_ESCAPED}",
             "parse_mode": "MarkdownV2",
             "reply_markup": {
               "inline_keyboard": [
