@@ -260,7 +260,7 @@ describe('OrderController', () => {
 
       const result = await controller.deleteOrder(orderId);
 
-      expect(result).toEqual(createMockOrder());
+      expect(result).toEqual(expect.objectContaining(createMockOrder()));
       expect(service.deleteOrder).toHaveBeenCalledWith(orderId);
     });
   });

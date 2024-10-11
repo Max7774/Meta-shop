@@ -4,6 +4,7 @@ import { FileUploadService } from './file-upload.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { createMock } from '@golevelup/ts-jest';
 import { promises as fs } from 'fs';
+import * as path from 'path';
 
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
@@ -89,14 +90,17 @@ describe('FileUploadController', () => {
 
       const result = await controller.deleteFile(mockFileName, mockProductUuid);
 
+      const expectedFilePath = path.resolve(
+        process.env.DESTINATION,
+        mockFileName,
+      );
+
       expect(result).toEqual({ message: 'Файл успешно удален' });
       expect(service.deleteImageInProduct).toHaveBeenCalledWith(
         mockProductUuid,
         mockFileName,
       );
-      expect(fs.unlink).toHaveBeenCalledWith(
-        `${process.env.DESTINATION}/${mockFileName}`,
-      );
+      expect(fs.unlink).toHaveBeenCalledWith(expectedFilePath);
     });
 
     it('should throw an HttpException if file is not found', async () => {

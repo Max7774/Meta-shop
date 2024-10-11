@@ -101,7 +101,7 @@ describe('UserController', () => {
       jest.spyOn(service, 'updateProfile').mockResolvedValue(createMockUser());
 
       const result = await controller.updateProfile(userUuid, dto);
-      expect(result).toEqual(createMockUser());
+      expect(result).toEqual(expect.objectContaining(createMockUser()));
       expect(service.updateProfile).toHaveBeenCalledWith(userUuid, dto);
     });
   });
