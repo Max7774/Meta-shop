@@ -78,14 +78,13 @@ describe('UserService', () => {
     it('should return a user by uuid', async () => {
       const uuid = 'user-uuid';
 
-      jest
-        .spyOn(prisma.user, 'findUnique')
-        .mockResolvedValue(createMockUser({ createdAt: new Date(2020, 0, 1) }));
+      const mockUser = createMockUser({ createdAt: new Date(2020, 0, 1) });
+
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser);
 
       const result = await service.byId(uuid);
-      expect(result).toEqual(
-        createMockUser({ createdAt: new Date(2020, 0, 1, 0, 0, 0) }),
-      );
+
+      expect(result).toEqual(mockUser);
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { uuid },
         select: expect.any(Object),
