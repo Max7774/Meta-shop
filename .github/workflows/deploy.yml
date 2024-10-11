@@ -58,9 +58,11 @@ jobs:
         working-directory: ./backend
         run: yarn test
 
-      - name: Remove Backend Tests
-        working-directory: ./backend
-        run: find . -name "*.spec.ts" -type f -delete
+      - name: Remove Test Files
+        if: ${{ always() }}
+        working-directory: ./backend/src
+        run: |
+          find . -type f -name "*.spec.ts" -delete
 
   sonarqube_analysis_backend:
     runs-on: ubuntu-latest

@@ -67,7 +67,6 @@ describe('UserService', () => {
   });
 
   afterEach(async () => {
-    // Используйте "?" чтобы убедиться, что module был инициализирован
     await module?.close();
   });
 
