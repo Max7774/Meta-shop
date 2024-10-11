@@ -400,9 +400,9 @@ jobs:
           MESSAGE+=$'🛠️ *Версия бэкенда\\:* `'${BACKEND_VERSION}$'`\n'
           MESSAGE+=$'💻 *Версия фронтенда\\:* `'${FRONTEND_VERSION}$'`\n\n'
 
-          MESSAGE=$'🛠️ *Sonar Qube\\:*\n'
+          MESSAGE=+$'🛠️ *Sonar Qube\\:*\n'
 
-          echo -e "$MESSAGE"
+          echo -e "'${FRONTEND_CHECK_STATUS_ESCAPED}$'"
 
           # Добавляем информацию о проверке бэкенда
           if [[ -n "${BACKEND_SONAR_URL}" ]]; then
