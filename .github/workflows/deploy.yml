@@ -25,10 +25,42 @@ jobs:
             frontend:
               - 'frontend/**'
 
-  sonarqube_analysis_backend:
+  run_tests_backend:
     runs-on: ubuntu-latest
     needs: [check_changes]
     if: needs.check_changes.outputs.backend_changed == 'true'
+    outputs:
+      tests_success: ${{ steps.run_backend_tests.outcome == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.10.0"
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: yarn install
+
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: yarn test
+
+  sonarqube_analysis_backend:
+    runs-on: ubuntu-latest
+    needs: [run_tests_backend]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -196,6 +228,13 @@ jobs:
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/.dockerignore ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/Meta-shop/backend/
 
+      - name: Remove Test Files
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
+          cd /Meta-shop/backend
+          find . -name "*.spec.ts" -type f -delete
+          EOF
+
       - name: SSH [Docker compose - Down volumes]
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }} << 'EOF'
@@ -291,11 +330,13 @@ jobs:
           FRONTEND_RESULT="${{ needs.deploy_frontend.result }}"
           BACKEND_CHECK_RESULT="${{ needs.sonarqube_analysis_backend.result }}"
           FRONTEND_CHECK_RESULT="${{ needs.sonarqube_analysis_frontend.result }}"
+          TESTS_BACKEND_RESULT="${{ needs.run_tests_backend.outputs.tests_success }}"
 
           echo "BACKEND_RESULT=$BACKEND_RESULT"
           echo "FRONTEND_RESULT=$FRONTEND_RESULT"
           echo "BACKEND_CHECK_RESULT=$BACKEND_CHECK_RESULT"
           echo "FRONTEND_CHECK_RESULT=$FRONTEND_CHECK_RESULT"
+          echo "TESTS_BACKEND_RESULT=$TESTS_BACKEND_RESULT"
 
           if [[ "$BACKEND_RESULT" == "success" || "$FRONTEND_RESULT" == "success" ]]; then
             echo "should_notify=true" >> $GITHUB_OUTPUT
@@ -342,6 +383,13 @@ jobs:
             echo "FRONTEND_CHECK_STATUS=⚠️ Проверка прервана" >> $GITHUB_ENV
           fi
 
+          # Определяем статус тестов для backend
+          if [[ "$TESTS_BACKEND_RESULT" == "true" ]]; then
+            echo "BACKEND_TEST_STATUS=✅ Тесты пройдены" >> $GITHUB_ENV
+          else
+            echo "BACKEND_TEST_STATUS=❌ Тесты не пройдены" >> $GITHUB_ENV
+          fi
+
       - name: Send notification to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -355,6 +403,7 @@ jobs:
           FRONTEND_CHECK_STATUS: ${{ env.FRONTEND_CHECK_STATUS }}
           BACKEND_SONAR_URL: ${{ env.BACKEND_SONAR_URL }}
           FRONTEND_SONAR_URL: ${{ env.FRONTEND_SONAR_URL }}
+          BACKEND_TEST_STATUS: ${{ env.BACKEND_TEST_STATUS }}
         run: |
           # Экранируем специальные символы для MarkdownV2
           escape() {
@@ -399,6 +448,9 @@ jobs:
           MESSAGE+=$'👤 *Автор\\:* `'${COMMIT_AUTHOR}$'`\n'
           MESSAGE+=$'🛠️ *Версия бэкенда\\:* `'${BACKEND_VERSION}$'`\n'
           MESSAGE+=$'💻 *Версия фронтенда\\:* `'${FRONTEND_VERSION}$'`\n\n'
+
+          MESSAGE+=$'🛠️ *Тесты Бэкенда\\:* '${BACKEND_TEST_STATUS_ESCAPED}$'\n\n'
+
           MESSAGE+=$'🛠️ *Sonar Qube\\:*\n'
 
           echo -e "'${FRONTEND_CHECK_STATUS}$'"
