@@ -15,7 +15,13 @@ import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto, ResetPasswordDto } from './dto/refresh-token.dto';
 import { ResetPasswordType } from './auth.interface';
-import { ApiBody, ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -74,26 +80,22 @@ export class AuthController {
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'New access token generated',
     schema: {
       type: 'object',
       properties: {
         user: {
           type: 'object',
           properties: {
-            verified: {
-              type: 'boolean',
-            },
-            uuid: { type: 'string' },
-            email: { type: 'string' },
-            role: { type: 'string' },
+            verified: { type: 'boolean', example: true },
+            uuid: { type: 'string', example: 'user-uuid' },
+            email: { type: 'string', example: 'user@example.com' },
+            role: { type: 'string', example: 'DEFAULT_USER' },
           },
         },
-        accessToken: {
-          type: 'string',
-        },
-        refreshToken: {
-          type: 'string',
-        },
+        accessToken: { type: 'string', example: 'newAccessToken' },
+        refreshToken: { type: 'string', example: 'newRefreshToken' },
       },
     },
   })
@@ -108,27 +110,24 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('verify/:token')
+  @ApiOperation({ summary: 'Verify email using token' })
   @ApiResponse({
+    status: 200,
+    description: 'Email verification successful',
     schema: {
       type: 'object',
       properties: {
         user: {
           type: 'object',
           properties: {
-            verified: {
-              type: 'boolean',
-            },
-            uuid: { type: 'string' },
-            email: { type: 'string' },
-            role: { type: 'string' },
+            verified: { type: 'boolean', example: true },
+            uuid: { type: 'string', example: 'user-uuid' },
+            email: { type: 'string', example: 'user@example.com' },
+            role: { type: 'string', example: 'DEFAULT_USER' },
           },
         },
-        accessToken: {
-          type: 'string',
-        },
-        refreshToken: {
-          type: 'string',
-        },
+        accessToken: { type: 'string', example: 'someAccessToken' },
+        refreshToken: { type: 'string', example: 'someRefreshToken' },
       },
     },
   })
@@ -141,10 +140,12 @@ export class AuthController {
   @Get('verify-token')
   @ApiHeader({
     name: 'Authorization',
-    description: 'Access token',
+    description: 'Bearer access token',
     required: true,
   })
   @ApiResponse({
+    status: 200,
+    description: 'Token verification result',
     schema: {
       type: 'boolean',
       example: false,
@@ -158,21 +159,24 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        first_name: { type: 'string' },
-        second_name: { type: 'string' },
-        town: { type: 'string' },
-        birth_day: { type: 'string' },
-        phone_number: { type: 'string' },
-        email: { type: 'string' },
-        password: { type: 'string' },
+        first_name: { type: 'string', example: 'John' },
+        second_name: { type: 'string', example: 'Doe' },
+        town: { type: 'string', example: 'New York' },
+        birth_day: { type: 'string', example: '1990-01-01' },
+        phone_number: { type: 'string', example: '1234567890' },
+        email: { type: 'string', example: 'user@example.com' },
+        password: { type: 'string', example: 'password123' },
       },
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'Registration successful',
     schema: {
       type: 'string',
       example: 'Success',
@@ -185,15 +189,18 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('phone-register')
+  @ApiOperation({ summary: 'Register user by phone number' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        phone_number: { type: 'string' },
+        phone_number: { type: 'string', example: '1234567890' },
       },
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'Phone registration successful',
     schema: {
       type: 'string',
       example: 'Success',
@@ -206,15 +213,18 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('reset-password')
+  @ApiOperation({ summary: 'Request password reset' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        email: { type: 'string' },
+        email: { type: 'string', example: 'user@example.com' },
       },
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'Password reset request successful',
     schema: {
       type: 'string',
       example: 'OK',
@@ -227,16 +237,19 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Patch('reset')
+  @ApiOperation({ summary: 'Reset password with reset token' })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        new_pass: { type: 'string' },
-        resetToken: { type: 'string' },
+        new_pass: { type: 'string', example: 'newPassword123' },
+        resetToken: { type: 'string', example: 'someResetToken' },
       },
     },
   })
   @ApiResponse({
+    status: 200,
+    description: 'Password reset successful',
     schema: {
       type: 'string',
       example: 'OK',
