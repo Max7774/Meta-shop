@@ -5,9 +5,9 @@ import Address from "@Components/Address/Address";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
-import { Button, Divider, Progress, Textarea } from "@nextui-org/react";
+import { Button, Divider, Textarea } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,19 +20,21 @@ const OrderPage = () => {
   } = useAppSelector((state) => state.user);
   const { createOrder, reset, updateItemsInStock } = useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
-  const [deliveryPrice, setDeliveryPrice] = useState(800);
+  // const [deliveryPrice, setDeliveryPrice] = useState(800);
   const [itemsInStock, setInStock] = useState<any>([
     ...items.filter((el) => !el.inStock),
   ]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (total > 7000) {
-      setDeliveryPrice(0);
-    } else {
-      setDeliveryPrice(800);
-    }
-  }, [total]);
+  const deliveryPrice = 800;
+
+  // useEffect(() => {
+  //   if (total > 7000) {
+  //     setDeliveryPrice(0);
+  //   } else {
+  //     setDeliveryPrice(800);
+  //   }
+  // }, [total]);
 
   const grandTotal = total + deliveryPrice;
 
@@ -117,15 +119,9 @@ const OrderPage = () => {
               </div>
               <div className="flex justify-between font-bold text-sm sm:text-lg">
                 <div className="text-nowrap">Стоимость доставки:</div>
-                <div>
-                  {deliveryPrice === 0 ? (
-                    <span className="text-green-600">Бесплатно</span>
-                  ) : (
-                    convertPrice(deliveryPrice)
-                  )}
-                </div>
+                <div>{convertPrice(deliveryPrice)}</div>
               </div>
-              <Progress
+              {/* <Progress
                 aria-label="Loading..."
                 label={
                   deliveryPrice === 0
@@ -135,7 +131,7 @@ const OrderPage = () => {
                 color={deliveryPrice === 0 ? "success" : "warning"}
                 maxValue={7000}
                 value={total}
-              />
+              /> */}
               <Divider />
               <div className="flex justify-between font-bold text-xl">
                 <div>Итого к оплате:</div>
@@ -159,3 +155,7 @@ const OrderPage = () => {
 };
 
 export default OrderPage;
+
+// deliveryPrice === 0 ? (
+//   <span className="text-green-600">Бесплатно</span>
+// ) : (

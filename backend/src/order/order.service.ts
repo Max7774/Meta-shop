@@ -217,8 +217,8 @@ export class OrderService {
           }),
         },
         isActual: false,
-        isDelivery: total <= 7000 ? true : false,
-        total: total <= 7000 ? total + 800 : total,
+        isDelivery: true,
+        total: total + 800,
         user: {
           connect: {
             uuid: userUuid,
@@ -275,7 +275,7 @@ export class OrderService {
         });
       }
 
-      const { uuid, isDelivery } = await this.prisma.order.findUnique({
+      const { uuid } = await this.prisma.order.findUnique({
         where: { orderId },
       });
 
@@ -295,7 +295,7 @@ export class OrderService {
 
       const order = await this.prisma.order.update({
         where: { orderId },
-        data: { total: isDelivery ? totalInt + 800 : totalInt, isActual: true },
+        data: { total: totalInt + 800, isActual: true },
         include: {
           address: true,
           items: {

@@ -26,7 +26,7 @@ const BottomActions = () => {
           <MdOutlineDeliveryDining size={20} />
         </div>
         <span className="text-xs text-center pt-0.5">
-          Доставка: {convertPrice(0)} - {convertPrice(800)}
+          Доставка: {convertPrice(800)}
         </span>
         <div className="rounded-full bg-default-200 p-1">
           <FaAngleRight size={15} color="gray" onClick={onOpen} />
@@ -44,7 +44,7 @@ const BottomActions = () => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-1">
-                  <p>Бесплатная доставка от {convertPrice(7000)}</p>
+                  <p>Доставка {convertPrice(7000)}</p>
                   <Divider className="my-1" />
                   <p>Принимаются заказы: 9:00 — 13:00</p>
                   <p className="text-warning">Ягоды до 9:00</p>
