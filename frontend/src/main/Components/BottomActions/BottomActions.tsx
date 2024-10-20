@@ -44,7 +44,7 @@ const BottomActions = () => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-1">
-                  <p>Доставка {convertPrice(7000)}</p>
+                  <p>Доставка {convertPrice(800)}</p>
                   <Divider className="my-1" />
                   <p>Принимаются заказы: 9:00 — 13:00</p>
                   <p className="text-warning">Ягоды до 9:00</p>
