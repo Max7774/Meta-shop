@@ -5,4 +5,5 @@ export const unitofmeasurementData: Record<string, string> = {
   package: 'упаковка',
   kg: 'кг',
   gr: 'гр',
+  piece: 'шт',
 };
