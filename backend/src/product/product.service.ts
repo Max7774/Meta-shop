@@ -275,6 +275,14 @@ export class ProductService {
 
     if (isProduct) throw new NotFoundException('Product is exist');
 
+    try {
+      await this.subcategoryService.byId(dto.subcategoryUuid);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Subcategory not found');
+      }
+    }
+
     const product = await this.prisma.product.create({
       data: {
         uuid: uuidGen(),
@@ -391,6 +399,10 @@ export class ProductService {
         // Возвращаем удаленный продукт
         return deletedProduct;
       });
+
+      for (const image of product.images) {
+        await fs.unlink(`./uploads/${image}`);
+      }
 
       return deletedProduct;
     } catch (error) {

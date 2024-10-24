@@ -11,7 +11,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  useDisclosure,
 } from "@nextui-org/react";
 import {
   Controller,
@@ -24,10 +23,16 @@ import { toast } from "react-toastify";
 interface IActualizeOrderItemProps {
   items: TOrderItem[];
   orderId: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
 }
 
-const ActualizeOrderItem = ({ items, orderId }: IActualizeOrderItemProps) => {
-  const { isOpen, onOpen, onOpenChange, onClose: close } = useDisclosure();
+const ActualizeOrderItem = ({
+  items,
+  orderId,
+  setIsOpen,
+  isOpen,
+}: IActualizeOrderItemProps) => {
   const { actualizeOrder } = useActions();
   const { isActualLoading } = useAppSelector((state) => state.orders);
   const { handleSubmit, control } = useForm<{ items: TOrderItem[] }>({
@@ -45,102 +50,99 @@ const ActualizeOrderItem = ({ items, orderId }: IActualizeOrderItemProps) => {
     const res: any = await actualizeOrder({ items: data.items, orderId });
 
     if (res.type === "/order/actualize/fulfilled") {
-      close();
+      setIsOpen(false);
     } else {
       toast.error("Ошибка актуализации");
     }
   };
 
   return (
-    <>
-      <Button color="primary" onPress={onOpen}>
-        Актуализировать цены
-      </Button>
-      <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <form onSubmit={handleSubmit(submit)}>
-              <ModalHeader className="flex flex-col gap-1">Фильтры</ModalHeader>
-              <ModalBody>
-                <div className="flex flex-col gap-5">
-                  {fields.map((item, index) => (
-                    <div key={item?.uuid} className="flex flex-col gap-2">
-                      <span className="text-lg font-bold">
-                        {item?.product?.name}
-                      </span>
-                      <Controller
-                        name={`items.${index}.price`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            isDisabled
-                            labelPlacement="outside"
-                            label="Цена"
-                            placeholder="Цена"
-                            type="number"
-                            onChange={onChange}
-                            value={value?.toString()}
-                            fullWidth
-                          />
-                        )}
-                      />
+    <Modal
+      isOpen={isOpen}
+      placement="top"
+      onOpenChange={(isOpenModal) => setIsOpen(isOpenModal)}
+    >
+      <ModalContent>
+        {() => (
+          <form onSubmit={handleSubmit(submit)}>
+            <ModalHeader className="flex flex-col gap-1">
+              Актуализация
+            </ModalHeader>
+            <ModalBody>
+              <div className="flex flex-col gap-5">
+                {fields.map((item, index) => (
+                  <div key={item?.uuid} className="flex flex-col gap-2">
+                    <span className="text-lg font-bold">
+                      {item?.product?.name}
+                    </span>
+                    <Controller
+                      name={`items.${index}.price`}
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          isDisabled
+                          labelPlacement="outside"
+                          label="Цена"
+                          placeholder="Цена"
+                          type="number"
+                          onChange={onChange}
+                          value={value?.toString()}
+                          fullWidth
+                        />
+                      )}
+                    />
 
-                      <Controller
-                        name={`items.${index}.quantity`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            labelPlacement="outside"
-                            label="Количество"
-                            placeholder="Количество"
-                            type="number"
-                            onChange={onChange}
-                            value={value?.toString()}
-                            fullWidth
-                            endContent={
-                              <div className="pointer-events-none flex items-center justify-center">
-                                <span className="text-default-400">
-                                  {
-                                    unitofmeasurementData[
-                                      item?.product?.unitofmeasurement
-                                    ]
-                                  }
-                                </span>
-                              </div>
-                            }
-                          />
-                        )}
-                      />
+                    <Controller
+                      name={`items.${index}.quantity`}
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Input
+                          labelPlacement="outside"
+                          label="Количество"
+                          placeholder="Количество"
+                          type="number"
+                          onChange={onChange}
+                          value={value?.toString()}
+                          fullWidth
+                          endContent={
+                            <div className="pointer-events-none flex items-center justify-center">
+                              <span className="text-default-400">
+                                {
+                                  unitofmeasurementData[
+                                    item?.product?.unitofmeasurement
+                                  ]
+                                }
+                              </span>
+                            </div>
+                          }
+                        />
+                      )}
+                    />
 
-                      {/* Добавьте другие поля по мере необходимости */}
-                    </div>
-                  ))}
-                </div>
-              </ModalBody>
-              <ModalFooter className="w-full flex-col">
-                <Button
-                  color="warning"
-                  variant="faded"
-                  onPress={() => {
-                    actualizeOrder({ items, orderId });
-                    onClose();
-                  }}
-                >
-                  Оставить
-                </Button>
-                <Button
-                  isLoading={isActualLoading}
-                  color="primary"
-                  type="submit"
-                >
-                  Обновить
-                </Button>
-              </ModalFooter>
-            </form>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
+                    {/* Добавьте другие поля по мере необходимости */}
+                  </div>
+                ))}
+              </div>
+            </ModalBody>
+            <ModalFooter className="w-full flex-col">
+              <Button
+                color="warning"
+                variant="faded"
+                onPress={() => {
+                  actualizeOrder({ items, orderId });
+                  setIsOpen(false);
+                }}
+              >
+                Оставить
+              </Button>
+              <Button isLoading={isActualLoading} color="primary" type="submit">
+                Обновить
+              </Button>
+            </ModalFooter>
+          </form>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };
 

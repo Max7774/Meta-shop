@@ -22,6 +22,7 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { promises as fs } from 'fs';
+import * as path from 'path';
 
 @Controller('file-upload')
 @ApiTags('File-upload')
@@ -79,12 +80,24 @@ export class FileUploadController {
     return this.fileUploadService.updateAvatar(file, uuid);
   }
 
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth(['ADMIN', 'MANAGER'])
   @Delete(':fileName/:productUuid')
   async deleteFile(
     @Param('fileName') fileName: string,
     @Param('productUuid') productUuid: string,
   ): Promise<any> {
-    const filePath = `${process.env.DESTINATION}/${fileName}`;
+    if (!process.env.DESTINATION) {
+      throw new HttpException(
+        'Переменная окружения DESTINATION не настроена',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const baseDirectory = path.resolve(process.env.DESTINATION);
+    const filePath = path.join(baseDirectory, fileName);
+
     try {
       const result = await this.fileUploadService.deleteImageInProduct(
         productUuid,

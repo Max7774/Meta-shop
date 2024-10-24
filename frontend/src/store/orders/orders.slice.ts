@@ -16,6 +16,7 @@ type TOrdersState = {
   orders: TOrder[];
   oneOrder: TOrder;
   isLoading: boolean;
+  isError: boolean;
   isCancelOrderLoading: boolean;
   isActualLoading: boolean;
   isOrderStatusChangeLoading: boolean;
@@ -26,6 +27,7 @@ const initialState: TOrdersState = {
   orders: [],
   oneOrder: {} as TOrder,
   isLoading: false,
+  isError: false,
   isCancelOrderLoading: false,
   isActualLoading: false,
   isOrderStatusChangeLoading: false,
@@ -93,13 +95,16 @@ export const ordersSlice = createSlice({
       })
       .addCase(getOrderById.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
       })
       .addCase(getOrderById.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.isError = false;
         state.oneOrder = payload;
       })
       .addCase(getOrderById.rejected, (state) => {
         state.isLoading = false;
+        state.isError = true;
         state.oneOrder = {} as TOrder;
       })
       .addCase(actualizeOrder.pending, (state) => {

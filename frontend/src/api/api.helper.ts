@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const getContentType = (type: "JSON" | "FormData" | "URLEncoded") => {
   if (type === "JSON") {
     return { "Content-Type": "application/json" };

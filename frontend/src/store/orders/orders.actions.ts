@@ -72,7 +72,7 @@ export const getOrderById = createAsyncThunk<TOrder, string>(
 
       return response.data;
     } catch (error: any) {
-      window.location.href = "/";
+      // window.location.href = "/";
       return rejectWithValue(error.message);
     }
   }

@@ -3,7 +3,7 @@ import { useActions } from "@hooks/useActions";
 import Heading from "@UI/Heading";
 import Loader from "@UI/Loader";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Card,
   Table,
@@ -19,6 +19,7 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  Button,
 } from "@nextui-org/react";
 import { getImageUrl } from "@utils/getImageUrl";
 import styles from "./Receipt.module.scss";
@@ -28,17 +29,35 @@ import { convertPrice } from "@utils/convertPrice";
 const Receipt = () => {
   const { getOrderById } = useActions();
   const { orderId } = useParams();
-  const { isLoading, oneOrder } = useAppSelector((state) => state.orders);
+  const { isLoading, oneOrder, isError } = useAppSelector(
+    (state) => state.orders
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     getOrderById(orderId || "");
   }, [getOrderById, orderId]);
 
+  if (isError)
+    return (
+      <>
+        <Heading>Чека не сущесвует</Heading>
+        <Button color="primary" onClick={() => navigate("/")}>
+          Вернуться на главную
+        </Button>
+      </>
+    );
+
   if (isLoading) return <Loader />;
 
   return (
     <section>
-      <Heading>Чек</Heading>
+      <Heading>
+        <div className="flex flex-row justify-between items-end gap-5">
+          <span>Чек</span>
+          <span className="font-bold text-lg">№ {orderId}</span>
+        </div>
+      </Heading>
       <div className={styles.container}>
         <div className={styles.receiptCard}>
           <Card>
@@ -92,9 +111,9 @@ const Receipt = () => {
                     <TableRow key={item.uuid}>
                       <TableCell>{item.product.name}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.price.toFixed(2)} ₸</TableCell>
+                      <TableCell>{convertPrice(item.price)}</TableCell>
                       <TableCell>
-                        {(item.price * item.quantity).toFixed(2)} ₸
+                        {convertPrice(item.price * item.quantity)}
                       </TableCell>
                     </TableRow>
                   ))}

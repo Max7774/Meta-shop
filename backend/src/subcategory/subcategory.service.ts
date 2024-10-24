@@ -26,11 +26,22 @@ export class SubcategoryService {
 
   async create(createSubcategoryDto: CreateSubcategoryDto) {
     try {
+      const baseSlug = convertToSlug(createSubcategoryDto.name);
+
+      // Проверяем наличие существующего slug в базе данных
+      let slug = baseSlug;
+      let count = 1;
+      while (await this.prisma.subcategory.findUnique({ where: { slug } })) {
+        // Если slug уже существует, добавляем к нему число
+        slug = `${baseSlug}-${count}`;
+        count++;
+      }
+
       return await this.prisma.subcategory.create({
         data: {
           uuid: uuidGen(),
           name: createSubcategoryDto.name,
-          slug: convertToSlug(createSubcategoryDto.name),
+          slug: slug,
           category: {
             connect: {
               uuid: createSubcategoryDto.categoryUuid,

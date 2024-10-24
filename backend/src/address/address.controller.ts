@@ -3,22 +3,27 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   UsePipes,
   ValidationPipe,
   HttpCode,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
-import { UpdateAddressDto } from './dto/update-address.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
+import { Address } from './entities/address.entity';
 
 @Controller('address')
 @ApiTags('Address')
+@ApiBearerAuth()
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
@@ -26,6 +31,14 @@ export class AddressController {
   @HttpCode(200)
   @Auth(['DEFAULT_USER'])
   @Post()
+  @ApiOperation({ summary: 'Создать новый адрес' })
+  @ApiResponse({
+    status: 200,
+    description: 'Адрес успешно создан.',
+    type: Address,
+  })
+  @ApiResponse({ status: 400, description: 'Неверные данные.' })
+  @ApiResponse({ status: 401, description: 'Пользователь не авторизован.' })
   async create(
     @Body() createAddressDto: CreateAddressDto,
     @CurrentUser('uuid') userUuid: string,
@@ -37,6 +50,13 @@ export class AddressController {
   @HttpCode(200)
   @Auth(['DEFAULT_USER'])
   @Get()
+  @ApiOperation({ summary: 'Получить все адреса пользователя' })
+  @ApiResponse({
+    status: 200,
+    description: 'Список всех адресов пользователя.',
+    type: [Address],
+  })
+  @ApiResponse({ status: 401, description: 'Пользователь не авторизован.' })
   async findAll(@CurrentUser('uuid') userUuid: string) {
     return await this.addressService.findAll(userUuid);
   }
@@ -45,20 +65,19 @@ export class AddressController {
   @HttpCode(200)
   @Auth(['DEFAULT_USER'])
   @Get(':addressUuid')
+  @ApiOperation({ summary: 'Получить один адрес и установить его как текущий' })
+  @ApiParam({ name: 'addressUuid', description: 'UUID адреса', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Адрес успешно установлен как текущий.',
+    type: Address,
+  })
+  @ApiResponse({ status: 401, description: 'Пользователь не авторизован.' })
+  @ApiResponse({ status: 404, description: 'Адрес не найден.' })
   async findOne(
     @Param('addressUuid') addressUuid: string,
     @CurrentUser('uuid') userUuid: string,
   ) {
     return await this.addressService.setCurrentAddress(addressUuid, userUuid);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
-    return this.addressService.update(+id, updateAddressDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.addressService.remove(+id);
   }
 }

@@ -8,13 +8,14 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
+import { FiArrowDown } from "react-icons/fi";
 
 interface IStatusSortProps {
   setSelectedStatus: React.Dispatch<React.SetStateAction<EOrder>>;
 }
 
 const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set([EOrder.Canceled]));
+  const [selectedKeys, setSelectedKeys] = useState(new Set([EOrder.Delivered]));
 
   const selectedValue = useMemo(() => {
     const key = Array.from(selectedKeys)[0];
@@ -36,8 +37,11 @@ const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="solid" size="md" fullWidth>
-          {selectedValue}
+        <Button variant="faded" color="default" size="md" fullWidth>
+          <span>{selectedValue}</span>
+          <span>
+            <FiArrowDown />
+          </span>
         </Button>
       </DropdownTrigger>
       <DropdownMenu
@@ -48,8 +52,8 @@ const StatusSort = ({ setSelectedStatus }: IStatusSortProps) => {
         selectedKeys={selectedKeys}
         onSelectionChange={handleStatusChange}
       >
-        <DropdownItem key={EOrder.Canceled}>Отменен</DropdownItem>
         <DropdownItem key={EOrder.Delivered}>Доставлен</DropdownItem>
+        <DropdownItem key={EOrder.Canceled}>Отменен</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

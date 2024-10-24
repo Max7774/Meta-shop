@@ -1,7 +1,5 @@
 import { TOrder } from "@/types/TOrder";
-import { EOrder } from "@enums/EOrder";
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -14,29 +12,21 @@ import {
 } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
 import { getOrderStatusLabel } from "@utils/getOrderStatusLabel";
-import { getNextStatus } from "./utils/getNextStatus";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import { useActions } from "@hooks/useActions";
 import { getImageUrl } from "@utils/getImageUrl";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { ERoles } from "@enums/ERoles";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
-import UploadReceipt from "./UploadReceipt/UploadReceipt";
-import ActualizeOrderItem from "./ActualizeOrderItem/ActualizeOrderItem";
-import DeleteOrder from "./DeleteOrder/DeleteOrder";
+import Actions from "./Actions/Actions";
+import { EOrder } from "@enums/EOrder";
 
 interface IOrderCardProps {
   order: TOrder;
 }
 
 const OrderCard = ({ order }: IOrderCardProps) => {
-  const { isOrderStatusChangeLoading, isCancelOrderLoading } = useAppSelector(
-    (state) => state.orders
-  );
   const {
     profile: { role },
   } = useAuth();
-  const { updateStatus, cancelOrder } = useActions();
 
   const isAdmin = role === ERoles.ADMIN;
 
@@ -163,54 +153,9 @@ const OrderCard = ({ order }: IOrderCardProps) => {
               Итого: {convertPrice(order.total)}
             </span>
           </div>
-          {order.status !== EOrder.Canceled &&
-            order.status !== EOrder.Delivered && (
-              <>
-                {isAdmin && (
-                  <>
-                    {!order.isActual ? (
-                      <ActualizeOrderItem
-                        items={order.items}
-                        orderId={order.orderId}
-                      />
-                    ) : (
-                      <Button
-                        color="primary"
-                        onClick={() => {
-                          const nextStatus = getNextStatus(order.status);
-                          if (nextStatus) {
-                            updateStatus({
-                              orderUuid: order.uuid,
-                              status: nextStatus,
-                            });
-                          }
-                        }}
-                        isLoading={isOrderStatusChangeLoading}
-                      >
-                        {order.status === EOrder.Pending &&
-                          "Подтвердить оплату"}
-                        {order.status === EOrder.Payed &&
-                          "Отправить в доставку"}
-                        {order.status === EOrder.In_Delivery &&
-                          "Подтвердить доставку"}
-                      </Button>
-                    )}
-                  </>
-                )}
-                <Button
-                  color="danger"
-                  onClick={() => cancelOrder(order.uuid)}
-                  isLoading={isCancelOrderLoading}
-                >
-                  Отменить заказ
-                </Button>
-              </>
-            )}
-          {order.status !== EOrder.Canceled &&
-            order.status !== EOrder.Pending && (
-              <UploadReceipt orderId={order.orderId} isAdmin={isAdmin} />
-            )}
-          {isAdmin && <DeleteOrder orderId={order.orderId} />}
+          {order.status !== EOrder.Canceled && (
+            <Actions order={order} isAdmin={isAdmin} />
+          )}
         </div>
       </CardFooter>
     </Card>

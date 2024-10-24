@@ -4,7 +4,7 @@ import * as express from 'express';
 import { join } from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: false,
   });
@@ -32,7 +32,16 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
+    .addBasicAuth(
+      {
+        type: 'http',
+        scheme: 'basic',
+        description: 'Basic auth for logging in with username and password',
+      },
+      'basic-auth', // Название схемы для basic auth
+    )
     .addSecurityRequirements('JWT-auth')
+    .addSecurityRequirements('basic-auth')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
