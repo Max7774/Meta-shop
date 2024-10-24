@@ -26,6 +26,9 @@ model User {
   verifyToken    String?        @unique
   role           EnumRoleOfUser @default(DEFAULT_USER)
   currentAddress String?
+
+  companyUuid    String?        @map("companyUuid")
+  company        Company?       @relation(fields: [companyUuid], references: [uuid])
  
   addresses      Address[]
   orders         Order[]
@@ -188,6 +191,21 @@ model Address {
   user        User           @relation(fields: [userUuid], references: [uuid])
 }
 
+model Company {
+  uuid               String     @unique
+  createdAt          DateTime   @default(now()) @map("createdAt")
+  updatedAt          DateTime   @updatedAt @map("updatedAt")
+
+  name               String     @unique
+  oficalName         String
+  registrationNumber String     @unique
+  address            String
+  email              String     @unique
+  phoneNumber        String
+
+  users              User[]
+}
+
 enum EnumOrderItemStatus {
   Pending
   Payed
@@ -201,5 +219,6 @@ enum EnumRoleOfUser {
   DEFAULT_USER
   MANAGER
   COURIER
+  COMPANY
 }
 
