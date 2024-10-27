@@ -155,6 +155,7 @@ describe('UserService', () => {
         verified: true,
         verifyToken: 'token',
         currentAddress: 'current-address',
+        companyUuid: 'company-uuid',
       });
 
       await expect(service.updateProfile(uuid, dto)).rejects.toThrow(

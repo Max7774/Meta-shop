@@ -271,6 +271,9 @@ export class ProductService {
       where: {
         uuid: userUuid,
       },
+      select: {
+        companyUuid: true,
+      },
     });
 
     const isProduct = await this.prisma.product.findUnique({
