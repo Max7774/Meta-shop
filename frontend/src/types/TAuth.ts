@@ -11,6 +11,7 @@ export type TAuthnResponse = {
     uuid: string;
     email: string;
     role: ERoles;
+    companyUuid?: string;
   };
   accessToken: string;
   refreshToken: string;

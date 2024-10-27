@@ -35,6 +35,7 @@ export class UserService {
             reviews: true,
           },
         },
+        companyUuid: true,
         currentAddress: true,
         addresses: true,
         orders: true,

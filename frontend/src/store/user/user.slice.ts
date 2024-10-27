@@ -18,10 +18,12 @@ import {
 } from "./user.actions";
 import { TProfile } from "@/types/TProfile";
 import { ERoles } from "@enums/ERoles";
+import { getStoreLocal } from "@utils/local-storage";
 
 const info: TProfile = {
-  uuid: "",
-  email: "",
+  uuid: getStoreLocal("user")?.uuid || "",
+  companyUuid: getStoreLocal("user")?.companyUuid || "",
+  email: getStoreLocal("user")?.email || "",
   role: ERoles.DEFAULT_USER,
   first_name: "",
   second_name: "",

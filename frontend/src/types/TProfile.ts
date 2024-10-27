@@ -4,6 +4,7 @@ import { TProfileOrderItem } from "./TOrder";
 
 export type TProfile = {
   uuid: string;
+  companyUuid: string;
   email: string;
   role: ERoles;
   first_name: string;

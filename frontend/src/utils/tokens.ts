@@ -40,7 +40,11 @@ export const saveToStorage = (data: TAuthnResponse) => {
     saveTokensStorage(data);
     localStorage.setItem(
       "user",
-      JSON.stringify({ email: data.user.email, uuid: data.user.uuid })
+      JSON.stringify({
+        email: data.user.email,
+        uuid: data.user.uuid,
+        companyUuid: data.user.companyUuid,
+      })
     );
   }
 };

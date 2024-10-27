@@ -219,6 +219,7 @@ export class AuthService {
       uuid: user.uuid,
       email: user.email,
       role: user.role,
+      companyUuid: user?.companyUuid,
     };
   }
 
