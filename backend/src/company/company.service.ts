@@ -42,7 +42,7 @@ export class CompanyService {
         },
       });
 
-      const companyPassword = generateToken(10);
+      const companyPassword = generateToken(12);
 
       const user = await this.prisma.user.create({
         data: {

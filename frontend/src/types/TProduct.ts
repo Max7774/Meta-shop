@@ -18,6 +18,7 @@ export type TProduct = {
   isNew: boolean;
   inStock: boolean;
   company: {
+    uuid: string;
     name: string;
   };
 };
@@ -35,5 +36,6 @@ export type TProductCreateForm = {
   discount: number;
   inStock: boolean;
   unitofmeasurement: string;
+  companyUuid: string;
   images?: File[];
 };

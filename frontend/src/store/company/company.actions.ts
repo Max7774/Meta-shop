@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CompanyService } from "@/service/company.service";
 import { TAddCompany } from "@/types/TAddCompany";
+import { TCompany } from "@/types/TCompany";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getProductsStatistics = createAsyncThunk(
@@ -26,3 +27,15 @@ export const addCompany = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const getAllCompanies = createAsyncThunk<TCompany[], undefined>(
+  "/gat-all-companies",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await CompanyService.getAllCompanies();
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

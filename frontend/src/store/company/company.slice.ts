@@ -1,11 +1,16 @@
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
 import { TCompanyState } from "./company.types";
 import { createSlice } from "@reduxjs/toolkit";
-import { addCompany, getProductsStatistics } from "./company.actions";
+import {
+  addCompany,
+  getAllCompanies,
+  getProductsStatistics,
+} from "./company.actions";
 
 const initialState: TCompanyState = {
   statistic: {} as TCompanyStatistic,
   isLoading: false,
+  companies: [],
 };
 
 export const companySlice = createSlice({
@@ -34,6 +39,17 @@ export const companySlice = createSlice({
       })
       .addCase(addCompany.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(getAllCompanies.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllCompanies.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.companies = payload;
+      })
+      .addCase(getAllCompanies.rejected, (state) => {
+        state.isLoading = false;
+        state.companies = [];
       });
   },
 });

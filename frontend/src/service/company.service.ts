@@ -1,4 +1,5 @@
 import { TAddCompany } from "@/types/TAddCompany";
+import { TCompany } from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
 import { instance } from "@api/api.interceptor";
 
@@ -15,6 +16,13 @@ export const CompanyService = {
       url: "/company",
       method: "POST",
       data,
+    });
+  },
+
+  async getAllCompanies() {
+    return await instance<TCompany[]>({
+      url: "/company",
+      method: "GET",
     });
   },
 };

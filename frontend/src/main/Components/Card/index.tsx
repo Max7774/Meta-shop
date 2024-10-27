@@ -8,6 +8,8 @@ import DefaultActions from "./Actions/DefaultActions/DefaultActions";
 import AdminActions from "./Actions/AdminActions/AdminActions";
 import { getImageUrl } from "@utils/getImageUrl";
 
+const crudActions = [ERoles.ADMIN, ERoles.COMPANY];
+
 interface ICardProps {
   product: TProduct;
 }
@@ -53,7 +55,7 @@ const CardUI = ({ product }: ICardProps) => {
           )}
         </p>
         <Divider />
-        {role === ERoles.ADMIN ? (
+        {crudActions.includes(role) ? (
           <AdminActions productUuid={product.uuid} productSlug={product.slug} />
         ) : (
           <DefaultActions product={product} />

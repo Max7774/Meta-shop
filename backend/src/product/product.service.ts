@@ -393,23 +393,7 @@ export class ProductService {
           },
         });
 
-        // 2. Удаляем связанные OrderItem
-        await prisma.orderItem.deleteMany({
-          where: {
-            productUuid: uuid,
-          },
-        });
-
-        // 3. Удаляем заказы без элементов
-        await prisma.order.deleteMany({
-          where: {
-            items: {
-              none: {},
-            },
-          },
-        });
-
-        // 5. Удаляем связанные PhotoFile
+        // 2. Удаляем связанные PhotoFile
         await prisma.photoFile.deleteMany({
           where: {
             productUuid: uuid,
@@ -417,12 +401,12 @@ export class ProductService {
         });
 
         product.images.forEach(async (image) => {
-          // 6. Удаляем связанные PhotoFile
+          // 3. Удаляем связанные PhotoFile
           const filePath = `${process.env.DESTINATION}/${image}`;
           await fs.unlink(filePath);
         });
 
-        // 7. Удаляем сам Product
+        // 4. Удаляем сам Product
         const deletedProduct = await prisma.product.delete({
           where: {
             uuid,

@@ -22,12 +22,20 @@ import { toast } from "react-toastify";
 import { getImageUrl } from "@utils/getImageUrl";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import DeleteAction from "./DeleteAction";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 
 const EditProduct = () => {
   const { productSlug } = useParams();
-  const { getProductBySlug, updateProduct, deleteProductImage } = useActions();
+  const {
+    getProductBySlug,
+    updateProduct,
+    deleteProductImage,
+    getAllCompanies,
+  } = useActions();
   const { product, isLoading } = useProducts();
   const { categories } = useCategory();
+
+  const { companies } = useAppSelector((state) => state.company);
 
   const navigate = useNavigate();
 
@@ -81,6 +89,7 @@ const EditProduct = () => {
       discount: Number(data.discount),
       inStock: data.inStock,
       subcategoryUuid: data.subcategoryUuid,
+      companyUuid: data.companyUuid,
       unitofmeasurement: data?.unitofmeasurement || "",
     };
 
@@ -105,6 +114,10 @@ const EditProduct = () => {
     getProductBySlug(productSlug || "");
   }, [productSlug]);
 
+  useEffect(() => {
+    getAllCompanies();
+  }, [getAllCompanies]);
+
   // Добавляем useEffect для обновления формы и изображений
   useEffect(() => {
     if (product) {
@@ -117,6 +130,7 @@ const EditProduct = () => {
         discount: product.discount || 0,
         subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
+        companyUuid: product.company.uuid,
       });
 
       // Обновляем previewImages
@@ -245,6 +259,30 @@ const EditProduct = () => {
                   <SelectItem key={item.uuid} value={item.uuid}>
                     {item.name}
                   </SelectItem>
+                ))}
+              </Select>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="companyUuid"
+            rules={{ required: "Выберите фирму" }}
+            render={({ field, fieldState: { error } }) => (
+              <Select
+                label="Фирма поставщик-производитель"
+                placeholder="Выберите фирму"
+                selectedKeys={[field.value]}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0] as string;
+                  field.onChange(selectedKey);
+                }}
+                isInvalid={!!error?.message}
+                errorMessage={error?.message}
+                fullWidth
+              >
+                {companies.map(({ uuid, name }) => (
+                  <SelectItem key={uuid}>{name}</SelectItem>
                 ))}
               </Select>
             )}

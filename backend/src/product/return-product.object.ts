@@ -14,7 +14,7 @@ export const productReturnObject: Prisma.ProductSelect = {
   quantity: true,
   unitofmeasurement: true,
   inStock: true,
-  company: { select: { name: true } },
+  company: { select: { name: true, uuid: true } },
   subcategory: { select: returnSubcategoryObject },
 };
 
