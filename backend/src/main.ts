@@ -38,7 +38,7 @@ export async function bootstrap() {
         scheme: 'basic',
         description: 'Basic auth for logging in with username and password',
       },
-      'basic-auth', // Название схемы для basic auth
+      'basic-auth',
     )
     .addSecurityRequirements('JWT-auth')
     .addSecurityRequirements('basic-auth')
