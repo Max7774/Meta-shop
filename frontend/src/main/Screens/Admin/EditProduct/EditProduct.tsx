@@ -130,7 +130,7 @@ const EditProduct = () => {
         discount: product.discount || 0,
         subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
-        companyUuid: product.company.uuid,
+        companyUuid: product?.company?.uuid || "",
       });
 
       // Обновляем previewImages

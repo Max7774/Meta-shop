@@ -98,7 +98,7 @@ jobs:
           args: >
             -Dsonar.organization=max7774
             -Dsonar.projectKey=Max7774_Meta-shop
-            -Dsonar.sources=.
+            -Dsonar.sources=./backend
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -136,7 +136,7 @@ jobs:
           args: >
             -Dsonar.organization=max7774
             -Dsonar.projectKey=Max7774_Meta-shop
-            -Dsonar.sources=.
+            -Dsonar.sources=./frontend
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
