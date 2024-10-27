@@ -1,6 +1,6 @@
 import { TRoutes } from "@/types/TRoutesData";
 import { ECompanyRoutes } from "@enums/ERoutes";
-import { AddProduct, Statistics } from "../components/root";
+import { AddProduct, EditProduct, Statistics } from "../components/root";
 
 export const COMPANY_ROUTES: TRoutes<ECompanyRoutes>[] = [
   {
@@ -12,5 +12,10 @@ export const COMPANY_ROUTES: TRoutes<ECompanyRoutes>[] = [
     id: "statistics-company-page",
     path: ECompanyRoutes.STATISTICS,
     component: Statistics,
+  },
+  {
+    id: "edit-product-company-page",
+    path: ECompanyRoutes.EDIT_PRODUCT,
+    component: EditProduct,
   },
 ];

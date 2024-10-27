@@ -8,6 +8,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 jest.mock('node-telegram-bot-api');
+
 const mockTelegramBot = TelegramBot as jest.MockedClass<typeof TelegramBot>;
 
 export const mockOrder: IOrder = {

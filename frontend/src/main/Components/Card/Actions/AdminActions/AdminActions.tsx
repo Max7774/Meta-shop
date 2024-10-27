@@ -12,6 +12,8 @@ import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { ERoles } from "@enums/ERoles";
 
 interface IAdminActionsProps {
   productUuid: string;
@@ -23,6 +25,9 @@ const AdminActions = ({ productUuid, productSlug }: IAdminActionsProps) => {
   const { isProductLoading } = useProducts();
   const { deleteProduct } = useActions();
   const navigate = useNavigate();
+  const {
+    profile: { role },
+  } = useAppSelector((state) => state.user);
 
   return (
     <div className="flex flex-row justify-around">
@@ -34,7 +39,13 @@ const AdminActions = ({ productUuid, productSlug }: IAdminActionsProps) => {
       </Button>
       <Button
         variant="light"
-        onClick={() => navigate(`/admin/product/${productSlug}`)}
+        onClick={() => {
+          if (role === ERoles.COMPANY) {
+            navigate(`/company/product/${productSlug}`);
+          } else if (role === ERoles.ADMIN) {
+            navigate(`/admin/product/${productSlug}`);
+          }
+        }}
       >
         <FaRegEdit size={20} />
       </Button>
