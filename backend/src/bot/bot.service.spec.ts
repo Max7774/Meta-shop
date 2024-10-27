@@ -36,6 +36,7 @@ export const mockOrder: IOrder = {
       orderUuid: 'order-uuid',
       product: {
         uuid: 'product-uuid',
+        companyUuid: 'company-uuid',
         createdAt: new Date(),
         updatedAt: new Date(),
         name: 'Test Product',

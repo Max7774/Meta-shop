@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 
 export const mockUser: User = {
   uuid: '12345',
+  companyUuid: 'company-uuid',
   createdAt: new Date(),
   updatedAt: new Date(),
   email: 'test@example.com',

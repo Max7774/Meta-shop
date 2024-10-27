@@ -24,6 +24,7 @@ jest.mock('nodemailer', () => ({
 }));
 
 const mockUser: User = {
+  companyUuid: 'company-uuid',
   uuid: '12345',
   createdAt: new Date(),
   updatedAt: new Date(),
