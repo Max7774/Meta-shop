@@ -16,7 +16,7 @@ interface ICardProps {
 const CardUI = ({ product }: ICardProps) => {
   const navigate = useNavigate();
   const {
-    profile: { role, uuid },
+    profile: { role, companyUuid },
   } = useAppSelector((state) => state.user);
 
   return (
@@ -57,12 +57,14 @@ const CardUI = ({ product }: ICardProps) => {
         <Divider />
         {crudActions.includes(role) ? (
           <>
-            {uuid === product?.company?.uuid ||
-              (role === ERoles.ADMIN && (
+            {companyUuid === product?.company?.uuid ||
+              (role === ERoles.ADMIN ? (
                 <AdminActions
                   productUuid={product.uuid}
                   productSlug={product.slug}
                 />
+              ) : (
+                <DefaultActions product={product} />
               ))}
           </>
         ) : (
