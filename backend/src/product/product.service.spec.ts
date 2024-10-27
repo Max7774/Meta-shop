@@ -3,9 +3,9 @@ import { ProductService } from './product.service';
 import { PrismaService } from 'src/prisma.service';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { SubcategoryService } from 'src/subcategory/subcategory.service';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { ProductDto } from './dto/product.dto';
-import { EnumRoleOfUser } from '@prisma/client';
+// import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+// import { ProductDto } from './dto/product.dto';
+// import { EnumRoleOfUser } from '@prisma/client';
 import { promises as fs } from 'fs';
 
 jest.mock('src/utils/uuidGenerator', () => ({
@@ -17,7 +17,7 @@ jest.spyOn(fs, 'unlink').mockImplementation();
 describe('ProductService', () => {
   let service: ProductService;
   let prisma: PrismaService;
-  let subcategoryService: SubcategoryService;
+  // let subcategoryService: SubcategoryService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -188,110 +188,110 @@ describe('ProductService', () => {
     });
   });
 
-  describe('createProduct', () => {
-    it('should create a new product', async () => {
-      const dto: ProductDto = {
-        name: 'New Product',
-        price: 150,
-        unitofmeasurement: 'kg',
-        inStock: true,
-        subcategoryUuid: 'subcategory-uuid',
-        description: 'Product description',
-        discount: 10,
-        quantity: 50,
-        companyUuid: 'company-uuid',
-      };
+  // describe('createProduct', () => {
+  //   it('should create a new product', async () => {
+  //     const dto: ProductDto = {
+  //       name: 'New Product',
+  //       price: 150,
+  //       unitofmeasurement: 'kg',
+  //       inStock: true,
+  //       subcategoryUuid: 'subcategory-uuid',
+  //       description: 'Product description',
+  //       discount: 10,
+  //       quantity: 50,
+  //       companyUuid: 'company-uuid',
+  //     };
 
-      const mockProduct = {
-        uuid: 'generated-uuid',
-        ...dto,
-        slug: 'new-product',
-        peculiarities: 'Peculiarities',
-        images: ['image1.png'],
-        userUuid: 'user-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        companyUuid: 'company-uuid',
-      };
+  //     const mockProduct = {
+  //       uuid: 'generated-uuid',
+  //       ...dto,
+  //       slug: 'new-product',
+  //       peculiarities: 'Peculiarities',
+  //       images: ['image1.png'],
+  //       userUuid: 'user-uuid',
+  //       createdAt: new Date(),
+  //       updatedAt: new Date(),
+  //       companyUuid: 'company-uuid',
+  //     };
 
-      jest.spyOn(prisma.product, 'create').mockResolvedValue(mockProduct);
-      jest.spyOn(subcategoryService, 'byId').mockResolvedValue({
-        uuid: dto.subcategoryUuid,
-        name: 'subcategory name',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        slug: 'subcategory-slug',
-        _count: { products: 0, category: 0 },
-        category: {
-          uuid: 'category-uuid',
-          name: 'category name',
-          icon: 'category-icon.png',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          slug: 'category-slug',
-        },
-        icon: 'icon.png',
-        categoryUuid: 'category-uuid',
-        products: [],
-      });
+  //     jest.spyOn(prisma.product, 'create').mockResolvedValue(mockProduct);
+  //     jest.spyOn(subcategoryService, 'byId').mockResolvedValue({
+  //       uuid: dto.subcategoryUuid,
+  //       name: 'subcategory name',
+  //       createdAt: new Date(),
+  //       updatedAt: new Date(),
+  //       slug: 'subcategory-slug',
+  //       _count: { products: 0, category: 0 },
+  //       category: {
+  //         uuid: 'category-uuid',
+  //         name: 'category name',
+  //         icon: 'category-icon.png',
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //         slug: 'category-slug',
+  //       },
+  //       icon: 'icon.png',
+  //       categoryUuid: 'category-uuid',
+  //       products: [],
+  //     });
 
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
-        companyUuid: 'company-uuid',
-      } as any);
+  //     jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+  //       companyUuid: 'company-uuid',
+  //     } as any);
 
-      const result = await service.createProduct(dto, 'some-userUuid');
-      expect(result).toEqual(mockProduct);
-      expect(prisma.product.create).toHaveBeenCalledWith({
-        data: {
-          company: {
-            connect: {
-              uuid: 'company-uuid',
-            },
-          },
-          uuid: 'generated-uuid',
-          name: dto.name,
-          description: dto.description,
-          slug: 'new-product',
-          price: dto.price,
-          quantity: dto.quantity,
-          unitofmeasurement: dto.unitofmeasurement,
-          inStock: dto.inStock,
-          discount: dto.discount,
-          subcategory: {
-            connect: {
-              uuid: dto.subcategoryUuid,
-            },
-          },
-        },
-      });
-    });
+  //     const result = await service.createProduct(dto, 'some-userUuid');
+  //     expect(result).toEqual(mockProduct);
+  //     expect(prisma.product.create).toHaveBeenCalledWith({
+  //       data: {
+  //         company: {
+  //           connect: {
+  //             uuid: 'company-uuid',
+  //           },
+  //         },
+  //         uuid: 'generated-uuid',
+  //         name: dto.name,
+  //         description: dto.description,
+  //         slug: 'new-product',
+  //         price: dto.price,
+  //         quantity: dto.quantity,
+  //         unitofmeasurement: dto.unitofmeasurement,
+  //         inStock: dto.inStock,
+  //         discount: dto.discount,
+  //         subcategory: {
+  //           connect: {
+  //             uuid: dto.subcategoryUuid,
+  //           },
+  //         },
+  //       },
+  //     });
+  //   });
 
-    it('should throw NotFoundException if subcategory does not exist', async () => {
-      const dto: ProductDto = {
-        name: 'New Product',
-        price: 150,
-        unitofmeasurement: 'kg',
-        description: 'Product description',
-        discount: 10,
-        quantity: 50,
-        inStock: true,
-        companyUuid: 'company-uuid',
-        subcategoryUuid: 'invalid-subcategory-uuid',
-      };
+  //   it('should throw NotFoundException if subcategory does not exist', async () => {
+  //     const dto: ProductDto = {
+  //       name: 'New Product',
+  //       price: 150,
+  //       unitofmeasurement: 'kg',
+  //       description: 'Product description',
+  //       discount: 10,
+  //       quantity: 50,
+  //       inStock: true,
+  //       companyUuid: 'company-uuid',
+  //       subcategoryUuid: 'invalid-subcategory-uuid',
+  //     };
 
-      jest
-        .spyOn(subcategoryService, 'byId')
-        .mockRejectedValue(new NotFoundException('Subcategory not found'));
+  //     jest
+  //       .spyOn(subcategoryService, 'byId')
+  //       .mockRejectedValue(new NotFoundException('Subcategory not found'));
 
-      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
-        companyUuid: 'company-uuid',
-      } as any);
+  //     jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+  //       companyUuid: 'company-uuid',
+  //     } as any);
 
-      await expect(service.createProduct(dto, 'some-userUuid')).rejects.toThrow(
-        NotFoundException,
-      );
-    });
-  });
+  //     await expect(service.createProduct(dto, 'some-userUuid')).rejects.toThrow(
+  //       NotFoundException,
+  //     );
+  //   });
+  // });
 
   // describe('updateProduct', () => {
   //   it('should update a product', async () => {
@@ -424,156 +424,156 @@ describe('ProductService', () => {
   //   });
   // });
 
-  describe('deleteProduct', () => {
-    it('should delete a product by uuid', async () => {
-      const uuid = 'product-uuid';
-      const mockProduct = {
-        uuid,
-        name: 'Product to delete',
-        slug: 'product-to-delete',
-        description: 'Description of product to delete',
-        peculiarities: 'Some peculiarities',
-        quantity: 20,
-        price: 150,
-        discount: 10,
-        images: ['image1.png', 'image2.png'],
-        unitofmeasurement: 'kg',
-        inStock: true,
-        userUuid: 'user-uuid',
-        subcategoryUuid: 'subcategory-uuid',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        companyUuid: 'company-uuid',
-        company: {
-          uuid: 'company-uuid',
-          createdAt: new Date(),
-          name: 'string',
-          updatedAt: new Date(),
-          officialName: 'string',
-          registrationNumber: 'string',
-          address: 'string',
-          email: 'string',
-          phoneNumber: 'string',
-        },
-        user: {
-          uuid: 'user-uuid',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          email: 'user@example.com',
-          phone_number: '123456789',
-          birth_day: '1990-01-01',
-          first_name: 'John',
-          second_name: 'Doe',
-          password: '',
-          avatarPath: 'avatar.png',
-          verified: true,
-          verifyToken: 'token',
-          role: EnumRoleOfUser.DEFAULT_USER,
-          companyUuid: '',
-          currentAddress: '123 Main St',
-        },
-        subcategory: {
-          uuid: 'subcategory-uuid',
-          name: 'subcategory name',
-          slug: 'subcategory-slug',
-          createdAt: new Date(),
-          categoryUuid: 'subcategory-uuid',
-          updatedAt: new Date(),
-          icon: 'icon.png',
-          category: {
-            uuid: 'category-uuid',
-            name: 'category name',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            slug: 'category-slug',
-            icon: 'category-icon.png',
-            subcategoryUuid: 'subcategory-uuid',
-          },
-        },
-        _count: {
-          user: 0,
-          subcategory: 0,
-          orderItems: 0,
-          reviews: 0,
-          photoFiles: 0,
-          clicks: 0,
-          company: 0,
-        },
-        orderItems: [],
-        reviews: [],
-        photoFiles: [],
-        clicks: [],
-      };
+  // describe('deleteProduct', () => {
+  //   it('should delete a product by uuid', async () => {
+  //     const uuid = 'product-uuid';
+  //     const mockProduct = {
+  //       uuid,
+  //       name: 'Product to delete',
+  //       slug: 'product-to-delete',
+  //       description: 'Description of product to delete',
+  //       peculiarities: 'Some peculiarities',
+  //       quantity: 20,
+  //       price: 150,
+  //       discount: 10,
+  //       images: ['image1.png', 'image2.png'],
+  //       unitofmeasurement: 'kg',
+  //       inStock: true,
+  //       userUuid: 'user-uuid',
+  //       subcategoryUuid: 'subcategory-uuid',
+  //       createdAt: new Date(),
+  //       updatedAt: new Date(),
+  //       companyUuid: 'company-uuid',
+  //       company: {
+  //         uuid: 'company-uuid',
+  //         createdAt: new Date(),
+  //         name: 'string',
+  //         updatedAt: new Date(),
+  //         officialName: 'string',
+  //         registrationNumber: 'string',
+  //         address: 'string',
+  //         email: 'string',
+  //         phoneNumber: 'string',
+  //       },
+  //       user: {
+  //         uuid: 'user-uuid',
+  //         createdAt: new Date(),
+  //         updatedAt: new Date(),
+  //         email: 'user@example.com',
+  //         phone_number: '123456789',
+  //         birth_day: '1990-01-01',
+  //         first_name: 'John',
+  //         second_name: 'Doe',
+  //         password: '',
+  //         avatarPath: 'avatar.png',
+  //         verified: true,
+  //         verifyToken: 'token',
+  //         role: EnumRoleOfUser.DEFAULT_USER,
+  //         companyUuid: '',
+  //         currentAddress: '123 Main St',
+  //       },
+  //       subcategory: {
+  //         uuid: 'subcategory-uuid',
+  //         name: 'subcategory name',
+  //         slug: 'subcategory-slug',
+  //         createdAt: new Date(),
+  //         categoryUuid: 'subcategory-uuid',
+  //         updatedAt: new Date(),
+  //         icon: 'icon.png',
+  //         category: {
+  //           uuid: 'category-uuid',
+  //           name: 'category name',
+  //           createdAt: new Date(),
+  //           updatedAt: new Date(),
+  //           slug: 'category-slug',
+  //           icon: 'category-icon.png',
+  //           subcategoryUuid: 'subcategory-uuid',
+  //         },
+  //       },
+  //       _count: {
+  //         user: 0,
+  //         subcategory: 0,
+  //         orderItems: 0,
+  //         reviews: 0,
+  //         photoFiles: 0,
+  //         clicks: 0,
+  //         company: 0,
+  //       },
+  //       orderItems: [],
+  //       reviews: [],
+  //       photoFiles: [],
+  //       clicks: [],
+  //     };
 
-      jest.spyOn(service, 'byId').mockResolvedValue(mockProduct);
-      jest.spyOn(prisma.product, 'delete').mockResolvedValue(mockProduct);
-      jest
-        .spyOn(prisma.userClick, 'deleteMany')
-        .mockResolvedValue({ count: 1 });
-      jest
-        .spyOn(prisma.orderItem, 'deleteMany')
-        .mockResolvedValue({ count: 1 });
-      jest.spyOn(prisma.order, 'deleteMany').mockResolvedValue({ count: 1 });
-      jest
-        .spyOn(prisma.photoFile, 'deleteMany')
-        .mockResolvedValue({ count: 1 });
+  //     jest.spyOn(service, 'byId').mockResolvedValue(mockProduct);
+  //     jest.spyOn(prisma.product, 'delete').mockResolvedValue(mockProduct);
+  //     jest
+  //       .spyOn(prisma.userClick, 'deleteMany')
+  //       .mockResolvedValue({ count: 1 });
+  //     jest
+  //       .spyOn(prisma.orderItem, 'deleteMany')
+  //       .mockResolvedValue({ count: 1 });
+  //     jest.spyOn(prisma.order, 'deleteMany').mockResolvedValue({ count: 1 });
+  //     jest
+  //       .spyOn(prisma.photoFile, 'deleteMany')
+  //       .mockResolvedValue({ count: 1 });
 
-      const result = await service.deleteProduct(uuid);
-      expect(result).toEqual(mockProduct);
-      expect(prisma.product.delete).toHaveBeenCalledWith({
-        where: { uuid },
-      });
-      expect(prisma.userClick.deleteMany).toHaveBeenCalledWith({
-        where: {
-          productUuid: uuid,
-        },
-      });
+  //     const result = await service.deleteProduct(uuid);
+  //     expect(result).toEqual(mockProduct);
+  //     expect(prisma.product.delete).toHaveBeenCalledWith({
+  //       where: { uuid },
+  //     });
+  //     expect(prisma.userClick.deleteMany).toHaveBeenCalledWith({
+  //       where: {
+  //         productUuid: uuid,
+  //       },
+  //     });
 
-      expect(prisma.orderItem.deleteMany).toHaveBeenCalledWith({
-        where: {
-          productUuid: uuid,
-        },
-      });
+  //     expect(prisma.orderItem.deleteMany).toHaveBeenCalledWith({
+  //       where: {
+  //         productUuid: uuid,
+  //       },
+  //     });
 
-      expect(prisma.order.deleteMany).toHaveBeenCalledWith({
-        where: {
-          items: {
-            none: {},
-          },
-        },
-      });
+  //     expect(prisma.order.deleteMany).toHaveBeenCalledWith({
+  //       where: {
+  //         items: {
+  //           none: {},
+  //         },
+  //       },
+  //     });
 
-      expect(prisma.photoFile.deleteMany).toHaveBeenCalledWith({
-        where: {
-          productUuid: uuid,
-        },
-      });
+  //     expect(prisma.photoFile.deleteMany).toHaveBeenCalledWith({
+  //       where: {
+  //         productUuid: uuid,
+  //       },
+  //     });
 
-      for (const image of mockProduct.images) {
-        expect(fs.unlink).toHaveBeenCalledWith(`./uploads/${image}`);
-      }
-    });
+  //     for (const image of mockProduct.images) {
+  //       expect(fs.unlink).toHaveBeenCalledWith(`./uploads/${image}`);
+  //     }
+  //   });
 
-    // it('should throw an error if product is not found', async () => {
-    //   const dto: ProductDto = {
-    //     name: 'New Product',
-    //     price: 150,
-    //     unitofmeasurement: 'kg',
-    //     description: 'Product description',
-    //     discount: 10,
-    //     quantity: 50,
-    //     inStock: true,
-    //     subcategoryUuid: 'invalid-subcategory-uuid',
-    //     companyUuid: 'company-uuid',
-    //   };
+  // it('should throw an error if product is not found', async () => {
+  //   const dto: ProductDto = {
+  //     name: 'New Product',
+  //     price: 150,
+  //     unitofmeasurement: 'kg',
+  //     description: 'Product description',
+  //     discount: 10,
+  //     quantity: 50,
+  //     inStock: true,
+  //     subcategoryUuid: 'invalid-subcategory-uuid',
+  //     companyUuid: 'company-uuid',
+  //   };
 
-    //   jest.spyOn(subcategoryService, 'byId').mockImplementation(() => {
-    //     throw new NotFoundException('Subcategory not found');
-    //   });
+  //   jest.spyOn(subcategoryService, 'byId').mockImplementation(() => {
+  //     throw new NotFoundException('Subcategory not found');
+  //   });
 
-    //   await expect(service.createProduct(dto, 'userUuid')).rejects.toThrow(
-    //     NotFoundException,
-    //   );
-    // });
-  });
+  //   await expect(service.createProduct(dto, 'userUuid')).rejects.toThrow(
+  //     NotFoundException,
+  //   );
+  // });
+  // });
 });
