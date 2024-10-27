@@ -4,7 +4,11 @@ import { ERoles } from "@enums/ERoles";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const PrivateRoute = () => {
+interface IPrivateRouteProps {
+  currentRole: ERoles;
+}
+
+const PrivateRoute = ({ currentRole }: IPrivateRouteProps) => {
   const {
     profile: { role },
     isAuth,
@@ -14,7 +18,7 @@ const PrivateRoute = () => {
 
   if (isLoading) return <Loader />;
 
-  if (role !== ERoles.ADMIN) return <PermissionDenied />;
+  if (role !== currentRole) return <PermissionDenied />;
 
   if (!isAuth) {
     return <Navigate to="/auth" state={{ from: location }} replace />;

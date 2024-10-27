@@ -3,4 +3,5 @@ export enum ERoles {
   DEFAULT_USER = "DEFAULT_USER",
   MANAGER = "MANAGER",
   COURIER = "COURIER",
+  COMPANY = "COMPANY",
 }

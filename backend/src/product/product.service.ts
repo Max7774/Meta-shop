@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import {
+  BadGatewayException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Prisma, Product } from '@prisma/client';
 import { PaginationService } from 'src/pagination/pagination.service';
@@ -255,7 +255,7 @@ export class ProductService {
     return products;
   }
 
-  async createProduct(dto: ProductDto) {
+  async createProduct(dto: ProductDto, userUuid: string) {
     const {
       description,
       price,
@@ -266,6 +266,12 @@ export class ProductService {
       inStock,
       quantity,
     } = dto;
+
+    const { companyUuid } = await this.prisma.user.findUnique({
+      where: {
+        uuid: userUuid,
+      },
+    });
 
     const isProduct = await this.prisma.product.findUnique({
       where: {
@@ -294,6 +300,11 @@ export class ProductService {
         unitofmeasurement,
         inStock: inStock || true,
         discount: discount || 0,
+        company: {
+          connect: {
+            uuid: companyUuid,
+          },
+        },
         subcategory: {
           connect: {
             uuid: subcategoryUuid,
@@ -315,11 +326,22 @@ export class ProductService {
         discount,
         inStock,
         unitofmeasurement,
+        companyUuid,
       } = dto;
 
       const { uuid: subcatUuid } = await this.subcategoryService.byId(
         subcategoryUuid,
       );
+
+      const { name: companyName } = await this.prisma.company.findUnique({
+        where: {
+          uuid: companyUuid,
+        },
+      });
+
+      if (!companyName) {
+        throw new BadGatewayException('Компании не существует');
+      }
 
       const product = await this.prisma.product.update({
         where: {
@@ -332,6 +354,14 @@ export class ProductService {
           name,
           inStock,
           unitofmeasurement,
+          company: {
+            connect: {
+              uuid: companyUuid,
+            },
+            update: {
+              name: companyName,
+            },
+          },
           slug: convertToSlug(name),
           subcategory: {
             connect: {
@@ -344,7 +374,7 @@ export class ProductService {
 
       return product;
     } catch (error) {
-      throw new UnauthorizedException('Product is not found');
+      throw new BadGatewayException('Product is not found');
     }
   }
 

@@ -42,9 +42,17 @@ export const AdminCategories = lazy(
 export const AdminUsers = lazy(
   () => import("@/main/Screens/Admin/Users/Users")
 );
-export const AdminProducts = lazy(
-  () => import("@/main/Screens/Admin/Products/Products")
-);
 export const EditProduct = lazy(
   () => import("@/main/Screens/Admin/EditProduct/EditProduct")
+);
+export const AddCompany = lazy(
+  () => import("@/main/Screens/Admin/AddCompany/AddCompany")
+);
+
+/* COMPANY */
+export const AddProduct = lazy(
+  () => import("@/main/Screens/Company/AddProduct/AddProduct")
+);
+export const Statistics = lazy(
+  () => import("@/main/Screens/Company/Statistics/Statistics")
 );

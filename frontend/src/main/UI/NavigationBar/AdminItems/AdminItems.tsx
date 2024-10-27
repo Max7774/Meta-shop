@@ -13,7 +13,6 @@ const AdminItems = ({
     <>
       {ADMIN_SIDEBAR_ITEMS.map(({ uuid, name, slug }, index) => (
         <NavbarMenuItem
-          // onClick={() => setIsMenuOpen(false)}
           className="justify-self-center w-full"
           key={`${uuid}-${index}`}
         >

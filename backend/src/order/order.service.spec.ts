@@ -142,6 +142,7 @@ describe('OrderService', () => {
         images: [],
         unitofmeasurement: 'pcs',
         userUuid: 'user-uuid',
+        companyUuid: 'company-uuid',
         subcategoryUuid: 'subcategory-uuid',
       });
 
@@ -196,6 +197,7 @@ describe('OrderService', () => {
         images: [],
         unitofmeasurement: 'pcs',
         userUuid: 'user-uuid',
+        companyUuid: 'company-uuid',
         subcategoryUuid: 'subcategory-uuid',
       });
 
@@ -227,6 +229,7 @@ describe('OrderService', () => {
           verified: true,
           verifyToken: '',
           currentAddress: '',
+          companyUuid: 'company-uuid',
         },
         addressUuid: 'address-uuid',
         uuid: 'order-uuid',

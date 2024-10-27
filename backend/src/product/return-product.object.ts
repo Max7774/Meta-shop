@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import { returnReviewObject } from 'src/review/return-review.object';
 import { returnSubcategoryObject } from 'src/subcategory/returnSubcategoryObject';
 
 export const productReturnObject: Prisma.ProductSelect = {
@@ -15,13 +14,8 @@ export const productReturnObject: Prisma.ProductSelect = {
   quantity: true,
   unitofmeasurement: true,
   inStock: true,
+  company: { select: { name: true } },
   subcategory: { select: returnSubcategoryObject },
-  reviews: {
-    select: returnReviewObject,
-    orderBy: {
-      createdAt: 'desc',
-    },
-  },
 };
 
 export const productReturnObjectFull: Prisma.ProductSelect = {

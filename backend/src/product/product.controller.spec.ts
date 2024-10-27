@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { GetAllProductDto } from './dto/get-all.product.dto';
-import { ProductDto } from './dto/product.dto';
 import { EnumRoleOfUser } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
 
@@ -105,6 +104,7 @@ describe('ProductController', () => {
           verifyToken: 'token',
           role: EnumRoleOfUser.DEFAULT_USER,
           currentAddress: '123 Main St',
+          companyUuid: '',
         },
         subcategory: {
           uuid: 'subcategory-uuid',
@@ -124,6 +124,18 @@ describe('ProductController', () => {
             subcategoryUuid: 'subcategory-uuid',
           },
         },
+        companyUuid: 'company-uuid',
+        company: {
+          uuid: 'company-uuid',
+          createdAt: new Date(),
+          name: 'string',
+          updatedAt: new Date(),
+          officialName: 'string',
+          registrationNumber: 'string',
+          address: 'string',
+          email: 'string',
+          phoneNumber: 'string',
+        },
         _count: {
           user: 0,
           subcategory: 0,
@@ -131,6 +143,7 @@ describe('ProductController', () => {
           reviews: 0,
           photoFiles: 0,
           clicks: 0,
+          company: 0,
         },
         orderItems: [],
         reviews: [],
@@ -187,7 +200,7 @@ describe('ProductController', () => {
 
   describe('createProduct', () => {
     it('should call ProductService.createProduct with correct parameters', async () => {
-      const dto: ProductDto = {
+      const dto = {
         name: 'New Product',
         price: 100,
         unitofmeasurement: 'kg',
@@ -196,6 +209,7 @@ describe('ProductController', () => {
         description: 'Test description',
         discount: 5,
         quantity: 10,
+        companyUuid: 'company-uuid',
       };
       const mockProduct = {
         isNew: true,
@@ -214,6 +228,7 @@ describe('ProductController', () => {
         inStock: true,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
+        companyUuid: '',
         _count: {
           reviews: 0,
           orderItems: 0,
@@ -223,7 +238,7 @@ describe('ProductController', () => {
 
       jest.spyOn(service, 'createProduct').mockResolvedValue(mockProduct);
 
-      const result = await controller.createProduct(dto);
+      const result = await controller.createProduct(dto, '');
       expect(result).toEqual(mockProduct);
       expect(service.createProduct).toHaveBeenCalledWith(dto);
     });
@@ -232,7 +247,7 @@ describe('ProductController', () => {
   describe('updateProduct', () => {
     it('should call ProductService.updateProduct with correct parameters', async () => {
       const uuid = 'product-uuid';
-      const dto: ProductDto = {
+      const dto = {
         name: 'Updated Product',
         price: 150,
         unitofmeasurement: 'liters',
@@ -240,6 +255,7 @@ describe('ProductController', () => {
         subcategoryUuid: 'subcategory-uuid',
         description: 'Updated description',
         discount: 10,
+        companyUuid: 'company-uuid',
         quantity: 20,
       };
       const mockProduct = {
@@ -274,6 +290,7 @@ describe('ProductController', () => {
           verifyToken: 'token',
           role: EnumRoleOfUser.DEFAULT_USER,
           currentAddress: '123 Main St',
+          companyUuid: '',
         },
         subcategory: {
           uuid: 'subcategory-uuid',
@@ -293,6 +310,18 @@ describe('ProductController', () => {
             subcategoryUuid: 'subcategory-uuid',
           },
         },
+        companyUuid: 'company-uuid',
+        company: {
+          uuid: 'company-uuid',
+          createdAt: new Date(),
+          name: 'string',
+          updatedAt: new Date(),
+          officialName: 'string',
+          registrationNumber: 'string',
+          address: 'string',
+          email: 'string',
+          phoneNumber: 'string',
+        },
         _count: {
           user: 0,
           subcategory: 0,
@@ -300,6 +329,7 @@ describe('ProductController', () => {
           reviews: 0,
           photoFiles: 0,
           clicks: 0,
+          company: 0,
         },
         orderItems: [],
         reviews: [],
@@ -362,6 +392,7 @@ describe('ProductController', () => {
           verifyToken: 'token',
           role: EnumRoleOfUser.DEFAULT_USER,
           currentAddress: '123 Main St',
+          companyUuid: '',
         },
         subcategory: {
           uuid: 'subcategory-uuid',
@@ -381,6 +412,18 @@ describe('ProductController', () => {
             subcategoryUuid: 'subcategory-uuid',
           },
         },
+        companyUuid: 'company-uuid',
+        company: {
+          uuid: 'company-uuid',
+          createdAt: new Date(),
+          name: 'string',
+          updatedAt: new Date(),
+          officialName: 'string',
+          registrationNumber: 'string',
+          address: 'string',
+          email: 'string',
+          phoneNumber: 'string',
+        },
         _count: {
           user: 0,
           subcategory: 0,
@@ -388,6 +431,7 @@ describe('ProductController', () => {
           reviews: 0,
           photoFiles: 0,
           clicks: 0,
+          company: 0,
         },
         orderItems: [],
         reviews: [],

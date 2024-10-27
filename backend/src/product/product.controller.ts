@@ -18,6 +18,9 @@ import { ProductService } from './product.service';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { returnProductSchema } from './return-product.object';
+import { roles } from 'src/constants/roles';
+
+const { user, company, admin } = roles;
 
 @Controller('products')
 @ApiTags('Products')
@@ -25,6 +28,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   @Get()
   @ApiResponse({
     schema: {
@@ -65,16 +69,18 @@ export class ProductController {
     return this.productService.bySubcategory(subcategorySlug);
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Get('recommendations')
-  @Auth(['DEFAULT_USER'])
+  @Auth([user])
   async getRecommendedProducts(@CurrentUser('uuid') uuid: string) {
     return this.productService.recommendations(uuid);
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Get('click/:productUuid')
-  @Auth(['DEFAULT_USER'])
+  @Auth([user])
   async click(
     @Param('productUuid') productUuid: string,
     @CurrentUser('uuid') uuid: string,
@@ -82,30 +88,37 @@ export class ProductController {
     return this.productService.click(uuid, productUuid);
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('create')
-  @Auth(['ADMIN', 'MANAGER'])
-  async createProduct(@Body() dto: ProductDto) {
-    return this.productService.createProduct(dto);
+  @Auth([admin, company])
+  async createProduct(
+    @Body() dto: ProductDto,
+    @CurrentUser('uuid') uuid: string,
+  ) {
+    return this.productService.createProduct(dto, uuid);
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Put(':uuid')
-  @Auth(['ADMIN', 'MANAGER'])
+  @Auth([admin, company])
   async updateProduct(@Param('uuid') uuid: string, @Body() dto: ProductDto) {
     return this.productService.updateProduct(uuid, dto);
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Delete(':uuid')
-  @Auth(['ADMIN'])
+  @Auth([admin, company])
   async deleteProduct(@Param('uuid') uuid: string) {
     return this.productService.deleteProduct(uuid);
   }
 
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   @Get(':uuid')
-  @Auth(['ADMIN'])
+  @Auth([admin, company])
   async getProduct(@Param('uuid') uuid: string) {
     return this.productService.byId(uuid);
   }

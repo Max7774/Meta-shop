@@ -104,6 +104,7 @@ describe('ProductService', () => {
           subcategoryUuid: 'subcategory-uuid',
           createdAt: new Date(),
           updatedAt: new Date(),
+          companyUuid: 'company-uuid',
         },
         {
           uuid: 'product-uuid-2',
@@ -122,6 +123,7 @@ describe('ProductService', () => {
           subcategoryUuid: 'subcategory-uuid',
           createdAt: new Date(),
           updatedAt: new Date(),
+          companyUuid: 'company-uuid',
         },
       ];
 
@@ -159,6 +161,7 @@ describe('ProductService', () => {
         subcategoryUuid: 'subcategory-uuid',
         createdAt: new Date(),
         updatedAt: new Date(),
+        companyUuid: 'company-uuid',
       };
 
       jest.spyOn(prisma.product, 'findUnique').mockResolvedValue(mockProduct);
@@ -190,6 +193,7 @@ describe('ProductService', () => {
         description: 'Product description',
         discount: 10,
         quantity: 50,
+        companyUuid: 'company-uuid',
       };
 
       const mockProduct = {
@@ -201,6 +205,7 @@ describe('ProductService', () => {
         userUuid: 'user-uuid',
         createdAt: new Date(),
         updatedAt: new Date(),
+        companyUuid: 'company-uuid',
       };
 
       jest.spyOn(prisma.product, 'create').mockResolvedValue(mockProduct);
@@ -224,7 +229,7 @@ describe('ProductService', () => {
         products: [],
       });
 
-      const result = await service.createProduct(dto);
+      const result = await service.createProduct(dto, '');
       expect(result).toEqual(mockProduct);
       expect(prisma.product.create).toHaveBeenCalledWith({
         data: {
@@ -255,6 +260,7 @@ describe('ProductService', () => {
         discount: 10,
         quantity: 50,
         inStock: true,
+        companyUuid: 'company-uuid',
         subcategoryUuid: 'invalid-subcategory-uuid',
       };
 
@@ -262,7 +268,7 @@ describe('ProductService', () => {
         .spyOn(subcategoryService, 'byId')
         .mockRejectedValue(new NotFoundException('Subcategory not found'));
 
-      await expect(service.createProduct(dto)).rejects.toThrow(
+      await expect(service.createProduct(dto, '')).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -280,12 +286,14 @@ describe('ProductService', () => {
         description: 'Updated description',
         discount: 15,
         quantity: 30,
+        companyUuid: 'company-uuid',
       };
 
       const mockProduct = {
         uuid,
         ...dto,
         slug: 'updated-product',
+        companyUuid: 'company-uuid',
         peculiarities: 'Updated peculiarities',
         images: ['image3.png'],
         userUuid: 'user-uuid',
@@ -367,6 +375,7 @@ describe('ProductService', () => {
         description: 'Updated description',
         discount: 15,
         quantity: 30,
+        companyUuid: 'company-uuid',
       };
 
       jest
@@ -398,6 +407,18 @@ describe('ProductService', () => {
         subcategoryUuid: 'subcategory-uuid',
         createdAt: new Date(),
         updatedAt: new Date(),
+        companyUuid: 'company-uuid',
+        company: {
+          uuid: 'company-uuid',
+          createdAt: new Date(),
+          name: 'string',
+          updatedAt: new Date(),
+          officialName: 'string',
+          registrationNumber: 'string',
+          address: 'string',
+          email: 'string',
+          phoneNumber: 'string',
+        },
         user: {
           uuid: 'user-uuid',
           createdAt: new Date(),
@@ -412,6 +433,7 @@ describe('ProductService', () => {
           verified: true,
           verifyToken: 'token',
           role: EnumRoleOfUser.DEFAULT_USER,
+          companyUuid: '',
           currentAddress: '123 Main St',
         },
         subcategory: {
@@ -439,6 +461,7 @@ describe('ProductService', () => {
           reviews: 0,
           photoFiles: 0,
           clicks: 0,
+          company: 0,
         },
         orderItems: [],
         reviews: [],
@@ -505,13 +528,14 @@ describe('ProductService', () => {
         quantity: 50,
         inStock: true,
         subcategoryUuid: 'invalid-subcategory-uuid',
+        companyUuid: 'company-uuid',
       };
 
       jest.spyOn(subcategoryService, 'byId').mockImplementation(() => {
         throw new NotFoundException('Subcategory not found');
       });
 
-      await expect(service.createProduct(dto)).rejects.toThrow(
+      await expect(service.createProduct(dto, 'userUuid')).rejects.toThrow(
         NotFoundException,
       );
     });
