@@ -31,6 +31,11 @@ const ProductPage = () => {
       </Helmet>
       <section className="w-full">
         <div className="px-6">
+          {product?.company && (
+            <span className="text-default-300">
+              От фирмы: {product?.company?.name}
+            </span>
+          )}
           <Heading>{product?.name}</Heading>
           <div className="flex flex-row flex-wrap gap-2">
             <Chip

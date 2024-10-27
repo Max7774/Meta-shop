@@ -1,4 +1,5 @@
-import { EAdminRoutes, ERoutes } from "@enums/ERoutes";
+import { ERoles } from "@enums/ERoles";
+import { EAdminRoutes, ECompanyRoutes, ERoutes } from "@enums/ERoutes";
 import { IconType } from "react-icons";
 
 export type TRootRoutes<T> = {
@@ -24,6 +25,18 @@ export type TAdminRootRoute = {
     key?: string;
     another_routes?: string;
     routes: TRootRoutes<EAdminRoutes>[];
+    role: ERoles;
+  };
+};
+
+export type TCompanyRootRoute = {
+  [T in string]: {
+    Loader?: () => JSX.Element;
+    id?: string;
+    key?: string;
+    another_routes?: string;
+    routes: TRootRoutes<ECompanyRoutes>[];
+    role: ERoles;
   };
 };
 

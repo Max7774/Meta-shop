@@ -47,7 +47,6 @@ const Filters = () => {
   return (
     <section>
       <div className="flex flex-row gap-5 cursor-pointer" onClick={onOpen}>
-        <span className="font-bold">Фильтры</span>
         <IoFilter size={25} />
       </div>
       <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>

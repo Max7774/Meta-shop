@@ -23,6 +23,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { roles } from 'src/constants/roles';
+
+const { user, company, manager, admin } = roles;
 
 @Controller('file-upload')
 @ApiTags('File-upload')
@@ -31,7 +34,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN', 'MANAGER'])
+  @Auth([admin, manager, company])
   @Post('create/:uuid')
   @UseInterceptors(FilesInterceptor('files'))
   async createProduct(
@@ -48,7 +51,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN', 'MANAGER'])
+  @Auth([admin, manager, company])
   @Post('create/subcategory/icon/:subcategoryUuid')
   @UseInterceptors(FileInterceptor('file'))
   async createIcon(
@@ -65,7 +68,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['DEFAULT_USER'])
+  @Auth([user, admin, manager, company])
   @Post('update/user/avatar')
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(
@@ -82,7 +85,7 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN', 'MANAGER'])
+  @Auth([admin, manager, company])
   @Delete(':fileName/:productUuid')
   async deleteFile(
     @Param('fileName') fileName: string,

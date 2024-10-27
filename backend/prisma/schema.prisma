@@ -52,12 +52,15 @@ model Product {
   
   userUuid      String?       @map("userUuid")
   subcategoryUuid String?     @map("subcategoryUuid")
+  companyUuid   String?       @map("companyUuid") 
 
   orderItems    OrderItem[]
   reviews       Review[]
   photoFiles    PhotoFile[]
   clicks        UserClick[]
 
+
+  company       Company?       @relation(fields: [companyUuid], references: [uuid])
   user          User?         @relation(fields: [userUuid], references: [uuid])
   subcategory   Subcategory?  @relation(fields: [subcategoryUuid], references: [uuid])
 }
@@ -194,13 +197,14 @@ model Company {
   updatedAt          DateTime   @updatedAt @map("updatedAt")
 
   name               String     @unique
-  oficalName         String
+  officialName        String
   registrationNumber String     @unique
   address            String
   email              String     @unique
   phoneNumber        String
 
   users              User[]
+  products           Product[]
 }
 
 enum EnumOrderItemStatus {

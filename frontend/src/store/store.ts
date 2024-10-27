@@ -6,6 +6,7 @@ import { productsSlice } from "./product/product.slice";
 import { cartSlice } from "./cart/cart.slice";
 import { filtersSlice } from "./filters/filters.slice";
 import { ordersSlice } from "./orders/orders.slice";
+import { companySlice } from "./company/company.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
@@ -14,6 +15,7 @@ const combinedReducers = combineReducers({
   cart: cartSlice.reducer,
   filters: filtersSlice.reducer,
   orders: ordersSlice.reducer,
+  company: companySlice.reducer,
 });
 
 const mainReducer = combinedReducers;

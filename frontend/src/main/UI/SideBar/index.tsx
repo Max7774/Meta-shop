@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import CategoryItems from "./CategoryItems/CategoryItems";
 import AdminItems from "./AdminItems/AdminItems";
 import { useLocation } from "react-router-dom";
+import CompanyItems from "./CompanyItems/CompanyItems";
 
 const Sidebar = () => {
   const { getCategoriesAll } = useActions();
@@ -32,7 +33,13 @@ const Sidebar = () => {
             </div>
           )}
           <Divider className="my-4" />
-          {pathname.startsWith("/admin") ? <AdminItems /> : <CategoryItems />}
+          {pathname.startsWith("/admin") ? (
+            <AdminItems />
+          ) : pathname.startsWith("/company") ? (
+            <CompanyItems />
+          ) : (
+            <CategoryItems />
+          )}
         </ul>
       </aside>
     </>

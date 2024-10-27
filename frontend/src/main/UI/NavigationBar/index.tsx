@@ -21,8 +21,12 @@ import { useProfile } from "@hooks/useProfile";
 import { ERoles } from "@enums/ERoles";
 import AdminItems from "./AdminItems/AdminItems";
 import CategoryItems from "./CategoryItems/CategoryItems";
-import { ADMIN_GlOBAL_PREFIX } from "@/const/globalPrefix";
+import {
+  ADMIN_GlOBAL_PREFIX,
+  COMPANY_GlOBAL_PREFIX,
+} from "@/const/globalPrefix";
 import { getImageUrl } from "@utils/getImageUrl";
+import CompanyItems from "./CompanyItems/CompanyItems";
 
 export const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,11 +46,21 @@ export const NavigationBar = () => {
       role: [ERoles.ADMIN],
       key: "admin-panel",
       onClick: () => {
-        navigate(`${ADMIN_GlOBAL_PREFIX}products`);
+        navigate(`${ADMIN_GlOBAL_PREFIX}users`);
         setIsMenuOpen(false);
       },
       color: "default",
       label: "Админ панель",
+    },
+    {
+      role: [ERoles.COMPANY],
+      key: "company-panel",
+      onClick: () => {
+        navigate(`${COMPANY_GlOBAL_PREFIX}add-product`);
+        setIsMenuOpen(false);
+      },
+      color: "default",
+      label: "Панель",
     },
     {
       role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
@@ -79,7 +93,7 @@ export const NavigationBar = () => {
       label: "Архив заказов",
     },
     {
-      role: [ERoles.DEFAULT_USER, ERoles.ADMIN],
+      role: [ERoles.DEFAULT_USER, ERoles.ADMIN, ERoles.COMPANY],
       key: "logout",
       onClick: () => {
         logout();
@@ -120,6 +134,8 @@ export const NavigationBar = () => {
         <div className="flex flex-col w-full gap-5 py-4">
           {pathname.startsWith("/admin") ? (
             <AdminItems setIsMenuOpen={setIsMenuOpen} />
+          ) : pathname.startsWith("/company") ? (
+            <CompanyItems setIsMenuOpen={setIsMenuOpen} />
           ) : (
             <CategoryItems setIsMenuOpen={setIsMenuOpen} />
           )}

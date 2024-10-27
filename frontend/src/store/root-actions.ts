@@ -3,6 +3,7 @@ import * as categoryActions from "./category/category.actions";
 import * as productActions from "./product/product.actions";
 import { cartSlice } from "./cart/cart.slice";
 import * as ordersActions from "./orders/orders.actions";
+import * as companyActions from "./company/company.actions";
 import { filtersSlice } from "./filters/filters.slice";
 
 export const rootActions = {
@@ -12,4 +13,5 @@ export const rootActions = {
   ...cartSlice.actions,
   ...filtersSlice.actions,
   ...ordersActions,
+  ...companyActions,
 };
