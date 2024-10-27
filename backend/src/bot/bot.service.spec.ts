@@ -7,7 +7,6 @@ import { Decimal } from '@prisma/client/runtime/library';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-// Mock dependencies
 jest.mock('node-telegram-bot-api');
 
 const mockTelegramBot = TelegramBot as jest.MockedClass<typeof TelegramBot>;
