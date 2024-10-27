@@ -8,22 +8,22 @@ export const ADMIN_SIDEBAR_ITEMS = [
   },
   {
     uuid: "1",
-    name: "Продукты",
-    slug: ADMIN_GlOBAL_PREFIX + "products",
-  },
-  {
-    uuid: "2",
     name: "Категории",
     slug: ADMIN_GlOBAL_PREFIX + "categories",
   },
   {
-    uuid: "3",
+    uuid: "2",
     name: "Заказы",
     slug: ADMIN_GlOBAL_PREFIX + "orders",
   },
   {
-    uuid: "4",
+    uuid: "3",
     name: "Заказы в архиве",
     slug: ADMIN_GlOBAL_PREFIX + "archived-orders",
+  },
+  {
+    uuid: "4",
+    name: "Добавить фирму",
+    slug: ADMIN_GlOBAL_PREFIX + "add-company",
   },
 ];

@@ -17,6 +17,9 @@ export type TProduct = {
   subcategory: TSubCategory;
   isNew: boolean;
   inStock: boolean;
+  company: {
+    name: string;
+  };
 };
 
 export type TProductsResponse = {

@@ -1,10 +1,10 @@
 import { TRoutes } from "@/types/TRoutesData";
 import { EAdminRoutes } from "@enums/ERoutes";
 import {
+  AddCompany,
   AdminCategories,
   AdminMainPage,
   AdminOrders,
-  AdminProducts,
   AdminUsers,
   ArchivedOrders,
   EditProduct,
@@ -32,11 +32,6 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     component: AdminUsers,
   },
   {
-    id: "create-products-page-admin",
-    path: EAdminRoutes.PRODUCTS,
-    component: AdminProducts,
-  },
-  {
     id: "edit-product-root-page-admin",
     path: EAdminRoutes.EDIT_PRODUCT,
     component: EditProduct,
@@ -45,5 +40,10 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     id: "archived-orders-root-page-admin",
     path: EAdminRoutes.ARCHIVED_ORDERS,
     component: ArchivedOrders,
+  },
+  {
+    id: "add-company-root-page-admin",
+    path: EAdminRoutes.ADD_COMPANY,
+    component: AddCompany,
   },
 ];

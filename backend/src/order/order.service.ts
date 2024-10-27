@@ -253,7 +253,7 @@ export class OrderService {
       from: process.env.MAILDEV_INCOMING_USER,
       to: process.env.MAILDEV_AUDIT_USER,
       subject: 'Новый заказ!',
-      text: `Зарегистрирован новый заказ под номером:: ${order.orderId}!`,
+      text: `Зарегистрирован новый заказ под номером: ${order.orderId}!`,
     });
 
     await this.bot.sendOrderNotification(order);
