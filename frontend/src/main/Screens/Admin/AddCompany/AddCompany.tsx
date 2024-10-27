@@ -14,7 +14,7 @@ import InputMask from "react-input-mask";
 import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { validEmail } from "@utils/validations/valid-email";
-// QImrXjxs8E
+
 const AddCompany = () => {
   const { addCompany } = useActions();
   const { handleSubmit, control, reset } = useForm<TAddCompany>();
