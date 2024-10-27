@@ -22,7 +22,7 @@ export class UserController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN'])
+  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN', 'COMPANY'])
   @Get('profile')
   async getProfile(@CurrentUser('uuid') uuid: string) {
     return this.userService.byId(uuid);
@@ -30,14 +30,14 @@ export class UserController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN'])
+  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN', 'COMPANY'])
   @Put('profile')
   async updateProfile(@CurrentUser('uuid') uuid: string, @Body() dto: UserDto) {
     return this.userService.updateProfile(uuid, dto);
   }
 
   @HttpCode(200)
-  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN'])
+  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN', 'COMPANY'])
   @Patch('profile/favorites/:productUuid')
   async toggleFavorites(
     @CurrentUser('uuid') uuid: string,

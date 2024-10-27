@@ -39,13 +39,14 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
           <div className="bg-default-200 px-3 py-2 rounded-lg mx-2">
             {currentItem.quantity}
           </div>
-          <FiPlus
-            className="cursor-pointer"
-            size={20}
+          <span
+            className="cursor-pointer text-white"
             onClick={() =>
               changeQuantity({ uuid: currentItem.uuid, type: "plus" })
             }
-          />
+          >
+            В корзину
+          </span>
         </div>
       ) : (
         <Button
