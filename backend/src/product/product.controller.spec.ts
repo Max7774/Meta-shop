@@ -228,7 +228,7 @@ describe('ProductController', () => {
         inStock: true,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
-        companyUuid: '',
+        companyUuid: 'company-uuid',
         _count: {
           reviews: 0,
           orderItems: 0,
@@ -238,9 +238,9 @@ describe('ProductController', () => {
 
       jest.spyOn(service, 'createProduct').mockResolvedValue(mockProduct);
 
-      const result = await controller.createProduct(dto, '');
+      const result = await controller.createProduct(dto, 'user-uuid');
       expect(result).toEqual(mockProduct);
-      expect(service.createProduct).toHaveBeenCalledWith(dto);
+      expect(service.createProduct).toHaveBeenCalledWith(dto, 'user-uuid');
     });
   });
 
