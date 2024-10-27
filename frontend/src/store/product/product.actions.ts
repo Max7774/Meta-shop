@@ -66,6 +66,7 @@ export const createProduct = createAsyncThunk<TProduct, TProductCreateForm>(
         discount: product.discount++,
         inStock: product.inStock,
         unitofmeasurement: product.unitofmeasurement,
+        companyUuid: product.companyUuid,
       };
       const response = await ProductService.createProduct(currentProduct);
 
