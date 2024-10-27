@@ -1,12 +1,12 @@
 import { TProduct } from "@/types/TProduct";
 import { ERoles } from "@enums/ERoles";
-import { useProfile } from "@hooks/useProfile";
 import { Card, CardBody, CardFooter, Divider, Image } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
 import { useNavigate } from "react-router-dom";
 import DefaultActions from "./Actions/DefaultActions/DefaultActions";
 import AdminActions from "./Actions/AdminActions/AdminActions";
 import { getImageUrl } from "@utils/getImageUrl";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 
 const crudActions = [ERoles.ADMIN, ERoles.COMPANY];
 
@@ -17,7 +17,7 @@ const CardUI = ({ product }: ICardProps) => {
   const navigate = useNavigate();
   const {
     profile: { role },
-  } = useProfile();
+  } = useAppSelector((state) => state.user);
 
   return (
     <Card shadow="sm" key={product.uuid}>
