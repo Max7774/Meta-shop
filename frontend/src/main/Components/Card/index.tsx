@@ -57,15 +57,19 @@ const CardUI = ({ product }: ICardProps) => {
         <Divider />
         {crudActions.includes(role) ? (
           <>
-            {companyUuid === product?.company?.uuid ||
-              (role === ERoles.ADMIN ? (
-                <AdminActions
-                  productUuid={product.uuid}
-                  productSlug={product.slug}
-                />
-              ) : (
-                <DefaultActions product={product} />
-              ))}
+            {role === ERoles.ADMIN ? (
+              <AdminActions
+                productUuid={product.uuid}
+                productSlug={product.slug}
+              />
+            ) : companyUuid === product?.company?.uuid ? (
+              <AdminActions
+                productUuid={product.uuid}
+                productSlug={product.slug}
+              />
+            ) : (
+              <DefaultActions product={product} />
+            )}
           </>
         ) : (
           <DefaultActions product={product} />
