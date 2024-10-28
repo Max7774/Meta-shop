@@ -1,7 +1,7 @@
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chip } from "@nextui-org/react";
+import { Chip, CircularProgress } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
@@ -12,15 +12,15 @@ import Actions from "@Components/BottomActions/Actions/Actions";
 const ProductPage = () => {
   const { productSlug } = useParams();
   const { getProductBySlug } = useActions();
-  const { product } = useProducts();
+  const { product, isLoading } = useProducts();
   const navigate = useNavigate();
 
   useEffect(() => {
     getProductBySlug(productSlug || "");
   }, [productSlug, getProductBySlug]);
 
-  if (!product) {
-    return <div>Загрузка...</div>;
+  if (isLoading) {
+    return <CircularProgress />;
   }
 
   return (
@@ -69,20 +69,20 @@ const ProductPage = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
-          <Carousel images={product?.images} />
+          <Carousel images={product?.images || []} />
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
-              discount={product.discount}
-              price={product.price}
-              unitofmeasurement={product.unitofmeasurement}
+              discount={product?.discount || 0}
+              price={product?.price || 0}
+              unitofmeasurement={product?.unitofmeasurement || ""}
             />
-            <p className="break-words">{product.description}</p>
+            <p className="break-words">{product?.description}</p>
             <div className="hidden sm:flex flex-col gap-5">
               <Actions />
             </div>
           </div>
         </div>
-        {product.peculiarities && (
+        {product?.peculiarities && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Характеристики</h2>
             <p>{product.peculiarities}</p>
