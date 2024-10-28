@@ -16,6 +16,12 @@ const API_URLS = [
   "/api/order",
 ];
 
+const PHOTO_API_PATH = "/api/file-upload/";
+
+const isPhotoRequest = (url) => {
+  return url.pathname.includes(PHOTO_API_PATH);
+};
+
 const isApiRequest = (url) => {
   return API_URLS.some((endpoint) => url.includes(endpoint));
 };
@@ -38,6 +44,43 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+});
+
+self.addEventListener("fetch", (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  if (isPhotoRequest(url) && request.method === "GET") {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(async (cache) => {
+        try {
+          const networkResponse = await fetch(request);
+          cache.put(request, networkResponse.clone());
+          return networkResponse;
+        } catch (error) {
+          const cachedResponse = await cache.match(request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return new Response(
+            JSON.stringify({
+              error: "Network error and no cached data available.",
+            }),
+            {
+              status: 503,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(request).then((response) => {
+        return response || fetch(request);
+      })
+    );
+  }
 });
 
 self.addEventListener("fetch", (event) => {
