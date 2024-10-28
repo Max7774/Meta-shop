@@ -10,6 +10,7 @@ import {
   updateProduct,
 } from "./product.actions";
 import { toast } from "react-toastify";
+import { TProduct } from "@/types/TProduct";
 
 const initialState: TProductState = {
   isLoading: false,
@@ -40,6 +41,7 @@ export const productsSlice = createSlice({
       .addCase(getProductBySlug.pending, (state) => {
         /* ===================== GET PRODUCT BY SLUG ===================== */
         state.isLoading = true;
+        state.product = {} as TProduct;
       })
       .addCase(getProductBySlug.fulfilled, (state, { payload }) => {
         state.isLoading = false;
@@ -47,6 +49,7 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
+        state.product = {} as TProduct;
       })
       .addCase(getProductBySubCategory.pending, (state) => {
         /* ===================== GET PRODUCT BY CATEGORY ===================== */
