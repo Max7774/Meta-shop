@@ -52,9 +52,9 @@ const ProductPage = () => {
             <Chip
               size="lg"
               className="text-white"
-              color={product.inStock ? "success" : "danger"}
+              color={product?.inStock ? "success" : "danger"}
             >
-              {product.inStock ? "В наличии!" : "Нет в наличии!"}
+              {product?.inStock ? "В наличии!" : "Нет в наличии!"}
             </Chip>
             {product?.isNew && (
               <Chip size="lg" className="text-white" color="success">
@@ -69,7 +69,7 @@ const ProductPage = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
-          <Carousel images={product.images} />
+          <Carousel images={product?.images} />
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
               discount={product.discount}

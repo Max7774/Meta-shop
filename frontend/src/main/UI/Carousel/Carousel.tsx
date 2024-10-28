@@ -16,7 +16,7 @@ const Carousel = ({ images }: ICarouselProps) => {
   const [touchEndX, setTouchEndX] = useState(0);
   const sliderRef = useRef<any>(null);
 
-  const isOne = (images.length <= 1) as boolean;
+  const isOne = (images?.length <= 1) as boolean;
 
   const handlePrev = () => {
     setCurrentIndex((prevState) =>
@@ -58,7 +58,7 @@ const Carousel = ({ images }: ICarouselProps) => {
         onTouchEnd={handleTouchEnd}
         ref={sliderRef}
       >
-        {images.map((img, index) => (
+        {images?.map((img, index) => (
           <div
             key={img + index}
             style={{ width: `${slideWidth}%` }}
@@ -97,7 +97,7 @@ const Carousel = ({ images }: ICarouselProps) => {
 
       {!isOne && (
         <div className="flex mt-2 space-x-2 py-2 px-4 last:pl-1">
-          {images.map((img, index) => (
+          {images?.map((img, index) => (
             <Image
               key={index}
               src={getImageUrl(img)}

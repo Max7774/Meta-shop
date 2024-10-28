@@ -29,9 +29,9 @@ const CardUI = ({ product }: ICardProps) => {
           shadow="sm"
           radius="lg"
           width="100%"
-          alt={product.name}
+          alt={product?.name}
           className="w-full object-cover h-[140px]"
-          src={getImageUrl(product.images[0])}
+          src={getImageUrl(product?.images[0])}
         />
       </CardBody>
       <CardFooter className="text-small gap-2 flex-col justify-between">

@@ -12,6 +12,38 @@ import {
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
 
+const productMock: TProduct = {
+  images: [],
+  description: "",
+  unitofmeasurement: "",
+  uuid: "",
+  name: "",
+  price: 0,
+  discount: 0,
+  createdAt: "",
+  peculiarities: "",
+  slug: "",
+  quantity: 0,
+  subcategory: {
+    uuid: "",
+    name: "",
+    slug: "",
+    icon: "",
+  },
+  category: {
+    uuid: "",
+    name: "",
+    slug: "",
+  },
+  reviews: [],
+  isNew: false,
+  inStock: false,
+  company: {
+    uuid: "",
+    name: "",
+  },
+};
+
 const initialState: TProductState = {
   isLoading: false,
   isProductLoading: false,
@@ -41,7 +73,7 @@ export const productsSlice = createSlice({
       .addCase(getProductBySlug.pending, (state) => {
         /* ===================== GET PRODUCT BY SLUG ===================== */
         state.isLoading = true;
-        state.product = {} as TProduct;
+        state.product = productMock as TProduct;
       })
       .addCase(getProductBySlug.fulfilled, (state, { payload }) => {
         state.isLoading = false;
@@ -49,7 +81,7 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
-        state.product = {} as TProduct;
+        state.product = productMock as TProduct;
       })
       .addCase(getProductBySubCategory.pending, (state) => {
         /* ===================== GET PRODUCT BY CATEGORY ===================== */
