@@ -14,13 +14,8 @@ const API_URLS = [
   "/api/products/by-category/",
   "/api/categories",
   "/api/order",
+  "/api/file-upload/",
 ];
-
-const PHOTO_API_PATH = "/api/file-upload/";
-
-const isPhotoRequest = (url) => {
-  return url.pathname.includes(PHOTO_API_PATH);
-};
 
 const isApiRequest = (url) => {
   return API_URLS.some((endpoint) => url.includes(endpoint));
@@ -50,42 +45,22 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  if (isPhotoRequest(url) && request.method === "GET") {
+  if (request.destination === "image") {
     event.respondWith(
-      caches.open(CACHE_NAME).then(async (cache) => {
-        try {
-          const networkResponse = await fetch(request);
-          cache.put(request, networkResponse.clone());
-          return networkResponse;
-        } catch (error) {
-          const cachedResponse = await cache.match(request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return new Response(
-            JSON.stringify({
-              error: "Network error and no cached data available.",
-            }),
-            {
-              status: 503,
-              headers: { "Content-Type": "application/json" },
-            }
-          );
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
         }
-      })
-    );
-  } else {
-    event.respondWith(
-      caches.match(request).then((response) => {
-        return response || fetch(request);
+
+        return fetch(request).then((networkResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, networkResponse.clone());
+            return networkResponse;
+          });
+        });
       })
     );
   }
-});
-
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
 
   if (isApiRequest(url.pathname) && request.method === "GET") {
     event.respondWith(
