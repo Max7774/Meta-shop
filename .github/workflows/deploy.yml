@@ -338,7 +338,7 @@ jobs:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Copy Coverage Report to Server
-        if: needs.run_tests_backend.outputs.tests_success == 'true' # Копируем, если тесты успешны
+        if: needs.run_tests_backend.outputs.tests_success == 'true'
         run: |
           scp -o StrictHostKeyChecking=no -r ./backend/coverage ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html/
 
@@ -407,8 +407,10 @@ jobs:
           # Определяем статус тестов для backend
           if [[ "$TESTS_BACKEND_RESULT" == "true" ]]; then
             echo "BACKEND_TEST_STATUS=✅ Тесты пройдены" >> $GITHUB_ENV
-          else
+          elif [[ "$TESTS_BACKEND_RESULT" == "false" ]]; then
             echo "BACKEND_TEST_STATUS=❌ Тесты не пройдены" >> $GITHUB_ENV
+          else
+            echo "BACKEND_TEST_STATUS=⏭️ Тесты не выполнялись" >> $GITHUB_ENV
           fi
 
       - name: Send notification to Telegram

@@ -13,8 +13,8 @@ const SubCategories = () => {
   const { getAllByCategory } = useActions();
 
   useEffect(() => {
-    if (categories.length === 0) getAllByCategory(categorySlug || "");
-  }, [categories.length, getAllByCategory, categorySlug]);
+    getAllByCategory(categorySlug || "");
+  }, [getAllByCategory, categorySlug]);
 
   const currentCategory = categories.find(({ slug }) => categorySlug == slug);
 

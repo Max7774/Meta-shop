@@ -15,7 +15,7 @@ const SubCategoriesProducts = () => {
   const { categories } = useCategory();
 
   useEffect(() => {
-    if (products?.length === 0) getProductBySubCategory(subcategorySlug || "");
+    getProductBySubCategory(subcategorySlug || "");
   }, [products?.length, getProductBySubCategory, subcategorySlug]);
 
   const title = categories
