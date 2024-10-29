@@ -173,4 +173,16 @@ export class CompanyService {
       throw new BadRequestException(error);
     }
   }
+
+  async deleteCompany(uuid: string) {
+    try {
+      return await this.prisma.company.delete({
+        where: {
+          uuid,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }

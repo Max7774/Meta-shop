@@ -139,4 +139,16 @@ export class UserService {
       },
     });
   }
+
+  async deleteUser(uuid: string) {
+    try {
+      return await this.prisma.user.delete({
+        where: {
+          uuid,
+        },
+      });
+    } catch (error) {
+      throw new Error('User not found');
+    }
+  }
 }

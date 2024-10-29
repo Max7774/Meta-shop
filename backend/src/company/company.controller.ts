@@ -6,6 +6,8 @@ import {
   ValidationPipe,
   HttpCode,
   Get,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -33,6 +35,14 @@ export class CompanyController {
   @Auth([admin])
   async getAllCompanies() {
     return await this.companyService.getAllCompanies();
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Delete(':uuid')
+  @Auth([admin])
+  async deleteCompany(@Param('uuid') uuid: string) {
+    return await this.companyService.deleteCompany(uuid);
   }
 
   @UsePipes(new ValidationPipe())

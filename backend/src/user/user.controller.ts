@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -51,5 +52,12 @@ export class UserController {
   @Get('all')
   async getAll() {
     return this.userService.getAll();
+  }
+
+  @HttpCode(200)
+  @Auth(['ADMIN'])
+  @Delete(':uuid')
+  async deleteUser(@Param('uuid') uuid: string) {
+    return this.userService.deleteUser(uuid);
   }
 }
