@@ -24,7 +24,7 @@ const SubcategoriesList = ({
             key={item.uuid}
             isFooterBlurred
             onPress={() => navigate(`/categories/${categorySlug}/${item.slug}`)}
-            className="w-full h-[200px] col-span-6"
+            className="w-full h-[200px] col-span-6 sm:col-span-3"
           >
             <Image
               removeWrapper

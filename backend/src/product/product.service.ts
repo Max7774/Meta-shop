@@ -267,7 +267,7 @@ export class ProductService {
       quantity,
     } = dto;
 
-    const { companyUuid } = await this.prisma.user.findUnique({
+    const companyUser = await this.prisma.user.findUnique({
       where: {
         uuid: userUuid,
       },
@@ -305,7 +305,7 @@ export class ProductService {
         discount: discount || 0,
         company: {
           connect: {
-            uuid: companyUuid,
+            uuid: companyUser.companyUuid || '',
           },
         },
         subcategory: {

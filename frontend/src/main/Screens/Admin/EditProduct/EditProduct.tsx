@@ -23,6 +23,9 @@ import { getImageUrl } from "@utils/getImageUrl";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
 import DeleteAction from "./DeleteAction";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { ERoles } from "@enums/ERoles";
+
+const excludedRoles = [ERoles.COMPANY];
 
 const EditProduct = () => {
   const { productSlug } = useParams();
@@ -36,6 +39,7 @@ const EditProduct = () => {
   const { categories } = useCategory();
 
   const { companies } = useAppSelector((state) => state.company);
+  const { role } = useAppSelector((state) => state.user.profile);
 
   const navigate = useNavigate();
 
@@ -267,11 +271,13 @@ const EditProduct = () => {
           <Controller
             control={control}
             name="companyUuid"
+            disabled={excludedRoles.includes(role)}
             rules={{ required: "Выберите фирму" }}
             render={({ field, fieldState: { error } }) => (
               <Select
                 label="Фирма поставщик-производитель"
                 placeholder="Выберите фирму"
+                disabled={excludedRoles.includes(role)}
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
