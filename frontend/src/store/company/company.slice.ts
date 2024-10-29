@@ -3,6 +3,7 @@ import { TCompanyState } from "./company.types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addCompany,
+  deleteCompany,
   getAllCompanies,
   getProductsStatistics,
 } from "./company.actions";
@@ -10,6 +11,8 @@ import {
 const initialState: TCompanyState = {
   statistic: {} as TCompanyStatistic,
   isLoading: false,
+  isDeleteLoading: false,
+  isAddingLoading: false,
   companies: [],
 };
 
@@ -31,14 +34,14 @@ export const companySlice = createSlice({
         state.statistic = {} as TCompanyStatistic;
       })
       .addCase(addCompany.pending, (state) => {
-        state.isLoading = true;
+        state.isAddingLoading = true;
       })
       .addCase(addCompany.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
+        state.isAddingLoading = false;
         state.tempData = payload;
       })
       .addCase(addCompany.rejected, (state) => {
-        state.isLoading = false;
+        state.isAddingLoading = false;
       })
       .addCase(getAllCompanies.pending, (state) => {
         state.isLoading = true;
@@ -50,6 +53,18 @@ export const companySlice = createSlice({
       .addCase(getAllCompanies.rejected, (state) => {
         state.isLoading = false;
         state.companies = [];
+      })
+      .addCase(deleteCompany.pending, (state) => {
+        state.isDeleteLoading = true;
+      })
+      .addCase(deleteCompany.fulfilled, (state, { payload }) => {
+        state.isDeleteLoading = false;
+        state.companies = state.companies.filter(
+          (company) => company.uuid !== payload.uuid
+        );
+      })
+      .addCase(deleteCompany.rejected, (state) => {
+        state.isDeleteLoading = false;
       });
   },
 });

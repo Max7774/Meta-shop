@@ -13,4 +13,5 @@ export interface IUserInitialState {
   registerCode?: "none" | "waiting code" | "fulfilled";
   role?: ERoles;
   isError: boolean;
+  isDeleteLoading: boolean;
 }

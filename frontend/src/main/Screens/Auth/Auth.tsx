@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Tabs, Tab } from "@nextui-org/react";
 import { useAuthFormHeight } from "./useAuthFormHeight";
 import { useState } from "react";

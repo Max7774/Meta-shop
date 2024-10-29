@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IUserInitialState } from "./user.types";
 import {
   createAddress,
+  deleteUser,
   getAllUsers,
   getNewAccessToken,
   getUserProfile,
@@ -45,6 +46,7 @@ const initialState: IUserInitialState = {
   isError: false,
   isProfileLoading: false,
   isAdminUserLoading: false,
+  isDeleteLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -247,6 +249,19 @@ export const userSlice = createSlice({
       })
       .addCase(getAllUsers.rejected, (state) => {
         state.isAdminUserLoading = false;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        /* ===================== GET ALL USERS ===================== */
+        state.isDeleteLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, { payload }) => {
+        state.isDeleteLoading = false;
+        state.userList = state.userList.filter(
+          (el) => el.uuid !== payload.uuid
+        );
+      })
+      .addCase(deleteUser.rejected, (state) => {
+        state.isDeleteLoading = false;
       });
   },
 });

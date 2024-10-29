@@ -14,12 +14,15 @@ import InputMask from "react-input-mask";
 import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { validEmail } from "@utils/validations/valid-email";
+import CompanyList from "@Components/CompanyList/CompanyList";
 
 const AddCompany = () => {
   const { addCompany } = useActions();
   const { handleSubmit, control, reset } = useForm<TAddCompany>();
 
-  const { isLoading, tempData } = useAppSelector((state) => state.company);
+  const { isAddingLoading, tempData } = useAppSelector(
+    (state) => state.company
+  );
 
   const submit: SubmitHandler<TAddCompany> = async (data) => {
     addCompany(data);
@@ -162,11 +165,16 @@ const AddCompany = () => {
             </div>
           )}
         />
-        <Button isLoading={isLoading} type="submit" color="primary" fullWidth>
+        <Button
+          isLoading={isAddingLoading}
+          type="submit"
+          color="primary"
+          fullWidth
+        >
           Добавить
         </Button>
       </form>
-      {isLoading && <CircularProgress />}
+      {isAddingLoading && <CircularProgress />}
       {tempData && (
         <Card className="mt-4">
           <CardHeader>Данные для входа</CardHeader>
@@ -176,6 +184,10 @@ const AddCompany = () => {
           </CardBody>
         </Card>
       )}
+
+      <div className="mt-4">
+        <CompanyList />
+      </div>
     </section>
   );
 };

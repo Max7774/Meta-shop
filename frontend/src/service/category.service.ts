@@ -1,4 +1,4 @@
-import { CATEGORIES, SUBCATEGORY } from "@/const/startApi";
+import { CATEGORIES, FILE_UPLOAD, SUBCATEGORY } from "@/const/startApi";
 import { TCategory, TCreateSubCategory, TSubCategory } from "@/types/TCategory";
 import { formDataInstance, instance } from "@api/api.interceptor";
 
@@ -45,7 +45,7 @@ export const CategoryService = {
     formData.append("file", file);
 
     return await formDataInstance<{ message: string }>({
-      url: `/file-upload/create/subcategory/icon/${subcategoryUuid}`,
+      url: `${FILE_UPLOAD}/create/subcategory/icon/${subcategoryUuid}`,
       method: "POST",
       data: formData,
     });

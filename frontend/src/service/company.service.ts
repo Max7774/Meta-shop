@@ -1,3 +1,4 @@
+import { COMPANY } from "@/const/startApi";
 import { TAddCompany } from "@/types/TAddCompany";
 import { TCompany } from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
@@ -6,14 +7,14 @@ import { instance } from "@api/api.interceptor";
 export const CompanyService = {
   async getProductsStatistics() {
     return await instance<TCompanyStatistic>({
-      url: "/company/statistic",
+      url: `${COMPANY}/statistic`,
       method: "GET",
     });
   },
 
   async addCompany(data: TAddCompany) {
     return await instance<{ email: string; password: string }>({
-      url: "/company",
+      url: `${COMPANY}`,
       method: "POST",
       data,
     });
@@ -21,8 +22,15 @@ export const CompanyService = {
 
   async getAllCompanies() {
     return await instance<TCompany[]>({
-      url: "/company",
+      url: `${COMPANY}`,
       method: "GET",
+    });
+  },
+
+  async deleteCompany(uuid: string) {
+    return await instance<TCompany>({
+      url: `${COMPANY}/${uuid}`,
+      method: "DELETE",
     });
   },
 };

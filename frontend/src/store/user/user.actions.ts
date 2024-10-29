@@ -264,3 +264,16 @@ export const getAllUsers = createAsyncThunk<TAdminUser[], undefined>(
     }
   }
 );
+
+export const deleteUser = createAsyncThunk<TAdminUser, string>(
+  "/deleteUser",
+  async (uuid, thunkApi) => {
+    try {
+      const response = await AuthService.deleteUser(uuid);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);

@@ -1,3 +1,4 @@
+import { ADDRESS, FILE_UPLOAD, USERS } from "@/const/startApi";
 import { TAddress, TAddressForm } from "@/types/TAddress";
 import { TProfile, TProfileEdit } from "@/types/TProfile";
 import { formDataInstance, instance } from "@api/api.interceptor";
@@ -5,14 +6,14 @@ import { formDataInstance, instance } from "@api/api.interceptor";
 export const ProfileService = {
   async getUserProfile() {
     return await instance<TProfile>({
-      url: "/users/profile",
+      url: `${USERS}/profile`,
       method: "GET",
     });
   },
 
   async createAddress(data: TAddressForm) {
     return await instance<TAddress>({
-      url: `/address`,
+      url: `${ADDRESS}`,
       method: "POST",
       data,
     });
@@ -20,14 +21,14 @@ export const ProfileService = {
 
   async setCurrentAddress(addressUuid: string) {
     return await instance<string>({
-      url: `/address/${addressUuid}`,
+      url: `${ADDRESS}/${addressUuid}`,
       method: "GET",
     });
   },
 
   async updateProfile(data: TProfileEdit) {
     return await instance<TProfile>({
-      url: "/users/profile",
+      url: `${USERS}/profile`,
       method: "PUT",
       data,
     });
@@ -38,7 +39,7 @@ export const ProfileService = {
     formData.append("file", image);
 
     return await formDataInstance<string>({
-      url: "/file-upload/update/user/avatar",
+      url: `${FILE_UPLOAD}/update/user/avatar`,
       method: "POST",
       data: formData,
     });

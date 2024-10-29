@@ -1,4 +1,4 @@
-import { AUTH } from "@/const/startApi";
+import { AUTH, USERS } from "@/const/startApi";
 import {
   TLogin,
   TAuthnResponse,
@@ -79,8 +79,15 @@ export const AuthService = {
 
   async getAllUsers() {
     return await instance<TAdminUser[]>({
-      url: "/users/all",
+      url: `${USERS}/all`,
       method: "GET",
+    });
+  },
+
+  async deleteUser(uuid: string) {
+    return await instance<TAdminUser>({
+      url: `${USERS}/${uuid}`,
+      method: "DELETE",
     });
   },
 };

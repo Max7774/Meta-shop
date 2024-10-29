@@ -1,4 +1,4 @@
-import { PRODUCTS } from "@/const/startApi";
+import { FILE_UPLOAD, PRODUCTS } from "@/const/startApi";
 import { TFilters } from "@/types/TFilters";
 import {
   TProduct,
@@ -43,7 +43,7 @@ export const ProductService = {
     formData.append("files", image);
 
     return await formDataInstance<string[]>({
-      url: `/file-upload/create/${productUuid}`,
+      url: `${FILE_UPLOAD}/create/${productUuid}`,
       method: "POST",
       data: formData,
     });
@@ -66,7 +66,7 @@ export const ProductService = {
 
   async deleteProductImage(productUuid: string, filename: string) {
     return await instance<{ message: string }>({
-      url: `/file-upload/${filename}/${productUuid}`,
+      url: `${FILE_UPLOAD}/${filename}/${productUuid}`,
       method: "DELETE",
     });
   },

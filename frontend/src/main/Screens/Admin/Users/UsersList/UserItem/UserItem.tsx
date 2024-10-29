@@ -1,20 +1,32 @@
 import { TAdminUser } from "@/types/TUser";
+import { useActions } from "@hooks/useActions";
 import {
   Accordion,
   AccordionItem,
   Avatar,
+  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
 } from "@nextui-org/react";
 import { getImageUrl } from "@utils/getImageUrl";
+import { useState } from "react";
 
 interface IUserItemProps {
   user: TAdminUser;
 }
 
 const UserItem = ({ user }: IUserItemProps) => {
+  const { deleteUser } = useActions();
+  const [isLocalLoading, setIsLocalLoading] = useState(false);
+
+  const deleteUserHandler = () => {
+    setIsLocalLoading(true);
+    deleteUser(user.uuid);
+    setIsLocalLoading(false);
+  };
+
   return (
     <Card className="w-full">
       <CardHeader className="justify-between">
@@ -74,6 +86,13 @@ const UserItem = ({ user }: IUserItemProps) => {
             {new Date(user.createdAt).toLocaleDateString()}
           </p>
         </div>
+        <Button
+          color="primary"
+          isLoading={isLocalLoading}
+          onClick={deleteUserHandler}
+        >
+          Удалить пользователя
+        </Button>
       </CardFooter>
     </Card>
   );
