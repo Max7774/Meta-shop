@@ -16,7 +16,7 @@ const CompanyList = () => {
   if (isLoading) return <CircularProgress />;
 
   return (
-    <section>
+    <section className="flex flex-col gap-2">
       {companies.map((company) => (
         <CompanyCard company={company} key={company.uuid} />
       ))}

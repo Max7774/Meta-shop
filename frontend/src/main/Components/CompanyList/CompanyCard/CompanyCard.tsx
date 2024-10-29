@@ -27,6 +27,14 @@ const CompanyCard = ({ company }: ICompanyCardProps) => {
     <Card className="w-full">
       <CardHeader className="justify-between">
         <div className="text-lg font-bold">{company.officialName}</div>
+        <Button
+          color="primary"
+          size="sm"
+          isLoading={isLocalLoading}
+          onClick={deleteCompanyHandler}
+        >
+          Удалить фирму
+        </Button>
       </CardHeader>
       <CardBody className="px-3 py-0 text-small">
         <p>Uuid: {company.uuid}</p>
@@ -41,13 +49,6 @@ const CompanyCard = ({ company }: ICompanyCardProps) => {
             {new Date(company.createdAt).toLocaleDateString()}
           </p>
         </div>
-        <Button
-          color="primary"
-          isLoading={isLocalLoading}
-          onClick={deleteCompanyHandler}
-        >
-          Удалить фирму
-        </Button>
       </CardFooter>
     </Card>
   );

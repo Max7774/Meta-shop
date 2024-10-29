@@ -46,6 +46,14 @@ const UserItem = ({ user }: IUserItemProps) => {
             </h5>
           </div>
         </div>
+        <Button
+          color="primary"
+          size="sm"
+          isLoading={isLocalLoading}
+          onClick={deleteUserHandler}
+        >
+          Удалить пользователя
+        </Button>
       </CardHeader>
       <CardBody className="px-3 py-0 text-small">
         <p>Uuid: {user.uuid}</p>
@@ -86,13 +94,6 @@ const UserItem = ({ user }: IUserItemProps) => {
             {new Date(user.createdAt).toLocaleDateString()}
           </p>
         </div>
-        <Button
-          color="primary"
-          isLoading={isLocalLoading}
-          onClick={deleteUserHandler}
-        >
-          Удалить пользователя
-        </Button>
       </CardFooter>
     </Card>
   );
