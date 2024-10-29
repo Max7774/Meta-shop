@@ -99,6 +99,7 @@ export const deleteProduct = createAsyncThunk<TProduct, string>(
   }
 );
 
+/* updateProduct */
 export const updateProduct = createAsyncThunk<
   TProduct,
   { data: TProductCreateForm; uuid: string; images: File[] }
@@ -124,6 +125,7 @@ export const updateProduct = createAsyncThunk<
   }
 );
 
+/* deleteProductImage */
 export const deleteProductImage = createAsyncThunk<
   { message: string },
   { productUuid: string; filename: string }

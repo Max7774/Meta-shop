@@ -326,7 +326,7 @@ jobs:
     if: always()
     steps:
       - name: Download Coverage Report
-        if: always()
+        if: needs.run_tests_backend.outputs.tests_success == 'true'
         uses: actions/download-artifact@v3
         with:
           name: backend-coverage-report
