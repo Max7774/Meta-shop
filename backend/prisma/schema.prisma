@@ -49,6 +49,7 @@ model Product {
   images        String[]      @default(["default-product-photo.png"])
   unitofmeasurement String
   inStock       Boolean?      @default(false)
+  isDeleted     Boolean?      @default(false)
   
   userUuid      String?       @map("userUuid")
   subcategoryUuid String?     @map("subcategoryUuid")

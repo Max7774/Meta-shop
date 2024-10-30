@@ -28,15 +28,15 @@ export class ProductService {
   ) {}
 
   async getAll(dto: GetAllProductDto = {}) {
-    const { perPage, skip } = this.paginationService.getPagination(dto);
+    // const { perPage, skip } = this.paginationService.getPagination(dto);
 
     const filters = this.createFilter(dto);
 
     const currentProducts = await this.prisma.product.findMany({
-      where: filters,
+      where: { ...(filters || {}), isDeleted: false },
       orderBy: this.getSortOption(dto.sort),
-      skip,
-      take: perPage,
+      // skip,
+      // take: perPage,
       select: productReturnObject,
     });
 
@@ -175,6 +175,7 @@ export class ProductService {
     const product = await this.prisma.product.findUnique({
       where: {
         uuid,
+        isDeleted: false,
       },
       select: productReturnObjectFull,
     });
@@ -191,6 +192,7 @@ export class ProductService {
       const product = await this.prisma.product.findUnique({
         where: {
           slug,
+          isDeleted: false,
         },
         select: productReturnObjectFull,
       });
@@ -219,6 +221,7 @@ export class ProductService {
   async bySubcategory(subcategorySlug: string) {
     const products = await this.prisma.product.findMany({
       where: {
+        isDeleted: false,
         subcategory: {
           slug: subcategorySlug,
         },
@@ -392,17 +395,24 @@ export class ProductService {
             productUuid: uuid,
           },
         });
-
-        product.images.forEach(async (image) => {
-          // 2. Удаляем связанные PhotoFile
-          const filePath = `${process.env.DESTINATION}/${image}`;
-          await fs.unlink(filePath);
-        });
+        try {
+          product.images.forEach(async (image) => {
+            // 2. Удаляем связанные PhotoFile
+            const filePath = `${process.env.DESTINATION}/${image}`;
+            await fs.unlink(filePath);
+          });
+        } catch (error) {
+          console.error('Failed to delete product images:', error);
+          throw error;
+        }
 
         // 3. Удаляем сам Product
-        const deletedProduct = await prisma.product.delete({
+        const deletedProduct = await prisma.product.update({
           where: {
             uuid,
+          },
+          data: {
+            isDeleted: true,
           },
         });
 

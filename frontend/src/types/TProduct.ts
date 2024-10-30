@@ -17,6 +17,7 @@ export type TProduct = {
   subcategory: TSubCategory;
   isNew: boolean;
   inStock: boolean;
+  isDeleted?: boolean;
   company: {
     uuid: string;
     name: string;

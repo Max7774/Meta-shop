@@ -47,6 +47,7 @@ export const mockOrder: IOrder = {
         images: ['test-image.png'],
         unitofmeasurement: 'pcs',
         inStock: true,
+        isDeleted: false,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
       },

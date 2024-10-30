@@ -87,6 +87,7 @@ describe('ProductController', () => {
         images: [],
         unitofmeasurement: 'kg',
         inStock: true,
+        isDeleted: false,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
         user: {
@@ -205,6 +206,7 @@ describe('ProductController', () => {
         price: 100,
         unitofmeasurement: 'kg',
         inStock: true,
+        isDeleted: false,
         subcategoryUuid: 'subcategory-uuid',
         description: 'Test description',
         discount: 5,
@@ -226,6 +228,7 @@ describe('ProductController', () => {
         images: [],
         unitofmeasurement: 'kg',
         inStock: true,
+        isDeleted: false,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
         companyUuid: 'company-uuid',
@@ -252,6 +255,7 @@ describe('ProductController', () => {
         price: 150,
         unitofmeasurement: 'liters',
         inStock: true,
+        isDeleted: false,
         subcategoryUuid: 'subcategory-uuid',
         description: 'Updated description',
         discount: 10,
@@ -273,6 +277,7 @@ describe('ProductController', () => {
         images: [],
         unitofmeasurement: 'liters',
         inStock: true,
+        isDeleted: false,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
         user: {
@@ -375,6 +380,7 @@ describe('ProductController', () => {
         images: [],
         unitofmeasurement: 'kg',
         inStock: true,
+        isDeleted: false,
         userUuid: 'user-uuid',
         subcategoryUuid: 'subcategory-uuid',
         user: {
