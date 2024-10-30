@@ -386,14 +386,7 @@ export class ProductService {
       const product = await this.byId(uuid);
       // Начинаем транзакцию
       const deletedProduct = await this.prisma.$transaction(async (prisma) => {
-        // 1. Удаляем связанные UserClick
-        await prisma.userClick.deleteMany({
-          where: {
-            productUuid: uuid,
-          },
-        });
-
-        // 2. Удаляем связанные PhotoFile
+        // 1. Удаляем связанные PhotoFile
         await prisma.photoFile.deleteMany({
           where: {
             productUuid: uuid,
@@ -401,12 +394,12 @@ export class ProductService {
         });
 
         product.images.forEach(async (image) => {
-          // 3. Удаляем связанные PhotoFile
+          // 2. Удаляем связанные PhotoFile
           const filePath = `${process.env.DESTINATION}/${image}`;
           await fs.unlink(filePath);
         });
 
-        // 4. Удаляем сам Product
+        // 3. Удаляем сам Product
         const deletedProduct = await prisma.product.delete({
           where: {
             uuid,
