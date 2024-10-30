@@ -8,10 +8,6 @@ import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
 // import { validEmail } from "@utils/validations/valid-email";
 
-// interface ILoginProps {
-//   setTypeOfAuth?: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
-// }
-
 const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { login } = useActions();
