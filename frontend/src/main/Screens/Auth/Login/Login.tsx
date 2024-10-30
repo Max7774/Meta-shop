@@ -49,7 +49,7 @@ const Login = () => {
               variant="flat"
               size="lg"
               placeholder="Email"
-              type="email"
+              // type="email"
               required
               value={value}
               onChange={onChange}
