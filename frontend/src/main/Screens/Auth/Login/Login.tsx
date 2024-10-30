@@ -6,7 +6,7 @@ import { TLogin } from "@/types/TAuth";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
-import { validEmail } from "@utils/validations/valid-email";
+// import { validEmail } from "@utils/validations/valid-email";
 
 // interface ILoginProps {
 //   setTypeOfAuth?: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
@@ -36,10 +36,10 @@ const Login = () => {
           key="email"
           rules={{
             required: "Это поле обязательно!",
-            pattern: {
-              value: validEmail,
-              message: "Неверно введен email",
-            },
+            // pattern: {
+            //   value: validEmail,
+            //   message: "Неверно введен email",
+            // },
           }}
           defaultValue=""
           render={({ field: { onChange, value }, fieldState: { error } }) => (
