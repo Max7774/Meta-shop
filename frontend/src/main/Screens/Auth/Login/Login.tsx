@@ -1,5 +1,4 @@
 import { Button, Input, Spacer } from "@nextui-org/react";
-// import { TTypeOfAuth } from "../auth.types";
 import { useActions } from "@hooks/useActions";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { TLogin } from "@/types/TAuth";
