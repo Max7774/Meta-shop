@@ -1,4 +1,5 @@
 import { TProduct } from "@/types/TProduct";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { Button } from "@nextui-org/react";
@@ -12,9 +13,13 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
   const { items } = useCart();
   const { addToCart, changeQuantity, removeFromCart } = useActions();
 
+  const selectedCompanyProduct = useAppSelector(
+    (state) => state.products.selectedCompanyProduct
+  );
+
   const currentItem = items.find((el) => el.product.uuid === product.uuid);
 
-  if (!product.inStock)
+  if (!product.inStock || !product.company.length)
     return (
       <Button color="default" fullWidth isDisabled>
         Нет в наличии
@@ -56,13 +61,17 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
             addToCart({
               product,
               inStock: product.inStock,
-              discount: product.discount,
+              discount: selectedCompanyProduct.discount,
               quantity: 1,
-              price: product.discount
-                ? product.price - (product.price * product.discount) / 100
-                : product.price,
+              price: selectedCompanyProduct.discount
+                ? selectedCompanyProduct.price -
+                  (selectedCompanyProduct.price *
+                    selectedCompanyProduct.discount) /
+                    100
+                : selectedCompanyProduct.price,
               uuid: product?.uuid,
               productUuid: product?.uuid,
+              selectedCompanyProduct,
             })
           }
         >

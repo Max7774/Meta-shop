@@ -10,4 +10,4 @@ export type TFilters = {
   subcategoryUuid?: string;
 };
 
-export type TFiltersPages = "order" | "products";
+export type TFiltersPages = "order" | "products" | "users";

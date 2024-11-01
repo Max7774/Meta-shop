@@ -40,14 +40,14 @@ export const getAllCompanies = createAsyncThunk<TCompany[], undefined>(
   }
 );
 
-export const deleteCompany = createAsyncThunk<TCompany, string>(
-  "/delete-company",
-  async (uuid, { rejectWithValue }) => {
-    try {
-      const response = await CompanyService.deleteCompany(uuid);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
+export const deleteCompany = createAsyncThunk<
+  TCompany,
+  { uuid: string; userUuid: string }
+>("/delete-company", async ({ uuid, userUuid }, { rejectWithValue }) => {
+  try {
+    const response = await CompanyService.deleteCompany(uuid, userUuid);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
   }
-);
+});

@@ -3,10 +3,10 @@ import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
 import { useActions } from "@hooks/useActions";
 import { Button, Image } from "@nextui-org/react";
 import { ICartItem } from "@store/cart/cart.types";
-import Price from "@UI/Price/Price";
 import { getImageUrl } from "@utils/getImageUrl";
 import { FiTrash } from "react-icons/fi";
 import cn from "clsx";
+import OrderCardPrice from "./OrderCardPrice/OrderCardPrice";
 
 interface IOrderCardProps {
   item: ICartItem;
@@ -21,54 +21,56 @@ const OrderCard = ({ item, itemsInStock }: IOrderCardProps) => {
   );
 
   return (
-    <div
-      key={item.uuid}
-      className={cn(
-        "flex flex-row justify-between items-center rounded-2xl py-3 px-2",
-        {
-          "bg-gray-200": isOutOfStock,
-          "bg-white": !isOutOfStock,
-        }
-      )}
-    >
-      <div className="flex flex-row items-center gap-3">
-        <Image
-          src={getImageUrl(item.product.images[0])}
-          className={cn("w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-lg", {
-            "opacity-50": isOutOfStock,
-            "": !isOutOfStock,
-          })}
-          alt={item.product.name}
-        />
-        <div className="flex flex-col gap-2">
-          <div
-            className={cn("text-base font-medium", {
-              "text-gray-500": isOutOfStock,
-              "text-black": !isOutOfStock,
+    <div>
+      <div
+        key={item.uuid}
+        className={cn(
+          "flex flex-row justify-between items-center rounded-2xl py-3 px-2",
+          {
+            "bg-gray-200": isOutOfStock,
+            "bg-white": !isOutOfStock,
+          }
+        )}
+      >
+        <div className="flex flex-row items-center gap-3">
+          <Image
+            src={getImageUrl(item.product.images[0])}
+            className={cn("w-16 sm:w-20 h-16 sm:h-20 object-cover rounded-lg", {
+              "opacity-50": isOutOfStock,
+              "": !isOutOfStock,
             })}
-          >
-            {item.product.name}
-          </div>
-          <Price
-            discount={item.discount}
-            price={item.product.price}
-            unitofmeasurement={item.product.unitofmeasurement}
+            alt={item.product.name}
           />
+          <div className="flex flex-col gap-2">
+            <div
+              className={cn("text-base font-medium", {
+                "text-gray-500": isOutOfStock,
+                "text-black": !isOutOfStock,
+              })}
+            >
+              {item.product.name}
+            </div>
+          </div>
         </div>
+        {isOutOfStock ? (
+          <Button
+            onPress={() => removeFromCart({ uuid: item.productUuid })}
+            color="default"
+            endContent={<FiTrash />}
+            className="text-gray-500 border-gray-500"
+            variant="bordered"
+          >
+            Нет в наличии!
+          </Button>
+        ) : (
+          <CartActions item={item} />
+        )}
       </div>
-      {isOutOfStock ? (
-        <Button
-          onPress={() => removeFromCart({ uuid: item.productUuid })}
-          color="default"
-          endContent={<FiTrash />}
-          className="text-gray-500 border-gray-500"
-          variant="bordered"
-        >
-          Нет в наличии!
-        </Button>
-      ) : (
-        <CartActions item={item} />
-      )}
+      <OrderCardPrice
+        company={item.product.company}
+        unitofmeasurement={item.product.unitofmeasurement}
+        selectedCompanyProduct={item.selectedCompanyProduct}
+      />
     </div>
   );
 };

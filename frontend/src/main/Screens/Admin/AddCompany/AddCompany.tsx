@@ -58,6 +58,11 @@ const AddCompany = () => {
           defaultValue=""
           rules={{
             required: "Это обязательное поле!",
+            pattern: {
+              value: /^[A-Za-z]+$/,
+              message:
+                "Используйте только английские буквы без пробелов и других символов",
+            },
           }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input

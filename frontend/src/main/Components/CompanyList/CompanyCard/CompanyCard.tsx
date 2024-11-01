@@ -19,7 +19,7 @@ const CompanyCard = ({ company }: ICompanyCardProps) => {
 
   const deleteCompanyHandler = () => {
     setIsLocalLoading(true);
-    deleteCompany(company.uuid);
+    deleteCompany({ uuid: company.uuid, userUuid: company.users[0].uuid });
     setIsLocalLoading(false);
   };
 

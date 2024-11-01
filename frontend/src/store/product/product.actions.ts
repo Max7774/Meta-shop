@@ -85,19 +85,19 @@ export const createProduct = createAsyncThunk<TProduct, TProductCreateForm>(
 );
 
 /* deleteProduct */
-export const deleteProduct = createAsyncThunk<TProduct, string>(
-  "products/deleteProduct",
-  async (uuid, { rejectWithValue }) => {
-    try {
-      const response = await ProductService.deleteProduct(uuid);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue({
-        errorMessage: "Failed to delete product",
-      });
-    }
+export const deleteProduct = createAsyncThunk<
+  TProduct,
+  { uuid: string; type: "soft" | "hard" }
+>("products/deleteProduct", async ({ uuid, type }, { rejectWithValue }) => {
+  try {
+    const response = await ProductService.deleteProduct(uuid, type);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue({
+      errorMessage: "Failed to delete product",
+    });
   }
-);
+});
 
 /* updateProduct */
 export const updateProduct = createAsyncThunk<

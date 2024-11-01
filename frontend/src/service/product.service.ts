@@ -49,9 +49,9 @@ export const ProductService = {
     });
   },
 
-  async deleteProduct(productUuid: string) {
+  async deleteProduct(productUuid: string, type: "soft" | "hard") {
     return await instance<TProduct>({
-      url: `${PRODUCTS}/${productUuid}`,
+      url: `${PRODUCTS}/${productUuid}/${type}`,
       method: "DELETE",
     });
   },

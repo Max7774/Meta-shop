@@ -13,10 +13,11 @@ const crudActions = [ERoles.ADMIN, ERoles.COMPANY];
 interface ICardProps {
   product: TProduct;
 }
+
 const CardUI = ({ product }: ICardProps) => {
   const navigate = useNavigate();
   const {
-    profile: { role, companyUuid },
+    profile: { role },
   } = useAppSelector((state) => state.user);
 
   return (
@@ -37,39 +38,32 @@ const CardUI = ({ product }: ICardProps) => {
       <CardFooter className="text-small gap-2 flex-col justify-between">
         <b className="text-center">{product.name}</b>
         <p className="text-default-500">
-          {product.discount > 0 ? (
+          {product.company[0]?.discount || 0 > 0 ? (
             <>
               <span className="text-md font-semibold text-red-600">
                 {convertPrice(
-                  product.price - (product.price * product.discount) / 100
+                  product.company[0]?.price -
+                    (product.company[0]?.price * product.company[0]?.discount) /
+                      100
                 )}{" "}
               </span>
               <span className="text-xs line-through text-gray-500">
-                {convertPrice(product.price)}
+                {convertPrice(product.company[0]?.price || 0)}
               </span>
             </>
           ) : (
             <span className="text-md font-semibold">
-              {convertPrice(product.price)}
+              {convertPrice(product.company[0]?.price || 0)}
             </span>
           )}
         </p>
         <Divider />
         {crudActions.includes(role) ? (
           <>
-            {role === ERoles.ADMIN ? (
-              <AdminActions
-                productUuid={product.uuid}
-                productSlug={product.slug}
-              />
-            ) : companyUuid === product?.company?.uuid ? (
-              <AdminActions
-                productUuid={product.uuid}
-                productSlug={product.slug}
-              />
-            ) : (
-              <DefaultActions product={product} />
-            )}
+            <AdminActions
+              productUuid={product.uuid}
+              productSlug={product.slug}
+            />
           </>
         ) : (
           <DefaultActions product={product} />

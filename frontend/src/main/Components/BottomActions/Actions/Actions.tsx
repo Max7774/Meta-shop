@@ -1,4 +1,5 @@
 import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { useProducts } from "@hooks/useProducts";
@@ -12,6 +13,10 @@ const Actions = () => {
   const { product } = useProducts();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const selectedCompanyProduct = useAppSelector(
+    (state) => state.products.selectedCompanyProduct
+  );
 
   const currentElement = items.find(
     (cartItem) => cartItem.product.uuid === product?.uuid
@@ -37,14 +42,18 @@ const Actions = () => {
                 onClick={() =>
                   addToCart({
                     product,
-                    discount: product.discount,
+                    discount: selectedCompanyProduct.discount,
                     quantity: 1,
                     inStock: product.inStock,
-                    price: product.discount
-                      ? product.price - (product.price * product.discount) / 100
-                      : product.price,
+                    price: selectedCompanyProduct.discount
+                      ? selectedCompanyProduct.price -
+                        (selectedCompanyProduct.price *
+                          selectedCompanyProduct.discount) /
+                          100
+                      : selectedCompanyProduct.price,
                     uuid: product.uuid,
                     productUuid: product.uuid,
+                    selectedCompanyProduct,
                   })
                 }
                 isDisabled={!product.inStock}
