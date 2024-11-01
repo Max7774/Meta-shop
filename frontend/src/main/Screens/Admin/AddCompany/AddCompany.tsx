@@ -184,7 +184,12 @@ const AddCompany = () => {
         <Card className="mt-4">
           <CardHeader>Данные для входа</CardHeader>
           <CardBody>
-            <div>Email: {tempData.email}</div>
+            <div className="flex flex-col items-center">
+              <p className="text-default-400">
+                (Техническая почта, специально для входа в приложение)
+              </p>
+              <p>Email: {tempData.email}</p>
+            </div>
             <div>Пароль: {tempData.password}</div>
           </CardBody>
         </Card>

@@ -60,9 +60,16 @@ const UserItem = ({ user }: IUserItemProps) => {
         )}
       </CardHeader>
       <CardBody className="px-3 py-0 text-small">
-        <p>
-          {!companyUuid ? "Email: " : "Тех. email: "} {user.email}
-        </p>
+        {!companyUuid ? (
+          <p>Email: {user.email}</p>
+        ) : (
+          <div className="flex flex-col">
+            <p className="text-default-400">
+              (Техническая почта, специально для входа в приложение)
+            </p>
+            <p>Тех. Email: {user.email}</p>
+          </div>
+        )}
         <span className="pt-2">Телефон: {user.phone_number}</span>
         {!companyUuid && (
           <Accordion>
