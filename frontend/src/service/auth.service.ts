@@ -5,6 +5,7 @@ import {
   TRegister,
   TResetPassword,
 } from "@/types/TAuth";
+import { TFilters } from "@/types/TFilters";
 import { TAdminUser } from "@/types/TUser";
 import { axiosClassic, instance } from "@api/api.interceptor";
 import { ERoles } from "@enums/ERoles";
@@ -77,10 +78,11 @@ export const AuthService = {
     });
   },
 
-  async getAllUsers() {
+  async getAllUsers(data: TFilters) {
     return await instance<TAdminUser[]>({
       url: `${USERS}/all`,
       method: "GET",
+      params: data,
     });
   },
 

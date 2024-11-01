@@ -78,7 +78,23 @@ export class CompanyService {
 
   async getAllCompanies() {
     try {
-      return await this.prisma.company.findMany();
+      return await this.prisma.company.findMany({
+        select: {
+          uuid: true,
+          createdAt: true,
+          name: true,
+          officialName: true,
+          address: true,
+          email: true,
+          phoneNumber: true,
+          users: {
+            select: {
+              uuid: true,
+              email: true,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -86,11 +102,12 @@ export class CompanyService {
 
   async getCompanyProducts(uuid: string) {
     try {
-      return await this.prisma.product.findMany({
+      return await this.prisma.companyProduct.findMany({
         where: {
-          company: {
-            uuid,
-          },
+          uuid,
+        },
+        select: {
+          product: true,
         },
       });
     } catch (error) {
@@ -106,9 +123,12 @@ export class CompanyService {
         },
       });
 
-      const totalProducts = await this.prisma.product.findMany({
+      const totalProducts = await this.prisma.companyProduct.findMany({
         where: {
           companyUuid,
+        },
+        select: {
+          product: true,
         },
       });
 
@@ -117,7 +137,11 @@ export class CompanyService {
           items: {
             some: {
               product: {
-                companyUuid,
+                company: {
+                  some: {
+                    companyUuid,
+                  },
+                },
               },
             },
           },
@@ -129,7 +153,11 @@ export class CompanyService {
           items: {
             some: {
               product: {
-                companyUuid,
+                company: {
+                  some: {
+                    companyUuid,
+                  },
+                },
               },
             },
           },
@@ -143,7 +171,11 @@ export class CompanyService {
       const productSales = await this.prisma.orderItem.findMany({
         where: {
           product: {
-            companyUuid,
+            company: {
+              some: {
+                companyUuid,
+              },
+            },
           },
         },
       });
@@ -174,13 +206,35 @@ export class CompanyService {
     }
   }
 
-  async deleteCompany(uuid: string) {
+  async deleteCompany(uuid: string, userUuid: string) {
     try {
-      return await this.prisma.company.delete({
-        where: {
-          uuid,
-        },
+      const deletedCompany = await this.prisma.$transaction(async (prisma) => {
+        await prisma.user.delete({
+          where: {
+            uuid: userUuid,
+          },
+        });
+
+        try {
+          await prisma.companyProduct.deleteMany({
+            where: {
+              companyUuid: uuid,
+            },
+          });
+        } catch (error) {
+          throw new BadRequestException(error);
+        }
+
+        const company = await prisma.company.delete({
+          where: {
+            uuid,
+          },
+        });
+
+        return company;
       });
+
+      return deletedCompany;
     } catch (error) {
       throw new BadRequestException(error);
     }

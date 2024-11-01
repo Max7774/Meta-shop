@@ -39,7 +39,7 @@ const EditProduct = () => {
   const { categories } = useCategory();
 
   const { companies } = useAppSelector((state) => state.company);
-  const { role } = useAppSelector((state) => state.user.profile);
+  const { role, companyUuid } = useAppSelector((state) => state.user.profile);
 
   const navigate = useNavigate();
 
@@ -93,7 +93,7 @@ const EditProduct = () => {
       discount: Number(data.discount),
       inStock: data.inStock,
       subcategoryUuid: data.subcategoryUuid,
-      companyUuid: data.companyUuid,
+      companyUuid: data.companyUuid || companyUuid,
       unitofmeasurement: data?.unitofmeasurement || "",
     };
 
@@ -129,12 +129,18 @@ const EditProduct = () => {
       reset({
         name: product.name || "",
         description: product.description || "",
-        price: product.price || 0,
+        price:
+          product.company.find((el) => el.companyUuid === companyUuid)?.price ||
+          0,
         inStock: product.inStock,
-        discount: product.discount || 0,
+        discount:
+          product.company.find((el) => el.companyUuid === companyUuid)
+            ?.discount || 0,
         subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
-        companyUuid: product?.company?.uuid || "",
+        companyUuid:
+          product.company.find((el) => el.companyUuid === companyUuid)
+            ?.companyUuid || product.company[0]?.companyUuid,
       });
 
       // Обновляем previewImages
@@ -159,6 +165,7 @@ const EditProduct = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Input
+                isDisabled={!!companyUuid}
                 label="Название продукта"
                 placeholder="Введите название продукта"
                 onChange={onChange}
@@ -172,6 +179,7 @@ const EditProduct = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Textarea
+                isDisabled={!!companyUuid}
                 label="Описание продукта"
                 placeholder="Введите описание продукта"
                 onChange={onChange}
@@ -188,6 +196,7 @@ const EditProduct = () => {
             }}
             render={({ field: { onChange, value } }) => (
               <Input
+                isDisabled={!companyUuid}
                 type="number"
                 label="Цена"
                 placeholder="Введите цену"
@@ -219,6 +228,7 @@ const EditProduct = () => {
               <Select
                 label="Единица измерения"
                 placeholder="Выберите единицу измерения"
+                isDisabled={!!companyUuid}
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
@@ -247,6 +257,7 @@ const EditProduct = () => {
             control={control}
             render={({ field }) => (
               <Select
+                isDisabled={!!companyUuid}
                 label="Подкатегория"
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
@@ -271,10 +282,10 @@ const EditProduct = () => {
           <Controller
             control={control}
             name="companyUuid"
-            disabled={excludedRoles.includes(role)}
-            rules={{ required: "Выберите фирму" }}
+            rules={{ required: !companyUuid && "Выберите фирму" }}
             render={({ field, fieldState: { error } }) => (
               <Select
+                isDisabled={!!companyUuid}
                 label="Фирма поставщик-производитель"
                 placeholder="Выберите фирму"
                 disabled={excludedRoles.includes(role)}
@@ -303,6 +314,7 @@ const EditProduct = () => {
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Input
+                isDisabled={!companyUuid}
                 label="Скидка (%)"
                 placeholder="Введите скидку"
                 onChange={onChange}
@@ -324,24 +336,26 @@ const EditProduct = () => {
                   height={100}
                   alt={`Изображение ${index + 1}`}
                 />
-                <button
-                  type="button"
-                  onClick={() => {
-                    deleteProductImage({
-                      productUuid: product.uuid || "",
-                      filename: image,
-                    });
-                    const newPreviewImages = [...previewImages];
-                    const newSelectedFiles = [...selectedFiles];
-                    newPreviewImages.splice(index, 1);
-                    newSelectedFiles.splice(index, 1);
-                    setPreviewImages(newPreviewImages);
-                    setSelectedFiles(newSelectedFiles);
-                  }}
-                  className="absolute -top-2 -right-2 z-10 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                >
-                  <IoClose size={20} />
-                </button>
+                {!companyUuid && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      deleteProductImage({
+                        productUuid: product.uuid || "",
+                        filename: image,
+                      });
+                      const newPreviewImages = [...previewImages];
+                      const newSelectedFiles = [...selectedFiles];
+                      newPreviewImages.splice(index, 1);
+                      newSelectedFiles.splice(index, 1);
+                      setPreviewImages(newPreviewImages);
+                      setSelectedFiles(newSelectedFiles);
+                    }}
+                    className="absolute -top-2 -right-2 z-10 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  >
+                    <IoClose size={20} />
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -350,6 +364,7 @@ const EditProduct = () => {
             control={control}
             render={({ field }) => (
               <Input
+                isDisabled={!!companyUuid}
                 className="pt-3"
                 type="file"
                 label="Загрузить новые изображения"

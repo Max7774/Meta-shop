@@ -13,7 +13,7 @@ import {
   productReturnObject,
   productReturnObjectFull,
 } from './return-product.object';
-import { convertToNumber } from 'src/utils/convert-to-number';
+// import { convertToNumber } from 'src/utils/convert-to-number';
 import { convertToSlug } from 'src/utils/convertToSlug';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { promises as fs } from 'fs';
@@ -72,13 +72,13 @@ export class ProductService {
         this.getRatingFilter(dto.ratings.split('|').map((rating) => +rating)),
       );
 
-    if (dto.minPrice || dto.maxPrice)
-      filters.push(
-        this.getPriceFilter(
-          convertToNumber(dto.minPrice),
-          convertToNumber(dto.maxPrice),
-        ),
-      );
+    // if (dto.minPrice || dto.maxPrice)
+    //   filters.push(
+    //     this.getPriceFilter(
+    //       convertToNumber(dto.minPrice),
+    //       convertToNumber(dto.maxPrice),
+    //     ),
+    //   );
 
     if (dto.categoryUuid)
       filters.push(this.getCategoryFilter(dto.categoryUuid));
@@ -90,10 +90,10 @@ export class ProductService {
     sort: EnumProductsSort,
   ): Prisma.ProductOrderByWithRelationInput[] {
     switch (sort) {
-      case EnumProductsSort.LOW_PRICE:
-        return [{ price: 'asc' }];
-      case EnumProductsSort.HIGH_PRICE:
-        return [{ price: 'desc' }];
+      // case EnumProductsSort.LOW_PRICE:
+      //   return [{ price: 'asc' }];
+      // case EnumProductsSort.HIGH_PRICE:
+      //   return [{ price: 'desc' }];
       case EnumProductsSort.OLDEST:
         return [{ createdAt: 'asc' }];
       default:
@@ -140,30 +140,32 @@ export class ProductService {
     };
   }
 
-  private getPriceFilter(
-    minPrice?: number,
-    maxPrice?: number,
-  ): Prisma.ProductWhereInput {
-    let priceFilter: Prisma.IntFilter | undefined = undefined;
+  // private getPriceFilter(
+  //   minPrice?: number,
+  //   maxPrice?: number,
+  // ): Prisma.ProductWhereInput {
+  //   let priceFilter: Prisma.IntFilter | undefined = undefined;
 
-    if (minPrice) {
-      priceFilter = {
-        ...priceFilter,
-        gte: minPrice,
-      };
-    }
+  //   if (minPrice) {
+  //     priceFilter = {
+  //       ...priceFilter,
+  //       gte: minPrice,
+  //     };
+  //   }
 
-    if (maxPrice) {
-      priceFilter = {
-        ...priceFilter,
-        lte: maxPrice,
-      };
-    }
+  //   if (maxPrice) {
+  //     priceFilter = {
+  //       ...priceFilter,
+  //       lte: maxPrice,
+  //     };
+  //   }
 
-    return {
-      price: priceFilter,
-    };
-  }
+  //   return {
+  //     company: {
+  //       price: priceFilter,
+  //     },
+  //   };
+  // }
 
   private getCategoryFilter(subcategoryUuid: string): Prisma.ProductWhereInput {
     return {
@@ -301,21 +303,24 @@ export class ProductService {
         name,
         description,
         slug: convertToSlug(dto.name),
-        price,
-        quantity: quantity || 0,
         unitofmeasurement,
         inStock: inStock || true,
-        discount: discount || 0,
-        company: {
-          connect: {
-            uuid: companyUser.companyUuid || '',
-          },
-        },
         subcategory: {
           connect: {
             uuid: subcategoryUuid,
           },
         },
+      },
+    });
+
+    await this.prisma.companyProduct.create({
+      data: {
+        uuid: uuidGen(),
+        productUuid: product.uuid,
+        companyUuid: companyUser.companyUuid || '',
+        price,
+        quantity: quantity || 0,
+        discount: discount || 0,
       },
     });
 
@@ -339,14 +344,59 @@ export class ProductService {
         subcategoryUuid,
       );
 
-      const { name: companyName } = await this.prisma.company.findUnique({
-        where: {
-          uuid: companyUuid,
-        },
-      });
+      const { name: companyName, companyProducts } =
+        await this.prisma.company.findUnique({
+          where: {
+            uuid: companyUuid,
+          },
+          select: {
+            name: true,
+            companyProducts: {
+              select: {
+                uuid: true,
+                productUuid: true,
+              },
+            },
+          },
+        });
 
-      if (!companyName) {
-        throw new BadGatewayException('Компании не существует');
+      if (!companyName) throw new BadGatewayException('Компании не существует');
+
+      const companyProductUuid =
+        companyProducts.find((item) => item.productUuid === uuid)?.uuid || '';
+
+      try {
+        const isExist = await this.prisma.companyProduct.findUnique({
+          where: {
+            uuid: companyProductUuid,
+          },
+        });
+
+        if (isExist) {
+          await this.prisma.companyProduct.update({
+            where: {
+              uuid: companyProductUuid,
+            },
+            data: {
+              price,
+              quantity: dto.quantity || 0,
+              discount: discount || 0,
+            },
+          });
+        } else {
+          await this.prisma.companyProduct.create({
+            data: {
+              uuid: uuidGen(),
+              productUuid: uuid,
+              companyUuid: companyUuid,
+              price,
+              quantity: dto.quantity || 0,
+              discount: discount || 0,
+            },
+          });
+        }
+      } catch (error) {
+        throw new BadGatewayException(`Ошибка создания компании, ${error}`);
       }
 
       const product = await this.prisma.product.update({
@@ -355,19 +405,9 @@ export class ProductService {
         },
         data: {
           description,
-          discount,
-          price,
           name,
           inStock,
           unitofmeasurement,
-          company: {
-            connect: {
-              uuid: companyUuid,
-            },
-            update: {
-              name: companyName,
-            },
-          },
           slug: convertToSlug(name),
           subcategory: {
             connect: {
@@ -380,34 +420,16 @@ export class ProductService {
 
       return product;
     } catch (error) {
-      throw new BadGatewayException('Product is not found');
+      throw new BadGatewayException(`Product is not found, ${error}`);
     }
   }
 
-  async deleteProduct(uuid: string) {
+  async deleteProduct(uuid: string, type: 'soft' | 'hard') {
     try {
       const product = await this.byId(uuid);
-      // Начинаем транзакцию
-      const deletedProduct = await this.prisma.$transaction(async (prisma) => {
-        // 1. Удаляем связанные PhotoFile
-        await prisma.photoFile.deleteMany({
-          where: {
-            productUuid: uuid,
-          },
-        });
-        try {
-          product.images.forEach(async (image) => {
-            // 2. Удаляем связанные PhotoFile
-            const filePath = `${process.env.DESTINATION}/${image}`;
-            await fs.unlink(filePath);
-          });
-        } catch (error) {
-          console.error('Failed to delete product images:', error);
-          throw error;
-        }
 
-        // 3. Удаляем сам Product
-        const deletedProduct = await prisma.product.update({
+      if (type === 'soft') {
+        const deletedProduct = await this.prisma.product.update({
           where: {
             uuid,
           },
@@ -416,18 +438,52 @@ export class ProductService {
           },
         });
 
-        // Возвращаем удаленный продукт
         return deletedProduct;
-      });
+      } else if (type === 'hard') {
+        const deletedProduct = await this.prisma.$transaction(
+          async (prisma) => {
+            await prisma.photoFile.deleteMany({
+              where: {
+                productUuid: uuid,
+              },
+            });
 
-      for (const image of product.images) {
-        await fs.unlink(`./uploads/${image}`);
+            try {
+              product.images.forEach(async (image) => {
+                const filePath = `${process.env.DESTINATION}/${image}`;
+                await fs.unlink(filePath);
+              });
+            } catch (error) {
+              console.error('Failed to delete product images:', error);
+              throw error;
+            }
+
+            await prisma.companyProduct.deleteMany({
+              where: {
+                productUuid: uuid,
+              },
+            });
+
+            await prisma.orderItem.deleteMany({
+              where: {
+                productUuid: uuid,
+              },
+            });
+
+            const deletedProduct = await prisma.product.delete({
+              where: {
+                uuid,
+              },
+            });
+
+            return deletedProduct;
+          },
+        );
+
+        return deletedProduct;
       }
-
-      return deletedProduct;
     } catch (error) {
-      console.error('Failed to delete product:', error);
-      throw error;
+      throw new BadGatewayException(`Failed to delete product: ${error}`);
     }
   }
 

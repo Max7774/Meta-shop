@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TProductState } from "./product.types";
 import {
   createProduct,
@@ -11,6 +11,7 @@ import {
 } from "./product.actions";
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
+import { TCompanyProduct } from "@/types/TCompany";
 
 const productMock: TProduct = {
   images: [],
@@ -18,12 +19,9 @@ const productMock: TProduct = {
   unitofmeasurement: "",
   uuid: "",
   name: "",
-  price: 0,
-  discount: 0,
   createdAt: "",
   peculiarities: "",
   slug: "",
-  quantity: 0,
   subcategory: {
     uuid: "",
     name: "",
@@ -38,10 +36,7 @@ const productMock: TProduct = {
   reviews: [],
   isNew: false,
   inStock: false,
-  company: {
-    uuid: "",
-    name: "",
-  },
+  company: [],
 };
 
 const initialState: TProductState = {
@@ -49,12 +44,19 @@ const initialState: TProductState = {
   isProductLoading: false,
   products: [],
   length: 0,
+  selectedCompanyProduct: {} as TCompanyProduct,
 };
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedProduct: (state, action: PayloadAction<{ uuid: string }>) => {
+      state.selectedCompanyProduct =
+        state.product?.company.find((el) => el.uuid === action.payload.uuid) ||
+        ({} as TCompanyProduct);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getProductsAll.pending, (state) => {
@@ -78,6 +80,8 @@ export const productsSlice = createSlice({
       .addCase(getProductBySlug.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.product = payload;
+        state.selectedCompanyProduct =
+          payload.company[0] || ({} as TCompanyProduct);
       })
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
@@ -142,3 +146,5 @@ export const productsSlice = createSlice({
       });
   },
 });
+
+export const { setSelectedProduct } = productsSlice.actions;

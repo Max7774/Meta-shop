@@ -86,29 +86,13 @@ describe('UserController', () => {
     });
   });
 
-  describe('toggleFavorites', () => {
-    it('should call UserService.toggleFavorite with correct parameters', async () => {
-      const userUuid = 'user-uuid';
-      const productUuid = 'product-uuid';
-
-      jest.spyOn(service, 'toggleFavorite').mockResolvedValue(undefined);
-
-      const result = await controller.toggleFavorites(userUuid, productUuid);
-      expect(result).toBeUndefined();
-      expect(service.toggleFavorite).toHaveBeenCalledWith(
-        userUuid,
-        productUuid,
-      );
-    });
-  });
-
   describe('getAll', () => {
     it('should call UserService.getAll and return the list of users', async () => {
       const mockUsers = [createMockUser(), createMockUser()];
 
       jest.spyOn(service, 'getAll').mockResolvedValue(mockUsers);
 
-      const result = await controller.getAll();
+      const result = await controller.getAll({});
       expect(result).toEqual(mockUsers);
       expect(service.getAll).toHaveBeenCalled();
     });

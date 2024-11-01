@@ -5,8 +5,9 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
+  // Patch,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -37,21 +38,21 @@ export class UserController {
     return this.userService.updateProfile(uuid, dto);
   }
 
-  @HttpCode(200)
-  @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN', 'COMPANY'])
-  @Patch('profile/favorites/:productUuid')
-  async toggleFavorites(
-    @CurrentUser('uuid') uuid: string,
-    @Param('productUuid') productUuid: string,
-  ) {
-    return this.userService.toggleFavorite(uuid, productUuid);
-  }
+  // @HttpCode(200)
+  // @Auth(['DEFAULT_USER', 'MANAGER', 'ADMIN', 'COMPANY'])
+  // @Patch('profile/favorites/:productUuid')
+  // async toggleFavorites(
+  //   @CurrentUser('uuid') uuid: string,
+  //   @Param('productUuid') productUuid: string,
+  // ) {
+  //   return this.userService.toggleFavorite(uuid, productUuid);
+  // }
 
   @HttpCode(200)
   @Auth(['ADMIN'])
   @Get('all')
-  async getAll() {
-    return this.userService.getAll();
+  async getAll(@Query() queryDto: { searchTerm?: string }) {
+    return this.userService.getAll(queryDto);
   }
 
   @HttpCode(200)

@@ -1,3 +1,4 @@
+import { TCompanyProduct } from "@/types/TCompany";
 import { TOrderCartItem } from "@/types/TOrder";
 import { TProduct } from "@/types/TProduct";
 
@@ -10,6 +11,7 @@ export interface ICartItem {
   inStock: boolean;
   productUuid: string;
   length?: number;
+  selectedCompanyProduct: TCompanyProduct;
 }
 
 export interface ICartInitialState {

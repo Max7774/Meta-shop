@@ -1,4 +1,5 @@
 import { TCategory, TSubCategory } from "./TCategory";
+import { TCompanyProduct } from "./TCompany";
 
 export type TProduct = {
   images: string[];
@@ -6,22 +7,16 @@ export type TProduct = {
   unitofmeasurement: string;
   uuid: string;
   name: string;
-  price: number;
-  discount: number;
   createdAt: string;
   peculiarities: string;
   slug: string;
-  quantity: number;
   category: Pick<TCategory, "name" | "slug" | "uuid">;
   reviews: [];
   subcategory: TSubCategory;
   isNew: boolean;
   inStock: boolean;
   isDeleted?: boolean;
-  company: {
-    uuid: string;
-    name: string;
-  };
+  company: TCompanyProduct[];
 };
 
 export type TProductsResponse = {

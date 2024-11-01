@@ -109,10 +109,13 @@ export class ProductController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Delete(':uuid')
-  @Auth([admin, company])
-  async deleteProduct(@Param('uuid') uuid: string) {
-    return this.productService.deleteProduct(uuid);
+  @Delete(':uuid/:type')
+  @Auth([admin])
+  async deleteProduct(
+    @Param('uuid') uuid: string,
+    @Param('type') type: 'soft' | 'hard',
+  ) {
+    return this.productService.deleteProduct(uuid, type);
   }
 
   @UsePipes(new ValidationPipe())

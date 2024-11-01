@@ -1,9 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import {
-  IFiltersActionsPayload,
-  IFiltersState,
-} from "./filters.types";
+import { IFiltersActionsPayload, IFiltersState } from "./filters.types";
 import { ESort } from "@enums/ESort";
 import { TFiltersPages } from "@/types/TFilters";
 
@@ -15,6 +12,13 @@ const initialState: IFiltersState = {
     },
   },
   products: {
+    isFilterUpdated: false,
+    queryParams: {
+      searchTerm: "",
+      sort: ESort.NEWEST,
+    },
+  },
+  users: {
     isFilterUpdated: false,
     queryParams: {
       searchTerm: "",

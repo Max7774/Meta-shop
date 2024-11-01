@@ -5,6 +5,7 @@ import { cartSlice } from "./cart/cart.slice";
 import * as ordersActions from "./orders/orders.actions";
 import * as companyActions from "./company/company.actions";
 import { filtersSlice } from "./filters/filters.slice";
+import { productsSlice } from "./product/product.slice";
 
 export const rootActions = {
   ...userActions,
@@ -14,4 +15,5 @@ export const rootActions = {
   ...filtersSlice.actions,
   ...ordersActions,
   ...companyActions,
+  ...productsSlice.actions,
 };
