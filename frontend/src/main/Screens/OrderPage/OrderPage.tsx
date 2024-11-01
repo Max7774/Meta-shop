@@ -20,21 +20,12 @@ const OrderPage = () => {
   } = useAppSelector((state) => state.user);
   const { createOrder, reset, updateItemsInStock } = useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
-  // const [deliveryPrice, setDeliveryPrice] = useState(800);
   const [itemsInStock, setInStock] = useState<any>([
     ...items.filter((el) => !el.inStock),
   ]);
   const navigate = useNavigate();
 
   const deliveryPrice = 800;
-
-  // useEffect(() => {
-  //   if (total > 7000) {
-  //     setDeliveryPrice(0);
-  //   } else {
-  //     setDeliveryPrice(800);
-  //   }
-  // }, [total]);
 
   const grandTotal = total + deliveryPrice;
 
@@ -89,8 +80,11 @@ const OrderPage = () => {
         <form onSubmit={handleSubmit(submit)}>
           <Divider />
           <div className="flex flex-col mt-8 gap-8">
-            {items.map((item) => (
-              <OrderCard item={item} itemsInStock={itemsInStock} />
+            {items.map((item, index) => (
+              <>
+                <OrderCard item={item} itemsInStock={itemsInStock} />
+                {items.findLastIndex((_, i) => i) !== index && <Divider />}
+              </>
             ))}
             <Divider />
             <Controller
@@ -121,17 +115,6 @@ const OrderPage = () => {
                 <div className="text-nowrap">Стоимость доставки:</div>
                 <div>{convertPrice(deliveryPrice)}</div>
               </div>
-              {/* <Progress
-                aria-label="Loading..."
-                label={
-                  deliveryPrice === 0
-                    ? "Доставка бесплатная!"
-                    : `До бесплатной доставки: ${convertPrice(7000 - total)}`
-                }
-                color={deliveryPrice === 0 ? "success" : "warning"}
-                maxValue={7000}
-                value={total}
-              /> */}
               <Divider />
               <div className="flex justify-between font-bold text-xl">
                 <div>Итого к оплате:</div>
@@ -155,7 +138,3 @@ const OrderPage = () => {
 };
 
 export default OrderPage;
-
-// deliveryPrice === 0 ? (
-//   <span className="text-green-600">Бесплатно</span>
-// ) : (

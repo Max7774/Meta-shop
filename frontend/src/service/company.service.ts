@@ -27,9 +27,9 @@ export const CompanyService = {
     });
   },
 
-  async deleteCompany(uuid: string) {
+  async deleteCompany(uuid: string, userUuid: string) {
     return await instance<TCompany>({
-      url: `${COMPANY}/${uuid}`,
+      url: `${COMPANY}/${uuid}/${userUuid}`,
       method: "DELETE",
     });
   },

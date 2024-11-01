@@ -6,6 +6,7 @@ import {
   IUpdateItemsInStockPayload,
 } from "./cart.types";
 import { getStoreLocal, setLocalStorage } from "@utils/local-storage";
+import { TCompanyProduct } from "@/types/TCompany";
 
 const initialState: ICartInitialState = {
   items: getStoreLocal("cart") || [],
@@ -32,6 +33,26 @@ export const cartSlice = createSlice({
       state.items = state.items.filter(
         (item) => item.uuid !== action.payload.uuid
       );
+      setLocalStorage("cart", state.items);
+    },
+    updateSelectedCompanyProduct: (
+      state,
+      action: PayloadAction<{ uuid: string }>
+    ) => {
+      state.items = state.items.map((item) => {
+        const selected = item.product.company.find(
+          (el) => el.uuid === action.payload.uuid
+        ) as TCompanyProduct;
+
+        return {
+          ...item,
+          price: selected.discount
+            ? selected.price - (selected.price * selected.discount) / 100
+            : selected.price,
+          discount: selected.discount,
+          selectedCompanyProduct: selected,
+        };
+      });
       setLocalStorage("cart", state.items);
     },
     changeQuantity: (state, action: PayloadAction<IChangeQuantityPayload>) => {

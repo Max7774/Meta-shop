@@ -164,56 +164,29 @@ describe('UserService', () => {
     });
   });
 
-  describe('toggleFavorite', () => {
-    it('should add product to favorites if not already exists', async () => {
-      const uuid = 'user-uuid';
-      const productUuid = 'product-uuid';
-
-      jest.spyOn(service, 'byId').mockResolvedValue(createMockUser());
-      jest.spyOn(prisma.user, 'update').mockResolvedValue(createMockUser());
-
-      const result = await service.toggleFavorite(uuid, productUuid);
-      expect(result).toBe('Success');
-      expect(prisma.user.update).toHaveBeenCalledWith({
-        where: { uuid },
-        data: {
-          favorites: {
-            connect: { id: productUuid },
-          },
-        },
-      });
-    });
-
-    it('should remove product from favorites if it already exists', async () => {
-      const uuid = 'user-uuid';
-      const productUuid = 'product-uuid';
-
-      jest.spyOn(service, 'byId').mockResolvedValue(createMockUser());
-      jest.spyOn(prisma.user, 'update').mockResolvedValue(createMockUser());
-
-      const result = await service.toggleFavorite(uuid, productUuid);
-      expect(result).toBe('Success');
-      expect(prisma.user.update).toHaveBeenCalledWith({
-        where: { uuid },
-        data: {
-          favorites: {
-            connect: { id: productUuid },
-          },
-        },
-      });
-    });
-  });
-
   describe('getAll', () => {
     it('should return all users', async () => {
       const mockUsers = [createMockUser(), createMockUser()];
 
       jest.spyOn(prisma.user, 'findMany').mockResolvedValue(mockUsers);
 
-      const result = await service.getAll();
+      const result = await service.getAll({});
       expect(result).toEqual(mockUsers);
       expect(prisma.user.findMany).toHaveBeenCalledWith({
-        select: expect.any(Object),
+        select: {
+          addresses: true,
+          avatarPath: true,
+          createdAt: true,
+          currentAddress: true,
+          email: true,
+          first_name: true,
+          orders: true,
+          phone_number: true,
+          role: true,
+          second_name: true,
+          uuid: true,
+        },
+        where: {},
       });
     });
   });

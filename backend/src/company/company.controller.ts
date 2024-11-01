@@ -32,17 +32,20 @@ export class CompanyController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Get()
-  @Auth([admin])
+  @Auth([admin, company])
   async getAllCompanies() {
     return await this.companyService.getAllCompanies();
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Delete(':uuid')
+  @Delete(':uuid/:userUuid')
   @Auth([admin])
-  async deleteCompany(@Param('uuid') uuid: string) {
-    return await this.companyService.deleteCompany(uuid);
+  async deleteCompany(
+    @Param('uuid') uuid: string,
+    @Param('userUuid') userUuid: string,
+  ) {
+    return await this.companyService.deleteCompany(uuid, userUuid);
   }
 
   @UsePipes(new ValidationPipe())

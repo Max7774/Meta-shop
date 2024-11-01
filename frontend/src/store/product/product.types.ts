@@ -1,3 +1,4 @@
+import { TCompanyProduct } from "@/types/TCompany";
 import { TProduct } from "@/types/TProduct";
 
 export type TProductState = {
@@ -6,4 +7,5 @@ export type TProductState = {
   products: TProduct[];
   length: number;
   product?: TProduct;
+  selectedCompanyProduct: TCompanyProduct;
 };

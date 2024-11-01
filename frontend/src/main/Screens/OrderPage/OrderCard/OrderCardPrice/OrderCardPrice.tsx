@@ -1,20 +1,20 @@
 import { TCompanyProduct } from "@/types/TCompany";
 import { Badge, Select, SelectItem } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import PriceView from "./PriceView/PriceView";
+import PriceView from "@UI/Price/PriceView/PriceView";
 
 interface IPriceProps {
   company: TCompanyProduct[];
   unitofmeasurement: string;
+  selectedCompanyProduct: TCompanyProduct;
 }
 
-const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
-  const selectedCompanyProduct = useAppSelector(
-    (state) => state.products.selectedCompanyProduct
-  );
-
-  const { setSelectedProduct, updateSelectedCompanyProduct } = useActions();
+const OrderCardPrice = ({
+  company: companies,
+  unitofmeasurement,
+  selectedCompanyProduct,
+}: IPriceProps) => {
+  const { updateSelectedCompanyProduct } = useActions();
 
   const companyDiscount = companies.find(
     (el) => el.uuid === selectedCompanyProduct.uuid
@@ -42,7 +42,6 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
           fullWidth
           onSelectionChange={(keys) => {
             const selectedKey = Array.from(keys)[0] as string;
-            setSelectedProduct({ uuid: selectedKey });
             updateSelectedCompanyProduct({ uuid: selectedKey });
           }}
           classNames={{
@@ -82,4 +81,4 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
   );
 };
 
-export default Price;
+export default OrderCardPrice;

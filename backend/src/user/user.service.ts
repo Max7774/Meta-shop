@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  // NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { hash } from 'argon2';
@@ -20,21 +20,21 @@ export class UserService {
       },
       select: {
         ...returnUserObject,
-        favorites: {
-          select: {
-            uuid: true,
-            name: true,
-            price: true,
-            images: true,
-            slug: true,
-            subcategory: {
-              select: {
-                slug: true,
-              },
-            },
-            reviews: true,
-          },
-        },
+        // favorites: {
+        //   select: {
+        //     uuid: true,
+        //     name: true,
+        //     price: true,
+        //     images: true,
+        //     slug: true,
+        //     subcategory: {
+        //       select: {
+        //         slug: true,
+        //       },
+        //     },
+        //     reviews: true,
+        //   },
+        // },
         companyUuid: true,
         currentAddress: true,
         addresses: true,
@@ -74,21 +74,21 @@ export class UserService {
       },
       select: {
         ...returnUserObject,
-        favorites: {
-          select: {
-            uuid: true,
-            name: true,
-            price: true,
-            images: true,
-            slug: true,
-            subcategory: {
-              select: {
-                slug: true,
-              },
-            },
-            reviews: true,
-          },
-        },
+        // favorites: {
+        //   select: {
+        //     uuid: true,
+        //     name: true,
+        //     price: true,
+        //     images: true,
+        //     slug: true,
+        //     subcategory: {
+        //       select: {
+        //         slug: true,
+        //       },
+        //     },
+        //     reviews: true,
+        //   },
+        // },
         currentAddress: true,
         addresses: true,
         orders: true,
@@ -97,33 +97,75 @@ export class UserService {
     });
   }
 
-  async toggleFavorite(uuid: string, productUuid: string) {
-    const user = await this.byId(uuid);
+  // async toggleFavorite(uuid: string, productUuid: string) {
+  //   const user = await this.byId(uuid);
 
-    if (!user) throw new NotFoundException('User not found');
+  //   if (!user) throw new NotFoundException('User not found');
 
-    const isExists = user.favorites.some(
-      (product) => product.uuid === productUuid,
-    );
+  //   const isExists = user.favorites.some(
+  //     (product) => product.uuid === productUuid,
+  //   );
 
-    await this.prisma.user.update({
-      where: {
-        uuid: user.uuid,
-      },
-      data: {
-        favorites: {
-          [isExists ? 'disconnect' : 'connect']: {
-            id: productUuid,
+  //   await this.prisma.user.update({
+  //     where: {
+  //       uuid: user.uuid,
+  //     },
+  //     data: {
+  //       favorites: {
+  //         [isExists ? 'disconnect' : 'connect']: {
+  //           id: productUuid,
+  //         },
+  //       },
+  //     },
+  //   });
+
+  //   return 'Success';
+  // }
+
+  private getSearchTermFilter(searchTerm: string): Prisma.UserWhereInput {
+    return {
+      OR: [
+        {
+          email: {
+            contains: searchTerm,
+            mode: 'insensitive',
           },
         },
-      },
-    });
-
-    return 'Success';
+        {
+          first_name: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          second_name: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          phone_number: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+      ],
+    };
   }
 
-  async getAll() {
+  private createFilter(dto: { searchTerm?: string }): Prisma.UserWhereInput {
+    const filters: Prisma.UserWhereInput[] = [];
+
+    if (dto.searchTerm) filters.push(this.getSearchTermFilter(dto.searchTerm));
+
+    return filters.length ? { AND: filters } : {};
+  }
+
+  async getAll(queryDto: { searchTerm?: string }) {
+    const filters = this.createFilter(queryDto);
+
     return await this.prisma.user.findMany({
+      where: { ...filters },
       select: {
         uuid: true,
         createdAt: true,

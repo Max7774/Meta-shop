@@ -8,6 +8,7 @@ import {
   TRegister,
   TResetPassword,
 } from "@/types/TAuth";
+import { TFilters } from "@/types/TFilters";
 import { TProfile, TProfileEdit } from "@/types/TProfile";
 import { TAdminUser } from "@/types/TUser";
 import { ERoles } from "@enums/ERoles";
@@ -252,11 +253,11 @@ export const setNewUserAvatar = createAsyncThunk<string, File>(
   }
 );
 
-export const getAllUsers = createAsyncThunk<TAdminUser[], undefined>(
+export const getAllUsers = createAsyncThunk<TAdminUser[], TFilters>(
   "/getAllUsers",
-  async (_, thunkApi) => {
+  async (data, thunkApi) => {
     try {
-      const response = await AuthService.getAllUsers();
+      const response = await AuthService.getAllUsers(data);
       return response.data;
     } catch (error: any) {
       console.log(error);

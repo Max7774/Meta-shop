@@ -31,11 +31,6 @@ const ProductPage = () => {
       </Helmet>
       <section className="w-full">
         <div className="px-6">
-          {product?.company && (
-            <span className="text-default-300">
-              От фирмы: {product?.company?.name}
-            </span>
-          )}
           <Heading>{product?.name}</Heading>
           <div className="flex flex-row flex-wrap gap-2">
             <Chip
@@ -61,19 +56,13 @@ const ProductPage = () => {
                 Новый
               </Chip>
             )}
-            {product?.discount !== 0 && (
-              <Chip size="lg" className="text-white" color="danger">
-                Скидка {product?.discount}%
-              </Chip>
-            )}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
           <Carousel images={product?.images || []} />
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
-              discount={product?.discount || 0}
-              price={product?.price || 0}
+              company={product?.company || []}
               unitofmeasurement={product?.unitofmeasurement || ""}
             />
             <p className="break-words">{product?.description}</p>

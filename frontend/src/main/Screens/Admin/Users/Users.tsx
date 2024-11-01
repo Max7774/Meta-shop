@@ -1,23 +1,12 @@
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import { useActions } from "@hooks/useActions";
-import BlockSkeleton from "@UI/Skeleton/BlockSkeleton/BlockSkeleton";
-import { useEffect } from "react";
 import UsersList from "./UsersList/UsersList";
 import Heading from "@UI/Heading";
+import Search from "@Components/Search/Search";
 
 const Users = () => {
-  const { getAllUsers } = useActions();
-  const { isAdminUserLoading } = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    getAllUsers();
-  }, [getAllUsers]);
-
-  if (isAdminUserLoading) return <BlockSkeleton />;
-
   return (
     <section>
       <Heading>Все пользователи</Heading>
+      <Search pageKey="users" className="mb-4" />
       <UsersList />
     </section>
   );

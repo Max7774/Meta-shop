@@ -21,6 +21,11 @@ const DeleteAction = ({ productUuid }: IDeleteActionProps) => {
   const { deleteProduct } = useActions();
   const navigate = useNavigate();
 
+  const deleteProductHandler = (uuid: string, type: "soft" | "hard") => {
+    deleteProduct({ uuid, type });
+    navigate(-1);
+  };
+
   return (
     <div className="my-3">
       <Button
@@ -42,28 +47,42 @@ const DeleteAction = ({ productUuid }: IDeleteActionProps) => {
           </ModalHeader>
           <ModalBody>
             <span className="font-bold text-center">
-              К этому товару могут быть привязаны другие продукты!
+              К этому товару могут быть привязаны другие продукты в заказах!
             </span>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter className="flex flex-col-reverse">
             <Button
               color="primary"
-              variant="light"
+              size="sm"
               onPress={() => setIsOpen({ open: false, uuid: "" })}
             >
               Закрыть
             </Button>
-            <Button
-              isLoading={isProductLoading}
-              color="danger"
-              onPress={() => {
-                deleteProduct(isOpen.uuid);
-                setIsOpen({ open: false, uuid: "" });
-                navigate(-1);
-              }}
-            >
-              Применить
-            </Button>
+            <div className="grid grid-cols-2 gap-2 justify-between">
+              <Button
+                isLoading={isProductLoading}
+                color="warning"
+                size="sm"
+                className="text-white"
+                onPress={() => {
+                  deleteProductHandler(isOpen.uuid, "soft");
+                  setIsOpen({ open: false, uuid: "" });
+                }}
+              >
+                Частичное удаление
+              </Button>
+              <Button
+                isLoading={isProductLoading}
+                size="sm"
+                color="danger"
+                onPress={() => {
+                  deleteProductHandler(isOpen.uuid, "hard");
+                  setIsOpen({ open: false, uuid: "" });
+                }}
+              >
+                Полное удаление
+              </Button>
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

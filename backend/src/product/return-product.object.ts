@@ -6,15 +6,28 @@ export const productReturnObject: Prisma.ProductSelect = {
   description: true,
   uuid: true,
   name: true,
-  price: true,
-  discount: true,
   createdAt: true,
   peculiarities: true,
   slug: true,
-  quantity: true,
   unitofmeasurement: true,
   inStock: true,
-  company: { select: { name: true, uuid: true } },
+  company: {
+    select: {
+      uuid: true,
+      company: {
+        select: {
+          name: true,
+        },
+      },
+      createdAt: true,
+      updatedAt: true,
+      price: true,
+      quantity: true,
+      discount: true,
+      productUuid: true,
+      companyUuid: true,
+    },
+  },
   subcategory: { select: returnSubcategoryObject },
 };
 
