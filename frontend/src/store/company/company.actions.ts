@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CompanyService } from "@/service/company.service";
 import { TAddCompany } from "@/types/TAddCompany";
-import { TCompany } from "@/types/TCompany";
+import { TCompany, TCompanyInfo, TEditCompany } from "@/types/TCompany";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getProductsStatistics = createAsyncThunk(
@@ -51,3 +51,27 @@ export const deleteCompany = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const getCompanyInfo = createAsyncThunk<TCompanyInfo, undefined>(
+  "/company/info",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await CompanyService.getCompanyInfo();
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const editCompanyInfo = createAsyncThunk<TCompanyInfo, TEditCompany>(
+  "/company/edit-info",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await CompanyService.editCompanyInfo(data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

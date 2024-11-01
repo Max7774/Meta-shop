@@ -8,6 +8,7 @@ import {
   Get,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -62,5 +63,24 @@ export class CompanyController {
   @Auth([company])
   async getCompanyStatistic(@CurrentUser('uuid') uuid: string) {
     return await this.companyService.getCompanyStatistic(uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Get('info')
+  @Auth([company])
+  async getCompanyInfo(@CurrentUser('uuid') uuid: string) {
+    return await this.companyService.getCompanyInfo(uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Put()
+  @Auth([company])
+  async editCompanyInfo(
+    @Body() dto: CreateCompanyDto,
+    @CurrentUser('uuid') uuid: string,
+  ) {
+    return await this.companyService.editCompanyInfo(dto, uuid);
   }
 }

@@ -27,4 +27,5 @@ export enum ECompanyRoutes {
   ADD_PRODUCT = "add-product",
   STATISTICS = "statistics",
   EDIT_PRODUCT = "product/:productSlug",
+  COMPANY_INFO = "company-info",
 }

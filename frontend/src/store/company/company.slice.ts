@@ -4,16 +4,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   addCompany,
   deleteCompany,
+  editCompanyInfo,
   getAllCompanies,
+  getCompanyInfo,
   getProductsStatistics,
 } from "./company.actions";
+import { TCompanyInfo } from "@/types/TCompany";
 
 const initialState: TCompanyState = {
   statistic: {} as TCompanyStatistic,
   isLoading: false,
   isDeleteLoading: false,
   isAddingLoading: false,
+  isEditLoading: false,
   companies: [],
+  info: {} as TCompanyInfo,
 };
 
 export const companySlice = createSlice({
@@ -65,6 +70,28 @@ export const companySlice = createSlice({
       })
       .addCase(deleteCompany.rejected, (state) => {
         state.isDeleteLoading = false;
+      })
+      .addCase(getCompanyInfo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCompanyInfo.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.info = payload;
+      })
+      .addCase(getCompanyInfo.rejected, (state) => {
+        state.isLoading = false;
+        state.info = {} as TCompanyInfo;
+      })
+      .addCase(editCompanyInfo.pending, (state) => {
+        state.isEditLoading = true;
+      })
+      .addCase(editCompanyInfo.fulfilled, (state, { payload }) => {
+        state.isEditLoading = false;
+        state.info = payload;
+      })
+      .addCase(editCompanyInfo.rejected, (state) => {
+        state.isEditLoading = false;
+        state.info = {} as TCompanyInfo;
       });
   },
 });

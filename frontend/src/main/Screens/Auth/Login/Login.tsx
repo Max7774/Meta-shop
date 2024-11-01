@@ -5,7 +5,7 @@ import { TLogin } from "@/types/TAuth";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
-// import { validEmail } from "@utils/validations/valid-email";
+import { validEmail } from "@utils/validations/valid-email";
 
 const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,21 +31,22 @@ const Login = () => {
           key="email"
           rules={{
             required: "Это поле обязательно!",
-            // pattern: {
-            //   value: validEmail,
-            //   message: "Неверно введен email",
-            // },
+            pattern: {
+              value: validEmail,
+              message: "Неверно введен email",
+            },
           }}
           defaultValue=""
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
+              isRequired
               id="email"
               fullWidth
+              label="Почта"
               variant="flat"
               size="lg"
-              placeholder="Email"
-              // type="email"
-              required
+              placeholder="Введите email"
+              type="email"
               value={value}
               onChange={onChange}
               isInvalid={!!error?.message}
@@ -68,11 +69,13 @@ const Login = () => {
           defaultValue=""
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
+              isRequired
               id="password"
               variant="flat"
               fullWidth
               size="lg"
-              placeholder="Пароль"
+              label="Пароль"
+              placeholder="Введите пароль"
               endContent={
                 <button
                   className="focus:outline-none"
@@ -88,7 +91,6 @@ const Login = () => {
                 </button>
               }
               type={isVisible ? "text" : "password"}
-              required
               value={value}
               onChange={onChange}
               isInvalid={!!error?.message}

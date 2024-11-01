@@ -1,3 +1,5 @@
+import { TAdminUser } from "./TUser";
+
 export type TCompany = {
   name: string;
   uuid: string;
@@ -26,4 +28,17 @@ export type TCompanyProduct = {
   productUuid: string;
   companyUuid: string;
   company: TCompany;
+};
+
+export type TCompanyInfo = {
+  users: TAdminUser[];
+  companyProducts: TCompanyProduct[];
+} & TCompany;
+
+export type TEditCompany = {
+  name: string;
+  email: string;
+  officialName: string;
+  address: string;
+  phoneNumber: string;
 };

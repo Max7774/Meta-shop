@@ -239,4 +239,74 @@ export class CompanyService {
       throw new BadRequestException(error);
     }
   }
+
+  async getCompanyInfo(uuid: string) {
+    try {
+      const { companyUuid } = await this.prisma.user.findUnique({
+        where: {
+          uuid,
+        },
+      });
+      const company = await this.prisma.company.findUnique({
+        where: {
+          uuid: companyUuid,
+        },
+        select: {
+          uuid: true,
+          createdAt: true,
+          name: true,
+          officialName: true,
+          registrationNumber: true,
+          address: true,
+          email: true,
+          phoneNumber: true,
+          companyProducts: true,
+          users: true,
+        },
+      });
+
+      return company;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async editCompanyInfo(dto: CreateCompanyDto, uuid: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          uuid,
+        },
+      });
+
+      const company = await this.prisma.company.update({
+        where: {
+          uuid: user.companyUuid,
+        },
+        data: {
+          name: dto.name,
+          officialName: dto.officialName,
+          address: dto.address,
+          email: dto.email,
+          phoneNumber: dto.phoneNumber,
+        },
+        select: {
+          uuid: true,
+          createdAt: true,
+          name: true,
+          officialName: true,
+          registrationNumber: true,
+          address: true,
+          email: true,
+          phoneNumber: true,
+          companyProducts: true,
+          users: true,
+        },
+      });
+
+      return company;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }

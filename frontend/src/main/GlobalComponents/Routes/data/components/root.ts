@@ -56,3 +56,6 @@ export const AddProduct = lazy(
 export const Statistics = lazy(
   () => import("@/main/Screens/Company/Statistics/Statistics")
 );
+export const CompanyInfo = lazy(
+  () => import("@/main/Screens/Company/Info/Info")
+);

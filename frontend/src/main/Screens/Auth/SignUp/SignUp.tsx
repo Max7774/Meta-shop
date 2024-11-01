@@ -37,20 +37,33 @@ const SignUp = () => {
         }}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <>
-            <InputMask
-              onChange={onChange}
-              value={value}
-              mask="+7(999)-999-99-99"
-              placeholder="+7(___)-___-__-__"
-              maskChar="_"
+            <div
               className={cn(
-                "px-4 py-3 outline-none focus:border-primary transition-all placeholder:text-foreground-500 rounded-xl",
+                "px-4 py-3 outline-none flex flex-col focus:border-primary transition-all placeholder:text-foreground-500 rounded-2xl",
                 {
                   "bg-danger-50": !!error?.message,
                   "bg-default-100": !error?.message,
                 }
               )}
-            />
+            >
+              <span className="text-sm mb-2 block text-foreground-500">
+                Номер телефона
+              </span>
+              <InputMask
+                onChange={onChange}
+                value={value}
+                className={cn(
+                  "focus:border-primary placeholder:text-foreground-500 outline-none",
+                  {
+                    "bg-danger-50": !!error?.message,
+                    "bg-default-100": !error?.message,
+                  }
+                )}
+                mask="+7(999)-999-99-99"
+                placeholder="+7(___)-___-__-__"
+                maskChar="_"
+              />
+            </div>
             {errors.phone_number && (
               <span className="text-danger text-xs">
                 {errors.phone_number.message}

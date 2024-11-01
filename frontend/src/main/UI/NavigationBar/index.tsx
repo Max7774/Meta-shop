@@ -56,7 +56,7 @@ export const NavigationBar = () => {
       role: [ERoles.COMPANY],
       key: "company-panel",
       onClick: () => {
-        navigate(`${COMPANY_GlOBAL_PREFIX}add-product`);
+        navigate(`${COMPANY_GlOBAL_PREFIX}company-info`);
         setIsMenuOpen(false);
       },
       color: "default",

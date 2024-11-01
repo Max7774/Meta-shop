@@ -1,4 +1,4 @@
-import { TCompany } from "@/types/TCompany";
+import { TCompany, TCompanyInfo } from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
 
 export type TCompanyState = {
@@ -6,9 +6,11 @@ export type TCompanyState = {
   isLoading: boolean;
   isDeleteLoading: boolean;
   isAddingLoading: boolean;
+  isEditLoading: boolean;
   companies: TCompany[];
   tempData?: {
     email: string;
     password: string;
   };
+  info: TCompanyInfo;
 };
