@@ -21,6 +21,7 @@ import { useCategory } from "@hooks/useCategory";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
+import Search from "@Components/Search/Search";
 
 const AddProduct = () => {
   const { products, isLoading } = useProducts();
@@ -324,6 +325,7 @@ const AddProduct = () => {
         </Button>
       </form>
       <Divider className="mt-4" />
+      <Search pageKey="products" />
       <div className="py-10">
         <Products products={products} />
       </div>
