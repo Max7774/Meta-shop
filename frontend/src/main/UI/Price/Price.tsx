@@ -40,6 +40,7 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
           placeholder="Цен не проставлено"
           selectedKeys={[selectedCompanyProduct.uuid]}
           fullWidth
+          isDisabled={companies?.length === 0}
           onSelectionChange={(keys) => {
             const selectedKey = Array.from(keys)[0] as string;
             setSelectedProduct({ uuid: selectedKey });
