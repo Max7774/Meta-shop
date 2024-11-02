@@ -16,7 +16,7 @@ const SubcategoriesList = ({
 
   return (
     <div>
-      <div className="grid grid-cols-12 gap-3">
+      <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {subcategories.map((item) => (
           <Card
             isHoverable
@@ -24,7 +24,7 @@ const SubcategoriesList = ({
             key={item.uuid}
             isFooterBlurred
             onPress={() => navigate(`/categories/${categorySlug}/${item.slug}`)}
-            className="w-full h-[200px] col-span-6 md:col-span-2 lg:col-span-3 sm:col-span-2"
+            className="w-full aspect-square"
           >
             <Image
               removeWrapper

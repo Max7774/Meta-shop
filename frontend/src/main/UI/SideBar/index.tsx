@@ -19,7 +19,7 @@ const Sidebar = () => {
     <>
       <aside
         className={cn(
-          "relative bg-white border-r-1 border-gray flex flex-col justify-between z-20 h-full transition-transform duration-300"
+          "relative bg-white flex flex-col justify-between z-20 h-full transition-transform duration-300"
         )}
       >
         <ul>

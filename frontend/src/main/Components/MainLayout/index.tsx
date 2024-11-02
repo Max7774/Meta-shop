@@ -22,7 +22,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
           <Sidebar />
         </div>
         <main
-          className={cn("min-h-screen", {
+          className={cn("min-h-screen border-l-1 border-gray rounded-tl-3xl", {
             "px-0 pt-6 pb-40": pathname.startsWith("/product"),
             "px-6": !pathname.startsWith("/product"),
             "py-5": isBottomActions,

@@ -328,7 +328,7 @@ const AdminProducts = () => {
           Добавить продукт
         </Button>
       </form>
-      <Divider className="mt-4" />
+      <Divider className="my-4" />
       <Search pageKey="products" />
       <div className="py-10">
         <Products products={products} />
