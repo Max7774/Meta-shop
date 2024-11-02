@@ -36,8 +36,6 @@ const AdminActions = ({ product }: IAdminActionsProps) => {
     deleteProduct({ uuid, type, companyUuid });
   };
 
-  console.log(product);
-
   return (
     <>
       <div className="w-full flex flex-row justify-between gap-1">
