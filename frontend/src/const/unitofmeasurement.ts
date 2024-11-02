@@ -6,4 +6,5 @@ export const unitofmeasurementData: Record<string, string> = {
   kg: "кг",
   gr: "гр",
   piece: "шт",
+  bunch: "пучок",
 };
