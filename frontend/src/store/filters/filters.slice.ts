@@ -25,6 +25,13 @@ const initialState: IFiltersState = {
       sort: ESort.NEWEST,
     },
   },
+  "soft-deleted": {
+    isFilterUpdated: false,
+    queryParams: {
+      searchTerm: "",
+      sort: ESort.NEWEST,
+    },
+  },
 };
 
 export const filtersSlice = createSlice({

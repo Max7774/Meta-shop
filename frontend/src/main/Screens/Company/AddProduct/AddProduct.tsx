@@ -65,15 +65,17 @@ const AddProduct = () => {
   };
 
   const submit: SubmitHandler<TProductCreateForm> = async (data) => {
-    console.log(data);
     data.images = selectedFiles;
-    const result: any = await createProduct(data);
-    if (result.type === "products/createProduct/fulfilled") {
+    const { payload, type }: any = await createProduct(data);
+    if (type === "products/createProduct/fulfilled") {
       toast.success("Продукт создан успешно!");
       setPreviewImages([]);
       setSelectedFiles([]);
       reset();
       window.location.reload();
+    } else if (payload.data.message === "Product is exist") {
+      setError("name", { message: "Эти название уже есть" });
+      toast.error("Такое название продукта уже есть");
     } else {
       toast.error("Ошибка создания продукта");
     }

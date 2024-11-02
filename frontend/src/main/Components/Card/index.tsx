@@ -59,12 +59,7 @@ const CardUI = ({ product }: ICardProps) => {
         </p>
         <Divider />
         {crudActions.includes(role) ? (
-          <>
-            <AdminActions
-              productUuid={product.uuid}
-              productSlug={product.slug}
-            />
-          </>
+          <AdminActions product={product} />
         ) : (
           <DefaultActions product={product} />
         )}

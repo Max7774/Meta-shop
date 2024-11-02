@@ -21,6 +21,7 @@ export enum EAdminRoutes {
   EDIT_PRODUCT = "product/:productSlug",
   ARCHIVED_ORDERS = "archived-orders",
   ADD_COMPANY = "add-company",
+  SOFT_DELETED = "soft-deleted",
 }
 
 export enum ECompanyRoutes {

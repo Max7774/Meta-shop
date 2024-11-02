@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ProductService } from "@/service/product.service";
+import { AsyncThunkConfig } from "@/types/TError";
 import { TFilters } from "@/types/TFilters";
 import {
   TProduct,
@@ -14,6 +16,21 @@ export const getProductsAll = createAsyncThunk<TProductsResponse, TFilters>(
   async (filters, { rejectWithValue }) => {
     try {
       const response = await ProductService.getAll(filters);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        errorMessage: "Failed to fetch product by id",
+      });
+    }
+  }
+);
+
+/* getAllSoftDeleted */
+export const getAllSoftDeleted = createAsyncThunk<TProductsResponse, TFilters>(
+  "products/getAllSoftDeleted",
+  async (filters, { rejectWithValue }) => {
+    try {
+      const response = await ProductService.getAllSoftDeleted(filters);
       return response.data;
     } catch (error) {
       return rejectWithValue({
@@ -54,40 +71,43 @@ export const getProductBySubCategory = createAsyncThunk<TProduct[], string>(
 );
 
 /* createProduct */
-export const createProduct = createAsyncThunk<TProduct, TProductCreateForm>(
-  "products/createProduct",
-  async (product, { rejectWithValue }) => {
-    try {
-      const currentProduct = {
-        name: product.name,
-        price: product.price++,
-        description: product.description,
-        subcategoryUuid: product.subcategoryUuid,
-        discount: product.discount++,
-        inStock: product.inStock,
-        unitofmeasurement: product.unitofmeasurement,
-        companyUuid: product.companyUuid,
-      };
-      const response = await ProductService.createProduct(currentProduct);
+export const createProduct = createAsyncThunk<
+  TProduct,
+  TProductCreateForm,
+  AsyncThunkConfig<{ errorMessage: string; data: any }>
+>("products/createProduct", async (product, { rejectWithValue }) => {
+  try {
+    const currentProduct = {
+      name: product.name,
+      price: product.price++,
+      description: product.description,
+      subcategoryUuid: product.subcategoryUuid,
+      discount: product.discount++,
+      inStock: product.inStock,
+      unitofmeasurement: product.unitofmeasurement,
+      companyUuid: product.companyUuid,
+    };
+    const response = await ProductService.createProduct(currentProduct);
 
-      for (let index = 0; index < (product.images || []).length; index++) {
-        const element = (product.images || [])[index];
-        await ProductService.uploadProductImages(response.data.uuid, element);
-      }
-
-      return response.data;
-    } catch (error) {
-      return rejectWithValue({
-        errorMessage: "Failed to create product",
-      });
+    for (let index = 0; index < (product.images || []).length; index++) {
+      const element = (product.images || [])[index];
+      await ProductService.uploadProductImages(response.data.uuid, element);
     }
+
+    return response.data;
+  } catch (error: any) {
+    console.log("ERROR", error.response.data);
+    return rejectWithValue({
+      data: error.response.data,
+      errorMessage: "Failed to create product",
+    });
   }
-);
+});
 
 /* deleteProduct */
 export const deleteProduct = createAsyncThunk<
   TProduct,
-  { uuid: string; type: "soft" | "hard" }
+  { uuid: string; type: "soft" | "hard"; companyUuid?: string }
 >("products/deleteProduct", async ({ uuid, type }, { rejectWithValue }) => {
   try {
     const response = await ProductService.deleteProduct(uuid, type);
@@ -141,6 +161,21 @@ export const deleteProductImage = createAsyncThunk<
     } catch (error) {
       return rejectWithValue({
         errorMessage: "Failed to delete product image",
+      });
+    }
+  }
+);
+
+/* recoverProduct */
+export const recoverProduct = createAsyncThunk<TProduct, string>(
+  "products/recoverProduct",
+  async (uuid, { rejectWithValue }) => {
+    try {
+      const response = await ProductService.recoverProduct(uuid);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({
+        errorMessage: "Failed to recover product",
       });
     }
   }

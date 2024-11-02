@@ -26,4 +26,9 @@ export const ADMIN_SIDEBAR_ITEMS = [
     name: "Добавить фирму",
     slug: ADMIN_GlOBAL_PREFIX + "add-company",
   },
+  {
+    uuid: "5",
+    name: "Удаленные продукты",
+    slug: ADMIN_GlOBAL_PREFIX + "soft-deleted",
+  },
 ];

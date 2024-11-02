@@ -8,6 +8,7 @@ import {
   AdminUsers,
   ArchivedOrders,
   EditProduct,
+  SoftDeletedProducts,
 } from "../components/root";
 
 export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
@@ -45,5 +46,10 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     id: "add-company-root-page-admin",
     path: EAdminRoutes.ADD_COMPANY,
     component: AddCompany,
+  },
+  {
+    id: "soft-deleted-root-page-admin",
+    path: EAdminRoutes.SOFT_DELETED,
+    component: SoftDeletedProducts,
   },
 ];

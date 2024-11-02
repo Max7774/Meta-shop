@@ -16,6 +16,14 @@ export const ProductService = {
     });
   },
 
+  async getAllSoftDeleted(queryData = {} as TFilters) {
+    return await instance<TProductsResponse>({
+      url: `${PRODUCTS}/soft-deleted`,
+      method: "GET",
+      params: queryData,
+    });
+  },
+
   async getBySlug(slug: string) {
     return await axiosClassic<TProduct>({
       url: `${PRODUCTS}/by-slug/${slug}`,
@@ -68,6 +76,13 @@ export const ProductService = {
     return await instance<{ message: string }>({
       url: `${FILE_UPLOAD}/${filename}/${productUuid}`,
       method: "DELETE",
+    });
+  },
+
+  async recoverProduct(productUuid: string) {
+    return await instance<TProduct>({
+      url: `${PRODUCTS}/recover/${productUuid}`,
+      method: "GET",
     });
   },
 };

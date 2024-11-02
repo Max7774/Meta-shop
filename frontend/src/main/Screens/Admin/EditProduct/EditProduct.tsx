@@ -285,7 +285,7 @@ const EditProduct = () => {
             rules={{ required: !companyUuid && "Выберите фирму" }}
             render={({ field, fieldState: { error } }) => (
               <Select
-                isDisabled={!!companyUuid}
+                isDisabled
                 label="Фирма поставщик-производитель"
                 placeholder="Выберите фирму"
                 disabled={excludedRoles.includes(role)}

@@ -21,6 +21,7 @@ import { useCategory } from "@hooks/useCategory";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
+import Search from "@Components/Search/Search";
 
 const AdminProducts = () => {
   const { products, isLoading } = useProducts();
@@ -65,17 +66,23 @@ const AdminProducts = () => {
   };
 
   const submit: SubmitHandler<TProductCreateForm> = async (data) => {
-    console.log(data);
-    data.images = selectedFiles;
-    const result: any = await createProduct(data);
-    if (result.type === "products/createProduct/fulfilled") {
-      toast.success("Продукт создан успешно!");
-      setPreviewImages([]);
-      setSelectedFiles([]);
-      reset();
-      window.location.reload();
-    } else {
-      toast.error("Ошибка создания продукта");
+    try {
+      data.images = selectedFiles;
+      const { payload, type }: any = await createProduct(data);
+      if (type === "products/createProduct/fulfilled") {
+        toast.success("Продукт создан успешно!");
+        setPreviewImages([]);
+        setSelectedFiles([]);
+        reset();
+        window.location.reload();
+      } else if (payload.data.message === "Product is exist") {
+        setError("name", { message: "Эти название уже есть" });
+        toast.error("Такое название продукта уже есть");
+      } else {
+        toast.error("Ошибка создания продукта");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -322,6 +329,7 @@ const AdminProducts = () => {
         </Button>
       </form>
       <Divider className="mt-4" />
+      <Search pageKey="products" />
       <div className="py-10">
         <Products products={products} />
       </div>

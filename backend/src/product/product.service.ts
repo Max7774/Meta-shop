@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Product } from '@prisma/client';
+import { EnumRoleOfUser, Prisma, Product } from '@prisma/client';
 import { PaginationService } from 'src/pagination/pagination.service';
 import { PrismaService } from 'src/prisma.service';
 import { EnumProductsSort, GetAllProductDto } from './dto/get-all.product.dto';
@@ -37,7 +37,9 @@ export class ProductService {
       orderBy: this.getSortOption(dto.sort),
       // skip,
       // take: perPage,
-      select: productReturnObject,
+      select: {
+        ...productReturnObject,
+      },
     });
 
     const products = currentProducts.map((product) => {
@@ -57,7 +59,45 @@ export class ProductService {
     return {
       products,
       length: await this.prisma.product.count({
-        where: filters,
+        where: { ...(filters || {}), isDeleted: false },
+      }),
+    };
+  }
+
+  async getAllSoftDeleted(dto: GetAllProductDto = {}) {
+    // const { perPage, skip } = this.paginationService.getPagination(dto);
+
+    const filters = this.createFilter(dto);
+
+    const currentProducts = await this.prisma.product.findMany({
+      where: { ...(filters || {}), isDeleted: true },
+      orderBy: this.getSortOption(dto.sort),
+      // skip,
+      // take: perPage,
+      select: {
+        ...productReturnObject,
+        isDeleted: true,
+      },
+    });
+
+    const products = currentProducts.map((product) => {
+      if (product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        return {
+          ...product,
+          isNew: true,
+        };
+      } else {
+        return {
+          ...product,
+          isNew: false,
+        };
+      }
+    });
+
+    return {
+      products,
+      length: await this.prisma.product.count({
+        where: { ...(filters || {}), isDeleted: true },
       }),
     };
   }
@@ -196,7 +236,9 @@ export class ProductService {
           slug,
           isDeleted: false,
         },
-        select: productReturnObjectFull,
+        select: {
+          ...productReturnObjectFull,
+        },
       });
 
       if (!product) {
@@ -424,63 +466,106 @@ export class ProductService {
     }
   }
 
-  async deleteProduct(uuid: string, type: 'soft' | 'hard') {
+  async deleteProduct(uuid: string, type: 'soft' | 'hard', userUuid: string) {
     try {
       const product = await this.byId(uuid);
+      const { role, companyUuid } = await this.prisma.user.findUnique({
+        where: {
+          uuid: userUuid,
+        },
+        select: {
+          role: true,
+          companyUuid: true,
+        },
+      });
 
       if (type === 'soft') {
-        const deletedProduct = await this.prisma.product.update({
-          where: {
-            uuid,
-          },
-          data: {
-            isDeleted: true,
-          },
-        });
+        if (role === EnumRoleOfUser.COMPANY) {
+          const companyProduct = await this.prisma.companyProduct.findMany({
+            where: {
+              companyUuid,
+              productUuid: uuid,
+            },
+            select: {
+              uuid: true,
+              productUuid: true,
+            },
+          });
 
-        return deletedProduct;
+          const companyProductUuid = companyProduct[0].uuid;
+
+          await this.prisma.companyProduct.delete({
+            where: {
+              uuid: companyProductUuid,
+            },
+          });
+
+          return 'OK';
+        } else if (role === EnumRoleOfUser.ADMIN) {
+          const deletedProduct = await this.prisma.product.update({
+            where: {
+              uuid,
+            },
+            data: {
+              isDeleted: true,
+            },
+          });
+
+          return deletedProduct;
+        }
       } else if (type === 'hard') {
-        const deletedProduct = await this.prisma.$transaction(
-          async (prisma) => {
-            await prisma.photoFile.deleteMany({
-              where: {
-                productUuid: uuid,
-              },
-            });
+        try {
+          const deletedProduct = await this.prisma.$transaction(
+            async (prisma) => {
+              try {
+                await prisma.photoFile.deleteMany({
+                  where: {
+                    productUuid: uuid,
+                  },
+                });
+              } catch (error) {
+                console.error('Failed to delete photoFile of product:', error);
+                throw error;
+              }
 
-            try {
               product.images.forEach(async (image) => {
-                const filePath = `${process.env.DESTINATION}/${image}`;
-                await fs.unlink(filePath);
+                try {
+                  const filePath = `${process.env.DESTINATION}/${image}`;
+                  await fs.unlink(filePath);
+                } catch (error) {
+                  console.error('Failed to delete product images:', error);
+                  return;
+                }
               });
-            } catch (error) {
-              console.error('Failed to delete product images:', error);
-              throw error;
-            }
 
-            await prisma.companyProduct.deleteMany({
-              where: {
-                productUuid: uuid,
-              },
-            });
+              await prisma.companyProduct.deleteMany({
+                where: {
+                  productUuid: uuid,
+                },
+              });
 
-            await prisma.orderItem.deleteMany({
-              where: {
-                productUuid: uuid,
-              },
-            });
+              await prisma.orderItem.deleteMany({
+                where: {
+                  productUuid: uuid,
+                },
+              });
 
-            const deletedProduct = await prisma.product.delete({
-              where: {
-                uuid,
-              },
-            });
+              const deletedProduct = await prisma.product.delete({
+                where: {
+                  uuid,
+                },
+              });
 
-            return deletedProduct;
-          },
-        );
+              return deletedProduct;
+            },
+          );
 
-        return deletedProduct;
+          return deletedProduct;
+        } catch (error) {
+          throw new BadGatewayException(
+            `Failed to delete product by $transaction: ${error}`,
+          );
+        }
       }
     } catch (error) {
       throw new BadGatewayException(`Failed to delete product: ${error}`);
@@ -575,5 +660,44 @@ export class ProductService {
     });
 
     return 'OK';
+  }
+
+  async recoverProduct(uuid: string) {
+    const recoveredProduct = await this.prisma.product.update({
+      where: {
+        uuid,
+      },
+      data: {
+        isDeleted: false,
+      },
+      select: {
+        ...productReturnObject,
+      },
+    });
+
+    const isImageExist = async () => {
+      const filePath = `${process.env.DESTINATION}/${recoveredProduct.images[0]}`;
+      try {
+        await fs.access(filePath);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    };
+
+    if (!(await isImageExist())) {
+      await this.prisma.product.update({
+        where: {
+          uuid,
+        },
+        data: {
+          images: ['default-product-photo.png'],
+        },
+      });
+    }
+
+    console.log(recoveredProduct);
+
+    return recoveredProduct;
   }
 }

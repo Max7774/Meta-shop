@@ -8,6 +8,8 @@ import {
   getProductBySlug,
   getProductsAll,
   updateProduct,
+  getAllSoftDeleted,
+  recoverProduct,
 } from "./product.actions";
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
@@ -42,6 +44,7 @@ const productMock: TProduct = {
 const initialState: TProductState = {
   isLoading: false,
   isProductLoading: false,
+  isProductRecovered: false,
   products: [],
   length: 0,
   selectedCompanyProduct: {} as TCompanyProduct,
@@ -69,6 +72,19 @@ export const productsSlice = createSlice({
         state.length = payload.length;
       })
       .addCase(getProductsAll.rejected, (state) => {
+        state.isLoading = false;
+        state.products = [];
+      })
+      .addCase(getAllSoftDeleted.pending, (state) => {
+        /* ===================== GET ALL SOFT DELETED PRODUCTS ===================== */
+        state.isLoading = true;
+      })
+      .addCase(getAllSoftDeleted.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.products = payload.products;
+        state.length = payload.length;
+      })
+      .addCase(getAllSoftDeleted.rejected, (state) => {
         state.isLoading = false;
         state.products = [];
       })
@@ -113,12 +129,36 @@ export const productsSlice = createSlice({
         /* ===================== DELETE PRODUCT ===================== */
         state.isProductLoading = true;
       })
-      .addCase(deleteProduct.fulfilled, (state, { payload }) => {
-        state.isProductLoading = false;
-        state.products = state.products.filter(
-          (el) => el.uuid !== payload.uuid
-        );
-      })
+      .addCase(
+        deleteProduct.fulfilled,
+        (
+          state,
+          {
+            payload,
+            meta: {
+              arg: { type, companyUuid },
+            },
+          }
+        ) => {
+          state.isProductLoading = false;
+          if (type === "soft" && companyUuid) {
+            state.products = state.products.map((el) => {
+              if (el.company.some((item) => item.companyUuid === companyUuid)) {
+                return {
+                  ...el,
+                  company: el.company.filter(
+                    (el) => el.companyUuid !== companyUuid
+                  ),
+                };
+              }
+              return el;
+            });
+          }
+          state.products = state.products.filter(
+            (el) => el.uuid !== payload.uuid
+          );
+        }
+      )
       .addCase(deleteProduct.rejected, (state) => {
         state.isProductLoading = false;
       })
@@ -143,6 +183,22 @@ export const productsSlice = createSlice({
       })
       .addCase(deleteProductImage.rejected, (state) => {
         state.isProductLoading = false;
+      })
+      .addCase(recoverProduct.pending, (state) => {
+        /* ===================== RECOVER PRODUCT ===================== */
+        state.isProductRecovered = true;
+      })
+      .addCase(recoverProduct.fulfilled, (state, { payload }) => {
+        state.isProductRecovered = false;
+        state.products = state.products.map((el) => {
+          if (el.uuid === payload.uuid) {
+            return payload;
+          }
+          return el;
+        });
+      })
+      .addCase(recoverProduct.rejected, (state) => {
+        state.isProductRecovered = false;
       });
   },
 });

@@ -52,6 +52,14 @@ export class ProductController {
     return this.productService.getAll(queryDto);
   }
 
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Auth([admin])
+  @Get('soft-deleted')
+  async getAllSoftDeleted(@Query() queryDto: GetAllProductDto) {
+    return this.productService.getAllSoftDeleted(queryDto);
+  }
+
   @Get('similar/:uuid')
   async getSimilar(@Param('uuid') uuid: string) {
     return this.productService.getSimilar(uuid);
@@ -110,12 +118,13 @@ export class ProductController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Delete(':uuid/:type')
-  @Auth([admin])
+  @Auth([admin, company])
   async deleteProduct(
     @Param('uuid') uuid: string,
     @Param('type') type: 'soft' | 'hard',
+    @CurrentUser('uuid') userUuid: string,
   ) {
-    return this.productService.deleteProduct(uuid, type);
+    return this.productService.deleteProduct(uuid, type, userUuid);
   }
 
   @UsePipes(new ValidationPipe())
@@ -124,5 +133,13 @@ export class ProductController {
   @Auth([admin, company])
   async getProduct(@Param('uuid') uuid: string) {
     return this.productService.byId(uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Get('recover/:uuid')
+  @Auth([admin])
+  async recoverProduct(@Param('uuid') uuid: string) {
+    return this.productService.recoverProduct(uuid);
   }
 }
