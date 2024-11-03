@@ -28,7 +28,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
     const result: any = await login(data);
 
     if (result === "/login/fulfilled") {
-      navigate(-1);
+      navigate("/");
     }
   };
 
