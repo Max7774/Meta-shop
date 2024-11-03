@@ -172,6 +172,12 @@ describe('CategoryService', () => {
           name: dto.category_name,
           slug: 'updated-category',
         },
+        select: {
+          name: true,
+          slug: true,
+          subcategory: true,
+          uuid: true,
+        },
       });
     });
   });

@@ -86,6 +86,7 @@ export const createProduct = createAsyncThunk<
       inStock: product.inStock,
       unitofmeasurement: product.unitofmeasurement,
       companyUuid: product.companyUuid,
+      categoryUuid: product.categoryUuid,
     };
     const response = await ProductService.createProduct(currentProduct);
 
