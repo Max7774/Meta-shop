@@ -23,7 +23,7 @@ const SignUp = () => {
     const result: any = await phoneRegister(data);
 
     if (result === "/phoneRegister/fulfilled") {
-      navigate(-1);
+      navigate("/");
     }
   };
 
