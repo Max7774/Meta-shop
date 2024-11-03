@@ -5,4 +5,5 @@ export type TCategoryState = {
   isDeleteLoading: boolean;
   categories: TCategory[];
   isSubcategoryLoading: boolean;
+  isCategoryEdit: boolean;
 };

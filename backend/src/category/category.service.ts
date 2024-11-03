@@ -79,6 +79,12 @@ export class CategoryService {
         name: dto.category_name,
         slug: convertToSlug(dto.category_name),
       },
+      select: {
+        name: true,
+        slug: true,
+        uuid: true,
+        subcategory: true,
+      },
     });
   }
 

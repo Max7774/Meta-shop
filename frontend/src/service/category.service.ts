@@ -18,6 +18,14 @@ export const CategoryService = {
     });
   },
 
+  async updateCategory(uuid: string, data: { category_name: string }) {
+    return await instance<TCategory>({
+      url: `${CATEGORIES}/${uuid}`,
+      method: "PUT",
+      data,
+    });
+  },
+
   async deleteCategory(uuid: string) {
     return await instance<TCategory>({
       url: `${CATEGORIES}/${uuid}`,

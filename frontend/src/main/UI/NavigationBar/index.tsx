@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   Avatar,
   Skeleton,
+  Button,
 } from "@nextui-org/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
@@ -106,7 +107,6 @@ export const NavigationBar = () => {
 
   return (
     <Navbar
-      isBordered
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       shouldHideOnScroll
@@ -143,6 +143,15 @@ export const NavigationBar = () => {
       </NavbarMenu>
       <NavbarContent as="div" className="items-center" justify="end">
         <Cart />
+        {!isAuth && (
+          <Button
+            onClick={() => navigate("/auth")}
+            variant="flat"
+            color="primary"
+          >
+            Войти
+          </Button>
+        )}
         {isAuth && (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>

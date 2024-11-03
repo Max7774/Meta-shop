@@ -312,6 +312,7 @@ export class ProductService {
       unitofmeasurement,
       inStock,
       quantity,
+      companyUuid,
     } = dto;
 
     const companyUser = await this.prisma.user.findUnique({
@@ -359,7 +360,7 @@ export class ProductService {
       data: {
         uuid: uuidGen(),
         productUuid: product.uuid,
-        companyUuid: companyUser.companyUuid || '',
+        companyUuid: companyUser.companyUuid || companyUuid || '',
         price,
         quantity: quantity || 0,
         discount: discount || 0,
@@ -376,6 +377,7 @@ export class ProductService {
         price,
         name,
         subcategoryUuid,
+        categoryUuid,
         discount,
         inStock,
         unitofmeasurement,
@@ -454,6 +456,7 @@ export class ProductService {
           subcategory: {
             connect: {
               uuid: subcatUuid,
+              categoryUuid,
             },
           },
         },

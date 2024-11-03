@@ -51,6 +51,10 @@ export const AddCompany = lazy(
 export const SoftDeletedProducts = lazy(
   () => import("@/main/Screens/Admin/SoftDeletedProducts/SoftDeletedProducts")
 );
+export const Claims = lazy(() => import("@/main/Screens/Admin/Claims/Claims"));
+export const AdminAddProduct = lazy(
+  () => import("@/main/Screens/Admin/AddProduct/AddProduct")
+);
 
 /* COMPANY */
 export const AddProduct = lazy(

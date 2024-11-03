@@ -2,11 +2,13 @@ import { TRoutes } from "@/types/TRoutesData";
 import { EAdminRoutes } from "@enums/ERoutes";
 import {
   AddCompany,
+  AdminAddProduct,
   AdminCategories,
   AdminMainPage,
   AdminOrders,
   AdminUsers,
   ArchivedOrders,
+  Claims,
   EditProduct,
   SoftDeletedProducts,
 } from "../components/root";
@@ -51,5 +53,15 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     id: "soft-deleted-root-page-admin",
     path: EAdminRoutes.SOFT_DELETED,
     component: SoftDeletedProducts,
+  },
+  {
+    id: "claims-root-page-admin",
+    path: EAdminRoutes.CLAIMS,
+    component: Claims,
+  },
+  {
+    id: "add-product-root-page-admin",
+    path: EAdminRoutes.ADD_PRODUCT,
+    component: AdminAddProduct,
   },
 ];

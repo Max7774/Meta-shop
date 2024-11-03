@@ -28,6 +28,7 @@ export type TProductCreateForm = {
   name: string;
   price: number;
   description: string;
+  categoryUuid: string;
   subcategoryUuid: string;
   discount: number;
   inStock: boolean;

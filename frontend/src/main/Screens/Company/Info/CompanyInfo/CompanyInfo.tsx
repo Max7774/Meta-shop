@@ -14,7 +14,7 @@ const CompanyInfo = () => {
   if (isLoading) return <CircularProgress />;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-4xl p-6 mb-3 bg-white shadow-md rounded-lg">
       <div className="flex items-center mb-4">
         <Avatar color="primary" name={info?.name?.charAt(0)} size="lg" />
         <h1 className="ml-4 text-2xl font-semibold">{info.name}</h1>

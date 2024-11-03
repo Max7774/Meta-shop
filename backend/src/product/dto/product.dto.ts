@@ -14,6 +14,10 @@ export class ProductDto implements Prisma.ProductUpdateInput {
   @IsBoolean()
   inStock: boolean;
 
+  @IsOptional()
+  @IsString()
+  categoryUuid: string;
+
   @IsString()
   subcategoryUuid: string;
 

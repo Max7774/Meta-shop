@@ -138,7 +138,7 @@ export class AuthService {
       };
     }
 
-    const temporaryPassword = generateToken(16);
+    const temporaryPassword = generateToken(5);
 
     const newUser = await this.prisma.user.create({
       data: {

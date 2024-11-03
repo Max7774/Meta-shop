@@ -43,8 +43,17 @@ const EditProduct = () => {
 
   const navigate = useNavigate();
 
-  const { control, handleSubmit, setValue, setError, clearErrors, reset } =
-    useForm<TProductCreateForm>();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    reset,
+    watch,
+  } = useForm<TProductCreateForm>();
+
+  const categoryUuid = watch("categoryUuid");
 
   // Состояние для предварительного просмотра изображений
   const [previewImages, setPreviewImages] = useState<string[]>(
@@ -93,7 +102,8 @@ const EditProduct = () => {
       discount: Number(data.discount),
       inStock: data.inStock,
       subcategoryUuid: data.subcategoryUuid,
-      companyUuid: data.companyUuid || companyUuid,
+      categoryUuid: data.categoryUuid,
+      companyUuid: companyUuid || data.companyUuid || "",
       unitofmeasurement: data?.unitofmeasurement || "",
     };
 
@@ -110,8 +120,12 @@ const EditProduct = () => {
     }
   };
 
-  const handleCategoryChange = (subcategoryUuid: string) => {
+  const handleSubCategoryChange = (subcategoryUuid: string) => {
     setValue("subcategoryUuid", subcategoryUuid);
+  };
+
+  const handleCategoryChange = (categoryUuid: string) => {
+    setValue("categoryUuid", categoryUuid);
   };
 
   useEffect(() => {
@@ -136,6 +150,7 @@ const EditProduct = () => {
         discount:
           product.company.find((el) => el.companyUuid === companyUuid)
             ?.discount || 0,
+        categoryUuid: product?.subcategory?.category?.uuid || "",
         subcategoryUuid: product?.subcategory?.uuid || "",
         unitofmeasurement: product.unitofmeasurement || "",
         companyUuid:
@@ -245,11 +260,27 @@ const EditProduct = () => {
             )}
           />
 
-          <Input
-            placeholder="Категория"
-            label="Категория"
-            isDisabled
-            value={product.subcategory.category?.name}
+          <Controller
+            name="categoryUuid"
+            control={control}
+            render={({ field }) => (
+              <Select
+                isDisabled={!!companyUuid}
+                label="Категория"
+                selectedKeys={[field.value]}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0] as string;
+                  handleCategoryChange(selectedKey);
+                }}
+                placeholder="Выберите категорию"
+              >
+                {categories.map((item) => (
+                  <SelectItem key={item.uuid} value={item.uuid}>
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
           />
 
           <Controller
@@ -262,14 +293,17 @@ const EditProduct = () => {
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
-                  handleCategoryChange(selectedKey);
+                  handleSubCategoryChange(selectedKey);
                 }}
                 placeholder="Выберите подкатегорию"
               >
                 {(
                   categories.find(
                     ({ slug }) => product.subcategory.category?.slug === slug
-                  )?.subcategory || []
+                  )?.subcategory ||
+                  categories.find((el) => el.uuid === categoryUuid)
+                    ?.subcategory ||
+                  []
                 ).map((item) => (
                   <SelectItem key={item.uuid} value={item.uuid}>
                     {item.name}
@@ -285,10 +319,9 @@ const EditProduct = () => {
             rules={{ required: !companyUuid && "Выберите фирму" }}
             render={({ field, fieldState: { error } }) => (
               <Select
-                isDisabled
+                isDisabled={excludedRoles.includes(role)}
                 label="Фирма поставщик-производитель"
                 placeholder="Выберите фирму"
-                disabled={excludedRoles.includes(role)}
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;

@@ -7,12 +7,14 @@ import {
   getAllByCategory,
   getCategoriesAll,
   removeSubCategory,
+  updateCategory,
 } from "./category.actions";
 
 const initialState: TCategoryState = {
   isLoading: false,
   isDeleteLoading: false,
   isSubcategoryLoading: false,
+  isCategoryEdit: false,
   categories: [],
 };
 
@@ -32,6 +34,30 @@ export const categorySlice = createSlice({
       .addCase(getCategoriesAll.rejected, (state) => {
         state.isLoading = false;
         state.categories = [];
+      })
+      .addCase(updateCategory.pending, (state) => {
+        state.isCategoryEdit = true;
+      })
+      .addCase(
+        updateCategory.fulfilled,
+        (
+          state,
+          {
+            payload,
+            meta: {
+              arg: { uuid },
+            },
+          }
+        ) => {
+          state.isCategoryEdit = false;
+          state.categories = [
+            payload,
+            ...state.categories.filter((el) => el.uuid !== uuid),
+          ];
+        }
+      )
+      .addCase(updateCategory.rejected, (state) => {
+        state.isCategoryEdit = false;
       })
       .addCase(createCategory.pending, (state) => {
         state.isLoading = true;

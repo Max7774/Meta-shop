@@ -13,22 +13,32 @@ export const ADMIN_SIDEBAR_ITEMS = [
   },
   {
     uuid: "2",
+    name: "Добавление продукта",
+    slug: ADMIN_GlOBAL_PREFIX + "add-product",
+  },
+  {
+    uuid: "3",
     name: "Заказы",
     slug: ADMIN_GlOBAL_PREFIX + "orders",
   },
   {
-    uuid: "3",
+    uuid: "4",
     name: "Заказы в архиве",
     slug: ADMIN_GlOBAL_PREFIX + "archived-orders",
   },
   {
-    uuid: "4",
+    uuid: "5",
     name: "Добавить фирму",
     slug: ADMIN_GlOBAL_PREFIX + "add-company",
   },
   {
-    uuid: "5",
+    uuid: "6",
     name: "Удаленные продукты",
     slug: ADMIN_GlOBAL_PREFIX + "soft-deleted",
+  },
+  {
+    uuid: "7",
+    name: "Заявки",
+    slug: ADMIN_GlOBAL_PREFIX + "claims",
   },
 ];

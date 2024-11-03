@@ -88,3 +88,15 @@ export const getAllByCategory = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const updateCategory = createAsyncThunk<
+  TCategory,
+  { uuid: string; category_name: string }
+>("/update-category", async (data, { rejectWithValue }) => {
+  try {
+    const response = await CategoryService.updateCategory(data.uuid, data);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});

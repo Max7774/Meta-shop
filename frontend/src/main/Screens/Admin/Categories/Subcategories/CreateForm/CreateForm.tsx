@@ -41,6 +41,7 @@ const CreateForm = ({ open, close, categoryName }: ICreateFormProps) => {
     });
     if (result.type === "/create-subcategory/fulfilled") {
       close(false);
+      window.location.reload();
     } else {
       toast.error("Ошибка создания подкатегории");
     }
