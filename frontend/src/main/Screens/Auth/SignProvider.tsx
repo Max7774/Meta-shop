@@ -5,18 +5,13 @@ import SignUp from "./SignUp/SignUp";
 
 interface ISignProviderProps {
   type: TTypeOfAuth;
-  setTypeOfAuth?: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
+  setTypeOfAuth: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
 }
 
-const SignProvider = ({ type }: ISignProviderProps) => {
-  if (type === "login")
-    return (
-      <Login
-      // setTypeOfAuth={setTypeOfAuth}
-      />
-    );
+const SignProvider = ({ type, setTypeOfAuth }: ISignProviderProps) => {
+  if (type === "login") return <Login setTypeOfAuth={setTypeOfAuth} />;
   if (type === "register") return <SignUp />;
-  if (type === "reset-password") return <Reset />;
+  if (type === "reset-password") return <Reset setTypeOfAuth={setTypeOfAuth} />;
 };
 
 export default SignProvider;

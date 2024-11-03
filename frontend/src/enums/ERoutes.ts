@@ -1,6 +1,6 @@
 export enum ERoutes {
   ROOT = "/",
-  AUTH = "/auth",
+  AUTH = "/auth/:typeOfAuth",
   PRODUCT_CARD = "/product/:productSlug",
   CATEGORIES = "/categories/:categorySlug",
   SUB_CATEGORIES = "/categories/:categorySlug/:subcategorySlug",

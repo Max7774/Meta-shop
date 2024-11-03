@@ -119,8 +119,8 @@ export const sendEmailToResetPassword = createAsyncThunk<any, string>(
       return response.data;
     } catch (error: any) {
       console.log(error);
-      if (error.response.status) {
-        toast.error("Такой пользователь уже существует");
+      if (error.response.status === 404) {
+        toast.error("Такого пользователя не существует");
       }
 
       return thunkApi.rejectWithValue(
@@ -141,7 +141,7 @@ export const resetPassword = createAsyncThunk<any, TResetPassword>(
     } catch (error: any) {
       console.log(error);
       if (error.response.status) {
-        toast.error("Такой пользователь уже существует");
+        toast.error(error.response.data.message);
       }
 
       return thunkApi.rejectWithValue(

@@ -145,7 +145,7 @@ export const NavigationBar = () => {
         <Cart />
         {!isAuth && (
           <Button
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate("/auth/login")}
             variant="flat"
             color="primary"
           >

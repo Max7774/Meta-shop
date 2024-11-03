@@ -28,6 +28,7 @@ export type TRegister = {
 };
 
 export type TResetPassword = {
+  email?: string;
   new_pass: string;
   resetToken: string;
 };

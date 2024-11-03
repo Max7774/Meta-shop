@@ -6,8 +6,13 @@ import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
 import { validEmail } from "@utils/validations/valid-email";
+import { TTypeOfAuth } from "../auth.types";
 
-const Login = () => {
+interface ILoginProps {
+  setTypeOfAuth: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
+}
+
+const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const { login } = useActions();
   const { isLoading } = useAuth();
@@ -103,18 +108,16 @@ const Login = () => {
           Войти
         </Button>
       </form>
-      {/* <div className="flex justify-center">
-        <div className="text-md">
-          Забыли пароль?{" "}
-          <Button
-            className="text-md"
-            onClick={() => setTypeOfAuth("reset-password")}
-            variant="light"
-          >
-            Восстановить
-          </Button>
-        </div>
-      </div> */}
+      <div className="flex justify-center items-center gap-2">
+        <div className="text-md">Забыли пароль?</div>
+        <Button
+          className="text-md"
+          onClick={() => setTypeOfAuth('reset-password')}
+          variant="flat"
+        >
+          Восстановить
+        </Button>
+      </div>
     </>
   );
 };
