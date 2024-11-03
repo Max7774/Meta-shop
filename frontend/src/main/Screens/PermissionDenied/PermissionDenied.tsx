@@ -1,7 +1,10 @@
+import { Button } from "@nextui-org/react";
 import { FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PermissionDenied = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-gray-100 flex items-center justify-center min-h-screen">
       <div className="bg-white p-10 rounded-2xl shadow-lg text-center">
@@ -14,12 +17,9 @@ const PermissionDenied = () => {
         <p className="text-gray-600 mb-8">
           К сожалению, у вас нет прав для доступа к этой странице.
         </p>
-        <Link
-          to="/"
-          className="inline-block bg-blue-500 text-white py-3 px-6 rounded-2xl hover:bg-blue-600 transition-colors duration-200"
-        >
+        <Button onClick={() => navigate("/")} size="lg" color="primary">
           Вернуться на главную страницу
-        </Link>
+        </Button>
       </div>
     </section>
   );
