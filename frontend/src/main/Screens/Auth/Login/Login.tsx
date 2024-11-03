@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Input, Spacer } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -7,6 +8,7 @@ import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
 import { validEmail } from "@utils/validations/valid-email";
 import { TTypeOfAuth } from "../auth.types";
+import { useNavigate } from "react-router-dom";
 
 interface ILoginProps {
   setTypeOfAuth: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
@@ -18,10 +20,16 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const { isLoading } = useAuth();
   const { control, handleSubmit } = useForm<TLogin>();
 
+  const navigate = useNavigate();
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const submit: SubmitHandler<TLogin> = (data) => {
-    login(data);
+  const submit: SubmitHandler<TLogin> = async (data) => {
+    const result: any = await login(data);
+
+    if (result === "/login/fulfilled") {
+      navigate(-1);
+    }
   };
 
   return (
@@ -112,7 +120,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
         <div className="text-md">Забыли пароль?</div>
         <Button
           className="text-md"
-          onClick={() => setTypeOfAuth('reset-password')}
+          onClick={() => setTypeOfAuth("reset-password")}
           variant="flat"
         >
           Восстановить

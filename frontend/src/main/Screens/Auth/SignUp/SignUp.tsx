@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
 import { Button, Spacer } from "@nextui-org/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
 import cn from "clsx";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const { phoneRegister } = useActions();
@@ -15,8 +17,14 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<{ phone_number: string }>();
 
-  const submit: SubmitHandler<{ phone_number: string }> = (data) => {
-    phoneRegister(data);
+  const navigate = useNavigate();
+
+  const submit: SubmitHandler<{ phone_number: string }> = async (data) => {
+    const result: any = await phoneRegister(data);
+
+    if (result === "/phoneRegister/fulfilled") {
+      navigate(-1);
+    }
   };
 
   return (
