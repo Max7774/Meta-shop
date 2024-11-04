@@ -1,24 +1,22 @@
 import { TCompanyProduct } from "@/types/TCompany";
 import { Badge, Select, SelectItem } from "@nextui-org/react";
-import { useActions } from "@hooks/useActions";
+// import { useActions } from "@hooks/useActions";
 import PriceView from "@UI/Price/PriceView/PriceView";
 
 interface IPriceProps {
   company: TCompanyProduct[];
   unitofmeasurement: string;
-  selectedCompanyProduct: TCompanyProduct;
+  // selectedCompanyProduct: TCompanyProduct;
 }
 
 const OrderCardPrice = ({
   company: companies,
   unitofmeasurement,
-  selectedCompanyProduct,
-}: IPriceProps) => {
-  const { updateSelectedCompanyProduct } = useActions();
+}: // selectedCompanyProduct,
+IPriceProps) => {
+  // const { updateSelectedCompanyProduct } = useActions();
 
-  const companyDiscount = companies.find(
-    (el) => el.uuid === selectedCompanyProduct.uuid
-  );
+  const companyDiscount = companies.find((el) => el.uuid === "");
 
   return (
     <div className="w-full">
@@ -38,12 +36,13 @@ const OrderCardPrice = ({
           label="Цена от фирм"
           variant="bordered"
           placeholder="Цен не проставлено"
-          selectedKeys={[selectedCompanyProduct.uuid]}
+          selectedKeys={[""]}
           fullWidth
           isDisabled={companies?.length <= 0}
           onSelectionChange={(keys) => {
             const selectedKey = Array.from(keys)[0] as string;
-            updateSelectedCompanyProduct({ uuid: selectedKey });
+            console.log(selectedKey);
+            // updateSelectedCompanyProduct({ uuid: selectedKey });
           }}
           classNames={{
             trigger: "h-13",

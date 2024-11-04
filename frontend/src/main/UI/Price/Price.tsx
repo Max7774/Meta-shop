@@ -14,7 +14,7 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
     (state) => state.products.selectedCompanyProduct
   );
 
-  const { setSelectedProduct, updateSelectedCompanyProduct } = useActions();
+  const { selectCompanyProduct } = useActions();
 
   const companyDiscount = companies.find(
     (el) => el.uuid === selectedCompanyProduct.uuid
@@ -37,14 +37,13 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
           items={companies}
           label="Цена от фирм"
           variant="bordered"
-          placeholder="Цен не проставлено"
+          placeholder="Выберите фирму"
           selectedKeys={[selectedCompanyProduct.uuid]}
           fullWidth
           isDisabled={companies?.length <= 0}
           onSelectionChange={(keys) => {
             const selectedKey = Array.from(keys)[0] as string;
-            setSelectedProduct({ uuid: selectedKey });
-            updateSelectedCompanyProduct({ uuid: selectedKey });
+            selectCompanyProduct({ uuid: selectedKey });
           }}
           classNames={{
             trigger: "h-13",
@@ -66,9 +65,12 @@ const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
               />
             );
           }}
+          // disabledKeys={companies
+          //   .filter((company) => company.uuid !== selected)
+          //   .map((el) => el.companyUuid)}
         >
           {({ uuid, price, discount, company: { name } }) => (
-            <SelectItem textValue="" key={uuid}>
+            <SelectItem textValue={name} key={uuid}>
               <PriceView
                 price={price}
                 name={name}

@@ -51,7 +51,7 @@ const CartItem: FC<IItem> = ({ item }) => {
                 !item.inStock ? "text-gray-400" : "text-gray-500"
               }`}
             >
-              {convertPrice(item.selectedCompanyProduct.price)}
+              {convertPrice(0)}
             </span>
           </>
         ) : (

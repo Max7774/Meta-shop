@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
 import { TCompanyProduct } from "@/types/TCompany";
+import { getStoreLocal, setLocalStorage } from "@utils/local-storage";
 
 const productMock: TProduct = {
   images: [],
@@ -47,17 +48,22 @@ const initialState: TProductState = {
   isProductRecovered: false,
   products: [],
   length: 0,
-  selectedCompanyProduct: {} as TCompanyProduct,
+  selectedCompanyProduct:
+    getStoreLocal("selectedCompany") || ({} as TCompanyProduct),
 };
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setSelectedProduct: (state, action: PayloadAction<{ uuid: string }>) => {
-      state.selectedCompanyProduct =
-        state.product?.company.find((el) => el.uuid === action.payload.uuid) ||
-        ({} as TCompanyProduct);
+    selectCompanyProduct: (state, action: PayloadAction<{ uuid: string }>) => {
+      const company =
+        state.product?.company.find(
+          (el) =>
+            el.uuid === (action.payload.uuid ? action.payload.uuid : el.uuid)
+        ) || ({} as TCompanyProduct);
+      setLocalStorage("selectedCompany", company);
+      state.selectedCompanyProduct = company;
     },
   },
   extraReducers: (builder) => {
@@ -68,7 +74,18 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductsAll.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.products = payload.products;
+        if (state.selectedCompanyProduct.uuid) {
+          state.products = payload.products.map((el) => {
+            return {
+              ...el,
+              company: el.company.filter(
+                (el) => el.uuid === state.selectedCompanyProduct.uuid
+              ),
+            };
+          });
+        } else {
+          state.products = payload.products;
+        }
         state.length = payload.length;
       })
       .addCase(getProductsAll.rejected, (state) => {
@@ -97,7 +114,9 @@ export const productsSlice = createSlice({
         state.isLoading = false;
         state.product = payload;
         state.selectedCompanyProduct =
-          payload.company[0] || ({} as TCompanyProduct);
+          payload.company.find(
+            (el) => el.uuid === getStoreLocal("selectedCompany")?.uuid || ""
+          ) || ({} as TCompanyProduct);
       })
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
@@ -203,4 +222,4 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { setSelectedProduct } = productsSlice.actions;
+export const { selectCompanyProduct } = productsSlice.actions;

@@ -2,10 +2,11 @@ import Loader from "@/main/UI/Loader";
 import SubcategoriesList from "@Components/SubcategoriesList/SubcategoriesList";
 import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
+import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 import Heading from "@UI/Heading";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const SubCategories = () => {
   const { categorySlug } = useParams();
@@ -27,6 +28,16 @@ const SubCategories = () => {
         <meta name="description" content="Страница категорий - AgroZakupKz" />
       </Helmet>
       <section>
+        <Breadcrumbs>
+          <BreadcrumbItem>
+            <Link to={"/"}>{"Главная"}</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link to={`/categories/${categorySlug}`}>
+              {currentCategory?.name}
+            </Link>
+          </BreadcrumbItem>
+        </Breadcrumbs>
         {currentCategory && (
           <>
             <Heading>{currentCategory.name}</Heading>

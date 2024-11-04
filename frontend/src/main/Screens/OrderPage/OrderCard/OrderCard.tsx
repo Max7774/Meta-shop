@@ -69,7 +69,7 @@ const OrderCard = ({ item, itemsInStock }: IOrderCardProps) => {
       <OrderCardPrice
         company={item.product.company}
         unitofmeasurement={item.product.unitofmeasurement}
-        selectedCompanyProduct={item.selectedCompanyProduct}
+        // selectedCompanyProduct={item}
       />
     </div>
   );

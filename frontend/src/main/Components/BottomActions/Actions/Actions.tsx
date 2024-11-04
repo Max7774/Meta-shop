@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Actions = () => {
   const { items } = useCart();
-  const { addToCart } = useActions();
+  const { addToCart, selectCompanyProduct } = useActions();
   const { product } = useProducts();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -39,7 +39,7 @@ const Actions = () => {
                 color={product.inStock ? "primary" : "default"}
                 size="lg"
                 className="w-full"
-                onClick={() =>
+                onClick={() => {
                   addToCart({
                     product,
                     discount: selectedCompanyProduct.discount,
@@ -53,10 +53,12 @@ const Actions = () => {
                       : selectedCompanyProduct.price,
                     uuid: product.uuid,
                     productUuid: product.uuid,
-                    selectedCompanyProduct,
-                  })
-                }
-                isDisabled={!product.inStock}
+                  });
+                  selectCompanyProduct({
+                    uuid: selectedCompanyProduct.uuid,
+                  });
+                }}
+                isDisabled={!product.inStock && !!selectedCompanyProduct}
                 startContent={<RiShoppingCartLine size={25} />}
               >
                 {product.inStock ? "Добавить в корзину" : "Нет в наличии"}

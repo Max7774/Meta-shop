@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
@@ -13,6 +13,8 @@ import {
   Image,
   SelectItem,
   Checkbox,
+  Breadcrumbs,
+  BreadcrumbItem,
 } from "@nextui-org/react";
 import Heading from "@UI/Heading";
 import { TProductCreateForm } from "@/types/TProduct";
@@ -172,6 +174,31 @@ const EditProduct = () => {
 
   return (
     <section>
+      <Breadcrumbs>
+        <BreadcrumbItem>
+          <Link to={"/"}>{"Главная"}</Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to={`/categories/${product?.subcategory.category?.slug}`}>
+            {product?.subcategory?.category?.name}
+          </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link
+            to={`/categories/${product?.subcategory.category?.slug}/${product?.subcategory?.slug}`}
+          >
+            {product?.subcategory?.name}
+          </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link to={`/product/${product?.slug}`}>{product?.name}</Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <Link
+            to={`/${product?.subcategory?.slug}`}
+          >{`Редактирование: ${product?.name}`}</Link>
+        </BreadcrumbItem>
+      </Breadcrumbs>
       <Heading>Редактирование продукта</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-5">

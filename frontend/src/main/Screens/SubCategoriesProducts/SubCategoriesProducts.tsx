@@ -2,11 +2,12 @@ import Products from "@Components/Products/Products";
 import { useActions } from "@hooks/useActions";
 import { useCategory } from "@hooks/useCategory";
 import { useProducts } from "@hooks/useProducts";
+import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 import Heading from "@UI/Heading";
 import Loader from "@UI/Loader";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const SubCategoriesProducts = () => {
   const { subcategorySlug, categorySlug } = useParams();
@@ -22,6 +23,10 @@ const SubCategoriesProducts = () => {
     .find((item) => categorySlug === item.slug)
     ?.subcategory.find(({ slug }) => subcategorySlug === slug)?.name;
 
+  const categoryTitle = categories.find(
+    (item) => item.slug === categorySlug
+  )?.name;
+
   if (isLoading) return <Loader />;
 
   return (
@@ -34,6 +39,17 @@ const SubCategoriesProducts = () => {
         />
       </Helmet>
       <section>
+        <Breadcrumbs>
+          <BreadcrumbItem>
+            <Link to={"/"}>{"Главная"}</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link to={`/categories/${categorySlug}`}>{categoryTitle}</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Link to={`/${categorySlug}/${subcategorySlug}`}>{title}</Link>
+          </BreadcrumbItem>
+        </Breadcrumbs>
         {products.length === 0 ? (
           <>
             <Heading>{title}</Heading>
@@ -41,7 +57,7 @@ const SubCategoriesProducts = () => {
           </>
         ) : (
           <>
-            <Heading>{products[0]?.subcategory?.name}</Heading>
+            <Heading>{title}</Heading>
             <Products products={products} />
           </>
         )}

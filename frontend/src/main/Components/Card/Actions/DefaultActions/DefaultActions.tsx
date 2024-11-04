@@ -11,7 +11,8 @@ interface IDefaultActionsProps {
 
 const DefaultActions = ({ product }: IDefaultActionsProps) => {
   const { items } = useCart();
-  const { addToCart, changeQuantity, removeFromCart } = useActions();
+  const { addToCart, changeQuantity, removeFromCart, selectCompanyProduct } =
+    useActions();
 
   const selectedCompanyProduct = useAppSelector(
     (state) => state.products.selectedCompanyProduct
@@ -59,7 +60,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
           size="sm"
           color="primary"
           fullWidth
-          onClick={() =>
+          onClick={() => {
             addToCart({
               product,
               inStock: product.inStock,
@@ -78,9 +79,11 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
                   : companyProduct.price || selectedCompanyProduct.price,
               uuid: product?.uuid,
               productUuid: product?.uuid,
-              selectedCompanyProduct: companyProduct || selectedCompanyProduct,
-            })
-          }
+            });
+            selectCompanyProduct({
+              uuid: selectedCompanyProduct.uuid || companyProduct.uuid,
+            });
+          }}
         >
           В корзину
         </Button>

@@ -1,7 +1,12 @@
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Chip, CircularProgress } from "@nextui-org/react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  BreadcrumbItem,
+  Breadcrumbs,
+  Chip,
+  CircularProgress,
+} from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
@@ -31,6 +36,26 @@ const ProductPage = () => {
       </Helmet>
       <section className="w-full">
         <div className="px-6">
+          <Breadcrumbs>
+            <BreadcrumbItem>
+              <Link to={"/"}>{"Главная"}</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to={`/categories/${product?.subcategory.category?.slug}`}>
+                {product?.subcategory?.category?.name}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link
+                to={`/categories/${product?.subcategory.category?.slug}/${product?.subcategory?.slug}`}
+              >
+                {product?.subcategory?.name}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to={`/${product?.subcategory?.slug}`}>{product?.name}</Link>
+            </BreadcrumbItem>
+          </Breadcrumbs>
           <Heading>{product?.name}</Heading>
           <div className="flex flex-row flex-wrap gap-2">
             <Chip
