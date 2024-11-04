@@ -22,7 +22,9 @@ const SignUp = () => {
   const submit: SubmitHandler<{ phone_number: string }> = async (data) => {
     const result: any = await phoneRegister(data);
 
-    if (result === "/phoneRegister/fulfilled") {
+    console.log(result);
+
+    if (result.type === "/phoneRegister/fulfilled") {
       navigate("/");
     }
   };

@@ -27,7 +27,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const submit: SubmitHandler<TLogin> = async (data) => {
     const result: any = await login(data);
 
-    if (result === "/login/fulfilled") {
+    if (result.type === "/login/fulfilled") {
       navigate("/");
     }
   };
