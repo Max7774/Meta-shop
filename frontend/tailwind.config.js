@@ -104,6 +104,12 @@ module.exports = {
             secondary: { DEFAULT: colors.secondary, contrastText: "#ffffff" },
           },
         },
+        dark: {
+          colors: {
+            primary: { DEFAULT: colors.primary, contrastText: "#ffffff" },
+            secondary: { DEFAULT: colors.secondary, contrastText: "#ffffff" },
+          },
+        },
       },
     }),
   ],

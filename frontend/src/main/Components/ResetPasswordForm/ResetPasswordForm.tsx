@@ -54,8 +54,8 @@ const ResetPasswordForm = ({ setTypeOfAuth }: IResetPasswordFormProps) => {
   return (
     <form
       onSubmit={handleSubmit(submit)}
-      className={cn("flex flex-col sm:w-1/3 gap-2", {
-        "px-5": !isAuth,
+      className={cn("flex flex-col gap-2", {
+        "px-5 sm:w-1/3": !isAuth,
       })}
     >
       {resetPasswordCode === "none" && (

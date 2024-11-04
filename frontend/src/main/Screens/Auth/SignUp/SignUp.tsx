@@ -26,14 +26,11 @@ const SignUp = () => {
   const submit: SubmitHandler<TSignUp> = async (data) => {
     const result: any = await phoneRegister(data);
 
-    if (
-      result.type === "/phoneRegister/fulfilled" &&
-      pathname.startsWith("/auth")
-    ) {
-      navigate("/");
+    if (result.type === "/phoneRegister/fulfilled") {
+      if (pathname.startsWith("/auth")) navigate("/");
+      toast.success("Вы успешно зарегистрировались!");
+      toast.info("Не забудьте поменять пароль в профиле!");
     }
-    toast.success("Вы успешно зарегистрировались!");
-    toast.info("Не забудьте поменять пароль в профиле!");
   };
 
   return (
