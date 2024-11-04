@@ -15,8 +15,6 @@ const ProfilePage = () => {
   const handleEditOpen = () => setIsEditOpen(true);
   const handleEditClose = () => setIsEditOpen(false);
 
-  console.log(profile);
-
   return (
     <div className="container mx-auto">
       <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
@@ -38,12 +36,12 @@ const ProfilePage = () => {
             }
           />
         </Badge>
-        <div className="flex w-full flex-col space-y-2">
-          <div className="flex flex-row justify-center gap-3">
+        <div className="flex w-full flex-col">
+          <div className="flex flex-row justify-center sm:justify-start gap-3">
             <h1 className="text-2xl font-bold">{profile.first_name}</h1>
             <h1 className="text-2xl font-bold">{profile.second_name}</h1>
           </div>
-          <p className="w-full text-default-400 overflow-hidden text-center text-sm whitespace-nowrap text-ellipsis">
+          <p className="w-full mb-3 text-default-400 overflow-hidden text-center sm:text-start text-md whitespace-nowrap text-ellipsis">
             {`${profile.email}` || "Почты нет"}
             <p>{profile.phone_number}</p>
           </p>

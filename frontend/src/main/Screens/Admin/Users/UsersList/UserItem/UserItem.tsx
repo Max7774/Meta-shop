@@ -1,4 +1,5 @@
 import { TAdminUser } from "@/types/TUser";
+import ResetPasswordForm from "@Components/ResetPasswordForm/ResetPasswordForm";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import {
@@ -114,9 +115,17 @@ const UserItem = ({ user }: IUserItemProps) => {
             </div>
           </>
         ) : (
-          <Button isDisabled fullWidth color="primary">
-            Изменить пароль
-          </Button>
+          <Accordion variant="shadow">
+            <AccordionItem
+              key="1"
+              aria-label="Изменить пароль"
+              title="Изменить пароль"
+            >
+              <div className="w-full">
+                <ResetPasswordForm />
+              </div>
+            </AccordionItem>
+          </Accordion>
         )}
       </CardFooter>
     </Card>

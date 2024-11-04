@@ -18,6 +18,7 @@ import { convertToSlug } from 'src/utils/convertToSlug';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { promises as fs } from 'fs';
 import { SubcategoryService } from 'src/subcategory/subcategory.service';
+import { convertToNumber } from 'src/utils/convert-to-number';
 
 @Injectable()
 export class ProductService {
@@ -107,18 +108,20 @@ export class ProductService {
 
     if (dto.searchTerm) filters.push(this.getSearchTermFilter(dto.searchTerm));
 
-    if (dto.ratings)
+    // if (dto.ratings)
+    //   filters.push(
+    //     this.getRatingFilter(dto.ratings.split('|').map((rating) => +rating)),
+    //   );
+
+    if (dto.minPrice || dto.maxPrice)
       filters.push(
-        this.getRatingFilter(dto.ratings.split('|').map((rating) => +rating)),
+        this.getPriceFilter(
+          convertToNumber(dto.minPrice),
+          convertToNumber(dto.maxPrice),
+        ),
       );
 
-    // if (dto.minPrice || dto.maxPrice)
-    //   filters.push(
-    //     this.getPriceFilter(
-    //       convertToNumber(dto.minPrice),
-    //       convertToNumber(dto.maxPrice),
-    //     ),
-    //   );
+    if (dto.companyUuid) filters.push(this.getCompanyFilter(dto.companyUuid));
 
     if (dto.categoryUuid)
       filters.push(this.getCategoryFilter(dto.categoryUuid));
@@ -126,14 +129,24 @@ export class ProductService {
     return filters.length ? { AND: filters } : {};
   }
 
+  private getCompanyFilter(companyUuid: string): Prisma.ProductWhereInput {
+    return {
+      company: {
+        some: {
+          uuid: companyUuid,
+        },
+      },
+    };
+  }
+
   private getSortOption(
     sort: EnumProductsSort,
   ): Prisma.ProductOrderByWithRelationInput[] {
     switch (sort) {
-      // case EnumProductsSort.LOW_PRICE:
-      //   return [{ price: 'asc' }];
-      // case EnumProductsSort.HIGH_PRICE:
-      //   return [{ price: 'desc' }];
+      case EnumProductsSort.LOW_PRICE:
+        return [{ company: { _count: 'asc' } }];
+      case EnumProductsSort.HIGH_PRICE:
+        return [{ company: { _count: 'desc' } }];
       case EnumProductsSort.OLDEST:
         return [{ createdAt: 'asc' }];
       default:
@@ -180,32 +193,21 @@ export class ProductService {
     };
   }
 
-  // private getPriceFilter(
-  //   minPrice?: number,
-  //   maxPrice?: number,
-  // ): Prisma.ProductWhereInput {
-  //   let priceFilter: Prisma.IntFilter | undefined = undefined;
-
-  //   if (minPrice) {
-  //     priceFilter = {
-  //       ...priceFilter,
-  //       gte: minPrice,
-  //     };
-  //   }
-
-  //   if (maxPrice) {
-  //     priceFilter = {
-  //       ...priceFilter,
-  //       lte: maxPrice,
-  //     };
-  //   }
-
-  //   return {
-  //     company: {
-  //       price: priceFilter,
-  //     },
-  //   };
-  // }
+  private getPriceFilter(
+    minPrice?: number,
+    maxPrice?: number,
+  ): Prisma.ProductWhereInput {
+    return {
+      company: {
+        some: {
+          price: {
+            ...(minPrice !== undefined ? { gte: minPrice } : {}),
+            ...(maxPrice !== undefined ? { lte: maxPrice } : {}),
+          },
+        },
+      },
+    };
+  }
 
   private getCategoryFilter(subcategoryUuid: string): Prisma.ProductWhereInput {
     return {

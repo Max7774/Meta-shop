@@ -108,7 +108,7 @@ const AdminCategories = () => {
               <div className="grid grid-cols-3 items-center">
                 <Chip
                   size="sm"
-                  className="text-white justify-self-center"
+                  className="text-white justify-self-start"
                   color={subcategory.length === 0 ? "warning" : "success"}
                 >
                   {subcategory.length === 0

@@ -44,4 +44,9 @@ export class GetAllProductDto extends PaginationDto {
   @IsString()
   @ApiProperty({ required: false })
   subcategoryUuid?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ required: false })
+  companyUuid?: string;
 }
