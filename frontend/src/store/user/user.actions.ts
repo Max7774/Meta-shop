@@ -7,6 +7,7 @@ import {
   TLogin,
   TRegister,
   TResetPassword,
+  TSignUp,
 } from "@/types/TAuth";
 import { TFilters } from "@/types/TFilters";
 import { TProfile, TProfileEdit } from "@/types/TProfile";
@@ -66,27 +67,27 @@ export const register = createAsyncThunk<any, TRegister>(
 );
 
 /* phoneRegister */
-export const phoneRegister = createAsyncThunk<
-  TAuthnResponse,
-  { phone_number: string }
->("/phoneRegister", async (data, thunkApi) => {
-  try {
-    const response = await AuthService.phoneRegister(data);
+export const phoneRegister = createAsyncThunk<TAuthnResponse, TSignUp>(
+  "/phoneRegister",
+  async (data, thunkApi) => {
+    try {
+      const response = await AuthService.phoneRegister(data);
 
-    saveToStorage(response.data);
+      saveToStorage(response.data);
 
-    return response.data;
-  } catch (error: any) {
-    console.log(error);
-    if (error.response.status) {
-      toast.error("Такой пользователь уже существует");
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      if (error.response.status) {
+        toast.error("Такой пользователь уже существует");
+      }
+
+      return thunkApi.rejectWithValue(
+        error.response.data.message || "Unknown error"
+      );
     }
-
-    return thunkApi.rejectWithValue(
-      error.response.data.message || "Unknown error"
-    );
   }
-});
+);
 
 /* verifyTokenFromRegister */
 export const verifyTokenFromRegister = createAsyncThunk<any, string>(

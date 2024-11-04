@@ -17,6 +17,8 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
     (state) => state.products.selectedCompanyProduct
   );
 
+  const companyProduct = product.company[0];
+
   const currentItem = items.find((el) => el.product.uuid === product.uuid);
 
   if (!product.inStock || !product.company.length)
@@ -61,17 +63,22 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
             addToCart({
               product,
               inStock: product.inStock,
-              discount: selectedCompanyProduct.discount,
+              discount:
+                companyProduct.discount || selectedCompanyProduct.discount,
               quantity: 1,
-              price: selectedCompanyProduct.discount
-                ? selectedCompanyProduct.price -
-                  (selectedCompanyProduct.price *
-                    selectedCompanyProduct.discount) /
-                    100
-                : selectedCompanyProduct.price,
+              price:
+                companyProduct.discount || selectedCompanyProduct.discount
+                  ? companyProduct.price ||
+                    selectedCompanyProduct.price -
+                      (companyProduct.price ||
+                        selectedCompanyProduct.price *
+                          companyProduct.discount ||
+                        selectedCompanyProduct.discount) /
+                        100
+                  : companyProduct.price || selectedCompanyProduct.price,
               uuid: product?.uuid,
               productUuid: product?.uuid,
-              selectedCompanyProduct,
+              selectedCompanyProduct: companyProduct || selectedCompanyProduct,
             })
           }
         >

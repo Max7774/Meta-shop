@@ -5,7 +5,13 @@ import cn from "clsx";
 import { PropsWithChildren } from "react";
 import { useLocation } from "react-router-dom";
 
-const bottomActionsPath = ["/order", "/admin", "/about", "/company"];
+const bottomActionsPath = [
+  "/order",
+  "/admin",
+  "/about",
+  "/company",
+  "/profile",
+];
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   const { pathname } = useLocation();

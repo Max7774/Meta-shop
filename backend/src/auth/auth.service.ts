@@ -12,7 +12,7 @@ import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { uuidGen } from 'src/utils/uuidGenerator';
 import { createTransport } from 'nodemailer';
 import { generateToken } from 'src/utils/generateToken';
-import { ResetPasswordType } from './auth.interface';
+import { PhoneRegister, ResetPasswordType } from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -118,7 +118,7 @@ export class AuthService {
     return 'Success';
   }
 
-  async phoneRegister(data: { phone_number: string }) {
+  async phoneRegister(data: PhoneRegister) {
     const oldUser = await this.prisma.user.findUnique({
       where: {
         phone_number: data.phone_number,
@@ -126,16 +126,17 @@ export class AuthService {
     });
 
     if (oldUser) {
-      if (oldUser.role === 'ADMIN') {
-        throw new BadGatewayException('This number is invalid');
-      }
+      throw new BadGatewayException('Такой пользователь уже существует');
+      // if (oldUser.role === 'ADMIN') {
+      //   throw new BadGatewayException('This number is invalid');
+      // }
 
-      const tokens = await this.issueTokens(oldUser.uuid);
+      // const tokens = await this.issueTokens(oldUser.uuid);
 
-      return {
-        user: this.returnUserFields(oldUser),
-        ...tokens,
-      };
+      // return {
+      //   user: this.returnUserFields(oldUser),
+      //   ...tokens,
+      // };
     }
 
     const temporaryPassword = generateToken(5);
@@ -144,9 +145,9 @@ export class AuthService {
       data: {
         uuid: uuidGen(),
         role: 'DEFAULT_USER',
-        email: `tmp_email_${temporaryPassword}@gmail.com`,
-        first_name: '',
-        second_name: '',
+        email: data.email,
+        first_name: data.first_name,
+        second_name: data.second_name,
         birth_day: '',
         currentAddress: '',
         avatarPath: 'default-avatar.png',

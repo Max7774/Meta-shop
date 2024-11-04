@@ -212,6 +212,9 @@ describe('AuthService', () => {
         .mockResolvedValueOnce({ ...mockUser, phone_number: '1234567890' });
       const result = await authService.phoneRegister({
         phone_number: '1234567890',
+        first_name: '',
+        second_name: '',
+        email: 'test@example.com',
       });
       expect(result).toEqual({
         user: expect.objectContaining({

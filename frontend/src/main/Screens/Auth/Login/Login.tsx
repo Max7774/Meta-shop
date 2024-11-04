@@ -7,8 +7,8 @@ import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./Icons/Icons";
 import { validEmail } from "@utils/validations/valid-email";
-import { TTypeOfAuth } from "../auth.types";
-import { useNavigate } from "react-router-dom";
+import { TTypeOfAuth } from "types/auth.types";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ILoginProps {
   setTypeOfAuth: React.Dispatch<React.SetStateAction<TTypeOfAuth>>;
@@ -20,6 +20,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const { isLoading } = useAuth();
   const { control, handleSubmit } = useForm<TLogin>();
 
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -27,7 +28,7 @@ const Login = ({ setTypeOfAuth }: ILoginProps) => {
   const submit: SubmitHandler<TLogin> = async (data) => {
     const result: any = await login(data);
 
-    if (result.type === "/login/fulfilled") {
+    if (result.type === "/login/fulfilled" && pathname.startsWith("/auth")) {
       navigate("/");
     }
   };

@@ -34,6 +34,7 @@ const info: TProfile = {
   favorites: [],
   orders: [],
   addresses: [],
+  verified: false,
 };
 
 const initialState: IUserInitialState = {

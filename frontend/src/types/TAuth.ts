@@ -32,3 +32,10 @@ export type TResetPassword = {
   new_pass: string;
   resetToken: string;
 };
+
+export type TSignUp = {
+  email: string;
+  phone_number: string;
+  first_name: string;
+  second_name?: string;
+};

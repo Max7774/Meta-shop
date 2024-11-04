@@ -1,7 +1,7 @@
 import { Tabs, Tab } from "@nextui-org/react";
 import { useAuthFormHeight } from "./useAuthFormHeight";
 import { useState } from "react";
-import { TTypeOfAuth } from "./auth.types";
+import { TTypeOfAuth } from "types/auth.types";
 import SignProvider from "./SignProvider";
 import { useParams } from "react-router-dom";
 
@@ -25,7 +25,7 @@ const Auth = () => {
             fullWidth
             aria-label="Tabs sizes"
           >
-            <Tab key="register" title="Телефон" />
+            <Tab key="register" title="Регистрация" />
             <Tab key="login" title="Авторизация" />
           </Tabs>
         </div>

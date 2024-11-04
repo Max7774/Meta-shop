@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
-import { Button, Spacer } from "@nextui-org/react";
+import { Button, Input, Spacer } from "@nextui-org/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
 import cn from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { validEmail } from "@utils/validations/valid-email";
+import { TSignUp } from "@/types/TAuth";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const { phoneRegister } = useActions();
@@ -15,18 +18,22 @@ const SignUp = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ phone_number: string }>();
+  } = useForm<TSignUp>();
 
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const submit: SubmitHandler<{ phone_number: string }> = async (data) => {
+  const submit: SubmitHandler<TSignUp> = async (data) => {
     const result: any = await phoneRegister(data);
 
-    console.log(result);
-
-    if (result.type === "/phoneRegister/fulfilled") {
+    if (
+      result.type === "/phoneRegister/fulfilled" &&
+      pathname.startsWith("/auth")
+    ) {
       navigate("/");
     }
+    toast.success("Вы успешно зарегистрировались!");
+    toast.info("Не забудьте поменять пароль в профиле!");
   };
 
   return (
@@ -34,6 +41,79 @@ const SignUp = () => {
       className="flex flex-col w-full sm:w-1/3 px-5 gap-2"
       onSubmit={handleSubmit(submit)}
     >
+      <Controller
+        control={control}
+        name="first_name"
+        key="first_name"
+        rules={{
+          required: "Это поле обязательно!",
+        }}
+        defaultValue=""
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <Input
+            isRequired
+            id="first_name"
+            fullWidth
+            label="Имя"
+            variant="flat"
+            size="lg"
+            placeholder="Введите ваше имя"
+            value={value}
+            onChange={onChange}
+            isInvalid={!!error?.message}
+            errorMessage={error?.message}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="second_name"
+        key="second_name"
+        defaultValue=""
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <Input
+            id="second_name"
+            fullWidth
+            label="Фамилия"
+            variant="flat"
+            size="lg"
+            placeholder="Введите вашу фамилию"
+            value={value}
+            onChange={onChange}
+            isInvalid={!!error?.message}
+            errorMessage={error?.message}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="email"
+        key="email"
+        rules={{
+          required: "Это поле обязательно!",
+          pattern: {
+            value: validEmail,
+            message: "Неверно введен email",
+          },
+        }}
+        defaultValue=""
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <Input
+            isRequired
+            id="email"
+            fullWidth
+            label="Почта"
+            variant="flat"
+            size="lg"
+            placeholder="Введите email"
+            type="email"
+            value={value}
+            onChange={onChange}
+            isInvalid={!!error?.message}
+            errorMessage={error?.message}
+          />
+        )}
+      />
       <Controller
         name="phone_number"
         control={control}
@@ -49,7 +129,7 @@ const SignUp = () => {
           <>
             <div
               className={cn(
-                "px-4 py-3 outline-none flex flex-col focus:border-primary transition-all placeholder:text-foreground-500 rounded-2xl",
+                "px-4 py-2 outline-none flex flex-col focus:border-primary transition-all placeholder:text-foreground-500 rounded-2xl",
                 {
                   "bg-danger-50": !!error?.message,
                   "bg-default-100": !error?.message,
@@ -57,7 +137,7 @@ const SignUp = () => {
               )}
             >
               <span className="text-sm mb-2 block text-foreground-500">
-                Номер телефона
+                Номер телефона <span className="text-danger">*</span>
               </span>
               <InputMask
                 onChange={onChange}

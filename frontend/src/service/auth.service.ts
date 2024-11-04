@@ -4,6 +4,7 @@ import {
   TAuthnResponse,
   TRegister,
   TResetPassword,
+  TSignUp,
 } from "@/types/TAuth";
 import { TFilters } from "@/types/TFilters";
 import { TAdminUser } from "@/types/TUser";
@@ -28,7 +29,7 @@ export const AuthService = {
     });
   },
 
-  async phoneRegister(data: { phone_number: string }) {
+  async phoneRegister(data: TSignUp) {
     return await axiosClassic<TAuthnResponse>({
       url: `${AUTH}/phone-register`,
       method: "POST",

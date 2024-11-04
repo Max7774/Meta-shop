@@ -15,6 +15,7 @@ export type TProfile = {
   favorites: [];
   orders: TProfileOrderItem[];
   addresses: TAddress[];
+  verified: boolean;
 };
 
 export type TProfileEdit = {

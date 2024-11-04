@@ -74,6 +74,23 @@ const EditProfileForm = ({ isOpen, onClose }: IEditProfileFormProps) => {
             <Heading>Редактировать профиль</Heading>
           </ModalHeader>
           <ModalBody>
+            <div className="w-full flex flex-col items-center justify-center">
+              <Avatar
+                src={
+                  !avatarFile.avatarPath.includes("blob")
+                    ? getImageUrl(profile.avatarPath)
+                    : avatarFile.avatarPath
+                }
+                alt={profile.first_name}
+                className="mb-4 md:mb-0 h-40 w-40"
+              />
+              <Input
+                type="file"
+                label="Аватар"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+            </div>
             <Controller
               name="first_name"
               control={control}
@@ -133,24 +150,6 @@ const EditProfileForm = ({ isOpen, onClose }: IEditProfileFormProps) => {
                 </div>
               )}
             />
-            <div className="w-full flex flex-col justify-center">
-              <Avatar
-                src={
-                  !avatarFile.avatarPath.includes("blob")
-                    ? getImageUrl(profile.avatarPath)
-                    : avatarFile.avatarPath
-                }
-                alt={profile.first_name}
-                size="lg"
-                className="mb-4 md:mb-0"
-              />
-              <Input
-                type="file"
-                label="Аватар"
-                accept="image/*"
-                onChange={handleAvatarChange}
-              />
-            </div>
           </ModalBody>
           <ModalFooter>
             <Button variant="light" color="danger" onClick={onClose}>

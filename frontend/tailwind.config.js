@@ -8,7 +8,7 @@ const colors = {
   gray: "#CDCDCD",
   white: twColors.white,
   primary: "#17C964",
-  secondary: "#038C65",
+  secondary: "#0E793C",
   // "bg-color": "#F2F2F5",
   aqua: "#268697",
   green: twColors.green[400],
@@ -101,6 +101,7 @@ module.exports = {
         light: {
           colors: {
             primary: { DEFAULT: colors.primary, contrastText: "#ffffff" },
+            secondary: { DEFAULT: colors.secondary, contrastText: "#ffffff" },
           },
         },
       },

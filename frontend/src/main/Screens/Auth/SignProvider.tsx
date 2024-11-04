@@ -1,4 +1,4 @@
-import { TTypeOfAuth } from "./auth.types";
+import { TTypeOfAuth } from "types/auth.types";
 import Login from "./Login/Login";
 import Reset from "./Reset/Reset";
 import SignUp from "./SignUp/SignUp";

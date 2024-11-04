@@ -14,7 +14,7 @@ import {
 import { AuthDto, AuthLoginDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto, ResetPasswordDto } from './dto/refresh-token.dto';
-import { ResetPasswordType } from './auth.interface';
+import { PhoneRegister, ResetPasswordType } from './auth.interface';
 import {
   ApiBody,
   ApiHeader,
@@ -206,7 +206,10 @@ export class AuthController {
       example: 'Success',
     },
   })
-  async phoneRegister(@Body() data: { phone_number: string }) {
+  async phoneRegister(
+    @Body()
+    data: PhoneRegister,
+  ) {
     return this.authService.phoneRegister(data);
   }
 
@@ -258,4 +261,11 @@ export class AuthController {
   async updatePassword(@Body() body: ResetPasswordType) {
     return this.authService.updatePassword(body);
   }
+
+  // @UsePipes(new ValidationPipe())
+  // @HttpCode(200)
+  // @Post('update/email')
+  // async updateEmail(@Body() body: ResetPasswordType) {
+  //   return this.authService.updateEmail(body);
+  // }
 }
