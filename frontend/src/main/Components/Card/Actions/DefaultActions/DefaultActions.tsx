@@ -1,5 +1,4 @@
 import { TProduct } from "@/types/TProduct";
-// import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { Button } from "@nextui-org/react";
@@ -11,16 +10,7 @@ interface IDefaultActionsProps {
 
 const DefaultActions = ({ product }: IDefaultActionsProps) => {
   const { items } = useCart();
-  const {
-    addToCart,
-    changeQuantity,
-    removeFromCart,
-    // selectCompanyProduct
-  } = useActions();
-
-  // const selectedCompanyProduct = useAppSelector(
-  //   (state) => state.products.selectedCompanyProduct
-  // );
+  const { addToCart, changeQuantity, removeFromCart } = useActions();
 
   const companyProduct = product.company[0];
 
@@ -80,9 +70,6 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
               uuid: product?.uuid,
               productUuid: product?.uuid,
             });
-            // selectCompanyProduct({
-            //   uuid: selectedCompanyProduct.uuid || companyProduct.uuid,
-            // });
           }}
         >
           В корзину

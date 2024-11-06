@@ -1,5 +1,4 @@
 import CartActions from "@Components/Cart/cart-item/cart-actions/CartActions";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { useProducts } from "@hooks/useProducts";
@@ -9,17 +8,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Actions = () => {
   const { items } = useCart();
-  const {
-    addToCart,
-    // selectCompanyProduct
-  } = useActions();
-  const { product } = useProducts();
+  const { addToCart } = useActions();
+  const { product, selectedCompanyProduct } = useProducts();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const selectedCompanyProduct = useAppSelector(
-    (state) => state.products.selectedCompanyProduct
-  );
 
   const currentElement = items.find(
     (cartItem) => cartItem.product.uuid === product?.uuid
@@ -63,14 +55,13 @@ const Actions = () => {
                     uuid: product.uuid,
                     productUuid: product.uuid,
                   });
-                  // selectCompanyProduct({
-                  //   uuid: currentProduct?.uuid,
-                  // });
                 }}
-                isDisabled={!product.inStock && !!selectedCompanyProduct}
+                isDisabled={!product.inStock || !product.company.length}
                 startContent={<RiShoppingCartLine size={25} />}
               >
-                {product.inStock ? "Добавить в корзину" : "Нет в наличии"}
+                {!product.inStock || !product.company.length
+                  ? "Нет в наличии"
+                  : "Добавить в корзину"}
               </Button>
             )}
           </>

@@ -36,18 +36,18 @@ const ProductPage = () => {
       </Helmet>
       <section className="w-full">
         <div className="px-6">
-          <Breadcrumbs>
+          <Breadcrumbs maxItems={3} radius="full" variant="solid">
             <BreadcrumbItem>
               <Link to={"/"}>{"Главная"}</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`/categories/${product?.subcategory.category?.slug}`}>
+              <Link to={`/categories/${product?.subcategory?.category?.slug}`}>
                 {product?.subcategory?.category?.name}
               </Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
               <Link
-                to={`/categories/${product?.subcategory.category?.slug}/${product?.subcategory?.slug}`}
+                to={`/categories/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`}
               >
                 {product?.subcategory?.name}
               </Link>
@@ -72,14 +72,22 @@ const ProductPage = () => {
             <Chip
               size="lg"
               className="text-white"
-              color={product?.inStock ? "success" : "danger"}
+              color={
+                !product?.inStock || !product?.company.length
+                  ? "default"
+                  : "success"
+              }
             >
-              {product?.inStock ? "В наличии!" : "Нет в наличии!"}
+              {!product?.inStock || !product?.company.length
+                ? "Нет в наличии!"
+                : "В наличии!"}
             </Chip>
-            {product?.isNew && (
+            {!product?.isNew || product?.company.length ? (
               <Chip size="lg" className="text-white" color="success">
                 Новый
               </Chip>
+            ) : (
+              <></>
             )}
           </div>
         </div>

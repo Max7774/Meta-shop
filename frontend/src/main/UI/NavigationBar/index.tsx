@@ -148,10 +148,7 @@ export const NavigationBar = ({ isBottomActions }: INavigationBarProps) => {
           )}
         </div>
       </NavbarMenu>
-      <NavbarContent
-        className="hidden sm:flex sm:w-full gap-4"
-        justify="center"
-      >
+      <NavbarContent className="hidden sm:flex sm:w-1/3 gap-4" justify="center">
         {!isBottomActions && <SelectCompany company={companies} />}
       </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="end">

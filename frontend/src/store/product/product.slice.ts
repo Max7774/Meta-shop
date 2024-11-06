@@ -57,17 +57,21 @@ export const productsSlice = createSlice({
   initialState,
   reducers: {
     selectCompanyProduct: (state, action: PayloadAction<{ uuid: string }>) => {
+      const cp = state.companyProducts.filter(
+        (el) => el.companyUuid === action.payload.uuid
+      );
       setLocalStorage("selectedCompany", action.payload.uuid);
       state.selectedCompanyProduct = action.payload.uuid;
       state.products = state.products.map((el) => {
-        const cp = state.companyProducts.filter(
-          (el) => el.companyUuid === action.payload.uuid
-        );
         return {
           ...el,
           company: cp.filter((item) => item.productUuid === el.uuid),
         };
       });
+      state.product = {
+        ...(state.product || ({} as TProduct)),
+        company: cp.filter((el) => el.productUuid === state.product?.uuid),
+      };
     },
   },
   extraReducers: (builder) => {
@@ -195,7 +199,7 @@ export const productsSlice = createSlice({
                 return {
                   ...el,
                   company: el.company.filter(
-                    (el) => el.companyUuid !== companyUuid
+                    (item) => item.companyUuid === companyUuid
                   ),
                 };
               }

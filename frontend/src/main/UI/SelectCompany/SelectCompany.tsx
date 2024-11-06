@@ -27,7 +27,9 @@ const SelectCompany = ({ company: companies }: ISelectCompanyProps) => {
         items={companies}
         variant="bordered"
         size="sm"
+        aria-label="Выберите фирму"
         className="items-center"
+        defaultSelectedKeys=""
         startContent={<span className="text-sm font-bold">Фирма:</span>}
         placeholder="Выберите фирму"
         selectedKeys={[selectedCompanyProduct]}
@@ -37,7 +39,9 @@ const SelectCompany = ({ company: companies }: ISelectCompanyProps) => {
         }
         onSelectionChange={(keys) => {
           const selectedKey = Array.from(keys)[0] as string;
-          selectCompanyProduct({ uuid: selectedKey });
+          if (companies.some((company) => company.uuid === selectedKey)) {
+            selectCompanyProduct({ uuid: selectedKey });
+          }
         }}
         classNames={{
           innerWrapper: "items-canter",
@@ -52,7 +56,7 @@ const SelectCompany = ({ company: companies }: ISelectCompanyProps) => {
         }}
       >
         {({ uuid, name }) => (
-          <SelectItem textValue={name} key={uuid}>
+          <SelectItem textValue={name} key={uuid} value={uuid}>
             <span className="text-black">{name}</span>
           </SelectItem>
         )}

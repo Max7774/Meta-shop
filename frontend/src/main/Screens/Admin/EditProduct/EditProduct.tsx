@@ -174,7 +174,7 @@ const EditProduct = () => {
 
   return (
     <section>
-      <Breadcrumbs>
+      <Breadcrumbs maxItems={3} radius="full" variant="solid">
         <BreadcrumbItem>
           <Link to={"/"}>{"Главная"}</Link>
         </BreadcrumbItem>
