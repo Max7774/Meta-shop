@@ -28,8 +28,14 @@ import {
 } from "@/const/globalPrefix";
 import { getImageUrl } from "@utils/getImageUrl";
 import CompanyItems from "./CompanyItems/CompanyItems";
+import SelectCompany from "@UI/SelectCompany/SelectCompany";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 
-export const NavigationBar = () => {
+interface INavigationBarProps {
+  isBottomActions: boolean;
+}
+
+export const NavigationBar = ({ isBottomActions }: INavigationBarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuth } = useAuth();
   const { logout } = useActions();
@@ -38,6 +44,7 @@ export const NavigationBar = () => {
     isProfileLoading,
     profile: { avatarPath, role },
   } = useProfile();
+  const { companies } = useAppSelector((state) => state.company);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -141,6 +148,12 @@ export const NavigationBar = () => {
           )}
         </div>
       </NavbarMenu>
+      <NavbarContent
+        className="hidden sm:flex sm:w-full gap-4"
+        justify="center"
+      >
+        {!isBottomActions && <SelectCompany company={companies} />}
+      </NavbarContent>
       <NavbarContent as="div" className="items-center" justify="end">
         <Cart />
         {!isAuth && (

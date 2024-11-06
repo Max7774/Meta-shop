@@ -1,86 +1,37 @@
-import { TCompanyProduct } from "@/types/TCompany";
-import { Badge, Select, SelectItem } from "@nextui-org/react";
-import { useActions } from "@hooks/useActions";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import PriceView from "./PriceView/PriceView";
+import { unitofmeasurementData } from "@/const/unitofmeasurement";
+import { convertPrice } from "@utils/convertPrice";
 
 interface IPriceProps {
-  company: TCompanyProduct[];
+  discount: number;
+  price: number;
   unitofmeasurement: string;
 }
 
-const Price = ({ company: companies, unitofmeasurement }: IPriceProps) => {
-  const selectedCompanyProduct = useAppSelector(
-    (state) => state.products.selectedCompanyProduct
-  );
-
-  const { selectCompanyProduct } = useActions();
-
-  const companyDiscount = companies.find(
-    (el) => el.uuid === selectedCompanyProduct.uuid
-  );
-
+const Price = ({ discount, price, unitofmeasurement }: IPriceProps) => {
   return (
-    <div className="w-full">
-      <Badge
-        className="px-2"
-        classNames={{ base: "w-full" }}
-        content={
-          companyDiscount?.discount
-            ? `Скидка ${companyDiscount.discount}%`
-            : undefined
-        }
-        shape="circle"
-        color="danger"
-      >
-        <Select
-          items={companies}
-          label="Цена от фирм"
-          variant="bordered"
-          placeholder="Выберите фирму"
-          selectedKeys={[selectedCompanyProduct.uuid]}
-          fullWidth
-          isDisabled={companies?.length <= 0}
-          onSelectionChange={(keys) => {
-            const selectedKey = Array.from(keys)[0] as string;
-            selectCompanyProduct({ uuid: selectedKey });
-          }}
-          classNames={{
-            trigger: "h-13",
-          }}
-          renderValue={(items) => {
-            const {
-              uuid,
-              price,
-              discount,
-              company: { name },
-            } = items[0].data as TCompanyProduct;
-            return (
-              <PriceView
-                key={uuid}
-                price={price}
-                name={name}
-                discount={discount}
-                unitofmeasurement={unitofmeasurement}
-              />
-            );
-          }}
-          // disabledKeys={companies
-          //   .filter((company) => company.uuid !== selected)
-          //   .map((el) => el.companyUuid)}
-        >
-          {({ uuid, price, discount, company: { name } }) => (
-            <SelectItem textValue={name} key={uuid}>
-              <PriceView
-                price={price}
-                name={name}
-                discount={discount}
-                unitofmeasurement={unitofmeasurement}
-              />
-            </SelectItem>
-          )}
-        </Select>
-      </Badge>
+    <div className="flex items-center gap-2">
+      {discount > 0 ? (
+        <div className="flex flex-col flex-wrap gap-2">
+          <span className="text-[15px] font-semibold text-red-600">
+            {convertPrice(price - (price * discount) / 100)}
+            <span className="text-[15px] pl-2 text-default-400">
+              / {unitofmeasurementData[unitofmeasurement]}
+            </span>
+          </span>
+          <span className="text-[15px] line-through text-gray-500">
+            {convertPrice(price)}
+          </span>
+        </div>
+      ) : (
+        <div className="flex flex-col flex-wrap gap-2">
+          <span className="text-[15px] font-semibold">
+            {convertPrice(price)}
+            <span className="text-[15px] pl-2 text-default-400">
+              / {unitofmeasurementData[unitofmeasurement]}
+            </span>
+          </span>
+        </div>
+      )}
     </div>
   );
 };

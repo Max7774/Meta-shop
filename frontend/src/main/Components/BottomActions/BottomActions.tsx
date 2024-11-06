@@ -9,15 +9,22 @@ import {
   ModalFooter,
   Button,
   Divider,
-  Chip,
 } from "@nextui-org/react";
 import { FaAngleRight } from "react-icons/fa";
 import Actions from "./Actions/Actions";
+import SelectCompany from "@UI/SelectCompany/SelectCompany";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { useActions } from "@hooks/useActions";
+import { useEffect } from "react";
 
 const BottomActions = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { selectedCompanyProduct } = useAppSelector((state) => state.products);
+  const { getAllCompanies } = useActions();
+  const { companies } = useAppSelector((state) => state.company);
+
+  useEffect(() => {
+    getAllCompanies();
+  }, [getAllCompanies]);
 
   return (
     <>
@@ -36,15 +43,7 @@ const BottomActions = () => {
             <FaAngleRight size={15} color="gray" onClick={onOpen} />
           </div>
         </div>
-        {!!selectedCompanyProduct.uuid && (
-          <Chip
-            variant="solid"
-            color="secondary"
-            className="flex justify-center"
-          >
-            Выбранная фирма: {selectedCompanyProduct?.company?.name}
-          </Chip>
-        )}
+        <SelectCompany company={companies} />
         <div className="w-full">
           <Actions />
         </div>

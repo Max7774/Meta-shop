@@ -9,7 +9,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Actions = () => {
   const { items } = useCart();
-  const { addToCart, selectCompanyProduct } = useActions();
+  const {
+    addToCart,
+    // selectCompanyProduct
+  } = useActions();
   const { product } = useProducts();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -20,6 +23,10 @@ const Actions = () => {
 
   const currentElement = items.find(
     (cartItem) => cartItem.product.uuid === product?.uuid
+  );
+
+  const currentProduct = items.find(
+    (item) => item.product.company[0].companyUuid === selectedCompanyProduct
   );
 
   const isProductPage = pathname.startsWith("/product");
@@ -42,21 +49,23 @@ const Actions = () => {
                 onClick={() => {
                   addToCart({
                     product,
-                    discount: selectedCompanyProduct.discount,
+                    discount: currentProduct?.discount || 0,
                     quantity: 1,
                     inStock: product.inStock,
-                    price: selectedCompanyProduct.discount
-                      ? selectedCompanyProduct.price -
-                        (selectedCompanyProduct.price *
-                          selectedCompanyProduct.discount) /
-                          100
-                      : selectedCompanyProduct.price,
+                    price:
+                      currentProduct?.discount || 0
+                        ? currentProduct?.price ||
+                          0 -
+                            (currentProduct?.price ||
+                              0 * (currentProduct?.discount || 0)) /
+                              100
+                        : currentProduct?.price || 0,
                     uuid: product.uuid,
                     productUuid: product.uuid,
                   });
-                  selectCompanyProduct({
-                    uuid: selectedCompanyProduct.uuid,
-                  });
+                  // selectCompanyProduct({
+                  //   uuid: currentProduct?.uuid,
+                  // });
                 }}
                 isDisabled={!product.inStock && !!selectedCompanyProduct}
                 startContent={<RiShoppingCartLine size={25} />}

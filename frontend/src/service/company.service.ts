@@ -1,6 +1,6 @@
 import { COMPANY } from "@/const/startApi";
 import { TAddCompany } from "@/types/TAddCompany";
-import { TCompany, TCompanyInfo, TEditCompany } from "@/types/TCompany";
+import { TCompany, TCompanyInfo, TCompanyProduct, TEditCompany } from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
 import { instance } from "@api/api.interceptor";
 
@@ -48,4 +48,11 @@ export const CompanyService = {
       data,
     });
   },
+
+  async getAllCompanyProducts() {
+    return await instance<TCompanyProduct[]>({
+      url: `${COMPANY}/companies-products`,
+      method: "GET",
+    });
+  }
 };

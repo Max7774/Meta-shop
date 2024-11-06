@@ -79,12 +79,13 @@ const OrderPage = () => {
       ) : (
         <form onSubmit={handleSubmit(submit)}>
           <Divider />
-          <div className="flex flex-col mt-8 gap-8">
+          <div className="flex flex-col mt-4 gap-3">
             {items.map((item, index) => (
-              <>
-                <OrderCard item={item} itemsInStock={itemsInStock} />
-                {items.findLastIndex((_, i) => i) !== index && <Divider />}
-              </>
+              <OrderCard
+                item={item}
+                key={item.uuid + index}
+                itemsInStock={itemsInStock}
+              />
             ))}
             <Divider />
             <Controller
@@ -128,7 +129,7 @@ const OrderPage = () => {
               fullWidth
               size="lg"
             >
-              Оформить заказ
+              {isLoading ? "Оформляем..." : "Оформить заказ"}
             </Button>
           </div>
         </form>

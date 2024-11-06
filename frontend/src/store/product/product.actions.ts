@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { CompanyService } from "@/service/company.service";
 import { ProductService } from "@/service/product.service";
+import { TCompanyProduct } from "@/types/TCompany";
 import { AsyncThunkConfig } from "@/types/TError";
 import { TFilters } from "@/types/TFilters";
 import {
@@ -181,3 +183,15 @@ export const recoverProduct = createAsyncThunk<TProduct, string>(
     }
   }
 );
+
+export const getAllCompanyProducts = createAsyncThunk<
+  TCompanyProduct[],
+  undefined
+>("/company/products", async (_, { rejectWithValue }) => {
+  try {
+    const response = await CompanyService.getAllCompanyProducts();
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
+  }
+});

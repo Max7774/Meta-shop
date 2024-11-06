@@ -17,6 +17,7 @@ const initialState: TCompanyState = {
   isDeleteLoading: false,
   isAddingLoading: false,
   isEditLoading: false,
+  companyProducts: [],
   companies: [],
   info: {} as TCompanyInfo,
 };

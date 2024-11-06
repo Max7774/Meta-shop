@@ -1,5 +1,5 @@
 import { TProduct } from "@/types/TProduct";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+// import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
 import { Button } from "@nextui-org/react";
@@ -11,12 +11,16 @@ interface IDefaultActionsProps {
 
 const DefaultActions = ({ product }: IDefaultActionsProps) => {
   const { items } = useCart();
-  const { addToCart, changeQuantity, removeFromCart, selectCompanyProduct } =
-    useActions();
+  const {
+    addToCart,
+    changeQuantity,
+    removeFromCart,
+    // selectCompanyProduct
+  } = useActions();
 
-  const selectedCompanyProduct = useAppSelector(
-    (state) => state.products.selectedCompanyProduct
-  );
+  // const selectedCompanyProduct = useAppSelector(
+  //   (state) => state.products.selectedCompanyProduct
+  // );
 
   const companyProduct = product.company[0];
 
@@ -64,25 +68,21 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
             addToCart({
               product,
               inStock: product.inStock,
-              discount:
-                companyProduct.discount || selectedCompanyProduct.discount,
+              discount: currentItem?.discount || 0,
               quantity: 1,
               price:
-                companyProduct.discount || selectedCompanyProduct.discount
-                  ? companyProduct.price ||
-                    selectedCompanyProduct.price -
-                      (companyProduct.price ||
-                        selectedCompanyProduct.price *
-                          companyProduct.discount ||
-                        selectedCompanyProduct.discount) /
+                currentItem?.discount || 0
+                  ? currentItem?.price ||
+                    0 -
+                      (currentItem?.price || 0 * (currentItem?.discount || 0)) /
                         100
-                  : companyProduct.price || selectedCompanyProduct.price,
+                  : companyProduct.price || 0,
               uuid: product?.uuid,
               productUuid: product?.uuid,
             });
-            selectCompanyProduct({
-              uuid: selectedCompanyProduct.uuid || companyProduct.uuid,
-            });
+            // selectCompanyProduct({
+            //   uuid: selectedCompanyProduct.uuid || companyProduct.uuid,
+            // });
           }}
         >
           В корзину

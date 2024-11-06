@@ -10,10 +10,10 @@ import {
   updateProduct,
   getAllSoftDeleted,
   recoverProduct,
+  getAllCompanyProducts,
 } from "./product.actions";
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
-import { TCompanyProduct } from "@/types/TCompany";
 import { getStoreLocal, setLocalStorage } from "@utils/local-storage";
 
 const productMock: TProduct = {
@@ -47,9 +47,9 @@ const initialState: TProductState = {
   isProductLoading: false,
   isProductRecovered: false,
   products: [],
+  companyProducts: [],
   length: 0,
-  selectedCompanyProduct:
-    getStoreLocal("selectedCompany") || ({} as TCompanyProduct),
+  selectedCompanyProduct: getStoreLocal("selectedCompany") || "",
 };
 
 export const productsSlice = createSlice({
@@ -57,13 +57,17 @@ export const productsSlice = createSlice({
   initialState,
   reducers: {
     selectCompanyProduct: (state, action: PayloadAction<{ uuid: string }>) => {
-      const company =
-        state.product?.company.find(
-          (el) =>
-            el.uuid === (action.payload.uuid ? action.payload.uuid : el.uuid)
-        ) || ({} as TCompanyProduct);
-      setLocalStorage("selectedCompany", company);
-      state.selectedCompanyProduct = company;
+      setLocalStorage("selectedCompany", action.payload.uuid);
+      state.selectedCompanyProduct = action.payload.uuid;
+      state.products = state.products.map((el) => {
+        const cp = state.companyProducts.filter(
+          (el) => el.companyUuid === action.payload.uuid
+        );
+        return {
+          ...el,
+          company: cp.filter((item) => item.productUuid === el.uuid),
+        };
+      });
     },
   },
   extraReducers: (builder) => {
@@ -74,12 +78,12 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductsAll.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        if (state.selectedCompanyProduct.uuid) {
+        if (state.selectedCompanyProduct) {
           state.products = payload.products.map((el) => {
             return {
               ...el,
               company: el.company.filter(
-                (el) => el.uuid === state.selectedCompanyProduct.uuid
+                (el) => el.companyUuid === state.selectedCompanyProduct
               ),
             };
           });
@@ -112,11 +116,12 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductBySlug.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.product = payload;
-        state.selectedCompanyProduct =
-          payload.company.find(
-            (el) => el.uuid === getStoreLocal("selectedCompany")?.uuid || ""
-          ) || ({} as TCompanyProduct);
+        state.product = {
+          ...payload,
+          company: payload.company.filter(
+            (el) => el.companyUuid === state.selectedCompanyProduct
+          ),
+        };
       })
       .addCase(getProductBySlug.rejected, (state) => {
         state.isLoading = false;
@@ -128,7 +133,31 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductBySubCategory.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.products = payload;
+        if (state.selectedCompanyProduct) {
+          state.products = payload.map((el) => {
+            return {
+              ...el,
+              company: el.company.filter(
+                (el) => el.companyUuid === state.selectedCompanyProduct
+              ),
+            };
+          });
+        } else {
+          state.selectedCompanyProduct =
+            getStoreLocal("user")?.companyUuid ||
+            payload[0].company[0].companyUuid;
+          setLocalStorage(
+            "selectedCompany",
+            getStoreLocal("user")?.companyUuid ||
+              payload[0].company[0].companyUuid
+          );
+          state.products = payload.map((el) => {
+            return {
+              ...el,
+              company: [el.company[0]],
+            };
+          });
+        }
       })
       .addCase(getProductBySubCategory.rejected, (state) => {
         state.isLoading = false;
@@ -218,6 +247,16 @@ export const productsSlice = createSlice({
       })
       .addCase(recoverProduct.rejected, (state) => {
         state.isProductRecovered = false;
+      })
+      .addCase(getAllCompanyProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllCompanyProducts.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.companyProducts = payload;
+      })
+      .addCase(getAllCompanyProducts.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

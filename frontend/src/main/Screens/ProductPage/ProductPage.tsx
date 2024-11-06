@@ -11,8 +11,8 @@ import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import Carousel from "@/main/UI/Carousel/Carousel";
 import { Helmet } from "react-helmet-async";
-import Price from "@UI/Price/Price";
 import Actions from "@Components/BottomActions/Actions/Actions";
+import Price from "@UI/Price/Price";
 
 const ProductPage = () => {
   const { productSlug } = useParams();
@@ -87,7 +87,8 @@ const ProductPage = () => {
           <Carousel images={product?.images || []} />
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
-              company={product?.company || []}
+              discount={product?.company[0]?.discount || 0}
+              price={product?.company[0]?.price || 0}
               unitofmeasurement={product?.unitofmeasurement || ""}
             />
             <p className="break-words">{product?.description}</p>

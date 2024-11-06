@@ -33,7 +33,6 @@ export class CompanyController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Get()
-  @Auth([admin, company])
   async getAllCompanies() {
     return await this.companyService.getAllCompanies();
   }
@@ -82,5 +81,12 @@ export class CompanyController {
     @CurrentUser('uuid') uuid: string,
   ) {
     return await this.companyService.editCompanyInfo(dto, uuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Get('companies-products')
+  async getAllCompanyProducts() {
+    return await this.companyService.getAllCompanyProducts();
   }
 }

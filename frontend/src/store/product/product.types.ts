@@ -8,5 +8,6 @@ export type TProductState = {
   products: TProduct[];
   length: number;
   product?: TProduct;
-  selectedCompanyProduct: TCompanyProduct;
+  selectedCompanyProduct: string;
+  companyProducts: TCompanyProduct[];
 };

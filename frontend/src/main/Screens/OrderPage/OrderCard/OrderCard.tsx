@@ -6,7 +6,7 @@ import { ICartItem } from "@store/cart/cart.types";
 import { getImageUrl } from "@utils/getImageUrl";
 import { FiTrash } from "react-icons/fi";
 import cn from "clsx";
-import OrderCardPrice from "./OrderCardPrice/OrderCardPrice";
+import Price from "@UI/Price/Price";
 
 interface IOrderCardProps {
   item: ICartItem;
@@ -50,6 +50,11 @@ const OrderCard = ({ item, itemsInStock }: IOrderCardProps) => {
             >
               {item.product.name}
             </div>
+            <Price
+              discount={item.discount}
+              price={item.price}
+              unitofmeasurement={item.product.unitofmeasurement}
+            />
           </div>
         </div>
         {isOutOfStock ? (
@@ -66,11 +71,6 @@ const OrderCard = ({ item, itemsInStock }: IOrderCardProps) => {
           <CartActions item={item} />
         )}
       </div>
-      <OrderCardPrice
-        company={item.product.company}
-        unitofmeasurement={item.product.unitofmeasurement}
-        // selectedCompanyProduct={item}
-      />
     </div>
   );
 };

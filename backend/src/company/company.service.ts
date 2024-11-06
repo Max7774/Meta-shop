@@ -309,4 +309,13 @@ export class CompanyService {
       throw new BadRequestException(error);
     }
   }
+
+  async getAllCompanyProducts() {
+    try {
+      const products = await this.prisma.companyProduct.findMany();
+      return products;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }
