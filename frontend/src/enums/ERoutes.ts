@@ -30,6 +30,8 @@ export enum EAdminRoutes {
 export enum ECompanyRoutes {
   ADD_PRODUCT = "add-product",
   STATISTICS = "statistics",
+  COMPANY_ORDERS = "orders",
+  ARCHIVED_ORDERS = "archived-orders",
   EDIT_PRODUCT = "product/:productSlug",
   COMPANY_INFO = "company-info",
 }

@@ -185,11 +185,37 @@ export class UserService {
 
   async deleteUser(uuid: string) {
     try {
-      return await this.prisma.user.delete({
-        where: {
-          uuid,
-        },
+      const deletedUser = await this.prisma.$transaction(async (prisma) => {
+        const user = await prisma.user.delete({
+          where: {
+            uuid,
+          },
+        });
+
+        try {
+          await prisma.address.deleteMany({
+            where: {
+              userUuid: uuid,
+            },
+          });
+        } catch (error) {
+          throw new BadRequestException(error);
+        }
+
+        try {
+          await prisma.order.deleteMany({
+            where: {
+              userUuid: uuid,
+            },
+          });
+        } catch (error) {
+          throw new BadRequestException(error);
+        }
+
+        return user;
       });
+
+      return deletedUser;
     } catch (error) {
       throw new Error('User not found');
     }

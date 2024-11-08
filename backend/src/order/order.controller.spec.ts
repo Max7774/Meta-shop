@@ -175,10 +175,14 @@ describe('OrderController', () => {
 
       jest.spyOn(service, 'placeOrder').mockResolvedValue(mockOrder);
 
-      const result = await controller.placeOrder(dto, userUuid);
+      const result = await controller.placeOrder(dto, userUuid, 'company-uuid');
 
       expect(result).toEqual(expect.objectContaining(mockOrder));
-      expect(service.placeOrder).toHaveBeenCalledWith(dto, userUuid);
+      expect(service.placeOrder).toHaveBeenCalledWith(
+        dto,
+        userUuid,
+        'company-uuid',
+      );
     });
   });
 

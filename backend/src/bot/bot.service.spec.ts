@@ -21,6 +21,7 @@ export const mockOrder: IOrder = {
   isActual: true,
   comment: '',
   addressUuid: 'address-uuid',
+  companyUuid: 'company-uuid',
   userUuid: 'user-uuid',
   items: [
     {

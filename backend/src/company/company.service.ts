@@ -231,6 +231,16 @@ export class CompanyService {
           throw new BadRequestException(error);
         }
 
+        try {
+          await prisma.photoFile.deleteMany({
+            where: {
+              companyUuid: uuid,
+            },
+          });
+        } catch (error) {
+          throw new BadRequestException(error);
+        }
+
         const company = await prisma.company.delete({
           where: {
             uuid,
@@ -266,6 +276,7 @@ export class CompanyService {
           deliveryPrice: true,
           minimumOrderPrice: true,
           address: true,
+          logoPath: true,
           email: true,
           phoneNumber: true,
           companyProducts: true,

@@ -22,6 +22,9 @@ import { PaymentStatusDto } from './dto/payment-status.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { EnumOrderItemStatus, OrderItem } from '@prisma/client';
 import { Response } from 'express';
+import { roles } from 'src/constants/roles';
+
+const { admin, company, user } = roles;
 
 @Controller('orders')
 @ApiTags('Orders')
@@ -29,7 +32,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Get()
-  @Auth(['DEFAULT_USER', 'ADMIN'])
+  @Auth([user, admin, company])
   getAll(
     @CurrentUser('uuid') userUuid: string,
     @Query() params: { searchTerm: string; status?: EnumOrderItemStatus },
@@ -38,13 +41,13 @@ export class OrderController {
   }
 
   @Get('by-user')
-  @Auth(['DEFAULT_USER', 'ADMIN'])
+  @Auth([user, admin])
   getByUserId(@CurrentUser('uuid') userUuid: string) {
     return this.orderService.getByUserId(userUuid);
   }
 
   @Get(':orderId')
-  @Auth(['DEFAULT_USER', 'ADMIN'])
+  @Auth([user, admin])
   getByUuid(
     @Param('orderId') orderId: string,
     @CurrentUser('uuid') userUuid: string,
@@ -53,22 +56,26 @@ export class OrderController {
   }
 
   @Get('cancel/:orderUuid')
-  @Auth(['DEFAULT_USER', 'ADMIN'])
+  @Auth([user, admin, company])
   cancelOrder(@Param('orderUuid') orderUuid: string) {
     return this.orderService.cancelOrder(orderUuid);
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Post('order-create')
-  @Auth(['DEFAULT_USER', 'ADMIN'])
-  placeOrder(@Body() dto: OrderDto, @CurrentUser('uuid') userUuid: string) {
-    return this.orderService.placeOrder(dto, userUuid);
+  @Post('order-create/:companyUuid')
+  @Auth([user, admin, company])
+  placeOrder(
+    @Body() dto: OrderDto,
+    @CurrentUser('uuid') userUuid: string,
+    @Param('companyUuid') companyUuid: string,
+  ) {
+    return this.orderService.placeOrder(dto, userUuid, companyUuid);
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN'])
+  @Auth([admin, company])
   @Post('status')
   async updateStatus(@Body() dto: PaymentStatusDto) {
     return this.orderService.updateStatus(dto);
@@ -76,7 +83,7 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['DEFAULT_USER', 'ADMIN'])
+  @Auth([user, admin, company])
   @Get('receipt/:orderId')
   async uploadReceipt(
     @Param('orderId') orderId: string,
@@ -99,7 +106,7 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN'])
+  @Auth([admin, company])
   @Put('actualize/:orderId')
   async actualizeOrder(
     @Param('orderId') orderId: string,
@@ -110,7 +117,7 @@ export class OrderController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth(['ADMIN'])
+  @Auth([admin])
   @Delete(':orderId')
   async deleteOrder(@Param('orderId') orderId: string) {
     return this.orderService.deleteOrder(orderId);

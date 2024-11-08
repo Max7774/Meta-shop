@@ -128,6 +128,42 @@ export class OrderService {
           },
         },
       });
+    } else if (role === 'COMPANY') {
+      const { companyUuid } = await this.prisma.user.findUnique({
+        where: {
+          uuid: userUuid,
+        },
+        select: {
+          companyUuid: true,
+        },
+      });
+      return await this.prisma.order.findMany({
+        where: { ...(filters || {}), companyUuid },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          user: {
+            select: {
+              uuid: true,
+              first_name: true,
+              second_name: true,
+              email: true,
+              currentAddress: true,
+              avatarPath: true,
+              phone_number: true,
+            },
+          },
+          address: true,
+          items: {
+            include: {
+              product: {
+                select: productReturnObject,
+              },
+            },
+          },
+        },
+      });
     } else {
       return await this.prisma.order.findMany({
         where: {
@@ -171,7 +207,7 @@ export class OrderService {
     });
   }
 
-  async placeOrder(dto: OrderDto, userUuid: string) {
+  async placeOrder(dto: OrderDto, userUuid: string, companyUuid: string) {
     const total = dto.items.reduce((acc, item) => {
       return acc + item.price * item.quantity;
     }, 0);
@@ -208,6 +244,7 @@ export class OrderService {
         orderId: 'ORDER-' + timestamp + '-' + randomNum,
         status: dto.status,
         comment: dto.comment,
+        companyUuid,
         items: {
           create: items.map((el) => {
             return {

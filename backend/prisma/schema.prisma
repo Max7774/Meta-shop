@@ -148,6 +148,7 @@ model Order {
  
   addressUuid  String         @map("addressUuid")
   userUuid     String         @map("userUuid")
+  companyUuid  String?        @map("companyUuid")
 }
 
 model OrderItem {
