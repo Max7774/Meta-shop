@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   CircularProgress,
+  Image,
   Input,
 } from "@nextui-org/react";
 import Heading from "@UI/Heading";
@@ -15,10 +16,14 @@ import { useActions } from "@hooks/useActions";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { validEmail } from "@utils/validations/valid-email";
 import CompanyList from "@Components/CompanyList/CompanyList";
+import { IoClose } from "react-icons/io5";
 
 const AddCompany = () => {
   const { addCompany } = useActions();
-  const { handleSubmit, control, reset } = useForm<TAddCompany>();
+  const { handleSubmit, control, reset, watch, setValue } =
+    useForm<TAddCompany>();
+
+  const logoPath = watch("logoPath");
 
   const { isAddingLoading, tempData } = useAppSelector(
     (state) => state.company
@@ -210,6 +215,36 @@ const AddCompany = () => {
             </div>
           )}
         />
+        <Controller
+          control={control}
+          name="logoPath"
+          rules={{ required: "Это поле обязательно!" }}
+          render={({ field: { onChange } }) => (
+            <Input
+              type="file"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files) onChange(e.target.files[0]);
+              }}
+            />
+          )}
+        />
+        <div className="flex">
+          {logoPath && (
+            <div className="relative">
+              <Image
+                src={URL.createObjectURL(logoPath)}
+                alt="..."
+                className="w-32 h-32 object-cover rounded-2xl"
+              />
+              <button
+                onClick={() => setValue("logoPath", undefined)}
+                className="absolute -top-2 -right-2 z-10 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+              >
+                <IoClose size={20} />
+              </button>
+            </div>
+          )}
+        </div>
         <Button
           isLoading={isAddingLoading}
           type="submit"

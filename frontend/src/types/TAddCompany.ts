@@ -7,4 +7,5 @@ export type TAddCompany = {
   englishName: string;
   deliveryPrice: number;
   minimumOrderPrice: number;
+  logoPath?: File;
 };

@@ -46,4 +46,5 @@ export type TEditCompany = {
   phoneNumber: string;
   deliveryPrice: number;
   minimumOrderPrice: number;
+  logoPath?: File;
 };

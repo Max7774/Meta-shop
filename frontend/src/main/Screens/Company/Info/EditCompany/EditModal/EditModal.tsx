@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TEditCompany } from "@/types/TCompany";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Image, Input } from "@nextui-org/react";
 import Heading from "@UI/Heading";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import cn from "clsx";
@@ -9,6 +9,7 @@ import InputMask from "react-input-mask";
 import { validEmail } from "@utils/validations/valid-email";
 import { useActions } from "@hooks/useActions";
 import { toast } from "react-toastify";
+import { IoClose } from "react-icons/io5";
 
 interface IEditModalProps {
   onClose: () => void;
@@ -27,8 +28,10 @@ const EditModal = ({ onClose }: IEditModalProps) => {
       minimumOrderPrice,
     },
   } = useAppSelector((state) => state.company);
-  const { handleSubmit, control } = useForm<TEditCompany>();
+  const { handleSubmit, control, setValue, watch } = useForm<TEditCompany>();
   const { editCompanyInfo } = useActions();
+
+  const logoPath = watch("logoPath");
 
   const submit: SubmitHandler<TEditCompany> = async (data) => {
     const res: any = await editCompanyInfo({
@@ -182,6 +185,36 @@ const EditModal = ({ onClose }: IEditModalProps) => {
             </div>
           )}
         />
+        <Controller
+          control={control}
+          name="logoPath"
+          rules={{ required: "Это поле обязательно!" }}
+          render={({ field: { onChange } }) => (
+            <Input
+              type="file"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files) onChange(e.target.files[0]);
+              }}
+            />
+          )}
+        />
+        <div className="flex">
+          {logoPath && (
+            <div className="relative">
+              <Image
+                src={URL.createObjectURL(logoPath)}
+                alt="..."
+                className="w-32 h-32 object-cover rounded-2xl"
+              />
+              <button
+                onClick={() => setValue("logoPath", undefined)}
+                className="absolute -top-2 -right-2 z-10 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+              >
+                <IoClose size={20} />
+              </button>
+            </div>
+          )}
+        </div>
         <Button isLoading={isEditLoading} type="submit" color="primary">
           Редактировать
         </Button>

@@ -33,7 +33,6 @@ const CreateForm = ({ open, close, categoryName }: ICreateFormProps) => {
   const icon = watch("icon");
 
   const submit: SubmitHandler<TCreateSubCategory> = async (data) => {
-    console.log(data);
     const result: any = await createSubCategory({
       categoryUuid: categoryName.uuid,
       name: data.name,

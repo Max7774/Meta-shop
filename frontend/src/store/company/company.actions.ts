@@ -17,11 +17,16 @@ export const getProductsStatistics = createAsyncThunk(
 );
 
 export const addCompany = createAsyncThunk<
-  { email: string; password: string },
+  { email: string; password: string; uuid: string },
   TAddCompany
 >("/company", async (data, { rejectWithValue }) => {
   try {
     const response = await CompanyService.addCompany(data);
+
+    if (data.logoPath) {
+      await CompanyService.updateCompanyLogo(response.data.uuid, data.logoPath);
+    }
+
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -69,6 +74,14 @@ export const editCompanyInfo = createAsyncThunk<TCompanyInfo, TEditCompany>(
   async (data, { rejectWithValue }) => {
     try {
       const response = await CompanyService.editCompanyInfo(data);
+
+      if (data.logoPath) {
+        await CompanyService.updateCompanyLogo(
+          response.data.uuid,
+          data.logoPath
+        );
+      }
+
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);

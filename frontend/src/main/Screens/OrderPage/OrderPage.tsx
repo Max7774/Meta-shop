@@ -12,14 +12,14 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderCard from "./OrderCard/OrderCard";
+import { useCompany } from "@hooks/useCompany";
 
 const OrderPage = () => {
   const { items, total } = useCart();
   const {
     profile: { currentAddress },
   } = useAppSelector((state) => state.user);
-  const { companies } = useAppSelector((state) => state.company);
-  const { selectedCompanyProduct } = useAppSelector((state) => state.products);
+  const { companyDeliveryPrice, companyMinPriceDelivery } = useCompany();
 
   const { createOrder, reset, updateItemsInStock, getAllCompanies } =
     useActions();
@@ -28,13 +28,6 @@ const OrderPage = () => {
     ...items.filter((el) => !el.inStock),
   ]);
   const navigate = useNavigate();
-
-  const companyDeliveryPrice = companies.find(
-    (item) => item.uuid === selectedCompanyProduct
-  )?.deliveryPrice;
-  const companyMinPriceDelivery = companies.find(
-    (item) => item.uuid === selectedCompanyProduct
-  )?.minimumOrderPrice;
 
   const deliveryPrice = companyDeliveryPrice || 600;
   const minPriceDelivery = companyMinPriceDelivery || 7000;

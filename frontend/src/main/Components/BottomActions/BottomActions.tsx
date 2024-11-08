@@ -16,11 +16,13 @@ import SelectCompany from "@UI/SelectCompany/SelectCompany";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useEffect } from "react";
+import { useCompany } from "@hooks/useCompany";
 
 const BottomActions = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { getAllCompanies } = useActions();
   const { companies } = useAppSelector((state) => state.company);
+  const { companyDeliveryPrice, companyMinPriceDelivery } = useCompany();
 
   useEffect(() => {
     getAllCompanies();
@@ -37,7 +39,7 @@ const BottomActions = () => {
             <MdOutlineDeliveryDining size={20} />
           </div>
           <span className="text-xs text-center pt-0.5">
-            Доставка: {convertPrice(800)}
+            Доставка: {convertPrice(companyDeliveryPrice || 800)}
           </span>
           <div className="rounded-full bg-default-200 p-1">
             <FaAngleRight size={15} color="gray" onClick={onOpen} />
@@ -56,13 +58,12 @@ const BottomActions = () => {
                 </ModalHeader>
                 <ModalBody>
                   <div className="flex flex-col gap-1">
-                    <p>Доставка {convertPrice(800)}</p>
+                    <p>Доставка {convertPrice(companyDeliveryPrice || 800)}</p>
                     <Divider className="my-1" />
-                    <p>Принимаются заказы: 9:00 — 13:00</p>
-                    <p className="text-warning">Ягоды до 9:00</p>
-                    <Divider className="my-1" />
-                    <p>Доставка: 13:00 — 20:00</p>
-                    <p className="text-warning">Ягоды до 13:00</p>
+                    <p>
+                      Минимальная сумма заказа:
+                      {convertPrice(companyMinPriceDelivery || 7000)}
+                    </p>
                   </div>
                 </ModalBody>
                 <ModalFooter>

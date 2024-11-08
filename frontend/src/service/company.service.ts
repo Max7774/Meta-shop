@@ -1,6 +1,11 @@
-import { COMPANY } from "@/const/startApi";
+import { COMPANY, FILE_UPLOAD } from "@/const/startApi";
 import { TAddCompany } from "@/types/TAddCompany";
-import { TCompany, TCompanyInfo, TCompanyProduct, TEditCompany } from "@/types/TCompany";
+import {
+  TCompany,
+  TCompanyInfo,
+  TCompanyProduct,
+  TEditCompany,
+} from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
 import { instance } from "@api/api.interceptor";
 
@@ -13,7 +18,7 @@ export const CompanyService = {
   },
 
   async addCompany(data: TAddCompany) {
-    return await instance<{ email: string; password: string }>({
+    return await instance<{ email: string; password: string; uuid: string }>({
       url: `${COMPANY}`,
       method: "POST",
       data,
@@ -54,5 +59,16 @@ export const CompanyService = {
       url: `${COMPANY}/companies-products`,
       method: "GET",
     });
-  }
+  },
+
+  async updateCompanyLogo(companyUuid: string, image: File) {
+    const formData = new FormData();
+    formData.append("file", image);
+
+    return await instance<TCompanyInfo>({
+      url: `${FILE_UPLOAD}/create/company/logo/${companyUuid}`,
+      method: "POST",
+      data: formData,
+    });
+  },
 };

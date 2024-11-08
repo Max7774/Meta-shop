@@ -71,6 +71,7 @@ export class CompanyService {
       return {
         ...user,
         password: companyPassword,
+        uuid: company.uuid,
       };
     } catch (error) {
       console.log(error);
