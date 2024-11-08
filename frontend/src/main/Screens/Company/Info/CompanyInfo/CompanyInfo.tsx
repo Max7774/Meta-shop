@@ -2,6 +2,7 @@ import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { Avatar, CircularProgress } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
+import { getImageUrl } from "@utils/getImageUrl";
 import { useEffect } from "react";
 
 const CompanyInfo = () => {
@@ -17,7 +18,7 @@ const CompanyInfo = () => {
   return (
     <div className="max-w-4xl p-6 mb-3 bg-white shadow-md rounded-lg">
       <div className="flex items-center mb-4">
-        <Avatar color="primary" name={info?.name?.charAt(0)} size="lg" />
+        <Avatar color="primary" src={getImageUrl(info.logoPath)} size="lg" />
         <h1 className="ml-4 text-2xl font-semibold">{info.name}</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

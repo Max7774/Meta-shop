@@ -23,7 +23,7 @@ const Companies = () => {
   return (
     <>
       <Heading>Компании</Heading>
-      <div className="flex flex-wrap justify-around sm:justify-start gap-5">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 desktop:grid-cols-5">
         {companies.map((company) => {
           return (
             <Card
