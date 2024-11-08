@@ -7,7 +7,7 @@ import {
   TEditCompany,
 } from "@/types/TCompany";
 import { TCompanyStatistic } from "@/types/TCompanyStatistic";
-import { instance } from "@api/api.interceptor";
+import { formDataInstance, instance } from "@api/api.interceptor";
 
 export const CompanyService = {
   async getProductsStatistics() {
@@ -65,7 +65,7 @@ export const CompanyService = {
     const formData = new FormData();
     formData.append("file", image);
 
-    return await instance<TCompanyInfo>({
+    return await formDataInstance<TCompanyInfo>({
       url: `${FILE_UPLOAD}/create/company/logo/${companyUuid}`,
       method: "POST",
       data: formData,
