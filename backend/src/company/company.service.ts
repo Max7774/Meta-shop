@@ -38,6 +38,8 @@ export class CompanyService {
           address: createCompanyDto.address,
           email: createCompanyDto.email,
           phoneNumber: createCompanyDto.phoneNumber,
+          deliveryPrice: createCompanyDto.deliveryPrice,
+          minimumOrderPrice: createCompanyDto.minimumOrderPrice,
           registrationNumber: `company-${generateToken(5)}`,
         },
       });
@@ -87,6 +89,9 @@ export class CompanyService {
           address: true,
           email: true,
           phoneNumber: true,
+          logoPath: true,
+          deliveryPrice: true,
+          minimumOrderPrice: true,
           users: {
             select: {
               uuid: true,
@@ -257,6 +262,8 @@ export class CompanyService {
           name: true,
           officialName: true,
           registrationNumber: true,
+          deliveryPrice: true,
+          minimumOrderPrice: true,
           address: true,
           email: true,
           phoneNumber: true,
@@ -289,6 +296,8 @@ export class CompanyService {
           address: dto.address,
           email: dto.email,
           phoneNumber: dto.phoneNumber,
+          deliveryPrice: dto.deliveryPrice,
+          minimumOrderPrice: dto.minimumOrderPrice,
         },
         select: {
           uuid: true,
@@ -296,6 +305,8 @@ export class CompanyService {
           name: true,
           officialName: true,
           registrationNumber: true,
+          deliveryPrice: true,
+          minimumOrderPrice: true,
           address: true,
           email: true,
           phoneNumber: true,

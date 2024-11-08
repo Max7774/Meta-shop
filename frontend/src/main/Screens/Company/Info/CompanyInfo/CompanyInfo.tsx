@@ -1,6 +1,7 @@
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { Avatar, CircularProgress } from "@nextui-org/react";
+import { convertPrice } from "@utils/convertPrice";
 import { useEffect } from "react";
 
 const CompanyInfo = () => {
@@ -43,12 +44,14 @@ const CompanyInfo = () => {
           <p className="text-lg">{info.email}</p>
         </div>
         <div className="col-span-1">
-          <p className="text-sm font-medium text-gray-500">Пользователи</p>
-          {info?.users?.map((user) => (
-            <p key={user.uuid} className="text-lg">
-              {user.email}
-            </p>
-          ))}
+          <p className="text-sm font-medium text-gray-500">Доставка</p>
+          <p className="text-lg">{convertPrice(info.deliveryPrice)}</p>
+        </div>
+        <div className="col-span-1">
+          <p className="text-sm font-medium text-gray-500">
+            Минимальная сумма заказа
+          </p>
+          <p className="text-lg">{convertPrice(info.minimumOrderPrice)}</p>
         </div>
       </div>
     </div>

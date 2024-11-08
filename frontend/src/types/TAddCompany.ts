@@ -5,4 +5,6 @@ export type TAddCompany = {
   email: string;
   phoneNumber: string;
   englishName: string;
+  deliveryPrice: number;
+  minimumOrderPrice: number;
 };

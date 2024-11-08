@@ -9,10 +9,10 @@ import {
 } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
-import Carousel from "@/main/UI/Carousel/Carousel";
 import { Helmet } from "react-helmet-async";
 import Actions from "@Components/BottomActions/Actions/Actions";
 import Price from "@UI/Price/Price";
+import SwiperUI from "@UI/SwiperUI/SwiperUI";
 
 const ProductPage = () => {
   const { productSlug } = useParams();
@@ -92,7 +92,11 @@ const ProductPage = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
-          <Carousel images={product?.images || []} />
+          <div className="mt-4">
+            <SwiperUI
+              images={product?.images.map((el) => ({ image: el })) || []}
+            />
+          </div>
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
             <Price
               discount={product?.company[0]?.discount || 0}

@@ -3,6 +3,7 @@ import { ERoutes } from "@enums/ERoutes";
 import {
   About,
   ArchivedOrders,
+  Categories,
   Contacts,
   MainPage,
   OrderPage,
@@ -27,6 +28,11 @@ export const ROOT_DATA: TRoutes<ERoutes>[] = [
   },
   {
     id: "categories-page",
+    path: ERoutes.CATEGORIES_ROOT,
+    component: Categories,
+  },
+  {
+    id: "subcategories-page",
     path: ERoutes.CATEGORIES,
     component: SubCategories,
   },

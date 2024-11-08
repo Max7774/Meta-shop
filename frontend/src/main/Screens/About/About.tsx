@@ -4,6 +4,7 @@ import styles from "./AboutUs.module.scss";
 import { Button, Image } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import { VERSION } from "@/const/version";
+import Footer from "@Components/Footer/Footer";
 const About = () => {
   const navigate = useNavigate();
 
@@ -96,6 +97,7 @@ const About = () => {
           <span>Версия приложения: {VERSION}</span>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

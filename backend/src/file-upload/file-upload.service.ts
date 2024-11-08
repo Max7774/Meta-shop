@@ -133,4 +133,33 @@ export class FileUploadService {
       throw new BadGatewayException(error);
     }
   }
+
+  async createLogo(file: Express.Multer.File, companyUuid: string) {
+    const { filename, mimetype, originalname, size, path } = file;
+    const url = `${process.env.SERVER_URL}/file-upload/${filename}`;
+
+    const result = await this.prismaFileService.photoFile.create({
+      data: {
+        uuid: uuidGen(),
+        url,
+        filename,
+        mimetype,
+        originalname,
+        size,
+        path,
+        companyUuid,
+      },
+    });
+
+    await this.prismaFileService.company.update({
+      where: {
+        uuid: companyUuid,
+      },
+      data: {
+        logoPath: result.filename,
+      },
+    });
+
+    return result.filename;
+  }
 }

@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet-async";
-import { FaPhoneAlt, FaEnvelope, FaClock } from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import styles from "./Contacts.module.scss";
-import { Divider } from "@nextui-org/react";
 import Heading from "@UI/Heading";
+import { Button } from "@nextui-org/react";
 
 const Contacts = () => {
   return (
@@ -42,19 +42,9 @@ const Contacts = () => {
           </div>
         </div>
       </div>
-
-      <div className="flex flex-row m-[10px] mt-7 sm:mt-20">
-        <FaClock className={styles.icon} />
-        <div>
-          <h3>Часы работы</h3>
-          <p>Пн-Вс:</p>
-          <p>Принимаются заказы: 9:00 — 13:00</p>
-          <p className="text-warning">Ягоды до 9:00</p>
-          <Divider className="my-1" />
-          <p>Доставка: 13:00 — 20:00</p>
-          <p className="text-warning">Ягоды до 13:00</p>
-        </div>
-      </div>
+      <Button className="mt-4 sm:w-1/3 w-full" size="lg" color="primary">
+        Оставить заявку
+      </Button>
     </div>
   );
 };

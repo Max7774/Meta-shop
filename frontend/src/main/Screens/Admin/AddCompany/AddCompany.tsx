@@ -54,6 +54,46 @@ const AddCompany = () => {
         />
         <Controller
           control={control}
+          name="deliveryPrice"
+          defaultValue={0}
+          rules={{
+            required: "Это обязательное поле!",
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Input
+              label="Стоимость доставки"
+              placeholder="Введите цену"
+              fullWidth
+              onChange={onChange}
+              type="number"
+              value={value.toString()}
+              isInvalid={!!error?.message}
+              errorMessage={error?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="minimumOrderPrice"
+          defaultValue={0}
+          rules={{
+            required: "Это обязательное поле!",
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Input
+              label="Минимальная стоимость заказа"
+              placeholder="Введите цену"
+              fullWidth
+              onChange={onChange}
+              type="number"
+              value={value.toString()}
+              isInvalid={!!error?.message}
+              errorMessage={error?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
           name="englishName"
           defaultValue=""
           rules={{

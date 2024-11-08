@@ -68,6 +68,23 @@ export class FileUploadController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @Auth([admin, manager, company])
+  @Post('create/company/logo/:companyUuid')
+  @UseInterceptors(FileInterceptor('file'))
+  async createLogo(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
+      }),
+    )
+    file: Express.Multer.File,
+    @Param('companyUuid') companyUuid: string,
+  ) {
+    return this.fileUploadService.createLogo(file, companyUuid);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   @Auth([user, admin, manager, company])
   @Post('update/user/avatar')
   @UseInterceptors(FileInterceptor('file'))

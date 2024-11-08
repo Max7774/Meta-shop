@@ -28,6 +28,9 @@ export const Receipt = lazy(() => import("@/main/Screens/Receipt/Receipt"));
 export const ArchivedOrders = lazy(
   () => import("@/main/Components/ArchivedOrders/ArchivedOrders")
 );
+export const Categories = lazy(
+  () => import("@/main/Screens/Categories/Categories")
+);
 
 /* ADMIN */
 export const AdminMainPage = lazy(

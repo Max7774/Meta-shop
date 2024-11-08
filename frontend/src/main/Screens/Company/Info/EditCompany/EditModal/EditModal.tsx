@@ -17,17 +17,29 @@ interface IEditModalProps {
 const EditModal = ({ onClose }: IEditModalProps) => {
   const {
     isEditLoading,
-    info: { name, phoneNumber, address, email, officialName },
+    info: {
+      name,
+      phoneNumber,
+      address,
+      email,
+      officialName,
+      deliveryPrice,
+      minimumOrderPrice,
+    },
   } = useAppSelector((state) => state.company);
   const { handleSubmit, control } = useForm<TEditCompany>();
   const { editCompanyInfo } = useActions();
 
   const submit: SubmitHandler<TEditCompany> = async (data) => {
-    const res: any = await editCompanyInfo(data);
+    const res: any = await editCompanyInfo({
+      ...data,
+      deliveryPrice: Number(data.deliveryPrice),
+      minimumOrderPrice: Number(data.minimumOrderPrice),
+    });
     if (res.type === "/company/edit-info/fulfilled") {
       onClose();
     } else {
-        toast.error('Ошибка редактирования')
+      toast.error("Ошибка редактирования");
     }
   };
 
@@ -93,6 +105,46 @@ const EditModal = ({ onClose }: IEditModalProps) => {
               placeholder="Введите официальное название компании"
               onChange={onChange}
               value={value}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="deliveryPrice"
+          defaultValue={deliveryPrice}
+          rules={{
+            required: "Это обязательное поле!",
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Input
+              label="Стоимость доставки"
+              placeholder="Введите цену"
+              fullWidth
+              onChange={onChange}
+              type="number"
+              value={value.toString()}
+              isInvalid={!!error?.message}
+              errorMessage={error?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="minimumOrderPrice"
+          defaultValue={minimumOrderPrice}
+          rules={{
+            required: "Это обязательное поле!",
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Input
+              label="Минимальная стоимость заказа"
+              placeholder="Введите цену"
+              fullWidth
+              onChange={onChange}
+              type="number"
+              value={value.toString()}
+              isInvalid={!!error?.message}
+              errorMessage={error?.message}
             />
           )}
         />

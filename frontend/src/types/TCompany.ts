@@ -7,6 +7,9 @@ export type TCompany = {
   updatedAt: Date;
   email: string;
   officialName: string;
+  logoPath: string;
+  deliveryPrice: number;
+  minimumOrderPrice: number;
   registrationNumber: string;
   address: string;
   phoneNumber: string;
@@ -41,4 +44,6 @@ export type TEditCompany = {
   officialName: string;
   address: string;
   phoneNumber: string;
+  deliveryPrice: number;
+  minimumOrderPrice: number;
 };

@@ -41,6 +41,7 @@ export const mockOrder: IOrder = {
         description: 'This is a test product',
         peculiarities: 'None',
         images: ['test-image.png'],
+        isWholesale: false,
         unitofmeasurement: 'pcs',
         inStock: true,
         isDeleted: false,

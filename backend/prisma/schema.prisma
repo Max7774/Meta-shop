@@ -47,6 +47,7 @@ model Product {
   unitofmeasurement String
   inStock       Boolean?      @default(false)
   isDeleted     Boolean?      @default(false)
+  isWholesale   Boolean?      @default(false)
   
   userUuid      String?       @map("userUuid")
   subcategoryUuid String?     @map("subcategoryUuid")
@@ -86,6 +87,7 @@ model PhotoFile {
   productUuid  String?       @map("productUuid")
   product      Product?      @relation(fields: [productUuid], references: [uuid])
   subcategoryUuid String?    @map("subcategoryUuid") @unique
+  companyUuid  String?       @map("companyUuid") @unique
 }
 
 model Category {
@@ -198,6 +200,9 @@ model Company {
   address            String
   email              String     @unique
   phoneNumber        String
+  deliveryPrice      Int        @default(800)
+  minimumOrderPrice  Int        @default(7000)
+  logoPath           String?    @default("default-product-photo.png")
   
   users              User[]
   companyProducts    CompanyProduct[]

@@ -5,9 +5,9 @@ import Address from "@Components/Address/Address";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useCart } from "@hooks/useCart";
-import { Button, Divider, Textarea } from "@nextui-org/react";
+import { Button, Divider, Progress, Textarea } from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,14 +18,26 @@ const OrderPage = () => {
   const {
     profile: { currentAddress },
   } = useAppSelector((state) => state.user);
-  const { createOrder, reset, updateItemsInStock } = useActions();
+  const { companies } = useAppSelector((state) => state.company);
+  const { selectedCompanyProduct } = useAppSelector((state) => state.products);
+
+  const { createOrder, reset, updateItemsInStock, getAllCompanies } =
+    useActions();
   const { isLoading } = useAppSelector((state) => state.orders);
   const [itemsInStock, setInStock] = useState<any>([
     ...items.filter((el) => !el.inStock),
   ]);
   const navigate = useNavigate();
 
-  const deliveryPrice = 800;
+  const companyDeliveryPrice = companies.find(
+    (item) => item.uuid === selectedCompanyProduct
+  )?.deliveryPrice;
+  const companyMinPriceDelivery = companies.find(
+    (item) => item.uuid === selectedCompanyProduct
+  )?.minimumOrderPrice;
+
+  const deliveryPrice = companyDeliveryPrice || 600;
+  const minPriceDelivery = companyMinPriceDelivery || 7000;
 
   const grandTotal = total + deliveryPrice;
 
@@ -64,6 +76,10 @@ const OrderPage = () => {
       toast.error("Ошибка создания заказа");
     }
   };
+
+  useEffect(() => {
+    getAllCompanies();
+  }, [getAllCompanies]);
 
   return (
     <section>
@@ -116,6 +132,21 @@ const OrderPage = () => {
                 <div className="text-nowrap">Стоимость доставки:</div>
                 <div>{convertPrice(deliveryPrice)}</div>
               </div>
+              {minPriceDelivery !== 0 && (
+                <Progress
+                  aria-label="Loading..."
+                  label={
+                    total >= 7000
+                      ? "Можно заказаывать"
+                      : `Ещё необходимо: ${convertPrice(
+                          minPriceDelivery - total
+                        )}`
+                  }
+                  color={total >= 7000 ? "success" : "warning"}
+                  maxValue={minPriceDelivery}
+                  value={total}
+                />
+              )}
               <Divider />
               <div className="flex justify-between font-bold text-xl">
                 <div>Итого к оплате:</div>
@@ -127,6 +158,7 @@ const OrderPage = () => {
               color="primary"
               isLoading={isLoading}
               fullWidth
+              isDisabled={minPriceDelivery >= grandTotal}
               size="lg"
             >
               {isLoading ? "Оформляем..." : "Оформить заказ"}

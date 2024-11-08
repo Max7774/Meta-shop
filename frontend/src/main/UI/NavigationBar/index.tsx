@@ -16,7 +16,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
-import { AcmeLogo } from "./LogoIcon";
+import { AcmeLogo } from "../Logo/LogoIcon";
 import Cart from "../../Components/Cart/Cart";
 import { useProfile } from "@hooks/useProfile";
 import { ERoles } from "@enums/ERoles";
