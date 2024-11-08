@@ -97,7 +97,9 @@ const About = () => {
           <span>Версия приложения: {VERSION}</span>
         </div>
       </section>
-      <Footer />
+      <div className="sm:hidden block">
+        <Footer />
+      </div>
     </>
   );
 };

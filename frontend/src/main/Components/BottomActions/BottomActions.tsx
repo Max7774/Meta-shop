@@ -61,7 +61,7 @@ const BottomActions = () => {
                     <p>Доставка {convertPrice(companyDeliveryPrice || 800)}</p>
                     <Divider className="my-1" />
                     <p>
-                      Минимальная сумма заказа:
+                      Минимальная сумма заказа{" "}
                       {convertPrice(companyMinPriceDelivery || 7000)}
                     </p>
                   </div>
