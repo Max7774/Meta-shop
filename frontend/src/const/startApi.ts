@@ -7,3 +7,4 @@ export const COMPANY = "/company";
 export const ADDRESS = "/address";
 export const USERS = "/users";
 export const FILE_UPLOAD = "/file-upload";
+export const CLAIMS = "/claims";

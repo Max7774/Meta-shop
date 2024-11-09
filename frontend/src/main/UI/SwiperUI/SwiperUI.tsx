@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
+
 import { Button, Image } from "@nextui-org/react";
 import { getImageUrl } from "@utils/getImageUrl";
 import { TSwiperData } from "@/types/TSwiperData";
@@ -26,7 +27,9 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
       <Swiper
         modules={[Autoplay, Pagination, A11y]}
         spaceBetween={30}
-        slidesPerView={1}
+        watchSlidesProgress={true}
+        slidesPerView={1.4}
+        centeredSlides={true}
         loop={true}
         grabCursor={true}
         pagination={{
@@ -40,7 +43,7 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
           disableOnInteraction: false,
         }}
         scrollbar={{ draggable: true }}
-        className="thumbShow"
+        className="rounded-2xl"
       >
         {images.map(
           (
@@ -48,7 +51,11 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
             index
           ) => (
             <SwiperSlide
-              style={{ display: "flex", justifyContent: "center" }}
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+              }}
               key={image + index}
               className="select-none"
             >
@@ -69,7 +76,7 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
                 </div>
                 <Image
                   src={image.startsWith("/images") ? image : getImageUrl(image)}
-                  className="h-[28rem] w-full object-cover"
+                  className="h-[18rem] w-[1200px] object-cover"
                 />
                 {buttonText && (
                   <div className="absolute z-20 bottom-4 right-4">

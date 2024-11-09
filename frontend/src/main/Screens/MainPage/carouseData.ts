@@ -15,6 +15,7 @@ export const carouselData: TSwiperData[] = [
     textColor: "black",
     text: "Получите возможность продавать свои продукты вместе с нами.",
     buttonText: "Оставить заявку",
+    buttonLink: "/claim",
   },
   {
     image: "/images/gradient-3.jpg",
@@ -22,5 +23,6 @@ export const carouselData: TSwiperData[] = [
     textColor: "white",
     text: "Заказывайте свежие и качественные продукты оптом.",
     buttonText: "Оставить заявку",
+    buttonLink: "/claim",
   },
 ];

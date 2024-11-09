@@ -19,7 +19,11 @@ const OrderPage = () => {
   const {
     profile: { currentAddress },
   } = useAppSelector((state) => state.user);
-  const { companyDeliveryPrice, companyMinPriceDelivery } = useCompany();
+  const {
+    companyDeliveryPrice,
+    companyMinPriceDelivery,
+    selectedCompanyProduct,
+  } = useCompany();
 
   const { createOrder, reset, updateItemsInStock, getAllCompanies } =
     useActions();
@@ -47,6 +51,7 @@ const OrderPage = () => {
     }
     const result: any = await createOrder({
       ...data,
+      companyUuid: selectedCompanyProduct,
       addressUuid: currentAddress,
       items: [...items].map((item) => {
         return {

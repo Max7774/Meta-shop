@@ -6,6 +6,7 @@ import * as ordersActions from "./orders/orders.actions";
 import * as companyActions from "./company/company.actions";
 import { filtersSlice } from "./filters/filters.slice";
 import { productsSlice } from "./product/product.slice";
+import * as claimActions from "./claim/claim.actions";
 
 export const rootActions = {
   ...userActions,
@@ -16,4 +17,5 @@ export const rootActions = {
   ...ordersActions,
   ...companyActions,
   ...productsSlice.actions,
+  ...claimActions,
 };

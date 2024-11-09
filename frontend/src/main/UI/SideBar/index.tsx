@@ -15,36 +15,34 @@ const Sidebar = () => {
   }, [getCategoriesAll]);
 
   return (
-    <>
-      <aside
-        className={cn(
-          "relative bg-white flex flex-col justify-between z-20 h-full transition-transform duration-300"
+    <aside
+      className={cn(
+        "relative bg-white flex flex-col justify-between z-20 h-full transition-transform duration-300"
+      )}
+    >
+      <ul>
+        {pathname.startsWith("/admin") ? (
+          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
+            Админ панель
+          </div>
+        ) : pathname.startsWith("/company") ? (
+          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
+            Компания
+          </div>
+        ) : (
+          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
+            Категории
+          </div>
         )}
-      >
-        <ul>
-          {pathname.startsWith("/admin") ? (
-            <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-              Админ панель
-            </div>
-          ) : pathname.startsWith("/company") ? (
-            <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-              Компания
-            </div>
-          ) : (
-            <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-              Категории
-            </div>
-          )}
-          {pathname.startsWith("/admin") ? (
-            <AdminItems />
-          ) : pathname.startsWith("/company") ? (
-            <CompanyItems />
-          ) : (
-            <CategoryItems />
-          )}
-        </ul>
-      </aside>
-    </>
+        {pathname.startsWith("/admin") ? (
+          <AdminItems />
+        ) : pathname.startsWith("/company") ? (
+          <CompanyItems />
+        ) : (
+          <CategoryItems />
+        )}
+      </ul>
+    </aside>
   );
 };
 

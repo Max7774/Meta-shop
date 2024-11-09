@@ -3,8 +3,10 @@ import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import styles from "./Contacts.module.scss";
 import Heading from "@UI/Heading";
 import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 const Contacts = () => {
+  const navigate = useNavigate();
   return (
     <div className={styles["contacts-container"]}>
       <Helmet>
@@ -42,7 +44,12 @@ const Contacts = () => {
           </div>
         </div>
       </div>
-      <Button className="mt-4 sm:w-1/3 w-full" size="lg" color="primary">
+      <Button
+        onClick={() => navigate("/claim")}
+        className="mt-4 sm:w-1/3 w-full"
+        size="lg"
+        color="primary"
+      >
         Оставить заявку
       </Button>
     </div>

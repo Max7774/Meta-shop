@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Companies = () => {
-  const { getAllCompanies, selectCompanyProduct } = useActions();
+  const { getAllCompanies, selectCompanyProduct, reset } = useActions();
 
   const navigate = useNavigate();
 
@@ -33,6 +33,7 @@ const Companies = () => {
               onPress={() => {
                 selectCompanyProduct({ uuid: company.uuid });
                 navigate("/categories");
+                reset();
               }}
             >
               <CardBody className="overflow-visible p-0">

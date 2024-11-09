@@ -60,5 +60,6 @@ export type TProfileOrderItem = {
 export type TOrderForm = {
   comment: string;
   addressUuid: string;
+  companyUuid: string;
   items: TOrderCartItem[];
 };

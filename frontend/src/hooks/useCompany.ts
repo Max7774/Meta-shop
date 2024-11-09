@@ -4,15 +4,13 @@ export const useCompany = () => {
   const { selectedCompanyProduct } = useAppSelector((state) => state.products);
   const { companies } = useAppSelector((state) => state.company);
 
-  const companyDeliveryPrice = companies.find(
-    (item) => item.uuid === selectedCompanyProduct
-  )?.deliveryPrice;
-  const companyMinPriceDelivery = companies.find(
-    (item) => item.uuid === selectedCompanyProduct
-  )?.minimumOrderPrice;
+  const { deliveryPrice, minimumOrderPrice, name } =
+    companies?.find((item) => item.uuid === selectedCompanyProduct) || {};
 
   return {
-    companyDeliveryPrice,
-    companyMinPriceDelivery,
+    companyDeliveryPrice: deliveryPrice,
+    companyMinPriceDelivery: minimumOrderPrice,
+    selectedCompanyProduct,
+    companyName: name,
   };
 };

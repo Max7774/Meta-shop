@@ -1,15 +1,25 @@
-import { PiFarmFill } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Logo } from "@UI/Logo/LogoIcon";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <footer className="bg-default-white text-default-400 py-8">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+      <div className="container mx-auto gap-10 flex flex-col md:flex-row justify-between items-center px-4">
         <div className="text-center flex flex-col items-center mb-4 md:mb-0">
-          <h2 className="text-xl font-bold">
-            <PiFarmFill size={35} />
+          <h2
+            className="text-xl font-bold cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <Logo size="lg" />
           </h2>
-          <p className="mt-1">Свежие продукты от фермеров</p>
+        </div>
+        <div>
+          <span>
+            Мы стремимся обеспечить наших клиентов и партнеров в сфере B2B
+            качественными продуктами по лучшим ценам.
+          </span>
         </div>
         <nav className="flex space-x-4">
           <Link to="/" className="hover:text-gray transition duration-200">
@@ -17,7 +27,7 @@ const Footer = () => {
           </Link>
           <Link
             to="/about"
-            className="hover:text-gray-300 transition duration-200"
+            className="hover:text-gray-300 transition duration-200 text-nowrap"
           >
             О нас
           </Link>

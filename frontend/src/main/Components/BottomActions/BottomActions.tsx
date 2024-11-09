@@ -22,7 +22,8 @@ const BottomActions = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { getAllCompanies } = useActions();
   const { companies } = useAppSelector((state) => state.company);
-  const { companyDeliveryPrice, companyMinPriceDelivery } = useCompany();
+  const { companyDeliveryPrice, companyMinPriceDelivery, companyName } =
+    useCompany();
 
   useEffect(() => {
     getAllCompanies();
@@ -54,7 +55,7 @@ const BottomActions = () => {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Доставка
+                  {!companyName ? "Доставка" : `Доставка от ${companyName}`}
                 </ModalHeader>
                 <ModalBody>
                   <div className="flex flex-col gap-1">

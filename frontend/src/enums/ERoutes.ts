@@ -12,6 +12,7 @@ export enum ERoutes {
   CONTACTS = "/contacts",
   RECEIPT = "/order/:orderId",
   ARCHIVED_ORDERS = "/archived-orders",
+  CLAIM = "/claim",
 }
 
 export enum EAdminRoutes {

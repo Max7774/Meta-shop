@@ -35,7 +35,7 @@ const Search = ({ placeholder, pageKey, className }: ISearchProps) => {
           mainWrapper: "h-full",
           input: "text-small",
           inputWrapper:
-            "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+            "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20 rounded-3xl",
         }}
         placeholder={placeholder || "Поиск..."}
         size="sm"

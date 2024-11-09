@@ -37,7 +37,7 @@ const OrderCard = ({ order }: IOrderCardProps) => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full">
             <h3 className="text-lg font-semibold">Заказ № {order.orderId}</h3>
             <span className="text-sm text-gray-500">
-              От: {new Date(order.createdAt).toLocaleDateString()}
+              От: {new Date(order.createdAt).toLocaleString()}
             </span>
             <div className="flex flex-row gap-3 my-2">
               {order.isDelivery && (

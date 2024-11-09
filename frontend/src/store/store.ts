@@ -7,6 +7,7 @@ import { cartSlice } from "./cart/cart.slice";
 import { filtersSlice } from "./filters/filters.slice";
 import { ordersSlice } from "./orders/orders.slice";
 import { companySlice } from "./company/company.slice";
+import { claimSlice } from "./claim/claim.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
@@ -16,6 +17,7 @@ const combinedReducers = combineReducers({
   filters: filtersSlice.reducer,
   orders: ordersSlice.reducer,
   company: companySlice.reducer,
+  claim: claimSlice.reducer,
 });
 
 const mainReducer = combinedReducers;

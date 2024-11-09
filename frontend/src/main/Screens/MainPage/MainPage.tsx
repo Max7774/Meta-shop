@@ -8,6 +8,7 @@ import cn from "clsx";
 import Companies from "./Companies/Companies";
 import SwiperUI from "@UI/SwiperUI/SwiperUI";
 import { carouselData } from "./carouseData";
+import Heading from "@UI/Heading";
 
 const MainPage = () => {
   const { products } = useAppSelector((state) => state.filters);
@@ -19,6 +20,9 @@ const MainPage = () => {
         <meta name="description" content="Главная страница - AgroZakupKz" />
       </Helmet>
       <section>
+        {!products.queryParams.searchTerm && (
+          <Heading>Добро пожаловать!</Heading>
+        )}
         <div className="mb-4 grid grid-cols-6 items-center justify-center">
           <div
             className={cn({
@@ -32,10 +36,16 @@ const MainPage = () => {
             {products.queryParams.searchTerm && <Filters />}
           </div>
         </div>
-        <div className="w-full mb-4">
-          <SwiperUI images={carouselData} />
-        </div>
-        {products.queryParams.searchTerm ? <ProductsList /> : <Companies />}
+        {products.queryParams.searchTerm ? (
+          <ProductsList />
+        ) : (
+          <>
+            <div className="w-full mb-4">
+              <SwiperUI images={carouselData} />
+            </div>
+            <Companies />
+          </>
+        )}
       </section>
     </>
   );

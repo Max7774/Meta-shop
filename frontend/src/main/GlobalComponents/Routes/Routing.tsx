@@ -8,10 +8,19 @@ import { ERoutes } from "@enums/ERoutes";
 import Auth from "@/main/Screens/Auth/Auth";
 import PrivateRoute from "../Providers/PrivateRoute";
 import { GlOBAL_PREFIX } from "@/const/globalPrefix";
+import { Claim } from "./data/components/root";
 
 const Routing = () => {
   return (
     <Routes>
+      <Route
+        path={GlOBAL_PREFIX + ERoutes.CLAIM}
+        element={
+          <Suspense fallback={<Loader />}>
+            <Claim />
+          </Suspense>
+        }
+      />
       <Route path={GlOBAL_PREFIX + ERoutes.AUTH} element={<Auth />} />
       {Object.entries(ADMIN_ROUTES_DATA).map(
         ([

@@ -16,4 +16,14 @@ export const COMPANY_SIDEBAR_ITEMS = [
     name: "Статистика",
     slug: COMPANY_GlOBAL_PREFIX + "statistics",
   },
+  {
+    uuid: "3",
+    name: "Заказы",
+    slug: COMPANY_GlOBAL_PREFIX + "orders",
+  },
+  {
+    uuid: "4",
+    name: "Архив заказов",
+    slug: COMPANY_GlOBAL_PREFIX + "archived-orders",
+  },
 ];

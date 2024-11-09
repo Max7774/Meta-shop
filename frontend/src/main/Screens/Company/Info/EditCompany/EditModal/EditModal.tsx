@@ -115,9 +115,6 @@ const EditModal = ({ onClose }: IEditModalProps) => {
           control={control}
           name="deliveryPrice"
           defaultValue={deliveryPrice}
-          rules={{
-            required: "Это обязательное поле!",
-          }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
               label="Стоимость доставки"
@@ -135,9 +132,6 @@ const EditModal = ({ onClose }: IEditModalProps) => {
           control={control}
           name="minimumOrderPrice"
           defaultValue={minimumOrderPrice}
-          rules={{
-            required: "Это обязательное поле!",
-          }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <Input
               label="Минимальная стоимость заказа"
@@ -155,7 +149,6 @@ const EditModal = ({ onClose }: IEditModalProps) => {
           name="phoneNumber"
           control={control}
           rules={{
-            required: "Номер телефона обязателен!",
             pattern: {
               value: /^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/,
               message:
@@ -188,7 +181,6 @@ const EditModal = ({ onClose }: IEditModalProps) => {
         <Controller
           control={control}
           name="logoPath"
-          rules={{ required: "Это поле обязательно!" }}
           render={({ field: { onChange } }) => (
             <Input
               type="file"

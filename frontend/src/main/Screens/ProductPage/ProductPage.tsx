@@ -94,7 +94,7 @@ const ProductPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 sm:px-6 gap-4">
           <div className="mt-4">
             <SwiperUI
-              images={product?.images.map((el) => ({ image: el })) || []}
+              images={product?.images?.map((el) => ({ image: el })) || []}
             />
           </div>
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
@@ -112,7 +112,7 @@ const ProductPage = () => {
         {product?.peculiarities && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Характеристики</h2>
-            <p>{product.peculiarities}</p>
+            <p>{product?.peculiarities}</p>
           </div>
         )}
       </section>

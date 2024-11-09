@@ -16,7 +16,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
-import { AcmeLogo } from "../Logo/LogoIcon";
+import { Logo } from "../Logo/LogoIcon";
 import Cart from "../../Components/Cart/Cart";
 import { useProfile } from "@hooks/useProfile";
 import { ERoles } from "@enums/ERoles";
@@ -131,10 +131,7 @@ export const NavigationBar = ({ isBottomActions }: INavigationBarProps) => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <AcmeLogo />
-          <p className="font-bold text-inherit ml-2 hidden mobileMin:block">
-            AgroZakupKz
-          </p>
+          <Logo />
         </NavbarBrand>
       </NavbarContent>
       <NavbarMenu>

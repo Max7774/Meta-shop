@@ -15,7 +15,7 @@ export const OrderService = {
 
   async createOrder(data: TOrderForm) {
     return await instance<boolean>({
-      url: `${ORDERS}/order-create`,
+      url: `${ORDERS}/order-create/${data.companyUuid}`,
       method: "POST",
       data,
     });

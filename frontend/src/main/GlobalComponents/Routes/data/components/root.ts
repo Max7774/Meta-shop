@@ -31,6 +31,7 @@ export const ArchivedOrders = lazy(
 export const Categories = lazy(
   () => import("@/main/Screens/Categories/Categories")
 );
+export const Claim = lazy(() => import("@/main/Screens/Claim/Claim"));
 
 /* ADMIN */
 export const AdminMainPage = lazy(

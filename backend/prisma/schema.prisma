@@ -225,6 +225,23 @@ model CompanyProduct {
   companyUuid String         @map("companyUuid")
 }
 
+model Claims {
+  uuid        String         @unique
+  createdAt   DateTime       @default(now()) @map("createdAt")
+  updatedAt   DateTime       @updatedAt @map("updatedAt")
+
+  email       String
+  text        String         
+  phone       String
+  claimType   EnumTypeOfClaim
+}
+
+enum EnumTypeOfClaim {
+  Cooperation
+  Complaint
+  Other
+}
+
 enum EnumOrderItemStatus {
   Pending
   Payed
