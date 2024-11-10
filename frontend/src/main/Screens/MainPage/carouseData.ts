@@ -5,7 +5,7 @@ export const carouselData: TSwiperData[] = [
     image: "/images/gradient-5.jpg",
     title: "Свежие продукты от фермеров — прямо к вашему столу",
     text: "Заказывайте свежие и качественные продукты прямо от фермеров. Натуральные продукты без посредников.",
-    textColor: "black",
+    textColor: 'white',
     buttonText: "Заказать",
     buttonLink: "/categories",
   },

@@ -16,7 +16,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@hooks/auth-hooks/useAuth";
 import { useActions } from "@hooks/useActions";
-import { Logo } from "../Logo/LogoIcon";
+import Logo from "../Logo/Logo";
 import Cart from "../../Components/Cart/Cart";
 import { useProfile } from "@hooks/useProfile";
 import { ERoles } from "@enums/ERoles";
@@ -131,7 +131,7 @@ export const NavigationBar = ({ isBottomActions }: INavigationBarProps) => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Logo />
+          <Logo size="sm" />
         </NavbarBrand>
       </NavbarContent>
       <NavbarMenu>
