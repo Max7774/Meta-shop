@@ -135,31 +135,67 @@ export class FileUploadService {
   }
 
   async createLogo(file: Express.Multer.File, companyUuid: string) {
-    const { filename, mimetype, originalname, size, path } = file;
-    const url = `${process.env.SERVER_URL}/file-upload/${filename}`;
+    try {
+      const { filename, mimetype, originalname, size, path } = file;
+      const url = `${process.env.SERVER_URL}/file-upload/${filename}`;
 
-    const result = await this.prismaFileService.photoFile.create({
-      data: {
-        uuid: uuidGen(),
-        url,
-        filename,
-        mimetype,
-        originalname,
-        size,
-        path,
-        companyUuid,
-      },
-    });
+      const photoFile = await this.prismaFileService.photoFile.findUnique({
+        where: {
+          companyUuid,
+        },
+      });
 
-    await this.prismaFileService.company.update({
-      where: {
-        uuid: companyUuid,
-      },
-      data: {
-        logoPath: result.filename,
-      },
-    });
+      if (photoFile) {
+        const result = await this.prismaFileService.photoFile.update({
+          where: {
+            companyUuid,
+          },
+          data: {
+            url,
+            filename,
+            mimetype,
+            originalname,
+            size,
+            path,
+            companyUuid,
+          },
+        });
+        await this.prismaFileService.company.update({
+          where: {
+            uuid: companyUuid,
+          },
+          data: {
+            logoPath: result.filename,
+          },
+        });
 
-    return result.filename;
+        return result.filename;
+      } else {
+        const result = await this.prismaFileService.photoFile.create({
+          data: {
+            uuid: uuidGen(),
+            url,
+            filename,
+            mimetype,
+            originalname,
+            size,
+            path,
+            companyUuid,
+          },
+        });
+        await this.prismaFileService.company.update({
+          where: {
+            uuid: companyUuid,
+          },
+          data: {
+            logoPath: result.filename,
+          },
+        });
+
+        return result.filename;
+      }
+    } catch (error) {
+      throw new BadGatewayException(error);
+    }
   }
 }

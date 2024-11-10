@@ -28,7 +28,7 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
         modules={[Autoplay, Pagination, A11y]}
         spaceBetween={30}
         watchSlidesProgress={true}
-        slidesPerView={1.4}
+        slidesPerView={1}
         centeredSlides={true}
         loop={true}
         grabCursor={true}

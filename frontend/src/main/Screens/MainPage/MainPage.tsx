@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-// import CategoriesList from "./CategoriesList/CategoriesList";
 import Search from "@Components/Search/Search";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import ProductsList from "@Components/ProductsList/ProductsList";

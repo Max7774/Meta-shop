@@ -16,9 +16,13 @@ const CompanyInfo = () => {
   if (isLoading) return <CircularProgress />;
 
   return (
-    <div className="max-w-4xl p-6 mb-3 bg-white shadow-md rounded-lg">
+    <div className="p-6 mb-3 bg-white shadow-md rounded-lg">
       <div className="flex items-center mb-4">
-        <Avatar src={getImageUrl(info?.logoPath)} size="lg" />
+        <Avatar
+          src={getImageUrl(info?.logoPath || "default-product-photo.png")}
+          alt="..."
+          className="w-40 h-40"
+        />
         <h1 className="ml-4 text-2xl font-semibold">{info.name}</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
