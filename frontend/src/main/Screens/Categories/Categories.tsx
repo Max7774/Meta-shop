@@ -5,8 +5,8 @@ import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import Search from "@Components/Search/Search";
 import Filters from "@Components/Filters/Filters";
 import ProductsList from "@Components/ProductsList/ProductsList";
-import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+// import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
+// import { Link } from "react-router-dom";
 
 const Categories = () => {
   const { products } = useAppSelector((state) => state.filters);
@@ -18,14 +18,14 @@ const Categories = () => {
         <meta name="description" content="Страница категорий - AgroZakupKz" />
       </Helmet>
       <section>
-        <Breadcrumbs maxItems={3} radius="full" variant="solid">
+        {/* <Breadcrumbs maxItems={3} radius="full" variant="solid">
           <BreadcrumbItem>
             <Link to={"/"}>{"Главная"}</Link>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <Link to={`/categories`}>Категории</Link>
           </BreadcrumbItem>
-        </Breadcrumbs>
+        </Breadcrumbs> */}
         <div className="my-4 grid grid-cols-6 items-center justify-center">
           <div
             className={cn({

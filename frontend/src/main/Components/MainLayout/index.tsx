@@ -1,10 +1,13 @@
 import { NavigationBar } from "@/main/UI/NavigationBar";
 import Sidebar from "@/main/UI/SideBar";
 import BottomActions from "@Components/BottomActions/BottomActions";
+// import BreadCrumbs from "@Components/BreadCrumbs/BreadCrumbs";
 import Footer from "@Components/Footer/Footer";
 import cn from "clsx";
-import { PropsWithChildren } from "react";
+import { lazy, PropsWithChildren, Suspense } from "react";
 import { useLocation } from "react-router-dom";
+
+const BreadCrumbs = lazy(() => import("@Components/BreadCrumbs/BreadCrumbs"));
 
 const bottomActionsPath = [
   "/order",
@@ -42,6 +45,11 @@ const MainLayout = ({ children }: PropsWithChildren) => {
             }
           )}
         >
+          {!isBottomActions && pathname !== "/" && (
+            <Suspense fallback={<>Loading</>}>
+              <BreadCrumbs />
+            </Suspense>
+          )}
           {children}
         </main>
       </div>

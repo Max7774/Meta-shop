@@ -1,12 +1,7 @@
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  BreadcrumbItem,
-  Breadcrumbs,
-  Chip,
-  CircularProgress,
-} from "@nextui-org/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Chip, CircularProgress } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import { Helmet } from "react-helmet-async";
@@ -36,26 +31,6 @@ const ProductPage = () => {
       </Helmet>
       <section className="w-full">
         <div className="px-6">
-          <Breadcrumbs maxItems={3} radius="full" variant="solid">
-            <BreadcrumbItem>
-              <Link to={"/"}>{"Главная"}</Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <Link to={`/categories/${product?.subcategory?.category?.slug}`}>
-                {product?.subcategory?.category?.name}
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <Link
-                to={`/categories/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`}
-              >
-                {product?.subcategory?.name}
-              </Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <Link to={`/${product?.subcategory?.slug}`}>{product?.name}</Link>
-            </BreadcrumbItem>
-          </Breadcrumbs>
           <Heading>{product?.name}</Heading>
           <div className="flex flex-row flex-wrap gap-2">
             <Chip
@@ -63,7 +38,7 @@ const ProductPage = () => {
               className="cursor-pointer"
               onClick={() =>
                 navigate(
-                  `/categories/${product?.category?.slug}/${product?.subcategory?.slug}`
+                  `/categories/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`
                 )
               }
             >
