@@ -32,6 +32,7 @@ const SwiperUI = ({ images }: ISwiperUIProps) => {
         centeredSlides={true}
         loop={true}
         grabCursor={true}
+        speed={2000}
         pagination={{
           enabled: true,
           clickable: true,
