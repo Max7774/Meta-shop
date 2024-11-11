@@ -11,6 +11,7 @@ import {
   getAllSoftDeleted,
   recoverProduct,
   getAllCompanyProducts,
+  getSimilarProducts,
 } from "./product.actions";
 import { toast } from "react-toastify";
 import { TProduct } from "@/types/TProduct";
@@ -46,8 +47,10 @@ const initialState: TProductState = {
   isLoading: false,
   isProductLoading: false,
   isProductRecovered: false,
+  isSimilarLoading: false,
   products: [],
   companyProducts: [],
+  similarProducts: [],
   length: 0,
   selectedCompanyProduct: getStoreLocal("selectedCompany") || "",
 };
@@ -99,6 +102,30 @@ export const productsSlice = createSlice({
       .addCase(getProductsAll.rejected, (state) => {
         state.isLoading = false;
         state.products = [];
+      })
+      .addCase(getSimilarProducts.pending, (state) => {
+        /* ===================== GET SIMILAR PRODUCTS ===================== */
+        state.isSimilarLoading = true;
+      })
+      .addCase(getSimilarProducts.fulfilled, (state, { payload }) => {
+        state.isSimilarLoading = false;
+        if (state.selectedCompanyProduct) {
+          state.similarProducts = payload.map((el) => {
+            return {
+              ...el,
+              company: el.company.filter(
+                (el) => el.companyUuid === state.selectedCompanyProduct
+              ),
+            };
+          });
+        } else {
+          state.similarProducts = payload;
+        }
+        state.length = payload.length;
+      })
+      .addCase(getSimilarProducts.rejected, (state) => {
+        state.isSimilarLoading = false;
+        state.similarProducts = [];
       })
       .addCase(getAllSoftDeleted.pending, (state) => {
         /* ===================== GET ALL SOFT DELETED PRODUCTS ===================== */

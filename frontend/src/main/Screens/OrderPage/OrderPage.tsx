@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderCard from "./OrderCard/OrderCard";
 import { useCompany } from "@hooks/useCompany";
+import ProductsList from "@Components/ProductsList/ProductsList";
 
 const OrderPage = () => {
   const { items, total } = useCart();
@@ -164,6 +165,12 @@ const OrderPage = () => {
           </div>
         </form>
       )}
+      <div className="mt-5">
+        <div className="mb-5">
+          <span className="font-semibold text-3xl">Может что-то ещё?</span>
+        </div>
+        <ProductsList />
+      </div>
     </section>
   );
 };

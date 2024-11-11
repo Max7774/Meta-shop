@@ -75,7 +75,6 @@ const SubCategoriesProducts = () => {
           </>
         ) : (
           <>
-            <Heading>{title}</Heading>
             <div className="my-4 grid grid-cols-6 items-center justify-center">
               <div
                 className={cn({
@@ -92,6 +91,7 @@ const SubCategoriesProducts = () => {
                 {productsFilters.queryParams.searchTerm && <Filters />}
               </div>
             </div>
+            <Heading>{title}</Heading>
             {productsFilters.queryParams.searchTerm ? (
               <ProductsList />
             ) : (

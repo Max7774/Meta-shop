@@ -35,9 +35,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         </div>
         <main
           className={cn(
-            "min-h-screen bg-default-50 border-l-1 border-t-1 sm:border-b-1 border-gray sm:rounded-l-3xl w-full sm:w-4/5",
+            "min-h-screen bg-default-50 sm:border-l-1 border-t-1 sm:border-b-1 border-gray sm:rounded-l-3xl w-full sm:w-4/5",
             {
-              "px-0 pt-5 pb-56": pathname.startsWith("/product"),
+              "px-0 pt-5 pb-72": pathname.startsWith("/product"),
               "px-6": !pathname.startsWith("/product"),
               "py-5": isBottomActions,
               "pt-5 pb-56":

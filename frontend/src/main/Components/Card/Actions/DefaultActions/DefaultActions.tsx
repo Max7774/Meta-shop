@@ -29,7 +29,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
         <div className="w-full flex flex-row justify-around items-center">
           <FiMinus
             className="cursor-pointer"
-            size={20}
+            size={15}
             onClick={() => {
               if (currentItem.quantity || 0 > 1) {
                 changeQuantity({ uuid: currentItem.uuid, type: "minus" });
@@ -38,12 +38,12 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
               }
             }}
           />
-          <div className="bg-default-200 w-[40px] text-center px-3 py-2 rounded-lg mx-2">
+          <div className="bg-default-200 w-[40px] text-center text-sm px-3 py-2 rounded-lg mx-2">
             {currentItem.quantity}
           </div>
           <FiPlus
             className="cursor-pointer"
-            size={20}
+            size={15}
             onClick={() =>
               changeQuantity({ uuid: currentItem.uuid, type: "plus" })
             }

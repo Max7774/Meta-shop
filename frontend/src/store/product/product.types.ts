@@ -5,7 +5,9 @@ export type TProductState = {
   isLoading: boolean;
   isProductLoading: boolean;
   isProductRecovered: boolean;
+  isSimilarLoading: boolean;
   products: TProduct[];
+  similarProducts: TProduct[];
   length: number;
   product?: TProduct;
   selectedCompanyProduct: string;

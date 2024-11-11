@@ -62,7 +62,7 @@ export class ProductController {
 
   @Get('similar/:uuid')
   async getSimilar(@Param('uuid') uuid: string) {
-    return this.productService.getSimilar(uuid);
+    return await this.productService.getSimilar(uuid);
   }
 
   @Get('by-slug/:slug')

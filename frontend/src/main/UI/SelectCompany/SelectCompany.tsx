@@ -26,7 +26,7 @@ const SelectCompany = ({ company: companies }: ISelectCompanyProps) => {
       <Select
         items={companies}
         variant="bordered"
-        size="sm"
+        size="md"
         aria-label="Выберите фирму"
         className="items-center"
         defaultSelectedKeys=""

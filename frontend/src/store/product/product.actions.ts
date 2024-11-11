@@ -195,3 +195,15 @@ export const getAllCompanyProducts = createAsyncThunk<
     return rejectWithValue(error.message);
   }
 });
+
+export const getSimilarProducts = createAsyncThunk<TProduct[], string>(
+  "/similar/products",
+  async (uuid, { rejectWithValue }) => {
+    try {
+      const response = await ProductService.getSimilarProducts(uuid);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

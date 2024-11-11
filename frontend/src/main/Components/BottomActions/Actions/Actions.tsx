@@ -36,7 +36,7 @@ const Actions = () => {
             ) : (
               <Button
                 color={product.inStock ? "primary" : "default"}
-                size="lg"
+                size='lg'
                 className="w-full"
                 onClick={() => {
                   addToCart({

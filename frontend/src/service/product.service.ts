@@ -31,6 +31,13 @@ export const ProductService = {
     });
   },
 
+  async getSimilarProducts(uuid: string) {
+    return await axiosClassic<TProduct[]>({
+      url: `${PRODUCTS}/similar/${uuid}`,
+      method: "GET",
+    });
+  },
+
   async getBySubCategory(subcategorySlug: string) {
     return await axiosClassic<TProduct[]>({
       url: `${PRODUCTS}/by-subcategory/${subcategorySlug}`,

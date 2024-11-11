@@ -10,6 +10,7 @@ import Price from "@UI/Price/Price";
 import SwiperUI from "@UI/SwiperUI/SwiperUI";
 import { ERoutes } from "@enums/ERoutes";
 import { useCategory } from "@hooks/useCategory";
+import SimilarProducts from "@Components/SimilarProducts/SimilarProducts";
 
 const ProductPage = () => {
   const { productSlug, categorySlug, subcategorySlug } = useParams();
@@ -131,6 +132,10 @@ const ProductPage = () => {
             <p>{product?.peculiarities}</p>
           </div>
         )}
+        <div className="mx-6 mt-5">
+          <Heading>Похожие продукты</Heading>
+          <SimilarProducts productUuid={product?.uuid || ""} />
+        </div>
       </section>
     </>
   );
