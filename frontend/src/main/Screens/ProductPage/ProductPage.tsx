@@ -8,16 +8,57 @@ import { Helmet } from "react-helmet-async";
 import Actions from "@Components/BottomActions/Actions/Actions";
 import Price from "@UI/Price/Price";
 import SwiperUI from "@UI/SwiperUI/SwiperUI";
+import { ERoutes } from "@enums/ERoutes";
+import { useCategory } from "@hooks/useCategory";
 
 const ProductPage = () => {
-  const { productSlug } = useParams();
-  const { getProductBySlug } = useActions();
+  const { productSlug, categorySlug, subcategorySlug } = useParams();
+  const { getProductBySlug, setBreadCrumbs } = useActions();
   const { product, isLoading } = useProducts();
+  const { categories } = useCategory();
   const navigate = useNavigate();
+
+  const title = categories
+    .find((item) => categorySlug === item.slug)
+    ?.subcategory.find(({ slug }) => subcategorySlug === slug)?.name;
+
+  const currentCategory = categories.find(({ slug }) => categorySlug == slug);
 
   useEffect(() => {
     getProductBySlug(productSlug || "");
   }, [productSlug, getProductBySlug]);
+
+  useEffect(() => {
+    setBreadCrumbs({
+      path: ERoutes.ROOT,
+      title: "Главная",
+    });
+
+    setBreadCrumbs({
+      path: ERoutes.CATEGORIES_ROOT,
+      title: "Категории",
+    });
+    setBreadCrumbs({
+      path: `/categories/${categorySlug}`,
+      title: currentCategory?.name || "",
+    });
+    setBreadCrumbs({
+      path: `/categories/${categorySlug}/${subcategorySlug}`,
+      title: title || "",
+    });
+    setBreadCrumbs({
+      path: `/product/${productSlug}/${categorySlug}/${subcategorySlug}`,
+      title: product?.name || "",
+    });
+  }, [
+    productSlug,
+    product?.name,
+    setBreadCrumbs,
+    categorySlug,
+    currentCategory?.name,
+    subcategorySlug,
+    title,
+  ]);
 
   if (isLoading) {
     return <CircularProgress />;

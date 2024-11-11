@@ -1,8 +1,8 @@
 import { NavigationBar } from "@/main/UI/NavigationBar";
 import Sidebar from "@/main/UI/SideBar";
 import BottomActions from "@Components/BottomActions/BottomActions";
-// import BreadCrumbs from "@Components/BreadCrumbs/BreadCrumbs";
 import Footer from "@Components/Footer/Footer";
+import { Chip } from "@nextui-org/react";
 import cn from "clsx";
 import { lazy, PropsWithChildren, Suspense } from "react";
 import { useLocation } from "react-router-dom";
@@ -46,7 +46,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
           )}
         >
           {!isBottomActions && pathname !== "/" && (
-            <Suspense fallback={<>Loading</>}>
+            <Suspense fallback={<Chip size="md" />}>
               <BreadCrumbs />
             </Suspense>
           )}

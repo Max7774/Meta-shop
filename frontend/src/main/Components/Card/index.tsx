@@ -24,7 +24,13 @@ const CardUI = ({ product }: ICardProps) => {
     <Card shadow="sm" key={product.uuid}>
       <CardBody
         className="overflow-visible p-0 cursor-pointer"
-        onClick={() => navigate("/product/" + product.slug)}
+        onClick={() =>
+          navigate(
+            "/product/" +
+              product.slug +
+              `/${product.subcategory.category?.slug}/${product.subcategory.slug}`
+          )
+        }
       >
         <Image
           shadow="sm"

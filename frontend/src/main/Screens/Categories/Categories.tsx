@@ -5,11 +5,24 @@ import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import Search from "@Components/Search/Search";
 import Filters from "@Components/Filters/Filters";
 import ProductsList from "@Components/ProductsList/ProductsList";
-// import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
-// import { Link } from "react-router-dom";
+import { ERoutes } from "@enums/ERoutes";
+import { useEffect } from "react";
+import { useActions } from "@hooks/useActions";
 
 const Categories = () => {
+  const { setBreadCrumbs } = useActions();
   const { products } = useAppSelector((state) => state.filters);
+
+  useEffect(() => {
+    setBreadCrumbs({
+      path: ERoutes.ROOT,
+      title: "Главная",
+    });
+    setBreadCrumbs({
+      path: ERoutes.CATEGORIES_ROOT,
+      title: "Категории",
+    });
+  }, [setBreadCrumbs]);
 
   return (
     <>
@@ -18,14 +31,6 @@ const Categories = () => {
         <meta name="description" content="Страница категорий - AgroZakupKz" />
       </Helmet>
       <section>
-        {/* <Breadcrumbs maxItems={3} radius="full" variant="solid">
-          <BreadcrumbItem>
-            <Link to={"/"}>{"Главная"}</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <Link to={`/categories`}>Категории</Link>
-          </BreadcrumbItem>
-        </Breadcrumbs> */}
         <div className="my-4 grid grid-cols-6 items-center justify-center">
           <div
             className={cn({

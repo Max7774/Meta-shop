@@ -8,6 +8,7 @@ import { filtersSlice } from "./filters/filters.slice";
 import { ordersSlice } from "./orders/orders.slice";
 import { companySlice } from "./company/company.slice";
 import { claimSlice } from "./claim/claim.slice";
+import { breadcrumbSlice } from "./breadcrumbs/breadcrumbs.slice";
 
 const combinedReducers = combineReducers({
   user: userSlice.reducer,
@@ -18,6 +19,7 @@ const combinedReducers = combineReducers({
   orders: ordersSlice.reducer,
   company: companySlice.reducer,
   claim: claimSlice.reducer,
+  breadcrumb: breadcrumbSlice.reducer,
 });
 
 const mainReducer = combinedReducers;

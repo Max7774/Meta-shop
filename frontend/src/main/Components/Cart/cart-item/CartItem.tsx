@@ -24,7 +24,9 @@ const CartItem: FC<IItem> = ({ item }) => {
         "bg-white": item.inStock,
       })}
     >
-      <Link to={`/product/${item.product?.category?.slug}`}>
+      <Link
+        to={`/product/${item.product?.slug}/${item.product.subcategory.category?.slug}/${item.product.subcategory.slug}`}
+      >
         <Image
           src={getImageUrl(item.product.images[0])}
           alt={item.product.name}

@@ -37,7 +37,7 @@ const CartActions: FC<{ item: ICartItem; className?: string }> = ({
             }
           }}
         />
-        <div className="bg-default-200 px-3 py-2 rounded-lg mx-2">
+        <div className="bg-default-200 w-[40px] text-center px-3 py-2 rounded-lg mx-2">
           {quantity}
         </div>
         <FiPlus

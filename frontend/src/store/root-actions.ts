@@ -7,6 +7,7 @@ import * as companyActions from "./company/company.actions";
 import { filtersSlice } from "./filters/filters.slice";
 import { productsSlice } from "./product/product.slice";
 import * as claimActions from "./claim/claim.actions";
+import { breadcrumbSlice } from "./breadcrumbs/breadcrumbs.slice";
 
 export const rootActions = {
   ...userActions,
@@ -18,4 +19,5 @@ export const rootActions = {
   ...companyActions,
   ...productsSlice.actions,
   ...claimActions,
+  ...breadcrumbSlice.actions,
 };

@@ -1,5 +1,5 @@
 import { TSubCategory } from "@/types/TCategory";
-import { Button, Card, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { getImageUrl } from "@utils/getImageUrl";
 import { useNavigate } from "react-router-dom";
 
@@ -16,36 +16,28 @@ const SubcategoriesList = ({
 
   return (
     <div>
-      <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 desktop:grid-cols-5">
         {subcategories.map((item) => (
           <Card
-            isHoverable
-            isPressable
+            shadow="sm"
             key={item.uuid}
-            isFooterBlurred
-            onPress={() => navigate(`/categories/${categorySlug}/${item.slug}`)}
-            className="w-full aspect-square"
+            isPressable
+            onPress={() => {
+              navigate(`/categories/${categorySlug}/${item.slug}`);
+            }}
           >
-            <Image
-              removeWrapper
-              alt="Card example background"
-              className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-              src={getImageUrl(item.icon)}
-            />
-            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-              <Button
-                fullWidth
-                className="text-tiny text-white bg-black/20"
-                variant="flat"
-                color="default"
+            <CardBody className="overflow-visible p-0">
+              <Image
+                shadow="sm"
                 radius="lg"
-                size="sm"
-                onPress={() =>
-                  navigate(`/categories/${categorySlug}/${item.slug}`)
-                }
-              >
-                {item.name}
-              </Button>
+                width="300px"
+                alt={item.name}
+                className="w-full object-cover h-[140px]"
+                src={getImageUrl(item.icon)}
+              />
+            </CardBody>
+            <CardFooter className="text-small justify-center">
+              <b>{item.name}</b>
             </CardFooter>
           </Card>
         ))}

@@ -114,7 +114,7 @@ const EditProduct = () => {
     });
 
     if (result.type === "products/updateProduct/fulfilled") {
-      navigate(`/product/${product?.slug}`);
+      navigate(`/product/${product?.slug}/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`);
     } else {
       toast.error("Ошибка редактирования продукта");
     }
