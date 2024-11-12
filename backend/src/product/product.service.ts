@@ -280,17 +280,53 @@ export class ProductService {
     return products;
   }
 
-  async getSimilar(uuid: string) {
+  async getSimilar(uuid: string, companyUuid?: string) {
     const currentProduct = await this.byId(uuid);
+
+    const currentCompany = await this.prisma.company.findUnique({
+      where: {
+        uuid: companyUuid,
+      },
+    });
+
+    const filters: Prisma.ProductWhereInput[] = [
+      {
+        subcategory: {
+          name: currentProduct.subcategory.name,
+        },
+      },
+      {
+        isWholesale: currentProduct.isWholesale,
+      },
+      {
+        subcategory: {
+          category: {
+            uuid: currentProduct.subcategory.categoryUuid,
+          },
+        },
+      },
+    ];
 
     if (!currentProduct)
       throw new NotFoundException('Current product not found');
 
+    if (currentCompany)
+      filters.push({
+        company: {
+          some: {
+            companyUuid: {
+              contains: currentCompany.uuid,
+            },
+            productUuid: {
+              contains: currentProduct.uuid,
+            },
+          },
+        },
+      } as Prisma.ProductWhereInput);
+
     const products = await this.prisma.product.findMany({
       where: {
-        subcategory: {
-          name: currentProduct.subcategory.name,
-        },
+        AND: [...filters],
         NOT: {
           uuid: currentProduct.uuid,
         },
@@ -298,6 +334,7 @@ export class ProductService {
       orderBy: {
         createdAt: 'desc',
       },
+      take: 10,
       select: productReturnObject,
     });
 

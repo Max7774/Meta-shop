@@ -60,9 +60,12 @@ export class ProductController {
     return this.productService.getAllSoftDeleted(queryDto);
   }
 
-  @Get('similar/:uuid')
-  async getSimilar(@Param('uuid') uuid: string) {
-    return await this.productService.getSimilar(uuid);
+  @Get('similar/:uuid/:companyUuid')
+  async getSimilar(
+    @Param('uuid') uuid: string,
+    @Param('companyUuid') companyUuid?: string | undefined,
+  ) {
+    return await this.productService.getSimilar(uuid, companyUuid);
   }
 
   @Get('by-slug/:slug')
