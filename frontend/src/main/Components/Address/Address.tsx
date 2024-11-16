@@ -72,7 +72,7 @@ const Address = ({ disabled }: IAddressProps) => {
               isLoading={isProfileLoading}
               variant="ghost"
               fullWidth
-              size="sm"
+              size="md"
               className="font-bold"
             >
               <span className="flex flex-row gap-2 items-center">
