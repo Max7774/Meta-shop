@@ -157,7 +157,7 @@ const OrderPage = () => {
               color="primary"
               isLoading={isLoading}
               fullWidth
-              isDisabled={minPriceDelivery >= grandTotal}
+              isDisabled={minPriceDelivery >= total}
               size="lg"
             >
               {isLoading ? "Оформляем..." : "Оформить заказ"}
