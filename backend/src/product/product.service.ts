@@ -29,15 +29,15 @@ export class ProductService {
   ) {}
 
   async getAll(dto: GetAllProductDto = {}) {
-    // const { perPage, skip } = this.paginationService.getPagination(dto);
+    const { perPage, skip } = this.paginationService.getPagination(dto);
 
     const filters = this.createFilter(dto);
 
     const currentProducts = await this.prisma.product.findMany({
       where: { ...(filters || {}), isDeleted: false },
       orderBy: this.getSortOption(dto.sort),
-      // skip,
-      // take: perPage,
+      skip,
+      take: perPage,
       select: {
         ...productReturnObject,
       },
@@ -264,7 +264,9 @@ export class ProductService {
     }
   }
 
-  async bySubcategory(subcategorySlug: string) {
+  async bySubcategory(subcategorySlug: string, dto: GetAllProductDto = {}) {
+    const { perPage, skip } = this.paginationService.getPagination(dto);
+
     const products = await this.prisma.product.findMany({
       where: {
         isDeleted: false,
@@ -272,6 +274,8 @@ export class ProductService {
           slug: subcategorySlug,
         },
       },
+      take: perPage,
+      skip,
       select: productReturnObjectFull,
     });
 
@@ -280,8 +284,21 @@ export class ProductService {
     return products;
   }
 
-  async getSimilar(uuid: string, companyUuid?: string) {
-    const currentProduct = await this.byId(uuid);
+  async getSimilar(
+    uuid: string,
+    companyUuid?: string,
+    dto: GetAllProductDto = {},
+  ) {
+    const { perPage, skip } = this.paginationService.getPagination(dto);
+    const currentProduct = await this.prisma.product.findUnique({
+      where: {
+        uuid,
+      },
+      select: {
+        subcategory: true,
+        ...productReturnObjectFull,
+      },
+    });
 
     const currentCompany = await this.prisma.company.findUnique({
       where: {
@@ -295,9 +312,9 @@ export class ProductService {
           name: currentProduct.subcategory.name,
         },
       },
-      {
-        isWholesale: currentProduct.isWholesale,
-      },
+      // {
+      //   isWholesale: currentProduct.isWholesale,
+      // },
       {
         subcategory: {
           category: {
@@ -317,9 +334,6 @@ export class ProductService {
             companyUuid: {
               contains: currentCompany.uuid,
             },
-            productUuid: {
-              contains: currentProduct.uuid,
-            },
           },
         },
       } as Prisma.ProductWhereInput);
@@ -331,10 +345,11 @@ export class ProductService {
           uuid: currentProduct.uuid,
         },
       },
+      take: perPage,
+      skip,
       orderBy: {
         createdAt: 'desc',
       },
-      take: 10,
       select: productReturnObject,
     });
 

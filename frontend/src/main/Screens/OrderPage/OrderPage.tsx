@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderCard from "./OrderCard/OrderCard";
 import { useCompany } from "@hooks/useCompany";
-import ProductsList from "@Components/ProductsList/ProductsList";
+import SimilarProducts from "@Components/SimilarProducts/SimilarProducts";
 
 const OrderPage = () => {
   const { items, total } = useCart();
@@ -169,7 +169,7 @@ const OrderPage = () => {
         <div className="mb-5">
           <span className="font-semibold text-3xl">Может что-то ещё?</span>
         </div>
-        <ProductsList />
+        <SimilarProducts productUuid={items[0].productUuid} />
       </div>
     </section>
   );

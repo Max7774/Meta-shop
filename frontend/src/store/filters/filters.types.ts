@@ -1,9 +1,10 @@
-import { TFilters, TFiltersPages } from "@/types/TFilters";
+import { TFilters, TFiltersPages, TFiltersPagination } from "@/types/TFilters";
 
 export type IFiltersState = {
   [key in TFiltersPages]: {
     isFilterUpdated: boolean;
     queryParams: TFilters;
+    pageFilters: TFiltersPagination;
   };
 };
 

@@ -26,6 +26,7 @@
 
 ![Главная страница](https://i-forvard.kz/images/main_page.png)
 ![Карточка товара](https://i-forvard.kz/images/product_page.png)
+![Оформление заказа](https://i-forvard.kz/images/order_page.png)
 
 ## 🛠 Технологии
 

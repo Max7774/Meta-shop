@@ -17,7 +17,7 @@ import { useState } from "react";
 import { IoFilter } from "react-icons/io5";
 
 const Filters = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { updateQueryParam } = useActions();
   const {
     products: { queryParams },
@@ -42,6 +42,7 @@ const Filters = () => {
       pageKey: "products",
     });
     updateQueryParam({ key: "sort", value: sort, pageKey: "products" });
+    onClose();
   };
 
   return (

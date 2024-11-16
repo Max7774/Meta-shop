@@ -10,14 +10,20 @@ import {
   TProductCreateForm,
   TProductsResponse,
 } from "@/types/TProduct";
+import { RootState } from "@hooks/redux-hooks/reduxHooks";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 /* getProductsAll */
 export const getProductsAll = createAsyncThunk<TProductsResponse, TFilters>(
   "products/getProducts",
-  async (filters, { rejectWithValue }) => {
+  async (filters, { rejectWithValue, getState }) => {
     try {
-      const response = await ProductService.getAll(filters);
+      const {
+        filters: {
+          products: { pageFilters },
+        },
+      } = getState() as RootState;
+      const response = await ProductService.getAll(filters, pageFilters);
       return response.data;
     } catch (error) {
       return rejectWithValue({
@@ -58,11 +64,23 @@ export const getProductBySlug = createAsyncThunk<TProduct, string>(
 );
 
 /* getProductBySubCategory */
-export const getProductBySubCategory = createAsyncThunk<TProduct[], string>(
+export const getProductBySubCategory = createAsyncThunk<
+  TProduct[],
+  { slug: string; filters: TFilters }
+>(
   "products/getProductBySubCategory",
-  async (subcategorySlug, { rejectWithValue }) => {
+  async ({ slug, filters }, { rejectWithValue, getState }) => {
     try {
-      const response = await ProductService.getBySubCategory(subcategorySlug);
+      const {
+        filters: {
+          products: { pageFilters },
+        },
+      } = getState() as RootState;
+      const response = await ProductService.getBySubCategory(
+        slug,
+        filters,
+        pageFilters
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue({
@@ -196,11 +214,18 @@ export const getAllCompanyProducts = createAsyncThunk<
   }
 });
 
-export const getSimilarProducts = createAsyncThunk<TProduct[], string>(
+export const getSimilarProducts = createAsyncThunk<
+  TProduct[],
+  { uuid: string; companyUuid: string; filters: TFilters }
+>(
   "/similar/products",
-  async (uuid, { rejectWithValue }) => {
+  async ({ uuid, companyUuid, filters }, { rejectWithValue }) => {
     try {
-      const response = await ProductService.getSimilarProducts(uuid);
+      const response = await ProductService.getSimilarProducts(
+        uuid,
+        companyUuid,
+        filters
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);

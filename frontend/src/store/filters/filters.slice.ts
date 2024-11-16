@@ -10,12 +10,20 @@ const initialState: IFiltersState = {
     queryParams: {
       searchTerm: "",
     },
+    pageFilters: {
+      perPage: 10,
+      page: 1,
+    },
   },
   products: {
     isFilterUpdated: false,
     queryParams: {
       searchTerm: "",
       sort: ESort.NEWEST,
+    },
+    pageFilters: {
+      perPage: 10,
+      page: 1,
     },
   },
   users: {
@@ -24,12 +32,20 @@ const initialState: IFiltersState = {
       searchTerm: "",
       sort: ESort.NEWEST,
     },
+    pageFilters: {
+      perPage: 10,
+      page: 1,
+    },
   },
   "soft-deleted": {
     isFilterUpdated: false,
     queryParams: {
       searchTerm: "",
       sort: ESort.NEWEST,
+    },
+    pageFilters: {
+      perPage: 10,
+      page: 1,
     },
   },
 };

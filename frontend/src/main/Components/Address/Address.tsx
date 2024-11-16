@@ -8,7 +8,7 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
 import NewAddressForm from "./NewAddressForm/NewAddressForm";
@@ -72,14 +72,14 @@ const Address = ({ disabled }: IAddressProps) => {
               isLoading={isProfileLoading}
               variant="ghost"
               fullWidth
-              size="lg"
+              size="sm"
               className="font-bold"
             >
               <span className="flex flex-row gap-2 items-center">
                 <span>
                   {selectedAddress
                     ? `${selectedAddress.street}, ${selectedAddress.house}`
-                    : "Выберите адрес"}
+                    : "Выберите адрес f"}
                 </span>
                 <span>
                   <FaAngleDown />
@@ -115,7 +115,7 @@ const Address = ({ disabled }: IAddressProps) => {
           </DropdownMenu>
         </Dropdown>
       ) : (
-        <Button fullWidth size="lg" color="secondary" onClick={onOpen}>
+        <Button fullWidth size="md" color="secondary" onClick={onOpen}>
           <span className="flex flex-row gap-2 items-center text-white">
             <FiPlus size={20} />
             <span>Новый адрес</span>

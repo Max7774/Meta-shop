@@ -52,6 +52,7 @@ const initialState: TProductState = {
   companyProducts: [],
   similarProducts: [],
   length: 0,
+  currentPage: 1,
   selectedCompanyProduct: getStoreLocal("selectedCompany") || "",
 };
 
@@ -76,6 +77,10 @@ export const productsSlice = createSlice({
         company: cp.filter((el) => el.productUuid === state.product?.uuid),
       };
     },
+    resetProducts: (state) => {
+      state.products = [];
+      state.currentPage = 1;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -85,17 +90,21 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductsAll.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.currentPage += 1;
         if (state.selectedCompanyProduct) {
-          state.products = payload.products.map((el) => {
-            return {
-              ...el,
-              company: el.company.filter(
-                (el) => el.companyUuid === state.selectedCompanyProduct
-              ),
-            };
-          });
+          state.products = [
+            ...state.products,
+            ...payload.products.map((el) => {
+              return {
+                ...el,
+                company: el.company.filter(
+                  (el) => el.companyUuid === state.selectedCompanyProduct
+                ),
+              };
+            }),
+          ];
         } else {
-          state.products = payload.products;
+          state.products = [...state.products, ...payload.products];
         }
         state.length = payload.length;
       })

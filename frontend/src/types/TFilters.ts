@@ -10,4 +10,9 @@ export type TFilters = {
   subcategoryUuid?: string;
 };
 
-export type TFiltersPages = "order" | "products" | "users" | 'soft-deleted';
+export type TFiltersPagination = {
+  page?: number;
+  perPage?: number;
+};
+
+export type TFiltersPages = "order" | "products" | "users" | "soft-deleted";

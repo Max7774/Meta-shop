@@ -1,5 +1,5 @@
 import { FILE_UPLOAD, PRODUCTS } from "@/const/startApi";
-import { TFilters } from "@/types/TFilters";
+import { TFilters, TFiltersPagination } from "@/types/TFilters";
 import {
   TProduct,
   TProductCreateForm,
@@ -8,19 +8,25 @@ import {
 import { axiosClassic, formDataInstance, instance } from "@api/api.interceptor";
 
 export const ProductService = {
-  async getAll(queryData = {} as TFilters) {
+  async getAll(
+    queryData = {} as TFilters,
+    pageData = {} as TFiltersPagination
+  ) {
     return await axiosClassic<TProductsResponse>({
       url: PRODUCTS,
       method: "GET",
-      params: queryData,
+      params: { ...queryData, ...pageData },
     });
   },
 
-  async getAllSoftDeleted(queryData = {} as TFilters) {
+  async getAllSoftDeleted(
+    queryData = {} as TFilters,
+    pageData = {} as TFiltersPagination
+  ) {
     return await instance<TProductsResponse>({
       url: `${PRODUCTS}/soft-deleted`,
       method: "GET",
-      params: queryData,
+      params: { ...queryData, ...pageData },
     });
   },
 
@@ -31,17 +37,28 @@ export const ProductService = {
     });
   },
 
-  async getSimilarProducts(uuid: string) {
+  async getSimilarProducts(
+    uuid: string,
+    companyUuid: string,
+    queryData = {} as TFilters,
+    pageData = {} as TFiltersPagination
+  ) {
     return await axiosClassic<TProduct[]>({
-      url: `${PRODUCTS}/similar/${uuid}`,
+      url: `${PRODUCTS}/similar/${uuid}/${companyUuid}`,
       method: "GET",
+      params: { ...queryData, ...pageData },
     });
   },
 
-  async getBySubCategory(subcategorySlug: string) {
+  async getBySubCategory(
+    subcategorySlug: string,
+    queryData = {} as TFilters,
+    pageData = {} as TFiltersPagination
+  ) {
     return await axiosClassic<TProduct[]>({
       url: `${PRODUCTS}/by-subcategory/${subcategorySlug}`,
       method: "GET",
+      params: { ...queryData, ...pageData },
     });
   },
 

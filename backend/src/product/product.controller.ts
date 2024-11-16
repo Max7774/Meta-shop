@@ -63,9 +63,10 @@ export class ProductController {
   @Get('similar/:uuid/:companyUuid')
   async getSimilar(
     @Param('uuid') uuid: string,
+    @Query() queryDto: GetAllProductDto,
     @Param('companyUuid') companyUuid?: string | undefined,
   ) {
-    return await this.productService.getSimilar(uuid, companyUuid);
+    return await this.productService.getSimilar(uuid, companyUuid, queryDto);
   }
 
   @Get('by-slug/:slug')
@@ -76,8 +77,9 @@ export class ProductController {
   @Get('by-subcategory/:subcategorySlug')
   async getProductsByCategory(
     @Param('subcategorySlug') subcategorySlug: string,
+    @Query() queryDto: GetAllProductDto,
   ) {
-    return this.productService.bySubcategory(subcategorySlug);
+    return this.productService.bySubcategory(subcategorySlug, queryDto);
   }
 
   @UsePipes(new ValidationPipe())

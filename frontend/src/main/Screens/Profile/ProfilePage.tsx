@@ -48,7 +48,7 @@ const ProfilePage = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
               className="sm:flex"
-              size="lg"
+              size="md"
               color="primary"
               onClick={handleEditOpen}
             >

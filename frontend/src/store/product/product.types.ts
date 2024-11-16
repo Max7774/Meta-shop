@@ -11,5 +11,6 @@ export type TProductState = {
   length: number;
   product?: TProduct;
   selectedCompanyProduct: string;
+  currentPage: number;
   companyProducts: TCompanyProduct[];
 };
