@@ -139,7 +139,7 @@ const ResetPasswordForm = ({ setTypeOfAuth }: IResetPasswordFormProps) => {
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Input
                 fullWidth
-                label="Код"
+                label="Код с почты"
                 variant="flat"
                 size="lg"
                 placeholder="Введите код с почты"

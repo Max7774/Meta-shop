@@ -48,7 +48,7 @@ const CardUI = ({ product }: ICardProps) => {
             ) : (
               <></>
             )}
-            {product?.company[0]?.discount !== 0 ? (
+            {product?.company[0]?.discount !== 0 || !product?.company.length ? (
               <Chip color="success" className="text-white" size="sm">
                 Скидка {product?.company[0]?.discount}%
               </Chip>
