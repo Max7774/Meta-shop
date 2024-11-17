@@ -27,15 +27,15 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <NavigationBar isBottomActions={isBottomActions} />
-      {/* <div className="sm:grid block" style={{ gridTemplateColumns: "1fr 4fr" }}>
-        <div className="hidden sm:block"> */}
-      <div className="flex flex-row">
-        <div className="hidden sm:block w-1/5">
+      <div className="sm:grid block" style={{ gridTemplateColumns: "1fr 4fr" }}>
+        <div className="hidden sm:block">
+          {/* <div className="flex flex-row">
+        <div className="hidden sm:block w-1/5"> */}
           <Sidebar />
         </div>
         <main
           className={cn(
-            "min-h-screen bg-default-50 sm:border-l-1 border-t-1 sm:border-b-1 border-gray sm:rounded-l-3xl w-full sm:w-4/5",
+            "min-h-screen bg-default-50 sm:border-l-1 border-t-1 sm:border-b-1 border-gray sm:rounded-l-3xl w-full",
             {
               "px-0 pt-5 pb-72": pathname.startsWith("/product"),
               "px-6": !pathname.startsWith("/product"),
