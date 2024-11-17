@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { ADMIN_SIDEBAR_ITEMS } from "@/const/admin_items";
 
-const AdminItems = () => {
+interface IAdminItemsProps {
+  isCollapsed: boolean;
+}
+
+const AdminItems = ({ isCollapsed }: IAdminItemsProps) => {
   const { pathname } = useLocation();
 
   return (
@@ -28,23 +32,31 @@ const AdminItems = () => {
         {ADMIN_SIDEBAR_ITEMS.length === 0 && (
           <span className="ml-5">Категорий пока что нет!</span>
         )}
-        {ADMIN_SIDEBAR_ITEMS.map(({ name, uuid, slug }) => (
+        {ADMIN_SIDEBAR_ITEMS.map(({ name, uuid, slug, Icon }) => (
           <li key={uuid} className="relative mb-2 last:mb-0">
             <Link
               key={uuid + "link"}
               className={cn(
-                "whitespace-nowrap text-lg h-12 flex items-center px-10 ml-3 transition-colors duration-300",
+                "whitespace-nowrap text-lg h-12 flex items-center px-10 transition-colors duration-300",
                 {
                   "text-white": pathname.includes(slug),
                   "text-black rounded-l-xl hover:shadow-[inset_1px_0_0_1px_#d1d1d4] hover:transition-all hover:duration-500 hover:cursor-pointer":
                     !pathname.includes(slug),
+                  "ml-0": isCollapsed,
+                  "ml-3": !isCollapsed,
                 }
               )}
               to={slug}
             >
-              <div className="text-md">
-                <span>{name}</span>
-              </div>
+              {isCollapsed ? (
+                <div>
+                  <Icon size={20} />
+                </div>
+              ) : (
+                <div className="text-md">
+                  <span>{name}</span>
+                </div>
+              )}
             </Link>
           </li>
         ))}

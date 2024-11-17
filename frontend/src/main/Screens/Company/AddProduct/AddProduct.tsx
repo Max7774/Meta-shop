@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-import Products from "@/main/Components/Products/Products";
+// import Products from "@/main/Components/Products/Products";
 import Heading from "@/main/UI/Heading";
 import { TProductCreateForm } from "@/types/TProduct";
 import { useActions } from "@hooks/useActions";
@@ -21,13 +21,14 @@ import { useCategory } from "@hooks/useCategory";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
-import Search from "@Components/Search/Search";
-import ProductsList from "@Components/ProductsList/ProductsList";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+// import Search from "@Components/Search/Search";
+// import ProductsList from "@Components/ProductsList/ProductsList";
+// import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import ProductsTable from "@Components/ProductsTable/ProductsTable";
 
 const AddProduct = () => {
   const { products, isLoading } = useProducts();
-  const { queryParams } = useAppSelector((state) => state.filters.products);
+  // const { queryParams } = useAppSelector((state) => state.filters.products);
   const { categories } = useCategory();
   const { getProductsAll, getCategoriesAll, createProduct } = useActions();
 
@@ -328,14 +329,15 @@ const AddProduct = () => {
         </Button>
       </form>
       <Divider className="my-4" />
-      <Search pageKey="products" />
+      {/* <Search pageKey="products" />
       <div className="py-10">
         {queryParams.searchTerm ? (
           <ProductsList />
         ) : (
           <Products products={products} />
         )}
-      </div>
+      </div> */}
+      <ProductsTable products={products} />
     </section>
   );
 };

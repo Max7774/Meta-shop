@@ -4,8 +4,13 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import cn from "clsx";
 import { motion } from "framer-motion";
 import { sideBarItems } from "./utils/sidebarItems";
+import { FaInfoCircle } from "react-icons/fa";
 
-const CategoryItems = () => {
+interface ICategoryItemsProps {
+  isCollapsed: boolean;
+}
+
+const CategoryItems = ({ isCollapsed }: ICategoryItemsProps) => {
   const { categories, isLoading } = useCategory();
   const { categorySlug } = useParams();
   const { pathname } = useLocation();
@@ -34,18 +39,26 @@ const CategoryItems = () => {
               <Link
                 key={uuid + "link"}
                 className={cn(
-                  "whitespace-nowrap text-lg h-12 flex items-center px-10 ml-3 transition-colors duration-300",
+                  "whitespace-nowrap text-lg h-12 flex items-center px-10 transition-colors duration-300",
                   {
                     "text-white": categorySlug === slug,
                     "text-black rounded-l-xl hover:shadow-[inset_1px_0_0_1px_#d1d1d4] hover:transition-all hover:duration-500 hover:cursor-pointer":
                       categorySlug !== slug,
+                    "ml-0": isCollapsed,
+                    "ml-3": !isCollapsed,
                   }
                 )}
                 to={`/categories/${slug}`}
               >
-                <div className="text-md">
-                  <span>{name}</span>
-                </div>
+                {isCollapsed ? (
+                  <div>
+                    <FaInfoCircle />
+                  </div>
+                ) : (
+                  <div className="text-md">
+                    <span>{name}</span>
+                  </div>
+                )}
               </Link>
             </li>
           ))}
@@ -66,23 +79,31 @@ const CategoryItems = () => {
           />
         )}
         <div className="flex flex-col">
-          {sideBarItems.map(({ name, uuid, slug }) => (
+          {sideBarItems.map(({ name, uuid, slug, icon: Icon }) => (
             <li key={uuid} className="relative mb-2 last:mb-0">
               <Link
                 key={uuid + "link"}
                 className={cn(
-                  "whitespace-nowrap text-lg h-12 flex items-center px-10 ml-3 transition-colors duration-300",
+                  "whitespace-nowrap text-lg h-12 flex items-center px-10 transition-colors duration-300",
                   {
                     "text-white": pathname === slug,
                     "text-black rounded-l-xl hover:shadow-[inset_1px_0_0_1px_#d1d1d4] hover:transition-all hover:duration-500 hover:cursor-pointer":
                       pathname !== slug,
+                    "ml-0": isCollapsed,
+                    "ml-3": !isCollapsed,
                   }
                 )}
                 to={slug}
               >
-                <div className="text-md">
-                  <span>{name}</span>
-                </div>
+                {isCollapsed ? (
+                  <div>
+                    <Icon />
+                  </div>
+                ) : (
+                  <div className="text-md">
+                    <span>{name}</span>
+                  </div>
+                )}
               </Link>
             </li>
           ))}

@@ -27,7 +27,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <NavigationBar isBottomActions={isBottomActions} />
-      <div className="sm:grid block" style={{ gridTemplateColumns: "1fr 4fr" }}>
+      <div className="sm:grid block" style={{ gridTemplateColumns: "auto 4fr" }}>
         <div className="hidden sm:block">
           {/* <div className="flex flex-row">
         <div className="hidden sm:block w-1/5"> */}

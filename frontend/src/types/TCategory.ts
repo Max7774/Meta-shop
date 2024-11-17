@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type TSubCategory = {
   uuid: string;
   name: string;
@@ -17,6 +18,6 @@ export type TCategory = {
   uuid: string;
   name: string;
   slug: string;
-  icon: string;
+  icon: any;
   subcategory: TSubCategory[];
 };
