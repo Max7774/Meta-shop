@@ -286,7 +286,19 @@ export class ProductService {
 
     if (!products) throw new NotFoundException('Products not found');
 
-    return products;
+    return products.map((el) => {
+      if (el.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        return {
+          ...el,
+          isNew: true,
+        };
+      } else {
+        return {
+          ...el,
+          isNew: false,
+        };
+      }
+    });
   }
 
   async getSimilar(
@@ -358,7 +370,19 @@ export class ProductService {
       select: productReturnObject,
     });
 
-    return products;
+    return products.map((el) => {
+      if (el.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        return {
+          ...el,
+          isNew: true,
+        };
+      } else {
+        return {
+          ...el,
+          isNew: false,
+        };
+      }
+    });
   }
 
   async createProduct(dto: ProductDto, userUuid: string) {

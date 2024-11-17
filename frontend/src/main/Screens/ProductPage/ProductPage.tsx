@@ -100,7 +100,7 @@ const ProductPage = () => {
                 ? "Нет в наличии!"
                 : "В наличии!"}
             </Chip>
-            {!product?.isNew || product?.company.length ? (
+            {product?.isNew ? (
               <Chip size="lg" className="text-white" color="success">
                 Новый
               </Chip>

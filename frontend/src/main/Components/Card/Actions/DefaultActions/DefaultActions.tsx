@@ -18,7 +18,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
 
   if (!product.inStock || !product.company.length)
     return (
-      <Button color="default" fullWidth isDisabled>
+      <Button size="sm" color="default" fullWidth isDisabled>
         Нет в наличии
       </Button>
     );
@@ -26,7 +26,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
   return (
     <>
       {!!currentItem && currentItem.quantity >= 1 ? (
-        <div className="w-full flex flex-row justify-around items-center">
+        <div className="w-full flex flex-row bg-default-100 rounded-lg justify-around items-center">
           <FiMinus
             className="cursor-pointer"
             size={15}
@@ -38,7 +38,7 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
               }
             }}
           />
-          <div className="bg-default-200 w-[40px] text-center text-sm px-3 py-2 rounded-lg mx-2">
+          <div className="h-[32px] w-[32px] text-center text-sm rounded-lg mx-2 flex items-center justify-center">
             {currentItem.quantity}
           </div>
           <FiPlus

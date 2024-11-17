@@ -41,14 +41,14 @@ const CardUI = ({ product }: ICardProps) => {
       >
         <div className="relative">
           <div className="absolute flex flex-row gap-2 z-20 right-2 top-2">
-            {!product?.isNew || product?.company.length ? (
+            {product?.isNew ? (
               <Chip size="sm" className="text-white" color="success">
                 Новый!
               </Chip>
             ) : (
               <></>
             )}
-            {product?.company[0]?.discount !== 0 && product.company.length ? (
+            {product?.company[0]?.discount !== 0 ? (
               <Chip color="success" className="text-white" size="sm">
                 Скидка {product?.company[0]?.discount}%
               </Chip>
