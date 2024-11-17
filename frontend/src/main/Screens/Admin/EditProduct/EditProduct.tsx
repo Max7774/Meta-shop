@@ -114,7 +114,9 @@ const EditProduct = () => {
     });
 
     if (result.type === "products/updateProduct/fulfilled") {
-      navigate(`/product/${product?.slug}/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`);
+      navigate(
+        `/product/${product?.slug}/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`
+      );
     } else {
       toast.error("Ошибка редактирования продукта");
     }
@@ -242,6 +244,7 @@ const EditProduct = () => {
             render={({ field, fieldState: { error } }) => (
               <Select
                 label="Единица измерения"
+                labelPlacement="outside"
                 placeholder="Выберите единицу измерения"
                 isDisabled={!!companyUuid}
                 selectedKeys={[field.value]}
@@ -267,6 +270,7 @@ const EditProduct = () => {
               <Select
                 isDisabled={!!companyUuid}
                 label="Категория"
+                labelPlacement="outside"
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
@@ -290,6 +294,7 @@ const EditProduct = () => {
               <Select
                 isDisabled={!!companyUuid}
                 label="Подкатегория"
+                labelPlacement="outside"
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {
                   const selectedKey = Array.from(keys)[0] as string;
@@ -299,7 +304,7 @@ const EditProduct = () => {
               >
                 {(
                   categories.find(
-                    ({ slug }) => product.subcategory.category?.slug === slug
+                    ({ slug }) => product?.subcategory?.category?.slug === slug
                   )?.subcategory ||
                   categories.find((el) => el.uuid === categoryUuid)
                     ?.subcategory ||
@@ -321,6 +326,7 @@ const EditProduct = () => {
               <Select
                 isDisabled={excludedRoles.includes(role)}
                 label="Фирма поставщик-производитель"
+                labelPlacement="outside"
                 placeholder="Выберите фирму"
                 selectedKeys={[field.value]}
                 onSelectionChange={(keys) => {

@@ -41,4 +41,9 @@ export const ADMIN_SIDEBAR_ITEMS = [
     name: "Заявки",
     slug: ADMIN_GlOBAL_PREFIX + "claims",
   },
+  {
+    uuid: "8",
+    name: "Массовые операции",
+    slug: ADMIN_GlOBAL_PREFIX + "mass-operations",
+  },
 ];

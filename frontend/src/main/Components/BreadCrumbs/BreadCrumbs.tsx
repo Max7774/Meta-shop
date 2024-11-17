@@ -10,7 +10,7 @@ const BreadCrumbs = () => {
 
   return (
     <Breadcrumbs
-      maxItems={3}
+      maxItems={window.innerWidth < 640 ? 3 : undefined}
       className={cn("mb-2", {
         "mx-6": pathname.startsWith("/product"),
       })}

@@ -66,7 +66,11 @@ export class ProductController {
     @Query() queryDto: GetAllProductDto,
     @Param('companyUuid') companyUuid?: string | undefined,
   ) {
-    return await this.productService.getSimilar(uuid, companyUuid, queryDto);
+    return await this.productService.getSimilar(
+      uuid,
+      companyUuid,
+      // queryDto
+    );
   }
 
   @Get('by-slug/:slug')
@@ -77,9 +81,13 @@ export class ProductController {
   @Get('by-subcategory/:subcategorySlug')
   async getProductsByCategory(
     @Param('subcategorySlug') subcategorySlug: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query() queryDto: GetAllProductDto,
   ) {
-    return this.productService.bySubcategory(subcategorySlug, queryDto);
+    return this.productService.bySubcategory(
+      subcategorySlug,
+      // queryDto
+    );
   }
 
   @UsePipes(new ValidationPipe())

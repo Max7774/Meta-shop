@@ -130,6 +130,7 @@ const ClaimForm = () => {
             isInvalid={!!error?.message}
             errorMessage={error?.message}
             label="Тип заявки"
+            labelPlacement="outside"
             placeholder="Выберите тип заявки"
             selectedKeys={new Set([value])}
             onSelectionChange={(selected) =>

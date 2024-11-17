@@ -26,6 +26,7 @@ export enum EAdminRoutes {
   ADD_COMPANY = "add-company",
   SOFT_DELETED = "soft-deleted",
   CLAIMS = "claims",
+  MASS_OPERATIONS = "mass-operations",
 }
 
 export enum ECompanyRoutes {
@@ -35,4 +36,5 @@ export enum ECompanyRoutes {
   ARCHIVED_ORDERS = "archived-orders",
   EDIT_PRODUCT = "product/:productSlug",
   COMPANY_INFO = "company-info",
+  MASS_OPERATIONS = "mass-operations",
 }

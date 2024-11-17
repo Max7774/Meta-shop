@@ -1,4 +1,4 @@
-import { TRoutes } from "@/types/TRoutesData";
+import { TAuthRoutes } from "@/types/TRoutesData";
 import { EAdminRoutes } from "@enums/ERoutes";
 import {
   AddCompany,
@@ -10,10 +10,11 @@ import {
   ArchivedOrders,
   Claims,
   EditProduct,
+  MassOperations,
   SoftDeletedProducts,
 } from "../components/root";
 
-export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
+export const ADMIN_ROUTES: TAuthRoutes<EAdminRoutes>[] = [
   {
     id: "root-page-admin",
     path: EAdminRoutes.ROOT,
@@ -64,4 +65,9 @@ export const ADMIN_ROUTES: TRoutes<EAdminRoutes>[] = [
     path: EAdminRoutes.ADD_PRODUCT,
     component: AdminAddProduct,
   },
+  {
+    id: "mass-operations-root-page-admin",
+    path: EAdminRoutes.MASS_OPERATIONS,
+    component: MassOperations,
+  }
 ];

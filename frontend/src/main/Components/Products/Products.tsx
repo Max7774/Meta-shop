@@ -6,6 +6,7 @@ interface IProductsProps {
 }
 
 const Products = ({ products }: IProductsProps) => {
+  
   if (products.length === 0) return <div>Продуктов нет...</div>;
 
   return (

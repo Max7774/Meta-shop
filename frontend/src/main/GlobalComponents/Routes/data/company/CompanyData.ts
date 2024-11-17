@@ -1,4 +1,4 @@
-import { TRoutes } from "@/types/TRoutesData";
+import { TAuthRoutes } from "@/types/TRoutesData";
 import { ECompanyRoutes } from "@enums/ERoutes";
 import {
   AddProduct,
@@ -6,10 +6,11 @@ import {
   ArchivedOrders,
   CompanyInfo,
   EditProduct,
+  MassOperations,
   Statistics,
 } from "../components/root";
 
-export const COMPANY_ROUTES: TRoutes<ECompanyRoutes>[] = [
+export const COMPANY_ROUTES: TAuthRoutes<ECompanyRoutes>[] = [
   {
     id: "company-add-product-page",
     path: ECompanyRoutes.ADD_PRODUCT,
@@ -39,5 +40,10 @@ export const COMPANY_ROUTES: TRoutes<ECompanyRoutes>[] = [
     id: "company-info-page",
     path: ECompanyRoutes.COMPANY_INFO,
     component: CompanyInfo,
+  },
+  {
+    id: "mass-operations-root-page-company",
+    path: ECompanyRoutes.MASS_OPERATIONS,
+    component: MassOperations,
   },
 ];

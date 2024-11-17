@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useFilters } from "@hooks/useFilters";
 import {
@@ -22,13 +23,15 @@ const Filters = () => {
   const {
     products: { queryParams },
   } = useFilters();
+  const { companies } = useAppSelector((state) => state.company);
 
   // Начальные значения ценового диапазона
   const [priceRange, setPriceRange] = useState<[number, number]>([
     Number(queryParams.minPrice) || 0,
-    Number(queryParams.maxPrice) || 10000, // Предполагаем максимальную цену 10000
+    Number(queryParams.maxPrice) || 7000, // Предполагаем максимальную цену 7000
   ]);
   const [sort, setSort] = useState(queryParams.sort || "");
+  const [companyUuid, setCompanyUuid] = useState(queryParams.companyUuid || "");
 
   const applyFilters = () => {
     updateQueryParam({
@@ -42,6 +45,11 @@ const Filters = () => {
       pageKey: "products",
     });
     updateQueryParam({ key: "sort", value: sort, pageKey: "products" });
+    updateQueryParam({
+      key: "companyUuid",
+      value: companyUuid,
+      pageKey: "products",
+    });
     onClose();
   };
 
@@ -62,13 +70,26 @@ const Filters = () => {
                       label="Ценовой диапазон"
                       step={10}
                       minValue={0}
-                      maxValue={10000}
-                      defaultValue={[100, 10000]}
+                      maxValue={7000}
+                      defaultValue={[100, 7000]}
                       value={priceRange}
                       onChange={(e: any) => setPriceRange(e)}
                       className="mt-4"
                     />
                   </div>
+                  <Select
+                    label="Фирма поставщик-производитель"
+                    placeholder="Выберите фирму"
+                    selectedKeys={new Set([companyUuid])}
+                    onSelectionChange={(keys) => {
+                      setCompanyUuid(Array.from(keys).join(""));
+                    }}
+                    fullWidth
+                  >
+                    {companies.map(({ uuid, name }) => (
+                      <SelectItem key={uuid}>{name}</SelectItem>
+                    ))}
+                  </Select>
                   <Select
                     label="Сортировка"
                     placeholder="Выберите вариант сортировки"
@@ -89,7 +110,7 @@ const Filters = () => {
                   color="primary"
                   variant="light"
                   onPress={() => {
-                    setPriceRange([0, 10000]);
+                    setPriceRange([0, 7000]);
                     setSort("");
                     onClose();
                     window.location.reload();

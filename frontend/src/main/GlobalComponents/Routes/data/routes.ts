@@ -4,11 +4,7 @@ import {
   COMPANY_GlOBAL_PREFIX,
   GlOBAL_PREFIX,
 } from "@/const/globalPrefix";
-import {
-  TAdminRootRoute,
-  TCompanyRootRoute,
-  TRootRoute,
-} from "@/types/TRoutesData";
+import { TMainRootRoute, TRootRoute } from "@/types/TRoutesData";
 import { ERoles } from "@enums/ERoles";
 import { getNotFound } from "@utils/getNotFound";
 import { ROOT_DATA } from "./root/RootData";
@@ -24,7 +20,7 @@ export const ROUTES: TRootRoute = {
   },
 };
 
-export const ADMIN_ROUTES_DATA: TAdminRootRoute = {
+export const AUTH_ROLES_ROUTES: TMainRootRoute = {
   [ADMIN_GlOBAL_PREFIX]: {
     id: getNotFound(ERoles.ADMIN),
     key: getNotFound(ERoles.ADMIN),
@@ -32,9 +28,6 @@ export const ADMIN_ROUTES_DATA: TAdminRootRoute = {
     routes: ADMIN_ROUTES,
     role: ERoles.ADMIN,
   },
-};
-
-export const COMPANY_ROUTES_DATA: TCompanyRootRoute = {
   [COMPANY_GlOBAL_PREFIX]: {
     id: getNotFound(ERoles.COMPANY),
     key: getNotFound(ERoles.COMPANY),

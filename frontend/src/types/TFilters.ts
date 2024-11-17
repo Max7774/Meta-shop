@@ -8,6 +8,7 @@ export type TFilters = {
   maxPrice?: string;
   categoryUuid?: string;
   subcategoryUuid?: string;
+  companyUuid?: string;
 };
 
 export type TFiltersPagination = {

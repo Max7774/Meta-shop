@@ -13,6 +13,25 @@ const ProductsList = () => {
     products: { queryParams },
   } = useFilters();
 
+  // const handleScroll = useCallback(() => {
+  //   if (
+  //     window.innerHeight + document.documentElement.scrollTop !==
+  //     document.documentElement.offsetHeight
+  //   )
+  //     return;
+
+  //   // Загрузите больше продуктов, когда достигнут нижний край
+  //   updatePageFilters({
+  //     pageKey: "products",
+  //     perPage: pageFilters?.perPage || 0 + 10,
+  //   });
+  // }, [pageFilters?.perPage, updatePageFilters]);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [handleScroll]);
+
   useEffect(() => {
     getProductsAll(queryParams);
   }, [queryParams, getProductsAll]);

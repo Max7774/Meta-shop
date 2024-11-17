@@ -59,6 +59,9 @@ export const Claims = lazy(() => import("@/main/Screens/Admin/Claims/Claims"));
 export const AdminAddProduct = lazy(
   () => import("@/main/Screens/Admin/AddProduct/AddProduct")
 );
+export const MassOperations = lazy(
+  () => import("@/main/Screens/Admin/MassOperations/MassOperations")
+);
 
 /* COMPANY */
 export const AddProduct = lazy(

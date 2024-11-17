@@ -5,17 +5,20 @@ import { useCategory } from "@hooks/useCategory";
 import { useProducts } from "@hooks/useProducts";
 import Heading from "@UI/Heading";
 import Loader from "@UI/Loader";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { useFilters } from "@hooks/useFilters";
 
 const SubCategoriesProducts = () => {
   const { subcategorySlug, categorySlug } = useParams();
   const { products, isLoading } = useProducts();
-  const { getProductBySubCategory, setBreadCrumbs } = useActions();
+  const { getProductBySubCategory, setBreadCrumbs, updatePageFilters } =
+    useActions();
   const { categories } = useCategory();
-  const { queryParams } = useAppSelector((state) => state.filters.products);
+  const {
+    products: { queryParams, pageFilters },
+  } = useFilters();
 
   useEffect(() => {
     getProductBySubCategory({
@@ -23,6 +26,27 @@ const SubCategoriesProducts = () => {
       filters: queryParams,
     });
   }, [products?.length, getProductBySubCategory, subcategorySlug, queryParams]);
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+
+    updatePageFilters({
+      pageKey: "products",
+      perPage: Number(pageFilters?.perPage) + 10,
+      // page: Number(pageFilters?.page) + 1,
+    });
+  }, [pageFilters?.perPage, updatePageFilters]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  console.log(pageFilters);
 
   const title = categories
     .find((item) => categorySlug === item.slug)

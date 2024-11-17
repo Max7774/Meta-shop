@@ -66,6 +66,19 @@ export const filtersSlice = createSlice({
       }
       state[action.payload.pageKey].isFilterUpdated = true;
     },
+    updatePageFilters: (
+      state,
+      action: PayloadAction<{
+        pageKey: TFiltersPages;
+        perPage: number;
+        // page: number;
+      }>
+    ) => {
+      const { pageKey, perPage } = action.payload;
+      state[pageKey].pageFilters.perPage = perPage;
+      // state[pageKey].pageFilters.page = page;
+      state[pageKey].isFilterUpdated = true;
+    },
     resetFilterUpdate: (
       state,
       action: PayloadAction<{ pageKey: TFiltersPages }>

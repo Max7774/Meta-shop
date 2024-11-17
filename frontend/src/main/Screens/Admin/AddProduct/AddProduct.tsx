@@ -177,6 +177,7 @@ const AddProduct = () => {
             <Select
               label="Единица измерения"
               placeholder="Выберите единицу измерения"
+              labelPlacement="outside"
               selectedKeys={[field.value]}
               onSelectionChange={(keys) => {
                 const selectedKey = Array.from(keys)[0] as string;
@@ -195,6 +196,7 @@ const AddProduct = () => {
         <Select
           label="Категория"
           placeholder="Выберите категорию"
+          labelPlacement="outside"
           selectedKeys={[selectedCategory]}
           onSelectionChange={(keys) => {
             const selectedKey = Array.from(keys)[0] as string;

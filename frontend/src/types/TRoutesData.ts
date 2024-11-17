@@ -18,26 +18,13 @@ export type TRootRoute = {
   };
 };
 
-export type TAdminRootRoute = {
-  [T in string]: {
-    Loader?: () => JSX.Element;
-    id?: string;
-    key?: string;
-    another_routes?: string;
-    routes: TRootRoutes<EAdminRoutes>[];
-    role: ERoles;
-  };
-};
-
-export type TCompanyRootRoute = {
-  [T in string]: {
-    Loader?: () => JSX.Element;
-    id?: string;
-    key?: string;
-    another_routes?: string;
-    routes: TRootRoutes<ECompanyRoutes>[];
-    role: ERoles;
-  };
+export type TAuthRoutes<E> = {
+  id: string;
+  path: E;
+  component: React.LazyExoticComponent<() => JSX.Element>;
+  label?: string;
+  Icon?: IconType;
+  pathId?: number;
 };
 
 export type TRoutes<T> = {
@@ -47,4 +34,17 @@ export type TRoutes<T> = {
   label?: string;
   Icon?: IconType;
   pathId?: number;
+};
+
+type TMainRoutes = TAuthRoutes<ECompanyRoutes> | TAuthRoutes<EAdminRoutes>;
+
+export type TMainRootRoute = {
+  [T in string]: {
+    role: ERoles;
+    routes: TMainRoutes[];
+    Loader?: () => JSX.Element;
+    id?: string;
+    key?: string;
+    another_routes?: string;
+  };
 };

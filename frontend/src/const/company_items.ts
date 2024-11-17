@@ -26,4 +26,9 @@ export const COMPANY_SIDEBAR_ITEMS = [
     name: "Архив заказов",
     slug: COMPANY_GlOBAL_PREFIX + "archived-orders",
   },
+  {
+    uuid: "5",
+    name: "Массовые операции",
+    slug: COMPANY_GlOBAL_PREFIX + "mass-operations",
+  },
 ];

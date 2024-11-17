@@ -1,7 +1,10 @@
+import { TCompany } from "@/types/TCompany";
 import { TFilters } from "@/types/TFilters";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import { useActions } from "@hooks/useActions";
 import { useFilters } from "@hooks/useFilters";
 import { Chip } from "@nextui-org/react";
+import { convertPrice } from "@utils/convertPrice";
 
 // Функция для получения названия категории по UUID
 const getCategoryName = (uuid: string) => {
@@ -32,20 +35,22 @@ const getSortLabel = (value: string) => {
 };
 
 // Функция для получения читаемого названия фильтра
-const getFilterLabel = (key: string, value: string) => {
+const getFilterLabel = (key: string, value: string, companies: TCompany[]) => {
   switch (key) {
     case "minPrice":
-      return `Мин. цена: ${value}`;
+      return `Мин: ${convertPrice(Number(value))}`;
     case "maxPrice":
-      return `Макс. цена: ${value}`;
+      return `Макс: ${convertPrice(Number(value))}`;
     case "ratings":
       return `Рейтинг: ${value}+`;
     case "categoryUuid":
       return `Категория: ${getCategoryName(value)}`;
+    case "companyUuid":
+      return `${companies.find((item) => item.uuid === value)?.name}`;
     case "sort":
-      return `Сортировка: ${getSortLabel(value)}`;
+      return `${getSortLabel(value)}`;
     case "searchTerm":
-      return `Поиск: ${value}`;
+      return `${value}`;
     default:
       return `${key}: ${value}`;
   }
@@ -56,6 +61,7 @@ const ChipFilters = () => {
     products: { queryParams },
   } = useFilters();
   const { updateQueryParam } = useActions();
+  const { companies } = useAppSelector((state) => state.company);
 
   // Преобразуем фильтры в массив для отображения
   const filters = Object.entries(queryParams).filter(
@@ -79,12 +85,13 @@ const ChipFilters = () => {
       {filters.map(([key, value]) => (
         <Chip
           key={key}
-          size="lg"
+          size="md"
           variant="flat"
+          isDisabled={key === "sort"}
           className="flex items-center"
           onClick={() => removeFilter(key)}
         >
-          {getFilterLabel(key, value)}
+          {getFilterLabel(key, value, companies)}
           <span className="ml-2 cursor-pointer">&times;</span>
         </Chip>
       ))}

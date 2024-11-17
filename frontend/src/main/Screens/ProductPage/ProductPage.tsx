@@ -77,7 +77,8 @@ const ProductPage = () => {
           <div className="flex flex-row flex-wrap gap-2">
             <Chip
               size="lg"
-              className="cursor-pointer"
+              color="warning"
+              className="text-white cursor-pointer"
               onClick={() =>
                 navigate(
                   `/categories/${product?.subcategory?.category?.slug}/${product?.subcategory?.slug}`

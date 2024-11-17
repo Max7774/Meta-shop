@@ -29,15 +29,15 @@ export class ProductService {
   ) {}
 
   async getAll(dto: GetAllProductDto = {}) {
-    const { perPage, skip } = this.paginationService.getPagination(dto);
+    // const { perPage, skip } = this.paginationService.getPagination(dto);
 
     const filters = this.createFilter(dto);
 
     const currentProducts = await this.prisma.product.findMany({
       where: { ...(filters || {}), isDeleted: false },
       orderBy: this.getSortOption(dto.sort),
-      skip,
-      take: perPage,
+      // skip,
+      // take: perPage,
       select: {
         ...productReturnObject,
       },
@@ -133,7 +133,9 @@ export class ProductService {
     return {
       company: {
         some: {
-          uuid: companyUuid,
+          company: {
+            uuid: companyUuid,
+          },
         },
       },
     };
@@ -264,8 +266,11 @@ export class ProductService {
     }
   }
 
-  async bySubcategory(subcategorySlug: string, dto: GetAllProductDto = {}) {
-    const { perPage, skip } = this.paginationService.getPagination(dto);
+  async bySubcategory(
+    subcategorySlug: string,
+    //  dto: GetAllProductDto = {}
+  ) {
+    // const { perPage } = this.paginationService.getPagination(dto);
 
     const products = await this.prisma.product.findMany({
       where: {
@@ -274,8 +279,8 @@ export class ProductService {
           slug: subcategorySlug,
         },
       },
-      take: perPage,
-      skip,
+      // take: dto.perPage ? +dto.perPage : 10,
+      // skip,
       select: productReturnObjectFull,
     });
 
@@ -287,9 +292,9 @@ export class ProductService {
   async getSimilar(
     uuid: string,
     companyUuid?: string,
-    dto: GetAllProductDto = {},
+    // dto: GetAllProductDto = {},
   ) {
-    const { perPage, skip } = this.paginationService.getPagination(dto);
+    // const { perPage, skip } = this.paginationService.getPagination(dto);
     const currentProduct = await this.prisma.product.findUnique({
       where: {
         uuid,
@@ -345,8 +350,8 @@ export class ProductService {
           uuid: currentProduct.uuid,
         },
       },
-      take: perPage,
-      skip,
+      // take: perPage,
+      // skip,
       orderBy: {
         createdAt: 'desc',
       },

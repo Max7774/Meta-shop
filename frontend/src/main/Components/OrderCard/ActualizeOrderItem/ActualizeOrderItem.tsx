@@ -11,6 +11,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import {
   Controller,
@@ -35,7 +37,9 @@ const ActualizeOrderItem = ({
 }: IActualizeOrderItemProps) => {
   const { actualizeOrder } = useActions();
   const { isActualLoading } = useAppSelector((state) => state.orders);
-  const { handleSubmit, control } = useForm<{ items: TOrderItem[] }>({
+  const { handleSubmit, control } = useForm<{
+    items: TOrderItem[];
+  }>({
     defaultValues: {
       items: items,
     },
@@ -46,7 +50,9 @@ const ActualizeOrderItem = ({
     name: "items",
   });
 
-  const submit: SubmitHandler<{ items: TOrderItem[] }> = async (data) => {
+  const submit: SubmitHandler<{
+    items: TOrderItem[];
+  }> = async (data) => {
     const res: any = await actualizeOrder({ items: data.items, orderId });
 
     if (res.type === "/order/actualize/fulfilled") {
@@ -105,15 +111,37 @@ const ActualizeOrderItem = ({
                           value={value?.toString()}
                           fullWidth
                           endContent={
-                            <div className="pointer-events-none flex items-center justify-center">
-                              <span className="text-default-400">
-                                {
-                                  unitofmeasurementData[
-                                    item?.product?.unitofmeasurement
-                                  ]
-                                }
-                              </span>
-                            </div>
+                            <Controller
+                              control={control}
+                              name={`items.${index}.product.unitofmeasurement`}
+                              rules={{ required: "Выберите единицу измерения" }}
+                              render={({ field, fieldState: { error } }) => (
+                                <Select
+                                  isDisabled
+                                  placeholder="Выберите единицу измерения"
+                                  selectedKeys={[field.value || ""]}
+                                  size="sm"
+                                  classNames={{
+                                    base: "w-[150px]",
+                                  }}
+                                  onSelectionChange={(keys) => {
+                                    const selectedKey = Array.from(
+                                      keys
+                                    )[0] as string;
+                                    field.onChange(selectedKey);
+                                  }}
+                                  isInvalid={!!error?.message}
+                                  errorMessage={error?.message}
+                                  fullWidth
+                                >
+                                  {Object.entries(unitofmeasurementData).map(
+                                    ([key, value]) => (
+                                      <SelectItem key={key}>{value}</SelectItem>
+                                    )
+                                  )}
+                                </Select>
+                              )}
+                            />
                           }
                         />
                       )}

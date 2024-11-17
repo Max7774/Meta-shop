@@ -1,6 +1,13 @@
 import { TProduct } from "@/types/TProduct";
 import { ERoles } from "@enums/ERoles";
-import { Card, CardBody, CardFooter, Divider, Image } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Chip,
+  Divider,
+  Image,
+} from "@nextui-org/react";
 import { convertPrice } from "@utils/convertPrice";
 import { useNavigate } from "react-router-dom";
 import DefaultActions from "./Actions/DefaultActions/DefaultActions";
@@ -32,14 +39,32 @@ const CardUI = ({ product }: ICardProps) => {
           )
         }
       >
-        <Image
-          shadow="sm"
-          radius="lg"
-          width="100%"
-          alt={product?.name}
-          className="w-full object-cover h-[140px]"
-          src={getImageUrl(product?.images[0])}
-        />
+        <div className="relative">
+          <div className="absolute flex flex-row gap-2 z-20 right-2 top-2">
+            {!product?.isNew || product?.company.length ? (
+              <Chip size="sm" className="text-white" color="success">
+                Новый!
+              </Chip>
+            ) : (
+              <></>
+            )}
+            {product?.company[0]?.discount !== 0 && product.company.length ? (
+              <Chip color="success" className="text-white" size="sm">
+                Скидка {product?.company[0]?.discount}%
+              </Chip>
+            ) : (
+              <></>
+            )}
+          </div>
+          <Image
+            shadow="sm"
+            radius="lg"
+            width="100%"
+            alt={product?.name}
+            className="w-full object-cover h-[140px]"
+            src={getImageUrl(product?.images[0])}
+          />
+        </div>
       </CardBody>
       <CardFooter className="text-small gap-2 flex-col justify-between">
         <b className="text-center">{product.name}</b>

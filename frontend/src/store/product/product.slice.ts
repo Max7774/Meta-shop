@@ -93,7 +93,7 @@ export const productsSlice = createSlice({
         state.currentPage += 1;
         if (state.selectedCompanyProduct) {
           state.products = [
-            ...state.products,
+            // ...state.products,
             ...payload.products.map((el) => {
               return {
                 ...el,

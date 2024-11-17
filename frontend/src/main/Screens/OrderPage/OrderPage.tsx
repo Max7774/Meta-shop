@@ -24,6 +24,7 @@ const OrderPage = () => {
     companyDeliveryPrice,
     companyMinPriceDelivery,
     selectedCompanyProduct,
+    companyName,
   } = useCompany();
 
   const { createOrder, reset, updateItemsInStock, getAllCompanies } =
@@ -82,7 +83,9 @@ const OrderPage = () => {
 
   return (
     <section>
-      <Heading>Оформление заказа</Heading>
+      <div className="text-center sm:text-start">
+        <Heading>Оформление заказа</Heading>
+      </div>
       <div className="pb-4">
         <Address />
         {errors.addressUuid && (
@@ -92,85 +95,91 @@ const OrderPage = () => {
       {items.length === 0 ? (
         <div className="text-center mt-8 text-lg">Корзина пуста!</div>
       ) : (
-        <form onSubmit={handleSubmit(submit)}>
-          <Divider />
-          <div className="flex flex-col mt-4 gap-3">
-            {items.map((item, index) => (
-              <OrderCard
-                item={item}
-                key={item.uuid + index}
-                itemsInStock={itemsInStock}
-              />
-            ))}
+        <>
+          <form onSubmit={handleSubmit(submit)}>
             <Divider />
-            <Controller
-              control={control}
-              name="comment"
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Textarea
-                  label="Комментарий"
-                  placeholder="Оставьте комментарий к доставке"
-                  isInvalid={!!error?.message}
-                  errorMessage={error?.message}
-                  onChange={onChange}
-                  value={value}
-                  fullWidth
+            <div className="flex flex-col mt-4 gap-3">
+              {items.map((item, index) => (
+                <OrderCard
+                  item={item}
+                  key={item.uuid + index}
+                  itemsInStock={itemsInStock}
                 />
-              )}
-            />
-            <Divider />
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between font-bold text-sm sm:text-lg">
-                <div className="text-nowrap">Стоимость товаров:</div>
-                <div>{convertPrice(total)}</div>
-              </div>
-              <div className="flex justify-between font-bold text-sm sm:text-lg">
-                <div className="text-nowrap">Стоимость доставки:</div>
-                <div>{convertPrice(deliveryPrice)}</div>
-              </div>
-              {minPriceDelivery !== 0 && (
-                <Progress
-                  aria-label="Loading..."
-                  label={
-                    total >= 7000
-                      ? "Можно заказаывать"
-                      : `Ещё необходимо: ${convertPrice(
-                          minPriceDelivery - total
-                        )}`
-                  }
-                  color={total >= 7000 ? "success" : "warning"}
-                  maxValue={minPriceDelivery}
-                  value={total}
-                />
-              )}
+              ))}
               <Divider />
-              <div className="flex justify-between font-bold text-xl">
-                <div>Итого к оплате:</div>
-                <div>{convertPrice(grandTotal)}</div>
+              <Controller
+                control={control}
+                name="comment"
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Textarea
+                    label="Комментарий"
+                    placeholder="Оставьте комментарий к доставке"
+                    isInvalid={!!error?.message}
+                    errorMessage={error?.message}
+                    onChange={onChange}
+                    value={value}
+                    fullWidth
+                  />
+                )}
+              />
+              <Divider />
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between font-bold text-sm sm:text-lg">
+                  <div className="text-nowrap">Выбранная фирма</div>
+                  <div>{companyName}</div>
+                </div>
+                <div className="flex justify-between font-bold text-sm sm:text-lg">
+                  <div className="text-nowrap">Стоимость товаров:</div>
+                  <div>{convertPrice(total)}</div>
+                </div>
+                <div className="flex justify-between font-bold text-sm sm:text-lg">
+                  <div className="text-nowrap">Стоимость доставки:</div>
+                  <div>{convertPrice(deliveryPrice)}</div>
+                </div>
+                {minPriceDelivery !== 0 && (
+                  <Progress
+                    aria-label="Loading..."
+                    label={
+                      total >= 7000
+                        ? "Можно заказаывать"
+                        : `Ещё необходимо: ${convertPrice(
+                            minPriceDelivery - total
+                          )}`
+                    }
+                    color={total >= 7000 ? "success" : "warning"}
+                    maxValue={minPriceDelivery}
+                    value={total}
+                  />
+                )}
+                <Divider />
+                <div className="flex justify-between font-bold text-xl">
+                  <div>Итого к оплате:</div>
+                  <div>{convertPrice(grandTotal)}</div>
+                </div>
               </div>
+              <Button
+                type="submit"
+                color="primary"
+                isLoading={isLoading}
+                fullWidth
+                isDisabled={minPriceDelivery >= total}
+                size="lg"
+              >
+                {isLoading ? "Оформляем..." : "Оформить заказ"}
+              </Button>
             </div>
-            <Button
-              type="submit"
-              color="primary"
-              isLoading={isLoading}
-              fullWidth
-              isDisabled={minPriceDelivery >= total}
-              size="lg"
-            >
-              {isLoading ? "Оформляем..." : "Оформить заказ"}
-            </Button>
+          </form>
+          <div className="mt-5">
+            <div className="mb-5">
+              <span className="font-semibold text-3xl">Может что-то ещё?</span>
+            </div>
+            <SimilarProducts productUuid={items[0].productUuid} />
           </div>
-        </form>
+        </>
       )}
-      <div className="mt-5">
-        <div className="mb-5">
-          <span className="font-semibold text-3xl">Может что-то ещё?</span>
-        </div>
-        <SimilarProducts productUuid={items[0].productUuid} />
-      </div>
     </section>
   );
 };
