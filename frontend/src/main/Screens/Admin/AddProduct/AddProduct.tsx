@@ -98,6 +98,9 @@ const AddProduct = () => {
 
   return (
     <section>
+      <Heading>Продукты</Heading>
+      <ProductsTable products={products} />
+      <Divider className="my-4" />
       <Heading>Добавление нового продукта</Heading>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-6">
         <Controller
@@ -359,8 +362,6 @@ const AddProduct = () => {
           Добавить продукт
         </Button>
       </form>
-      <Divider className="my-4" />
-      <ProductsTable products={products} />
       {/* <Search pageKey="products" />
       <div className="py-10">
         {queryParams.searchTerm ? (

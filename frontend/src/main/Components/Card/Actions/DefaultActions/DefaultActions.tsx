@@ -27,9 +27,8 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
     <>
       {!!currentItem && currentItem.quantity >= 1 ? (
         <div className="w-full flex flex-row bg-default-100 rounded-lg justify-around items-center">
-          <FiMinus
-            className="cursor-pointer"
-            size={15}
+          <div
+            className="px-4 cursor-pointer"
             onClick={() => {
               if (currentItem.quantity || 0 > 1) {
                 changeQuantity({ uuid: currentItem.uuid, type: "minus" });
@@ -37,17 +36,20 @@ const DefaultActions = ({ product }: IDefaultActionsProps) => {
                 removeFromCart({ uuid: currentItem.uuid });
               }
             }}
-          />
+          >
+            <FiMinus size={15} />
+          </div>
           <div className="h-[32px] w-[32px] text-center text-sm rounded-lg mx-2 flex items-center justify-center">
             {currentItem.quantity}
           </div>
-          <FiPlus
-            className="cursor-pointer"
-            size={15}
+          <div
+            className="px-4 cursor-pointer"
             onClick={() =>
               changeQuantity({ uuid: currentItem.uuid, type: "plus" })
             }
-          />
+          >
+            <FiPlus size={15} />
+          </div>
         </div>
       ) : (
         <Button
