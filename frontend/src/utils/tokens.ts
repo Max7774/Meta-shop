@@ -33,6 +33,10 @@ export const removeFromStorage = () => {
   window.location.reload();
 };
 
+export const removeCurrentFromStorage = (key: string) => {
+  localStorage.removeItem(key);
+};
+
 export const saveToStorage = (data: TAuthnResponse) => {
   if (!data.user) {
     return;

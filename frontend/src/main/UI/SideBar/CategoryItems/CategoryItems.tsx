@@ -50,15 +50,19 @@ const CategoryItems = ({ isCollapsed }: ICategoryItemsProps) => {
                 )}
                 to={`/categories/${slug}`}
               >
-                {isCollapsed ? (
-                  <div>
-                    <FaInfoCircle />
+                <div className="text-md">
+                  <div className="flex flex-row gap-2 items-center">
+                    <FaInfoCircle size={20} />
+                    <span
+                      className={cn("transition-all duration-300", {
+                        "opacity-0": isCollapsed,
+                        "opacity-1": !isCollapsed,
+                      })}
+                    >
+                      {name}
+                    </span>
                   </div>
-                ) : (
-                  <div className="text-md">
-                    <span>{name}</span>
-                  </div>
-                )}
+                </div>
               </Link>
             </li>
           ))}
@@ -95,15 +99,19 @@ const CategoryItems = ({ isCollapsed }: ICategoryItemsProps) => {
                 )}
                 to={slug}
               >
-                {isCollapsed ? (
-                  <div>
-                    <Icon />
+                <div className="text-md">
+                  <div className="flex flex-nowrap flex-row gap-2 items-center">
+                    <Icon size={20} />
+                    <span
+                      className={cn("transition-all duration-300", {
+                        "opacity-0": isCollapsed,
+                        "opacity-1": !isCollapsed,
+                      })}
+                    >
+                      {name}
+                    </span>
                   </div>
-                ) : (
-                  <div className="text-md">
-                    <span>{name}</span>
-                  </div>
-                )}
+                </div>
               </Link>
             </li>
           ))}

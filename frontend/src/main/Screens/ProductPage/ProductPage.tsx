@@ -1,7 +1,7 @@
 import Heading from "@/main/UI/Heading";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chip, CircularProgress } from "@nextui-org/react";
+import { Avatar, Chip, CircularProgress } from "@nextui-org/react";
 import { useActions } from "@hooks/useActions";
 import { useProducts } from "@hooks/useProducts";
 import { Helmet } from "react-helmet-async";
@@ -11,12 +11,17 @@ import SwiperUI from "@UI/SwiperUI/SwiperUI";
 import { ERoutes } from "@enums/ERoutes";
 import { useCategory } from "@hooks/useCategory";
 import SimilarProducts from "@Components/SimilarProducts/SimilarProducts";
+import { useCompany } from "@hooks/useCompany";
+import { getImageUrl } from "@utils/getImageUrl";
+import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 
 const ProductPage = () => {
   const { productSlug, categorySlug, subcategorySlug } = useParams();
   const { getProductBySlug, setBreadCrumbs } = useActions();
-  const { product, isLoading } = useProducts();
+  const { product, isLoading, selectedCompanyProduct } = useProducts();
   const { categories } = useCategory();
+  const { companies } = useAppSelector((state) => state.company);
+  const { companyName } = useCompany();
   const navigate = useNavigate();
 
   const title = categories
@@ -76,7 +81,7 @@ const ProductPage = () => {
           <Heading>{product?.name}</Heading>
           <div className="flex flex-row flex-wrap gap-2">
             <Chip
-              size="lg"
+              size="md"
               color="warning"
               className="text-white cursor-pointer"
               onClick={() =>
@@ -88,7 +93,7 @@ const ProductPage = () => {
               {product?.subcategory?.name}
             </Chip>
             <Chip
-              size="lg"
+              size="md"
               className="text-white"
               color={
                 !product?.inStock || !product?.company.length
@@ -101,7 +106,7 @@ const ProductPage = () => {
                 : "В наличии!"}
             </Chip>
             {product?.isNew ? (
-              <Chip size="lg" className="text-white" color="success">
+              <Chip size="md" className="text-white" color="success">
                 Новый
               </Chip>
             ) : (
@@ -116,12 +121,35 @@ const ProductPage = () => {
             />
           </div>
           <div className="relative flex flex-col px-6 sm:pt-6 gap-4">
-            <Price
-              discount={product?.company[0]?.discount || 0}
-              price={product?.company[0]?.price || 0}
-              unitofmeasurement={product?.unitofmeasurement || ""}
-            />
-            <p className="break-words">{product?.description}</p>
+            <div className="flex flex-row items-center gap-5">
+              <Price
+                discount={product?.company[0]?.discount || 0}
+                price={product?.company[0]?.price || 0}
+                unitofmeasurement={product?.unitofmeasurement || ""}
+              />
+              <Chip
+                variant="flat"
+                size="lg"
+                avatar={
+                  <Avatar
+                    name={companyName}
+                    src={getImageUrl(
+                      companies.find(
+                        ({ uuid }) => uuid === selectedCompanyProduct
+                      )?.logoPath || ""
+                    )}
+                  />
+                }
+              >
+                {companyName}
+              </Chip>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="text-default-300 font-bold text-lg">
+                Описание
+              </span>
+              <p className="break-words">{product?.description}</p>
+            </div>
             <div className="hidden sm:flex flex-col gap-5">
               <Actions />
             </div>

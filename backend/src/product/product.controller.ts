@@ -81,13 +81,9 @@ export class ProductController {
   @Get('by-subcategory/:subcategorySlug')
   async getProductsByCategory(
     @Param('subcategorySlug') subcategorySlug: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query() queryDto: GetAllProductDto,
   ) {
-    return this.productService.bySubcategory(
-      subcategorySlug,
-      // queryDto
-    );
+    return this.productService.bySubcategory(subcategorySlug, queryDto);
   }
 
   @UsePipes(new ValidationPipe())

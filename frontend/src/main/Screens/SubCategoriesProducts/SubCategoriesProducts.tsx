@@ -5,7 +5,7 @@ import { useCategory } from "@hooks/useCategory";
 import { useProducts } from "@hooks/useProducts";
 import Heading from "@UI/Heading";
 import Loader from "@UI/Loader";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { useFilters } from "@hooks/useFilters";
@@ -13,11 +13,10 @@ import { useFilters } from "@hooks/useFilters";
 const SubCategoriesProducts = () => {
   const { subcategorySlug, categorySlug } = useParams();
   const { products, isLoading } = useProducts();
-  const { getProductBySubCategory, setBreadCrumbs, updatePageFilters } =
-    useActions();
+  const { getProductBySubCategory, setBreadCrumbs } = useActions();
   const { categories } = useCategory();
   const {
-    products: { queryParams, pageFilters },
+    products: { queryParams, pageFilters, isFilterUpdated },
   } = useFilters();
 
   useEffect(() => {
@@ -25,28 +24,13 @@ const SubCategoriesProducts = () => {
       slug: subcategorySlug || "",
       filters: queryParams,
     });
-  }, [products?.length, getProductBySubCategory, subcategorySlug, queryParams]);
-
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    )
-      return;
-
-    updatePageFilters({
-      pageKey: "products",
-      perPage: Number(pageFilters?.perPage) + 10,
-      // page: Number(pageFilters?.page) + 1,
-    });
-  }, [pageFilters?.perPage, updatePageFilters]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  console.log(pageFilters);
+  }, [
+    products?.length,
+    pageFilters,
+    getProductBySubCategory,
+    subcategorySlug,
+    queryParams,
+  ]);
 
   const title = categories
     .find((item) => categorySlug === item.slug)
@@ -79,7 +63,7 @@ const SubCategoriesProducts = () => {
     title,
   ]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading && !isFilterUpdated) return <Loader />;
 
   return (
     <>

@@ -23,29 +23,13 @@ const Sidebar = () => {
 
   return (
     <aside
-      // className={cn(
-      //   "relative bg-white flex flex-col justify-between z-20 h-full transition-transform duration-300"
-      // )}
       className={cn(
-        "relative bg-white flex flex-col justify-between z-20 h-full transition-all duration-300",
-        { "w-64": !isCollapsed, "w-20": isCollapsed } // Две ширины для раскрытого и свернутого состояния
+        "relative bg-white flex flex-col justify-between z-20 h-full transition-all duration-400",
+        { "w-64": !isCollapsed, "w-20": isCollapsed }
       )}
     >
       <ToggleButton toggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
       <ul>
-        {/* {pathname.startsWith("/admin") ? (
-          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-            Админ панель
-          </div>
-        ) : pathname.startsWith("/company") ? (
-          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-            Компания
-          </div>
-        ) : (
-          <div className="text-xl font-bold text-wrap text-black mt-6 mb-6 ml-6">
-            Категории
-          </div>
-        )} */}
         {pathname.startsWith("/admin") ? (
           <li className="flex items-center mt-6 mb-6 ml-6">
             <FaChartPie className="mr-3" />
@@ -61,11 +45,19 @@ const Sidebar = () => {
             )}
           </li>
         ) : (
-          <li className="flex items-center mt-6 mb-6 ml-6">
+          <li className="flex flex-nowrap items-center mt-6 mb-6 ml-6">
             <FaListAlt className="mr-3" />
-            {!isCollapsed && (
-              <span className="text-xl font-bold text-black">Категории</span>
-            )}
+            <span
+              className={cn(
+                "text-xl font-bold text-black transition-all duration-200",
+                {
+                  "opacity-0": isCollapsed,
+                  "opacity-1": !isCollapsed,
+                }
+              )}
+            >
+              Категории
+            </span>
           </li>
         )}
 

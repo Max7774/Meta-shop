@@ -70,13 +70,13 @@ export const filtersSlice = createSlice({
       state,
       action: PayloadAction<{
         pageKey: TFiltersPages;
-        perPage: number;
-        // page: number;
+        perPage?: number;
+        page?: number;
       }>
     ) => {
-      const { pageKey, perPage } = action.payload;
-      state[pageKey].pageFilters.perPage = perPage;
-      // state[pageKey].pageFilters.page = page;
+      const { pageKey, perPage, page } = action.payload;
+      state[pageKey].pageFilters.perPage = perPage || 10;
+      state[pageKey].pageFilters.page = page || 1;
       state[pageKey].isFilterUpdated = true;
     },
     resetFilterUpdate: (
@@ -84,6 +84,12 @@ export const filtersSlice = createSlice({
       action: PayloadAction<{ pageKey: TFiltersPages }>
     ) => {
       state[action.payload.pageKey].isFilterUpdated = false;
+    },
+    resetFilters: (
+      state,
+      action: PayloadAction<{ pageKey: TFiltersPages }>
+    ) => {
+      state[action.payload.pageKey] = initialState[action.payload.pageKey];
     },
   },
 });

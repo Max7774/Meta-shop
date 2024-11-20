@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-// import Products from "@/main/Components/Products/Products";
 import Heading from "@/main/UI/Heading";
 import { TProductCreateForm } from "@/types/TProduct";
 import { useActions } from "@hooks/useActions";
@@ -21,18 +20,16 @@ import { useCategory } from "@hooks/useCategory";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { unitofmeasurementData } from "@/const/unitofmeasurement";
-// import Search from "@Components/Search/Search";
-// import ProductsList from "@Components/ProductsList/ProductsList";
-// import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 import ProductsTable from "@Components/ProductsTable/ProductsTable";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
 
 const AddProduct = () => {
-  const { products, isLoading } = useProducts();
-  // const { queryParams } = useAppSelector((state) => state.filters.products);
+  const { isLoading } = useProducts();
   const { categories } = useCategory();
-  const { companies } = useAppSelector((state) => state.company);
-  const { getProductsAll, getCategoriesAll, createProduct } = useActions();
+  const { companies, isLoading: isCompLoading } = useAppSelector(
+    (state) => state.company
+  );
+  const { getProductsAll, getAllCompanies, createProduct } = useActions();
 
   const { control, handleSubmit, clearErrors, setError, reset } =
     useForm<TProductCreateForm>();
@@ -89,17 +86,13 @@ const AddProduct = () => {
   };
 
   useEffect(() => {
-    getCategoriesAll();
-  }, [getCategoriesAll]);
-
-  useEffect(() => {
     getProductsAll({});
   }, [getProductsAll]);
 
   return (
     <section>
       <Heading>Продукты</Heading>
-      <ProductsTable products={products} />
+      <ProductsTable />
       <Divider className="my-4" />
       <Heading>Добавление нового продукта</Heading>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-6">
@@ -202,6 +195,8 @@ const AddProduct = () => {
         <Select
           label="Категория"
           placeholder="Выберите категорию"
+          isLoading={isCompLoading}
+          onClick={() => companies.length === 0 && getAllCompanies()}
           labelPlacement="outside"
           selectedKeys={[selectedCategory]}
           onSelectionChange={(keys) => {
@@ -254,6 +249,8 @@ const AddProduct = () => {
           rules={{ required: "Выберите фирму" }}
           render={({ field, fieldState: { error } }) => (
             <Select
+              isLoading={isCompLoading}
+              onClick={() => companies.length === 0 && getAllCompanies()}
               label="Фирма поставщик-производитель"
               labelPlacement="outside"
               placeholder="Выберите фирму"

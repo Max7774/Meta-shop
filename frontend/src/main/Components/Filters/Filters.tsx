@@ -15,7 +15,7 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useState } from "react";
-import { IoFilter } from "react-icons/io5";
+import { FaFilter } from "react-icons/fa6";
 
 const Filters = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -55,9 +55,9 @@ const Filters = () => {
 
   return (
     <section>
-      <div className="flex flex-row gap-5 cursor-pointer" onClick={onOpen}>
-        <IoFilter size={25} />
-      </div>
+      <Button fullWidth variant="light" onClick={onOpen}>
+        <FaFilter size={25} />
+      </Button>
       <Modal isOpen={isOpen} placement="top" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -80,6 +80,7 @@ const Filters = () => {
                   <Select
                     label="Фирма поставщик-производитель"
                     placeholder="Выберите фирму"
+                    labelPlacement="outside"
                     selectedKeys={new Set([companyUuid])}
                     onSelectionChange={(keys) => {
                       setCompanyUuid(Array.from(keys).join(""));
@@ -92,6 +93,7 @@ const Filters = () => {
                   </Select>
                   <Select
                     label="Сортировка"
+                    labelPlacement="outside"
                     placeholder="Выберите вариант сортировки"
                     selectedKeys={new Set([sort])}
                     onSelectionChange={(selected) =>
@@ -107,7 +109,7 @@ const Filters = () => {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="danger"
                   variant="light"
                   onPress={() => {
                     setPriceRange([0, 7000]);
@@ -117,9 +119,6 @@ const Filters = () => {
                   }}
                 >
                   Сбросить
-                </Button>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Закрыть
                 </Button>
                 <Button color="primary" onPress={applyFilters}>
                   Применить

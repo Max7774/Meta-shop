@@ -65,7 +65,7 @@ export const getProductBySlug = createAsyncThunk<TProduct, string>(
 
 /* getProductBySubCategory */
 export const getProductBySubCategory = createAsyncThunk<
-  TProduct[],
+  TProductsResponse,
   { slug: string; filters: TFilters }
 >(
   "products/getProductBySubCategory",

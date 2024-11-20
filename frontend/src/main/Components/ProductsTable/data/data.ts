@@ -14,4 +14,6 @@ const statusOptions = [
   { name: "Нет в наличии", uid: "false" },
 ];
 
-export { columns, statusOptions };
+const selectedRow = [5, 10, 20, 50, 100];
+
+export { columns, statusOptions, selectedRow };

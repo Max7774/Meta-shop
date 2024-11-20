@@ -26,7 +26,7 @@ const SubcategoriesList = ({
               navigate(`/categories/${categorySlug}/${item.slug}`);
             }}
           >
-            <CardBody className="overflow-visible p-0">
+            <CardBody className="w-full overflow-visible p-0">
               <Image
                 shadow="sm"
                 radius="lg"

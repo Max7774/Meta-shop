@@ -15,7 +15,7 @@ import { validEmail } from "@utils/validations/valid-email";
 import cn from "clsx";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ClaimForm = () => {
   const { createClaim } = useActions();
@@ -25,6 +25,9 @@ const ClaimForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<TCreateClaim>();
+  const param = useLocation();
+
+  const typeOfClaim = param.search.split("=")[1] as EnumTypeOfClaim;
 
   const navigate = useNavigate();
 
@@ -124,6 +127,7 @@ const ClaimForm = () => {
         control={control}
         name="type"
         rules={{ required: "Это поле обязательно" }}
+        defaultValue={typeOfClaim}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <Select
             isRequired

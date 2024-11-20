@@ -92,19 +92,16 @@ export const productsSlice = createSlice({
         state.isLoading = false;
         state.currentPage += 1;
         if (state.selectedCompanyProduct) {
-          state.products = [
-            // ...state.products,
-            ...payload.products.map((el) => {
-              return {
-                ...el,
-                company: el.company.filter(
-                  (el) => el.companyUuid === state.selectedCompanyProduct
-                ),
-              };
-            }),
-          ];
+          state.products = payload.products.map((el) => {
+            return {
+              ...el,
+              company: el.company.filter(
+                (el) => el.companyUuid === state.selectedCompanyProduct
+              ),
+            };
+          });
         } else {
-          state.products = [...state.products, ...payload.products];
+          state.products = payload.products;
         }
         state.length = payload.length;
       })
@@ -173,8 +170,9 @@ export const productsSlice = createSlice({
       })
       .addCase(getProductBySubCategory.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.length = payload.length;
         if (state.selectedCompanyProduct) {
-          state.products = payload.map((el) => {
+          state.products = payload.products.map((el) => {
             return {
               ...el,
               company: el.company.filter(
@@ -185,13 +183,13 @@ export const productsSlice = createSlice({
         } else {
           state.selectedCompanyProduct =
             getStoreLocal("user")?.companyUuid ||
-            payload[0].company[0].companyUuid;
+            payload.products[0].company[0].companyUuid;
           setLocalStorage(
             "selectedCompany",
             getStoreLocal("user")?.companyUuid ||
-              payload[0].company[0].companyUuid
+              payload.products[0].company[0].companyUuid
           );
-          state.products = payload.map((el) => {
+          state.products = payload.products.map((el) => {
             return {
               ...el,
               company: [el.company[0]],

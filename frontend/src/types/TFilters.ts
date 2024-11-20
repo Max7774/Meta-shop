@@ -12,8 +12,8 @@ export type TFilters = {
 };
 
 export type TFiltersPagination = {
-  page?: number;
-  perPage?: number;
+  page: number;
+  perPage: number;
 };
 
 export type TFiltersPages = "order" | "products" | "users" | "soft-deleted";

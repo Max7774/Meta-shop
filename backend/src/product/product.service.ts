@@ -29,15 +29,15 @@ export class ProductService {
   ) {}
 
   async getAll(dto: GetAllProductDto = {}) {
-    // const { perPage, skip } = this.paginationService.getPagination(dto);
+    const { perPage, skip } = this.paginationService.getPagination(dto);
 
     const filters = this.createFilter(dto);
 
     const currentProducts = await this.prisma.product.findMany({
       where: { ...(filters || {}), isDeleted: false },
       orderBy: this.getSortOption(dto.sort),
-      // skip,
-      // take: perPage,
+      skip,
+      take: perPage,
       select: {
         ...productReturnObject,
       },
@@ -266,11 +266,8 @@ export class ProductService {
     }
   }
 
-  async bySubcategory(
-    subcategorySlug: string,
-    //  dto: GetAllProductDto = {}
-  ) {
-    // const { perPage } = this.paginationService.getPagination(dto);
+  async bySubcategory(subcategorySlug: string, dto: GetAllProductDto = {}) {
+    const { perPage } = this.paginationService.getPagination(dto);
 
     const products = await this.prisma.product.findMany({
       where: {
@@ -279,26 +276,35 @@ export class ProductService {
           slug: subcategorySlug,
         },
       },
-      // take: dto.perPage ? +dto.perPage : 10,
-      // skip,
+      take: perPage,
       select: productReturnObjectFull,
     });
 
     if (!products) throw new NotFoundException('Products not found');
 
-    return products.map((el) => {
-      if (el.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
-        return {
-          ...el,
-          isNew: true,
-        };
-      } else {
-        return {
-          ...el,
-          isNew: false,
-        };
-      }
-    });
+    return {
+      products: products.map((el) => {
+        if (el.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+          return {
+            ...el,
+            isNew: true,
+          };
+        } else {
+          return {
+            ...el,
+            isNew: false,
+          };
+        }
+      }),
+      length: await this.prisma.product.count({
+        where: {
+          isDeleted: false,
+          subcategory: {
+            slug: subcategorySlug,
+          },
+        },
+      }),
+    };
   }
 
   async getSimilar(

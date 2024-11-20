@@ -19,11 +19,12 @@ const SimilarProducts = ({ productUuid }: ISimilarProductsProps) => {
     useProducts();
 
   useEffect(() => {
-    getSimilarProducts({
-      uuid: productUuid,
-      companyUuid: selectedCompanyProduct,
-      filters: queryParams,
-    });
+    if (productUuid)
+      getSimilarProducts({
+        uuid: productUuid,
+        companyUuid: selectedCompanyProduct,
+        filters: queryParams,
+      });
   }, [getSimilarProducts, productUuid, queryParams, selectedCompanyProduct]);
 
   if (isSimilarLoading) return <CircularProgress />;

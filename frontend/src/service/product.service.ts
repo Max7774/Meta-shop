@@ -55,7 +55,7 @@ export const ProductService = {
     queryData = {} as TFilters,
     pageData = {} as TFiltersPagination
   ) {
-    return await axiosClassic<TProduct[]>({
+    return await axiosClassic<TProductsResponse>({
       url: `${PRODUCTS}/by-subcategory/${subcategorySlug}`,
       method: "GET",
       params: { ...queryData, ...pageData },
