@@ -316,7 +316,7 @@ jobs:
 
       - name: Copy built frontend to server
         run: |
-          scp -o StrictHostKeyChecking=no -r ./frontend/build/* ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./frontend/build/ ${{ secrets.DEPLOY_SERVER_USER }}@${{ secrets.DEPLOY_SERVER_HOST }}:/var/www/html
   notify:
     runs-on: ubuntu-latest
     needs:

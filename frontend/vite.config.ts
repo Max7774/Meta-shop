@@ -56,6 +56,21 @@ export default () => {
     },
     build: {
       outDir: "build",
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ["react", "react-dom", "axios"],
+            ui: ["@nextui-org/react"],
+          },
+        },
+      },
     },
     server: {
       port: parseInt(port),
