@@ -128,10 +128,6 @@ const OrderPage = () => {
               <Divider />
               <div className="flex flex-col gap-4">
                 <div className="flex justify-between font-bold text-sm sm:text-lg">
-                  <div className="text-nowrap">Выбранная фирма</div>
-                  <div>{companyName}</div>
-                </div>
-                <div className="flex justify-between font-bold text-sm sm:text-lg">
                   <div className="text-nowrap">Стоимость товаров:</div>
                   <div>{convertPrice(total)}</div>
                 </div>
@@ -139,21 +135,31 @@ const OrderPage = () => {
                   <div className="text-nowrap">Стоимость доставки:</div>
                   <div>{convertPrice(deliveryPrice)}</div>
                 </div>
+                <div className="flex justify-between font-bold text-sm sm:text-lg">
+                  <div className="text-nowrap">Выбранная фирма</div>
+                  <div>{companyName}</div>
+                </div>
                 {minPriceDelivery !== 0 && (
                   <Progress
                     aria-label="Loading..."
                     label={
-                      total >= 7000
-                        ? "Можно заказаывать"
-                        : `Ещё необходимо: ${convertPrice(
-                            minPriceDelivery - total
-                          )}`
+                      total >= 7000 ? (
+                        <span className="text-primary">Можно заказаывать!</span>
+                      ) : (
+                        <span className="text-warning">{`Ещё необходимо: ${convertPrice(
+                          minPriceDelivery - total
+                        )}`}</span>
+                      )
                     }
                     color={total >= 7000 ? "success" : "warning"}
                     maxValue={minPriceDelivery}
                     value={total}
                   />
                 )}
+                <div className="flex justify-between font-bold text-default-400 text-sm sm:text-lg">
+                  <div className="text-nowrap">Минимальная сумма заказа</div>
+                  <div>{convertPrice(companyMinPriceDelivery || 7000)}</div>
+                </div>
                 <Divider />
                 <div className="flex justify-between font-bold text-xl">
                   <div>Итого к оплате:</div>

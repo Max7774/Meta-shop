@@ -17,6 +17,8 @@ interface IItem {
 const CartItem: FC<IItem> = ({ item }) => {
   const { removeFromCart } = useActions();
 
+  console.log(item);
+
   return (
     <div
       className={cn("flex flex-row items-center gap-3 py-3 px-2 rounded-2xl", {
@@ -46,14 +48,14 @@ const CartItem: FC<IItem> = ({ item }) => {
                 !item.inStock ? "text-gray-500" : "text-red-600"
               }`}
             >
-              {convertPrice(item.price)}
+              {convertPrice(item.price - (item.price * item.discount) / 100)}
             </span>
             <span
               className={`text-xs line-through ${
                 !item.inStock ? "text-gray-400" : "text-gray-500"
               }`}
             >
-              {convertPrice(0)}
+              {convertPrice(item.price)}
             </span>
           </>
         ) : (

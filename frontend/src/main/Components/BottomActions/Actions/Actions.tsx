@@ -17,8 +17,8 @@ const Actions = () => {
     (cartItem) => cartItem.product.uuid === product?.uuid
   );
 
-  const currentProduct = items.find(
-    (item) => item.product.company[0].companyUuid === selectedCompanyProduct
+  const currentProduct = product?.company.find(
+    (item) => item.companyUuid === selectedCompanyProduct
   );
 
   const isProductPage = pathname.startsWith("/product");
@@ -36,7 +36,7 @@ const Actions = () => {
             ) : (
               <Button
                 color={product.inStock ? "primary" : "default"}
-                size='lg'
+                size="lg"
                 className="w-full"
                 onClick={() => {
                   addToCart({
