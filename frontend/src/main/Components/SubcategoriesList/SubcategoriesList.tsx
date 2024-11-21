@@ -22,7 +22,7 @@ const SubcategoriesList = ({
             shadow="sm"
             key={item.uuid}
             isPressable
-            onPress={() => {
+            onClick={() => {
               navigate(`/categories/${categorySlug}/${item.slug}`);
             }}
           >

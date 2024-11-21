@@ -36,7 +36,7 @@ const Actions = () => {
             ) : (
               <Button
                 color={product.inStock ? "primary" : "default"}
-                size="lg"
+                size="md"
                 className="w-full"
                 onClick={() => {
                   addToCart({
@@ -70,7 +70,7 @@ const Actions = () => {
           <Button
             color="primary"
             onClick={() => navigate("/order")}
-            size="lg"
+            size="md"
             className="w-full"
           >
             Оформить заказ

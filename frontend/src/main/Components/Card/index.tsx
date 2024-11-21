@@ -14,6 +14,7 @@ import DefaultActions from "./Actions/DefaultActions/DefaultActions";
 import AdminActions from "./Actions/AdminActions/AdminActions";
 import { getImageUrl } from "@utils/getImageUrl";
 import { useAppSelector } from "@hooks/redux-hooks/reduxHooks";
+import { unitofmeasurementData } from "@/const/unitofmeasurement";
 
 const crudActions = [ERoles.ADMIN, ERoles.COMPANY];
 
@@ -81,11 +82,21 @@ const CardUI = ({ product }: ICardProps) => {
               <span className="text-xs line-through text-gray-500">
                 {convertPrice(product.company[0]?.price || 0)}
               </span>
+              <span className="text-default-300 font-bold">
+                {" "}
+                / {unitofmeasurementData[product.unitofmeasurement]}
+              </span>
             </>
           ) : (
-            <span className="text-md font-semibold">
-              {convertPrice(product.company[0]?.price || 0)}
-            </span>
+            <div>
+              <span className="text-md font-semibold">
+                {convertPrice(product.company[0]?.price || 0)}
+              </span>
+              <span className="text-default-300 font-bold">
+                {" "}
+                / {unitofmeasurementData[product.unitofmeasurement]}
+              </span>
+            </div>
           )}
         </p>
         <Divider />

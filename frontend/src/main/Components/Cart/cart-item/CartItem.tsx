@@ -21,10 +21,13 @@ const CartItem: FC<IItem> = ({ item }) => {
 
   return (
     <div
-      className={cn("flex flex-row items-center gap-3 py-3 px-2 rounded-2xl", {
-        "bg-gray-200": !item.inStock,
-        "bg-white": item.inStock,
-      })}
+      className={cn(
+        "flex flex-row items-center justify-between gap-3 py-3 px-2 rounded-2xl",
+        {
+          "bg-gray-200": !item.inStock,
+          "bg-white": item.inStock,
+        }
+      )}
     >
       <Link
         to={`/product/${item.product?.slug}/${item.product.subcategory.category?.slug}/${item.product.subcategory.slug}`}
